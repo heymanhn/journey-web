@@ -1,0 +1,27 @@
+{
+  "name": "journey-web",
+  "version": "0.0.1",
+  "description": "Journey Web app",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heymanhn/journey-web/"
+  },
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "keywords": [
+    "journey",
+    "web"
+  ],
+  "author": "heymanhn",
+  "engines": {
+    "node": "6.2.x"
+  }
+}
