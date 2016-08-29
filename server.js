@@ -12,11 +12,11 @@ let path = require('path')
 
 let app = express()
 app.set('port', (process.env.PORT || 3010))
-app.use(express.static('public'))
+app.use(express.static('app'))
 
 // send all requests to index.html so browserHistory in React Router works
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+  res.sendFile(path.join(__dirname, 'app', 'index.html'))
 })
 
 const options = {

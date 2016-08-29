@@ -1,16 +1,16 @@
-'use strict'
+'use strict';
 
 module.exports = {
-  entry: './public/app/app.js',
+  entry: './app/index.js',
   output: {
-    filename: 'bundle.js'
+    filename: './app/bundle.js'
   },
   module: {
     preLoaders: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'jshint-loader'
+        loader: 'eslint-loader'
       }
     ],
     loaders: [
@@ -19,7 +19,8 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015']
+          presets: ['react', 'es2015'],
+          plugins: ['transform-object-rest-spread']
         }
       }
     ]
@@ -27,5 +28,8 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.es6']
   },
-  watch: true
-}
+  watch: true,
+  eslint: {
+    configFile: './app/.eslintrc'
+  }
+};
