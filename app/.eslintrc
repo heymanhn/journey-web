@@ -1,0 +1,9 @@
+{
+  parser: "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "max-len": ["error", 80, { "ignoreComments": true }]
+  }
+}

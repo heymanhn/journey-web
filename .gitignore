@@ -35,3 +35,12 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Certificate files
+*.pem
+
+# Mac OS relics
+.DS_Store
+
+# Webpack bundle
+bundle.js
