@@ -1,1 +1,2 @@
-'use strict'
+/* jshint node: true */
+'use strict';
