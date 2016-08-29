@@ -18,8 +18,8 @@ class TextInput extends Component {
 }
 
 TextInput.propTypes = {
-  label: React.PropTypes.string.isRequired,
-  initialValue: React.PropTypes.string
+  label: PropTypes.string.isRequired,
+  initialValue: PropTypes.string
 };
 
 export default TextInput;

@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { apiLogin, apiSignup } from '../actions';
 import IntroPage from '../components/IntroPage';
 
 const mapStateToProps = (state) => {
@@ -8,7 +9,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    onLoginPress: () => {
+      dispatch(apiLogin());
+    },
+
+    onSignupPress: () => {
+      dispatch(apiSignup());
+    }
+  };
 };
 
 export default connect(
