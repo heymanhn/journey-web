@@ -6,6 +6,13 @@ export const buttonStyle = {
   margin: 10
 };
 
+export const errorMessageStyle = {
+  backgroundColor: 'orange',
+  color: 'black',
+  margin: 5,
+  width: 200
+};
+
 export const textInputStyle = {
   display: 'block',
   color: '#333333',

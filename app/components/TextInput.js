@@ -5,21 +5,19 @@ import { textInputStyle } from '../stylesheets/styles';
 
 class TextInput extends Component {
   render() {
-    const { initialValue, label, type } = this.props;
     return (
       <input
-        defaultValue={initialValue}
-        placeholder={label}
+        {...this.props}
         style={textInputStyle}
-        type={type || "text"}
       />
     );
   }
 }
 
 TextInput.propTypes = {
-  label: PropTypes.string.isRequired,
-  initialValue: PropTypes.string,
+  defaultValue: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
   type: PropTypes.string
 };
 

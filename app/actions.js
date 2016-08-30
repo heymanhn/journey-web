@@ -8,6 +8,11 @@ import { journeyAPI } from './constants';
  */
 
 // Authentication
+export const LOGIN_SAVE_EMAIL = 'LOGIN_SAVE_EMAIL';
+export const LOGIN_SAVE_PASSWORD = 'LOGIN_SAVE_PASSWORD';
+export const SIGNUP_SAVE_NAME = 'SIGNUP_SAVE_NAME';
+export const SIGNUP_SAVE_EMAIL = 'SIGNUP_SAVE_EMAIL';
+export const SIGNUP_SAVE_PASSWORD = 'SIGNUP_SAVE_PASSWORD';
 export const API_LOGIN_REQUEST = 'API_LOGIN_REQUEST';
 export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS';
 export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
@@ -21,6 +26,41 @@ export const LOGOUT = 'LOGOUT';
  */
 
 // Authentication
+export function loginSaveEmail(email) {
+  return {
+    type: LOGIN_SAVE_EMAIL,
+    email
+  };
+}
+
+export function loginSavePassword(password) {
+  return {
+    type: LOGIN_SAVE_PASSWORD,
+    password
+  };
+}
+
+export function signupSaveName(name) {
+  return {
+    type: SIGNUP_SAVE_NAME,
+    name
+  };
+}
+
+export function signupSaveEmail(email) {
+  return {
+    type: SIGNUP_SAVE_EMAIL,
+    email
+  };
+}
+
+export function signupSavePassword(password) {
+  return {
+    type: SIGNUP_SAVE_PASSWORD,
+    password
+  };
+}
+
 export function apiLoginRequest() {
   return {
     type: API_LOGIN_REQUEST
@@ -83,7 +123,11 @@ let optsTemplate = {
 };
 
 let handleErrors = (response) => {
-  return response.ok ? response : response.json().then(Promise.reject);
+  if (response.ok) {
+    return response;
+  } else {
+    return response.json().then(json => Promise.reject(json));
+  }
 };
 
 export function apiLogin() {
