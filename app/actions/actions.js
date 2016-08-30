@@ -1,8 +1,8 @@
 'use strict';
 
 import fetch from 'isomorphic-fetch';
-import { browserHistory } from 'react-router';
-import { journeyAPI } from './constants';
+import { viewTripsPage } from './navigation'
+import { journeyAPI } from '../constants';
 
 /*
  * Action Types
@@ -21,6 +21,11 @@ export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
 export const LOGOUT = 'LOGOUT';
+
+// Trip Management
+export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
+export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
+export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 
 /*
  * Action Creators
@@ -110,6 +115,27 @@ export function logout() {
   };
 }
 
+// Trip Management
+export function apiGetTripsRequest() {
+  return {
+    type: API_GET_TRIPS_REQUEST
+  };
+}
+
+export function apiGetTripsSuccess(json) {
+  return {
+    type: API_GET_TRIPS_SUCCESS,
+    trips: json.trips
+  };
+}
+
+export function apiGetTripsFailure() {
+  return {
+    type: API_GET_TRIPS_FAILURE
+  };
+}
+
+
 /*
  * Action Creator thunks
  */
@@ -166,8 +192,30 @@ export function apiSignup() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
-        browserHistory.push('/');
+        dispatch(apiGetTrips());
+        viewTripsPage();
       })
       .catch(error => { dispatch(apiSignupFailure(error)); });
+  }
+}
+
+// Trip Management
+export function apiGetTrips() {
+  return (dispatch, getState) => {
+    dispatch(apiGetTripsRequest());
+
+    const { user } = getState().authState;
+    const userTrips = journeyAPI.trips.get(user._id);
+    let opts = {...optsTemplate};
+    opts.method = userTrips.method;
+    opts.headers = new Headers({ 'Authorization': getState().authState.token });
+
+    fetch(userTrips.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiGetTripsSuccess(json));
+      })
+      .catch(error => { dispatch(apiGetTripsFailure(error)); });
   }
 }

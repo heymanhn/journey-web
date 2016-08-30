@@ -7,12 +7,25 @@ export const journeyAPI = {
     method: 'POST',
     route: journeyAPIHost + '/auth/login'
   },
+
   signup: {
     method: 'POST',
     route: journeyAPIHost + '/users'
+  },
+
+  trips: {
+    get: (userId) => ({
+      method: 'GET',
+      route: journeyAPIHost + '/users/' + userId + '/trips'
+    })
   }
 };
 
 export const initialAuthState = {
   isFetching: false
+};
+
+export const initialTripsState = {
+  isFetching: false,
+  trips: []
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import { viewSignupPage } from '../actions/navigation';
 import Button from './Button';
 import TextInput from './TextInput';
 import { errorMessageStyle } from '../stylesheets/styles';
@@ -32,14 +32,10 @@ class IntroPage extends Component {
           />
           <div style={errorMessageStyle}>{error}</div>
           <Button label="Log In" onClick={onLoginPress} />
-          <Button label="Sign Up" onClick={this.onSignupPress} />
+          <Button label="Sign Up" onClick={viewSignupPage} />
         </div>
       </div>
     );
-  }
-
-  onSignupPress() {
-    browserHistory.push('/signup');
   }
 }
 

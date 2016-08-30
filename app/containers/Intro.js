@@ -5,7 +5,7 @@ import {
   apiLogin,
   loginSaveEmail,
   loginSavePassword
-} from '../actions';
+} from '../actions/actions';
 import IntroPage from '../components/IntroPage';
 
 const mapStateToProps = (state) => {

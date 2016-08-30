@@ -5,8 +5,13 @@ import { connect } from 'react-redux';
 
 import Intro from './Intro';
 import Trips from './Trips';
+import { apiGetTrips } from '../actions/actions';
 
 class Home extends Component {
+  componentWillMount() {
+    this.props.onLoadHome();
+  }
+
   render() {
     const { authState } = this.props;
     if (authState.token) {
@@ -18,12 +23,17 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  authState: PropTypes.object
+  authState: PropTypes.object,
+  onLoadHome: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({
     authState: state.authState
   }),
-  dispatch => ({})
+  dispatch => ({
+    onLoadHome: () => {
+      dispatch(apiGetTrips());
+    }
+  })
 )(Home);

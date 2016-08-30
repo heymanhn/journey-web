@@ -19,3 +19,11 @@ export const textInputStyle = {
   fontSize: '16px',
   margin: 5
 };
+
+export const tripsListItemStyle = {
+  backgroundColor: '#eeeeee',
+  border: '1px solid #333333',
+  margin: 5,
+  padding: 5,
+  width: 300
+};
