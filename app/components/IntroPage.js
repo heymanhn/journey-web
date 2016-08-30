@@ -13,7 +13,7 @@ class IntroPage extends Component {
         <h1>Journey - Amazing trip plans</h1>
         <div>
           <TextInput label="Email Address" />
-          <TextInput label="Password" />
+          <TextInput label="Password" type="password" />
           <Button label="Log In" onClick={onLoginPress} />
           <Button label="Sign Up" onClick={onSignupPress} />
         </div>

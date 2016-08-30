@@ -8,5 +8,7 @@ export const buttonStyle = {
 
 export const textInputStyle = {
   display: 'block',
-  color: '#333333'
+  color: '#333333',
+  fontSize: '16px',
+  margin: 5
 };

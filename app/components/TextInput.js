@@ -5,13 +5,13 @@ import { textInputStyle } from '../stylesheets/styles';
 
 class TextInput extends Component {
   render() {
-    const { initialValue, label } = this.props;
+    const { initialValue, label, type } = this.props;
     return (
       <input
         defaultValue={initialValue}
         placeholder={label}
         style={textInputStyle}
-        type="text"
+        type={type || "text"}
       />
     );
   }
@@ -19,7 +19,8 @@ class TextInput extends Component {
 
 TextInput.propTypes = {
   label: PropTypes.string.isRequired,
-  initialValue: PropTypes.string
+  initialValue: PropTypes.string,
+  type: PropTypes.string
 };
 
 export default TextInput;
