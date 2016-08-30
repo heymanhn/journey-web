@@ -3,6 +3,11 @@
 import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import {
+  LOGIN_SAVE_EMAIL,
+  LOGIN_SAVE_PASSWORD,
+  SIGNUP_SAVE_NAME,
+  SIGNUP_SAVE_EMAIL,
+  SIGNUP_SAVE_PASSWORD,
   API_LOGIN_REQUEST,
   API_LOGIN_SUCCESS,
   API_LOGIN_FAILURE,
@@ -15,6 +20,16 @@ import { initialAuthState } from './constants';
 
 function authState(state = initialAuthState, action) {
   switch (action.type) {
+    case LOGIN_SAVE_EMAIL:
+      return { ...state, email: action.email };
+    case LOGIN_SAVE_PASSWORD:
+      return { ...state, password: action.password };
+    case SIGNUP_SAVE_NAME:
+      return { ...state, newName: action.name };
+    case SIGNUP_SAVE_EMAIL:
+      return { ...state, newEmail: action.email };
+    case SIGNUP_SAVE_PASSWORD:
+      return { ...state, newPassword: action.password };
     case API_LOGIN_REQUEST:
     case API_SIGNUP_REQUEST:
       delete state.error;
@@ -44,14 +59,12 @@ function authState(state = initialAuthState, action) {
         token: action.token
       };
     case API_LOGIN_FAILURE:
-      delete state.password;
       return {
         ...state,
         isFetching: false,
         error: action.error
       };
     case API_SIGNUP_FAILURE:
-      delete state.newPassword;
       return {
         ...state,
         isFetching: false,

@@ -1,14 +1,21 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { logout } from '../actions';
 import TripsPage from '../components/TripsPage';
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    name: state.authState.user.name
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    onLogoutPress: () => {
+      dispatch(logout());
+    }
+  };
 };
 
 export default connect(
