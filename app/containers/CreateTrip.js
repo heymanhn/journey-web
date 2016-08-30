@@ -1,7 +1,11 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiCreateTrip, createTripSaveTitle } from '../actions/actions';
+import {
+  apiCreateTrip,
+  createTripSaveDest,
+  createTripSaveTitle
+} from '../actions/actions';
 import CreateTripPage from '../components/CreateTripPage';
 
 const mapStateToProps = (state) => {
@@ -18,8 +22,8 @@ const mapDispatchToProps = (dispatch) => {
     onEnterTitle: (event) => {
       dispatch(createTripSaveTitle(event.target.value));
     },
-    onEnterDestination: (event) => {
-      // TBD
+    onEnterDestination: (place) => {
+      dispatch(createTripSaveDest(place));
     }
   };
 };

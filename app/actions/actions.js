@@ -23,6 +23,8 @@ export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
 export const LOGOUT = 'LOGOUT';
 
 // Trip Management
+export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
+export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
@@ -119,6 +121,20 @@ export function logout() {
 }
 
 // Trip Management
+export function createTripSaveTitle(title) {
+  return {
+    type: CREATE_TRIP_SAVE_TITLE,
+    title
+  };
+}
+
+export function createTripSaveDest(destination) {
+  return {
+    type: CREATE_TRIP_SAVE_DEST,
+    destination
+  };
+}
+
 export function apiGetTripsRequest() {
   return {
     type: API_GET_TRIPS_REQUEST

@@ -7,17 +7,24 @@ import { destTextInputStyle, errorMessageStyle } from '../stylesheets/styles';
 
 class CreateTripPage extends Component {
   componentDidMount() {
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      document.getElementById('destinationInput')
-    );
+    const { onEnterDestination } = this.props;
+
+    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
+    const input = document.getElementById('destinationInput');
+    const options = { types: ['(regions)'] };
+    const ac = new window.google.maps.places.Autocomplete(input, options);
+    ac.addListener('place_changed', destinationChanged);
+
+    function destinationChanged() {
+      onEnterDestination(ac.getPlace());
+    }
   }
 
   render() {
     const {
       error,
       onCreateTripPress,
-      onEnterTitle,
-      onEnterDestination
+      onEnterTitle
     } = this.props;
 
     return (
@@ -30,7 +37,6 @@ class CreateTripPage extends Component {
           />
           <TextInput
             id="destinationInput"
-            onChange={onEnterDestination}
             placeholder="Where do you want to go?"
             style={destTextInputStyle}
           />

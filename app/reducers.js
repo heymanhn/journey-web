@@ -13,6 +13,8 @@ import {
   API_SIGNUP_REQUEST,
   API_SIGNUP_SUCCESS,
   API_SIGNUP_FAILURE,
+  CREATE_TRIP_SAVE_TITLE,
+  CREATE_TRIP_SAVE_DEST,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
@@ -79,6 +81,16 @@ function authState(state = initialAuthState, action) {
 
 function tripsState(state = initialTripsState, action) {
   switch (action.type) {
+    case CREATE_TRIP_SAVE_TITLE:
+      return {
+        ...state,
+        newTitle: action.title
+      };
+    case CREATE_TRIP_SAVE_DEST:
+      return {
+        ...state,
+        newDestination: action.destination
+      };
     case API_GET_TRIPS_REQUEST:
     case API_CREATE_TRIP_REQUEST:
       delete state.error;
