@@ -7,17 +7,7 @@ import { destTextInputStyle, errorMessageStyle } from '../stylesheets/styles';
 
 class CreateTripPage extends Component {
   componentDidMount() {
-    const { onEnterDestination } = this.props;
-
-    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
-    const input = document.getElementById('destinationInput');
-    const options = { types: ['(regions)'] };
-    const ac = new window.google.maps.places.Autocomplete(input, options);
-    ac.addListener('place_changed', destinationChanged);
-
-    function destinationChanged() {
-      onEnterDestination(ac.getPlace());
-    }
+    this.loadGoogleAutocompleteAPI();
   }
 
   render() {
@@ -44,6 +34,19 @@ class CreateTripPage extends Component {
           <Button label="Create Trip" onClick={onCreateTripPress} />
         </div>
       </div>
+    );
+  }
+
+  loadGoogleAutocompleteAPI() {
+    const { onEnterDestination } = this.props;
+
+    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
+    const input = document.getElementById('destinationInput');
+    const options = { types: ['(regions)'] };
+    const ac = new window.google.maps.places.Autocomplete(input, options);
+    ac.addListener(
+      'place_changed',
+      () => { onEnterDestination(ac.getPlace()); }
     );
   }
 }
