@@ -5,10 +5,12 @@ import { Route, IndexRoute } from 'react-router';
 import App from './containers/App';
 import Home from './containers/Home';
 import Signup from './containers/Signup';
+import Trip from './containers/Trip';
 
 export default (
   <Route path='/' component={App}>
-    <IndexRoute component={Home}/>
-    <Route path='/signup' component={Signup}/>
+    <IndexRoute component={Home} />
+    <Route path='/signup' component={Signup} />
+    <Route path='/trips/:tripId' component={Trip} />
   </Route>
 );

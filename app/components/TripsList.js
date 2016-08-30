@@ -7,7 +7,7 @@ class TripsList extends Component {
   render() {
     const { trips } = this.props;
 
-    var tripsList = trips.map(function(trip) {
+    var tripsList = trips.map(trip => {
       return <TripsListItem key={trip._id} trip={trip} />;
     });
 
