@@ -5,7 +5,9 @@ import { logout } from '../actions';
 import TripsPage from '../components/TripsPage';
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    name: state.authState.user.name
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

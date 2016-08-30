@@ -1,14 +1,40 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import {
+  apiSignup,
+  signupSaveName,
+  signupSaveEmail,
+  signupSavePassword
+} from '../actions';
 import SignupPage from '../components/SignupPage';
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    email: state.authState.newEmail,
+    error: state.authState.error ? state.authState.error.message : '',
+    name: state.authState.newName
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    onEnterEmail: (event) => {
+      dispatch(signupSaveEmail(event.target.value));
+    },
+
+    onEnterName: (event) => {
+      dispatch(signupSaveName(event.target.value));
+    },
+
+    onEnterPassword: (event) => {
+      dispatch(signupSavePassword(event.target.value));
+    },
+
+    onSignupPress: () => {
+      dispatch(apiSignup());
+    }
+  };
 };
 
 export default connect(

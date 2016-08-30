@@ -1,6 +1,7 @@
 'use strict';
 
 import fetch from 'isomorphic-fetch';
+import { browserHistory } from 'react-router';
 import { journeyAPI } from './constants';
 
 /*
@@ -163,7 +164,10 @@ export function apiSignup() {
     fetch(journeyAPI.signup.route, opts)
       .then(handleErrors)
       .then(response => response.json())
-      .then(json => { dispatch(apiSignupSuccess(json)) })
-      .catch(error => { dispatch(apiSignupFailure(error)) });
+      .then(json => {
+        dispatch(apiSignupSuccess(json));
+        browserHistory.push('/');
+      })
+      .catch(error => { dispatch(apiSignupFailure(error)); });
   }
 }

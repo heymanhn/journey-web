@@ -5,11 +5,12 @@ import Button from './Button';
 
 class TripsPage extends Component {
   render() {
-    const { onLogoutPress } = this.props;
+    const { name, onLogoutPress } = this.props;
 
     return (
       <div>
         <h1>Trips page</h1>
+        <p>Welcome, {name}!</p>
         <Button label="Log Out" onClick={onLogoutPress} />
       </div>
     );
@@ -17,6 +18,7 @@ class TripsPage extends Component {
 }
 
 TripsPage.propTypes = {
+  name: PropTypes.string,
   onLogoutPress: PropTypes.func.isRequired
 };
 

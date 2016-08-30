@@ -3,7 +3,6 @@
 import { connect } from 'react-redux';
 import {
   apiLogin,
-  apiSignup,
   loginSaveEmail,
   loginSavePassword
 } from '../actions';
@@ -28,10 +27,6 @@ const mapDispatchToProps = (dispatch) => {
 
     onLoginPress: () => {
       dispatch(apiLogin());
-    },
-
-    onSignupPress: () => {
-      dispatch(apiSignup());
     }
   };
 };
