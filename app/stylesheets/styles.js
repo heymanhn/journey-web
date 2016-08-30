@@ -13,6 +13,14 @@ export const errorMessageStyle = {
   width: 200
 };
 
+export const destTextInputStyle = {
+  display: 'block',
+  color: '#333333',
+  fontSize: '16px',
+  width: 400,
+  margin: 5
+};
+
 export const textInputStyle = {
   display: 'block',
   color: '#333333',

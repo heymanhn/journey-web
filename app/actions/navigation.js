@@ -11,6 +11,10 @@ export function viewTripsPage() {
   return browserHistory.push('/');
 }
 
+export function createTrip() {
+  return browserHistory.push('/createtrip');
+}
+
 export function viewTripPage(tripId) {
   return browserHistory.push('/trips/' + tripId);
 }

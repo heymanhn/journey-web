@@ -1,7 +1,7 @@
 'use strict';
 
 import fetch from 'isomorphic-fetch';
-import { viewTripsPage } from './navigation'
+import { viewTripsPage, viewTripPage } from './navigation'
 import { journeyAPI } from '../constants';
 
 /*
@@ -23,6 +23,9 @@ export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
 export const LOGOUT = 'LOGOUT';
 
 // Trip Management
+export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
+export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
+export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
 export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
@@ -135,6 +138,25 @@ export function apiGetTripsFailure() {
   };
 }
 
+export function apiCreateTripRequest() {
+  return {
+    type: API_CREATE_TRIP_REQUEST
+  };
+}
+
+export function apiCreateTripSuccess(json) {
+  return {
+    type: API_CREATE_TRIP_SUCCESS,
+    trips: json.trips
+  };
+}
+
+export function apiCreateTripFailure() {
+  return {
+    type: API_CREATE_TRIP_FAILURE
+  };
+}
+
 
 /*
  * Action Creator thunks
@@ -217,5 +239,13 @@ export function apiGetTrips() {
         dispatch(apiGetTripsSuccess(json));
       })
       .catch(error => { dispatch(apiGetTripsFailure(error)); });
+  }
+}
+
+export function apiCreateTrip() {
+  return (dispatch, getState) => {
+    dispatch(apiCreateTripRequest());
+
+    // After trip is created, go to the trip page
   }
 }

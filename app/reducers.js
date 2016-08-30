@@ -16,6 +16,9 @@ import {
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
+  API_CREATE_TRIP_REQUEST,
+  API_CREATE_TRIP_SUCCESS,
+  API_CREATE_TRIP_FAILURE,
   LOGOUT
 } from './actions/actions';
 import { initialAuthState, initialTripsState } from './constants';
@@ -77,12 +80,14 @@ function authState(state = initialAuthState, action) {
 function tripsState(state = initialTripsState, action) {
   switch (action.type) {
     case API_GET_TRIPS_REQUEST:
+    case API_CREATE_TRIP_REQUEST:
       delete state.error;
       return {
         ...state,
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
+    case API_CREATE_TRIP_SUCCESS:
       delete state.error;
       return {
         ...state,
@@ -90,6 +95,7 @@ function tripsState(state = initialTripsState, action) {
         trips: action.trips
       };
     case API_GET_TRIPS_FAILURE:
+    case API_CREATE_TRIP_FAILURE:
       return {
         ...state,
         isFetching: false,

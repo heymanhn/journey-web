@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { createTrip } from '../actions/navigation';
 import Button from './Button';
 import TripsList from './TripsList';
 
@@ -16,6 +17,7 @@ class TripsPage extends Component {
       <div>
         <h1>Trips page</h1>
         <p>Welcome, {name}!</p>
+        <Button label="Create Trip" onClick={createTrip} />
         <TripsList trips={trips} />
         <Button label="Log Out" onClick={onLogoutPress} />
       </div>
