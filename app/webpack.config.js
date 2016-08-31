@@ -3,7 +3,8 @@
 module.exports = {
   entry: './app/index.js',
   output: {
-    filename: './app/bundle.js'
+    path: __dirname + '/app',
+    filename: 'bundle.js'
   },
   module: {
     preLoaders: [

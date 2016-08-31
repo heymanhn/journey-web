@@ -6,7 +6,7 @@ import {
   signupSaveName,
   signupSaveEmail,
   signupSavePassword
-} from '../actions';
+} from '../actions/actions';
 import SignupPage from '../components/SignupPage';
 
 const mapStateToProps = (state) => {

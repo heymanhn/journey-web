@@ -7,8 +7,8 @@ class TextInput extends Component {
   render() {
     return (
       <input
-        {...this.props}
         style={textInputStyle}
+        {...this.props}
       />
     );
   }
