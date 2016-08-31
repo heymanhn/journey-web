@@ -1,6 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import Button from './Button';
+import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
   findTripById(tripId) {
@@ -35,6 +37,7 @@ class TripPage extends Component {
         <div>{tripIdeas}</div>
         <p>Plan:</p>
         <div>{tripPlan}</div>
+        <Button label="Home" onClick={viewTripsPage} />
       </div>
     );
   }

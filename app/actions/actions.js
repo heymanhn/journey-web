@@ -148,9 +148,10 @@ export function apiGetTripsSuccess(json) {
   };
 }
 
-export function apiGetTripsFailure() {
+export function apiGetTripsFailure(error) {
   return {
-    type: API_GET_TRIPS_FAILURE
+    type: API_GET_TRIPS_FAILURE,
+    error
   };
 }
 
@@ -163,13 +164,14 @@ export function apiCreateTripRequest() {
 export function apiCreateTripSuccess(json) {
   return {
     type: API_CREATE_TRIP_SUCCESS,
-    trips: json.trips
+    trip: json.trip
   };
 }
 
-export function apiCreateTripFailure() {
+export function apiCreateTripFailure(error) {
   return {
-    type: API_CREATE_TRIP_FAILURE
+    type: API_CREATE_TRIP_FAILURE,
+    error
   };
 }
 
@@ -201,13 +203,17 @@ export function apiLogin() {
 
     let { email, password } = getState().authState;
     let opts = {...optsTemplate};
-    opts.method = journeyAPI.login.method;
+    opts.method = journeyAPI.login().method;
     opts.body = JSON.stringify({ email, password });
 
-    fetch(journeyAPI.login.route, opts)
+    fetch(journeyAPI.login().route, opts)
       .then(handleErrors)
       .then(response => response.json())
-      .then(json => { dispatch(apiLoginSuccess(json)) })
+      .then(json => {
+        dispatch(apiLoginSuccess(json));
+        dispatch(apiGetTrips());
+        viewTripsPage();
+      })
       .catch(error => { dispatch(apiLoginFailure(error)) });
   }
 }
@@ -218,14 +224,14 @@ export function apiSignup() {
 
     let { newName, newEmail, newPassword } = getState().authState;
     let opts = {...optsTemplate};
-    opts.method = journeyAPI.signup.method;
+    opts.method = journeyAPI.signup().method;
     opts.body = JSON.stringify({
       name: newName,
       email: newEmail,
       password: newPassword
     });
 
-    fetch(journeyAPI.signup.route, opts)
+    fetch(journeyAPI.signup().route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -244,9 +250,11 @@ export function apiGetTrips() {
 
     const { user } = getState().authState;
     const userTrips = journeyAPI.trips.get(user._id);
-    let opts = {...optsTemplate};
-    opts.method = userTrips.method;
-    opts.headers = new Headers({ 'Authorization': getState().authState.token });
+    let opts = {
+      ...optsTemplate,
+      method: userTrips.method
+    };
+    opts.headers['Authorization'] = getState().authState.token;
 
     fetch(userTrips.route, opts)
       .then(handleErrors)
@@ -262,6 +270,41 @@ export function apiCreateTrip() {
   return (dispatch, getState) => {
     dispatch(apiCreateTripRequest());
 
-    // After trip is created, go to the trip page
+    // Format the destination object before saving
+    const title = getState().tripsState.newTitle;
+    const oldDest = getState().tripsState.newDestination;
+    const loc = oldDest.geometry.location;
+
+    let destParams = {
+      googlePlaceId: oldDest.place_id,
+      name: oldDest.name,
+      formattedAddress: oldDest.formatted_address,
+      loc: {
+        type: 'Point',
+        coordinates: [loc.lng(), loc.lat()]
+      },
+      types: oldDest.types
+    };
+
+    const createTrip = journeyAPI.trips.create();
+    let opts = {
+      ...optsTemplate,
+      method: createTrip.method,
+      body: JSON.stringify({
+        title,
+        destination: destParams
+      })
+    };
+    opts.headers['Authorization'] = getState().authState.token;
+
+    fetch(createTrip.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiCreateTripSuccess(json));
+        dispatch(apiGetTrips());
+        viewTripPage(json.trip._id);
+      })
+      .catch(error => { dispatch(apiCreateTripFailure(error)); });
   }
 }

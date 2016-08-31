@@ -99,12 +99,20 @@ function tripsState(state = initialTripsState, action) {
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
-    case API_CREATE_TRIP_SUCCESS:
       delete state.error;
       return {
         ...state,
         isFetching: false,
         trips: action.trips
+      };
+    case API_CREATE_TRIP_SUCCESS:
+      delete state.error;
+      delete state.newTitle;
+      delete state.newDestination;
+      state.trips.splice(0, 0, action.trip);
+      return {
+        ...state,
+        isFetching: false
       };
     case API_GET_TRIPS_FAILURE:
     case API_CREATE_TRIP_FAILURE:
@@ -113,6 +121,8 @@ function tripsState(state = initialTripsState, action) {
         isFetching: false,
         error: action.error
       };
+    case LOGOUT:
+      return initialTripsState;
   }
 
   return state;

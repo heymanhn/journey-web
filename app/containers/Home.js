@@ -9,7 +9,10 @@ import { apiGetTrips } from '../actions/actions';
 
 class Home extends Component {
   componentWillMount() {
-    this.props.onLoadHome();
+    const { authState } = this.props;
+    if (authState.token) {
+      this.props.onLoadHome();
+    }
   }
 
   render() {
