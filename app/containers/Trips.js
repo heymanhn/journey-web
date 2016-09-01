@@ -1,7 +1,8 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { logout } from '../actions/actions';
+import { clearTripsError, logout } from '../actions/actions';
+import { createTrip } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
 
 const mapStateToProps = (state) => {
@@ -13,6 +14,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onCreateTripPress: () => {
+      dispatch(clearTripsError());
+      createTrip();
+    },
     onLogoutPress: () => {
       dispatch(logout());
     }

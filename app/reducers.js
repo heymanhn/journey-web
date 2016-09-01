@@ -15,6 +15,7 @@ import {
   API_SIGNUP_FAILURE,
   CREATE_TRIP_SAVE_TITLE,
   CREATE_TRIP_SAVE_DEST,
+  CLEAR_TRIPS_ERROR,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
@@ -121,6 +122,9 @@ function tripsState(state = initialTripsState, action) {
         isFetching: false,
         error: action.error
       };
+    case CLEAR_TRIPS_ERROR:
+      delete state.error;
+      return state;
     case LOGOUT:
       return initialTripsState;
   }

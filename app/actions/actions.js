@@ -31,6 +31,7 @@ export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
 export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
+export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
 /*
  * Action Creators
@@ -132,6 +133,12 @@ export function createTripSaveDest(destination) {
   return {
     type: CREATE_TRIP_SAVE_DEST,
     destination
+  };
+}
+
+export function clearTripsError() {
+  return {
+    type: CLEAR_TRIPS_ERROR
   };
 }
 
