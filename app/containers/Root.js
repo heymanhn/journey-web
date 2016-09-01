@@ -1,6 +1,6 @@
 'use strict';
 
-import localForage from 'localForage';
+import localForage from 'localforage';
 import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
