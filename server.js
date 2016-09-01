@@ -8,6 +8,7 @@
 let express = require('express');
 let fs = require('fs');
 let https = require('https');
+let http = require('http');
 let path = require('path');
 
 let app = express();
@@ -19,12 +20,14 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'app', 'index.html'));
 });
 
-const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
-};
+// Disable for now since we will be running on HTTP
+// const options = {
+//   key: fs.readFileSync('key.pem'),
+//   cert: fs.readFileSync('cert.pem')
+// };
+// app.server = https.createServer(options, app);
 
-app.server = https.createServer(options, app);
+app.server = http.createServer(app);
 app.server.listen(app.get('port'), () => {
   console.log('Server started: https://localhost:' + app.get('port') + '/');
 });
