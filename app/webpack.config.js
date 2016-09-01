@@ -1,10 +1,11 @@
 'use strict';
+var webpack = require('webpack');
+const API_SERVER = process.env.API_SERVER;
 
 module.exports = {
   entry: './app/index.js',
   output: {
-    path: __dirname + '/app',
-    filename: 'bundle.js'
+    filename: './app/bundle.js'
   },
   module: {
     preLoaders: [
@@ -26,6 +27,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      API_SERVER: JSON.stringify(API_SERVER)
+    })
+  ],
   resolve: {
     extensions: ['', '.js', '.es6']
   },

@@ -44,3 +44,6 @@ jspm_packages
 
 # Webpack bundle
 bundle.js
+
+# Heroku local config variables
+.env

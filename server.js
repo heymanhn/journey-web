@@ -29,5 +29,5 @@ app.get('*', (req, res) => {
 
 app.server = http.createServer(app);
 app.server.listen(app.get('port'), () => {
-  console.log('Server started: https://localhost:' + app.get('port') + '/');
+  console.log('Server started: http://localhost:' + app.get('port') + '/');
 });

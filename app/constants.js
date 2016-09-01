@@ -1,6 +1,6 @@
 'use strict';
 
-const journeyAPIHost = 'https://localhost:3000/v1';
+const journeyAPIHost = API_SERVER || 'http://localhost:3000/v1';
 
 export const journeyAPI = {
   login: () => ({
