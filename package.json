@@ -41,7 +41,9 @@
     "webpack": "^1.13.2"
   },
   "scripts": {
-    "start": "webpack --config app/webpack.config.js & node server.js"
+    "postinstall": "webpack -p --config app/webpack.config.js --progress",
+    "start": "node server.js",
+    "start-dev": "webpack --config app/webpack.config.js --watch & node server.js"
   },
   "keywords": [
     "journey",
