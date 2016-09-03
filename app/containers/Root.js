@@ -14,8 +14,12 @@ export default class Root extends Component {
     this.state = { rehydrated: false };
   }
 
-  // Moving the persistStore() call to this event handler to prevent the root
-  // view from loading until after the store has been rehydrated
+  /* Moving the persistStore() call to this event handler to prevent the root
+   * view from loading until after the store has been rehydrated
+   *
+   * HINT: call persistStore(...).purge() to clear all data if things get out
+   * of whack
+   */
   componentWillMount() {
     persistStore(this.props.store, { storage: localForage }, () => {
       this.setState({ rehydrated: true });
