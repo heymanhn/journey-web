@@ -45,28 +45,25 @@ function authState(state = initialAuthState, action) {
       return { ...state, newPassword: action.password };
     case API_LOGIN_REQUEST:
     case API_SIGNUP_REQUEST:
-      const newState = _.omit(state, 'error');
       return {
-        ...newState,
+        ...(_.omit(state, 'error')),
         isFetching: true
       };
     case API_LOGIN_SUCCESS:
-      const newState = _.omit(state, ['error', 'email', 'password']);
       return {
-        ...newState,
+        ...(_.omit(state, ['error', 'email', 'password'])),
         isFetching: false,
         user: action.user,
         token: action.token
       };
     case API_SIGNUP_SUCCESS:
-      const newState = _.omit(state, [
-        'error',
-        'newName',
-        'newEmail',
-        'newPassword'
-      ]);
       return {
-        ...newState,
+        ...(_.omit(state, [
+          'error',
+          'newName',
+          'newEmail',
+          'newPassword'
+        ])),
         isFetching: false,
         user: action.user,
         token: action.token
@@ -105,27 +102,24 @@ function tripsState(state = initialTripsState, action) {
     case API_GET_TRIPS_REQUEST:
     case API_GET_TRIP_REQUEST:
     case API_CREATE_TRIP_REQUEST:
-      const newState = _.omit(state, ['error', 'trip']);
       return {
-        ...newState,
+        ...(_.omit(state, ['error', 'trip'])),
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
-      const newState = _.omit(state, ['error']);
       return {
-        ...newState,
+        ...(_.omit(state, ['error'])),
         isFetching: false,
         trips: action.trips
       };
     case API_CREATE_TRIP_SUCCESS:
-      const newState = _.omit(state, [
-        'error',
-        'newTitle',
-        'newDestination',
-        'newVisibility'
-      ]);
       return {
-        ...newState,
+        ...(_.omit(state, [
+          'error',
+          'newTitle',
+          'newDestination',
+          'newVisibility'
+        ])),
         trips: [action.trip].concat(state.trips),
         isFetching: false
       };
