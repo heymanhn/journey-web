@@ -12,7 +12,7 @@ import SignupPage from '../components/SignupPage';
 const mapStateToProps = (state) => {
   return {
     email: state.authState.newEmail,
-    error: state.authState.error ? state.authState.error.message : '',
+    error: state.authState.error ? state.authState.error : '',
     name: state.authState.newName
   };
 };

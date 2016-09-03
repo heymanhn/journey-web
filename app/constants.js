@@ -22,6 +22,13 @@ export const journeyAPI = {
       method: 'POST',
       route: journeyAPIHost + '/trips'
     })
+  },
+
+  trip: {
+    get: (tripId) => ({
+      method: 'GET',
+      route: journeyAPIHost + '/trips/' + tripId
+    })
   }
 };
 

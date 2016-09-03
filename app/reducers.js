@@ -20,6 +20,9 @@ import {
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
+  API_GET_TRIP_REQUEST,
+  API_GET_TRIP_SUCCESS,
+  API_GET_TRIP_FAILURE,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
   API_CREATE_TRIP_FAILURE,
@@ -99,8 +102,10 @@ function tripsState(state = initialTripsState, action) {
         newVisibility: action.visibility
       };
     case API_GET_TRIPS_REQUEST:
+    case API_GET_TRIP_REQUEST:
     case API_CREATE_TRIP_REQUEST:
       delete state.error;
+      delete state.trip;
       return {
         ...state,
         isFetching: true
@@ -116,9 +121,16 @@ function tripsState(state = initialTripsState, action) {
       delete state.error;
       delete state.newTitle;
       delete state.newDestination;
+      delete state.newVisibility;
       state.trips.splice(0, 0, action.trip);
       return {
         ...state,
+        isFetching: false
+      };
+    case API_GET_TRIP_SUCCESS:
+      return {
+        ...state,
+        trip: action.trip,
         isFetching: false
       };
     case API_GET_TRIPS_FAILURE:
@@ -128,8 +140,15 @@ function tripsState(state = initialTripsState, action) {
         isFetching: false,
         error: action.error
       };
+    case API_GET_TRIP_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+        tripError: action.error
+      };
     case CLEAR_TRIPS_ERROR:
       delete state.error;
+      delete state.tripError;
       return state;
     case LOGOUT:
       return initialTripsState;

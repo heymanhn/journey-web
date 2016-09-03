@@ -11,7 +11,7 @@ import IntroPage from '../components/IntroPage';
 const mapStateToProps = (state) => {
   return {
     email: state.authState.email,
-    error: state.authState.error ? state.authState.error.message : ''
+    error: state.authState.error ? state.authState.error : ''
   };
 };
 

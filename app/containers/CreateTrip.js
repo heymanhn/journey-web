@@ -11,7 +11,7 @@ import CreateTripPage from '../components/CreateTripPage';
 
 const mapStateToProps = (state) => {
   return {
-    error: state.tripsState.error ? state.tripsState.error.message : ''
+    error: state.tripsState.error ? state.tripsState.error : ''
   };
 };
 
