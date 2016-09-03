@@ -15,6 +15,7 @@ import {
   API_SIGNUP_FAILURE,
   CREATE_TRIP_SAVE_TITLE,
   CREATE_TRIP_SAVE_DEST,
+  CREATE_TRIP_SAVE_VISIBILITY,
   CLEAR_TRIPS_ERROR,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
@@ -91,6 +92,11 @@ function tripsState(state = initialTripsState, action) {
       return {
         ...state,
         newDestination: action.destination
+      };
+    case CREATE_TRIP_SAVE_VISIBILITY:
+      return {
+        ...state,
+        newVisibility: action.visibility
       };
     case API_GET_TRIPS_REQUEST:
     case API_CREATE_TRIP_REQUEST:

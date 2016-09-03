@@ -25,6 +25,7 @@ export const LOGOUT = 'LOGOUT';
 // Trip Management
 export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
 export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
+export const CREATE_TRIP_SAVE_VISIBILITY = 'CREATE_TRIP_SAVE_VISIBILITY';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
@@ -133,6 +134,13 @@ export function createTripSaveDest(destination) {
   return {
     type: CREATE_TRIP_SAVE_DEST,
     destination
+  };
+}
+
+export function createTripSaveVisibility(visibility) {
+  return {
+    type: CREATE_TRIP_SAVE_VISIBILITY,
+    visibility
   };
 }
 
@@ -279,18 +287,19 @@ export function apiCreateTrip() {
 
     // Format the destination object before saving
     const title = getState().tripsState.newTitle;
-    const oldDest = getState().tripsState.newDestination;
-    const loc = oldDest.geometry.location;
+    const dest = getState().tripsState.newDestination;
+    const visibility = getState().tripsState.newVisibility || 'public';
+    const loc = dest.geometry.location;
 
     let destParams = {
-      googlePlaceId: oldDest.place_id,
-      name: oldDest.name,
-      formattedAddress: oldDest.formatted_address,
+      googlePlaceId: dest.place_id,
+      name: dest.name,
+      formattedAddress: dest.formatted_address,
       loc: {
         type: 'Point',
         coordinates: [loc.lng(), loc.lat()]
       },
-      types: oldDest.types
+      types: dest.types
     };
 
     const createTrip = journeyAPI.trips.create();
@@ -299,6 +308,7 @@ export function apiCreateTrip() {
       method: createTrip.method,
       body: JSON.stringify({
         title,
+        visibility,
         destination: destParams
       })
     };
