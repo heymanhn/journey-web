@@ -3,7 +3,11 @@
 import React, { Component, PropTypes } from 'react';
 import Button from './Button';
 import TextInput from './TextInput';
-import { destTextInputStyle, errorMessageStyle } from '../stylesheets/styles';
+import {
+  destTextInputStyle,
+  inlineDivStyle,
+  errorMessageStyle
+} from '../stylesheets/styles';
 
 class CreateTripPage extends Component {
   componentDidMount() {
@@ -14,7 +18,8 @@ class CreateTripPage extends Component {
     const {
       error,
       onCreateTripPress,
-      onEnterTitle
+      onEnterTitle,
+      onSetVisibility
     } = this.props;
 
     return (
@@ -30,6 +35,22 @@ class CreateTripPage extends Component {
             placeholder="Where do you want to go?"
             style={destTextInputStyle}
           />
+          <div style={inlineDivStyle}>
+            Visibility:
+            <input
+              type="radio"
+              name="tripVisibility"
+              value="public"
+              defaultChecked
+              onChange={onSetVisibility}
+            />Public
+            <input
+              type="radio"
+              name="tripVisibility"
+              value="private"
+              onChange={onSetVisibility}
+            />Private
+          </div>
           <div style={errorMessageStyle}>{error}</div>
           <Button label="Create Trip" onClick={onCreateTripPress} />
         </div>
@@ -55,7 +76,8 @@ CreateTripPage.propTypes = {
   error: PropTypes.string,
   onCreateTripPress: PropTypes.func.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
-  onEnterDestination: PropTypes.func.isRequired
+  onEnterDestination: PropTypes.func.isRequired,
+  onSetVisibility: PropTypes.func.isRequired
 };
 
 export default CreateTripPage;

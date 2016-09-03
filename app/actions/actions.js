@@ -25,12 +25,16 @@ export const LOGOUT = 'LOGOUT';
 // Trip Management
 export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
 export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
+export const CREATE_TRIP_SAVE_VISIBILITY = 'CREATE_TRIP_SAVE_VISIBILITY';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
 export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
+export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
+export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
+export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
 /*
@@ -136,6 +140,13 @@ export function createTripSaveDest(destination) {
   };
 }
 
+export function createTripSaveVisibility(visibility) {
+  return {
+    type: CREATE_TRIP_SAVE_VISIBILITY,
+    visibility
+  };
+}
+
 export function clearTripsError() {
   return {
     type: CLEAR_TRIPS_ERROR
@@ -158,6 +169,26 @@ export function apiGetTripsSuccess(json) {
 export function apiGetTripsFailure(error) {
   return {
     type: API_GET_TRIPS_FAILURE,
+    error
+  };
+}
+
+export function apiGetTripRequest() {
+  return {
+    type: API_GET_TRIP_REQUEST
+  };
+}
+
+export function apiGetTripSuccess(json) {
+  return {
+    type: API_GET_TRIP_SUCCESS,
+    trip: json.trip
+  };
+}
+
+export function apiGetTripFailure(error) {
+  return {
+    type: API_GET_TRIP_FAILURE,
     error
   };
 }
@@ -221,8 +252,8 @@ export function apiLogin() {
         dispatch(apiGetTrips());
         viewTripsPage();
       })
-      .catch(error => { dispatch(apiLoginFailure(error)) });
-  }
+      .catch(error => { dispatch(apiLoginFailure(error.message)) });
+  };
 }
 
 export function apiSignup() {
@@ -246,8 +277,8 @@ export function apiSignup() {
         dispatch(apiGetTrips());
         viewTripsPage();
       })
-      .catch(error => { dispatch(apiSignupFailure(error)); });
-  }
+      .catch(error => { dispatch(apiSignupFailure(error.message)); });
+  };
 }
 
 // Trip Management
@@ -269,8 +300,33 @@ export function apiGetTrips() {
       .then(json => {
         dispatch(apiGetTripsSuccess(json));
       })
-      .catch(error => { dispatch(apiGetTripsFailure(error)); });
-  }
+      .catch(error => { dispatch(apiGetTripsFailure(error.message)); });
+  };
+}
+
+export function apiGetTrip(tripId) {
+  return (dispatch, getState) => {
+    dispatch(apiGetTripRequest());
+
+    const userTrip = journeyAPI.trip.get(tripId);
+    let opts = {
+      ...optsTemplate,
+      method: userTrip.method
+    };
+
+    // Only add Authorization header if a user has authenticated
+    if (getState().authState.token) {
+      opts.headers['Authorization'] = getState().authState.token;
+    }
+
+    fetch(userTrip.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiGetTripSuccess(json));
+      })
+      .catch(error => { dispatch(apiGetTripFailure(error.message)); });
+  };
 }
 
 export function apiCreateTrip() {
@@ -279,18 +335,19 @@ export function apiCreateTrip() {
 
     // Format the destination object before saving
     const title = getState().tripsState.newTitle;
-    const oldDest = getState().tripsState.newDestination;
-    const loc = oldDest.geometry.location;
+    const dest = getState().tripsState.newDestination;
+    const visibility = getState().tripsState.newVisibility || 'public';
+    const loc = dest.geometry.location;
 
     let destParams = {
-      googlePlaceId: oldDest.place_id,
-      name: oldDest.name,
-      formattedAddress: oldDest.formatted_address,
+      googlePlaceId: dest.place_id,
+      name: dest.name,
+      formattedAddress: dest.formatted_address,
       loc: {
         type: 'Point',
         coordinates: [loc.lng(), loc.lat()]
       },
-      types: oldDest.types
+      types: dest.types
     };
 
     const createTrip = journeyAPI.trips.create();
@@ -299,6 +356,7 @@ export function apiCreateTrip() {
       method: createTrip.method,
       body: JSON.stringify({
         title,
+        visibility,
         destination: destParams
       })
     };
@@ -312,6 +370,6 @@ export function apiCreateTrip() {
         dispatch(apiGetTrips());
         viewTripPage(json.trip._id);
       })
-      .catch(error => { dispatch(apiCreateTripFailure(error)); });
-  }
+      .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
+  };
 }

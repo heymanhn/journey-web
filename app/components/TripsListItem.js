@@ -12,7 +12,7 @@ class TripsListItem extends Component {
     return (
       <div style={tripsListItemStyle}>
         <p>Name: {trip.title}</p>
-        <p>Destination: {trip.destination.name}</p>
+        <p>Destination: {trip.destination && trip.destination.name}</p>
         <p>Visibility: {trip.visibility}</p>
         <Button
           label="View Trip"

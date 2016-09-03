@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import {
   apiCreateTrip,
   createTripSaveDest,
-  createTripSaveTitle
+  createTripSaveTitle,
+  createTripSaveVisibility
 } from '../actions/actions';
 import CreateTripPage from '../components/CreateTripPage';
 
 const mapStateToProps = (state) => {
   return {
-    error: state.tripsState.error ? state.tripsState.error.message : ''
+    error: state.tripsState.error ? state.tripsState.error : ''
   };
 };
 
@@ -24,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onEnterDestination: (place) => {
       dispatch(createTripSaveDest(place));
+    },
+    onSetVisibility: (event) => {
+      dispatch(createTripSaveVisibility(event.target.value));
     }
   };
 };

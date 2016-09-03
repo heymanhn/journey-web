@@ -21,6 +21,10 @@ export const destTextInputStyle = {
   margin: 5
 };
 
+export const inlineDivStyle = {
+  display: 'inline'
+};
+
 export const textInputStyle = {
   display: 'block',
   color: '#333333',

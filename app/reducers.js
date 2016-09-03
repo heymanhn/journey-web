@@ -1,6 +1,7 @@
 'use strict';
 
 import { combineReducers } from 'redux';
+import _ from 'underscore';
 import {
   LOGIN_SAVE_EMAIL,
   LOGIN_SAVE_PASSWORD,
@@ -15,10 +16,14 @@ import {
   API_SIGNUP_FAILURE,
   CREATE_TRIP_SAVE_TITLE,
   CREATE_TRIP_SAVE_DEST,
+  CREATE_TRIP_SAVE_VISIBILITY,
   CLEAR_TRIPS_ERROR,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
+  API_GET_TRIP_REQUEST,
+  API_GET_TRIP_SUCCESS,
+  API_GET_TRIP_FAILURE,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
   API_CREATE_TRIP_FAILURE,
@@ -40,28 +45,28 @@ function authState(state = initialAuthState, action) {
       return { ...state, newPassword: action.password };
     case API_LOGIN_REQUEST:
     case API_SIGNUP_REQUEST:
-      delete state.error;
+      const newState = _.omit(state, 'error');
       return {
-        ...state,
+        ...newState,
         isFetching: true
       };
     case API_LOGIN_SUCCESS:
-      delete state.error;
-      delete state.email;
-      delete state.password;
+      const newState = _.omit(state, ['error', 'email', 'password']);
       return {
-        ...state,
+        ...newState,
         isFetching: false,
         user: action.user,
         token: action.token
       };
     case API_SIGNUP_SUCCESS:
-      delete state.error;
-      delete state.newName;
-      delete state.newEmail;
-      delete state.newPassword;
+      const newState = _.omit(state, [
+        'error',
+        'newName',
+        'newEmail',
+        'newPassword'
+      ]);
       return {
-        ...state,
+        ...newState,
         isFetching: false,
         user: action.user,
         token: action.token
@@ -92,27 +97,42 @@ function tripsState(state = initialTripsState, action) {
         ...state,
         newDestination: action.destination
       };
-    case API_GET_TRIPS_REQUEST:
-    case API_CREATE_TRIP_REQUEST:
-      delete state.error;
+    case CREATE_TRIP_SAVE_VISIBILITY:
       return {
         ...state,
+        newVisibility: action.visibility
+      };
+    case API_GET_TRIPS_REQUEST:
+    case API_GET_TRIP_REQUEST:
+    case API_CREATE_TRIP_REQUEST:
+      const newState = _.omit(state, ['error', 'trip']);
+      return {
+        ...newState,
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
-      delete state.error;
+      const newState = _.omit(state, ['error']);
       return {
-        ...state,
+        ...newState,
         isFetching: false,
         trips: action.trips
       };
     case API_CREATE_TRIP_SUCCESS:
-      delete state.error;
-      delete state.newTitle;
-      delete state.newDestination;
-      state.trips.splice(0, 0, action.trip);
+      const newState = _.omit(state, [
+        'error',
+        'newTitle',
+        'newDestination',
+        'newVisibility'
+      ]);
+      return {
+        ...newState,
+        trips: [action.trip].concat(state.trips),
+        isFetching: false
+      };
+    case API_GET_TRIP_SUCCESS:
       return {
         ...state,
+        trip: action.trip,
         isFetching: false
       };
     case API_GET_TRIPS_FAILURE:
@@ -122,9 +142,14 @@ function tripsState(state = initialTripsState, action) {
         isFetching: false,
         error: action.error
       };
+    case API_GET_TRIP_FAILURE:
+      return {
+        ...state,
+        isFetching: false,
+        tripError: action.error
+      };
     case CLEAR_TRIPS_ERROR:
-      delete state.error;
-      return state;
+      return _.omit(state, ['error', 'tripError']);
     case LOGOUT:
       return initialTripsState;
   }
