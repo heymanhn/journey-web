@@ -35,6 +35,7 @@ export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
+export const CLEAR_CURRENT_TRIP = 'CLEAR_CURRENT_TRIP';
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
 /*
@@ -144,6 +145,12 @@ export function createTripSaveVisibility(visibility) {
   return {
     type: CREATE_TRIP_SAVE_VISIBILITY,
     visibility
+  };
+}
+
+export function clearCurrentTrip() {
+  return {
+    type: CLEAR_CURRENT_TRIP
   };
 }
 

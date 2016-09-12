@@ -5,6 +5,7 @@ import {
   CREATE_TRIP_SAVE_TITLE,
   CREATE_TRIP_SAVE_DEST,
   CREATE_TRIP_SAVE_VISIBILITY,
+  CLEAR_CURRENT_TRIP,
   CLEAR_TRIPS_ERROR,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
@@ -79,6 +80,8 @@ export default function tripsState(state = initialTripsState, action) {
         isFetching: false,
         tripError: action.error
       };
+    case CLEAR_CURRENT_TRIP:
+      return _.omit(state, ['trip']);
     case CLEAR_TRIPS_ERROR:
       return _.omit(state, ['error', 'tripError']);
     case LOGOUT:

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   apiGetTrip,
   apiGetTripFailure,
+  clearCurrentTrip,
   clearTripsError
 } from '../actions/actions';
 import TripPage from '../components/TripPage';
@@ -18,6 +19,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onClearCurrentTrip: () => {
+      dispatch(clearCurrentTrip());
+    },
     onClearTripsError: () => {
       dispatch(clearTripsError());
     },

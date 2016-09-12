@@ -2,12 +2,14 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
+import TripPageIdeasList from './TripPageIdeasList';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
   constructor(props) {
     super(props);
 
+    this.props.onClearCurrentTrip();
     this.props.onClearTripsError();
     this.state = {
       trip: {}
@@ -18,20 +20,11 @@ class TripPage extends Component {
     const { tripId } = this.props.params;
     const { onGetTrip, onNoTripFound, trip, trips } = this.props;
 
-    // If trips array is not present, fetch the trip from the server
-    if (trips.length > 0) {
-      const tripFromTrips = trips.find(trip => (trip._id === tripId));
-      if (tripFromTrips) {
-        this.setState({ trip: tripFromTrips });
-      } else {
-        onGetTrip(tripId);
-      }
+    // Fetch the trip from the server if trip not loaded yet
+    if (trip && trip._id === tripId) {
+      this.setState({ trip });
     } else {
-      if (trip && trip._id === tripId) {
-        this.setState({ trip });
-      } else {
-        onGetTrip(tripId);
-      }
+      onGetTrip(tripId);
     }
   }
 
@@ -56,15 +49,6 @@ class TripPage extends Component {
       return null;
     }
 
-    const tripIdeas = trip.ideas.map(idea => {
-      return (
-        <div key={idea._id}>
-          <p>Name: {idea.name}</p>
-          <p>Comment: {idea.comment}</p>
-        </div>
-      );
-    });
-
     const tripPlan = trip.plan.map(day => {
       return (
         <p key={day._id}>Day</p>
@@ -83,11 +67,10 @@ class TripPage extends Component {
         </Row>
         <Row>
           <Col md={4}>
-            <p>Ideas:</p>
-            <div>{tripIdeas}</div>
+            <TripPageIdeasList ideas={trip.ideas} />
           </Col>
           <Col md={8}>
-            <p>Plan:</p>
+            <h3>Plan</h3>
             <div>{tripPlan}</div>
           </Col>
         </Row>
@@ -107,6 +90,7 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
+  onClearCurrentTrip: PropTypes.func.isRequired,
   onClearTripsError: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
   onNoTripFound: PropTypes.func.isRequired,
