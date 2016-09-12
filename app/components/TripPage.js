@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
 import Button from './Button';
 import { viewTripsPage } from '../actions/navigation';
 
@@ -72,17 +73,27 @@ class TripPage extends Component {
     });
 
     return (
-      <div>
-        <h1>Trip page</h1>
-        <p>Name: {trip.title}</p>
-        <p>Destination: {trip.destination && trip.destination.name}</p>
-        <p>Visibility: {trip.visibility}</p>
-        <p>Ideas:</p>
-        <div>{tripIdeas}</div>
-        <p>Plan:</p>
-        <div>{tripPlan}</div>
-        <Button label="Home" onClick={viewTripsPage} />
-      </div>
+      <Grid>
+        <Row>
+          <Col md={12}>
+            <h1>Trip page</h1>
+            <p>Name: {trip.title}</p>
+            <p>Destination: {trip.destination && trip.destination.name}</p>
+            <p>Visibility: {trip.visibility}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={4}>
+            <p>Ideas:</p>
+            <div>{tripIdeas}</div>
+          </Col>
+          <Col md={8}>
+            <p>Plan:</p>
+            <div>{tripPlan}</div>
+            <Button label="Home" onClick={viewTripsPage} />
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
