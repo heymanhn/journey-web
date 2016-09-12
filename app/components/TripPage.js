@@ -1,8 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
-import Button from './Button';
+import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
@@ -90,7 +89,15 @@ class TripPage extends Component {
           <Col md={8}>
             <p>Plan:</p>
             <div>{tripPlan}</div>
-            <Button label="Home" onClick={viewTripsPage} />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+              bsStyle="primary"
+              onClick={viewTripsPage}>
+              Home
+            </Button>
           </Col>
         </Row>
       </Grid>

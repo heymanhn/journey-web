@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Button from './Button';
+import { Button } from 'react-bootstrap';
 import { viewTripPage } from '../actions/navigation';
 import { tripsListItemStyle } from '../stylesheets/styles';
 
@@ -15,9 +15,11 @@ class TripsListItem extends Component {
         <p>Destination: {trip.destination && trip.destination.name}</p>
         <p>Visibility: {trip.visibility}</p>
         <Button
-          label="View Trip"
+          bsStyle="default"
           onClick={viewTripPage.bind(null, trip._id)}
-        />
+        >
+          View Trip
+        </Button>
       </div>
     );
   }

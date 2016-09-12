@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Button from './Button';
+import { Button } from 'react-bootstrap';
 import TripsList from './TripsList';
 
 class TripsPage extends Component {
@@ -17,9 +17,19 @@ class TripsPage extends Component {
       <div>
         <h1>Trips page</h1>
         <p>Welcome, {name}!</p>
-        <Button label="Create Trip" onClick={onCreateTripPress} />
+        <Button
+          bsStyle="primary"
+          onClick={onCreateTripPress}
+        >
+          Create Trip
+        </Button>
         <TripsList trips={trips} />
-        <Button label="Log Out" onClick={onLogoutPress} />
+        <Button
+          bsStyle="primary"
+          onClick={onLogoutPress}
+        >
+          Log Out
+        </Button>
       </div>
     );
   }

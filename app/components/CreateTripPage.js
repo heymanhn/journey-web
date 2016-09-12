@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Button from './Button';
+import { Button } from 'react-bootstrap';
 import TextInput from './TextInput';
 import {
   destTextInputStyle,
@@ -52,7 +52,12 @@ class CreateTripPage extends Component {
             />Private
           </div>
           <div style={errorMessageStyle}>{error}</div>
-          <Button label="Create Trip" onClick={onCreateTripPress} />
+          <Button
+            bsStyle="default"
+            onClick={onCreateTripPress}
+          >
+            Create Trip
+          </Button>
         </div>
       </div>
     );
