@@ -7,6 +7,11 @@ import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 class TripPageIdea extends Component {
   render() {
     const { idea } = this.props;
+    const commentSection = (
+      <div>
+        <p style={styles.comment}>{idea.comment}</p>
+      </div>
+    );
 
     return (
       <Panel style={styles.idea}>
@@ -15,9 +20,7 @@ class TripPageIdea extends Component {
           <p style={styles.name}>{idea.name}</p>
           <p style={styles.address}>{idea.address}</p>
         </div>
-        <div>
-          <p style={styles.comment}>{idea.comment}</p>
-        </div>
+        { idea.comment && commentSection }
       </Panel>
     );
   }

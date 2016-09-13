@@ -45,7 +45,7 @@ export const tripPageIdeaStyles = {
     backgroundColor: '#fdfdfd'
   },
   info: {
-    height: 120
+    height: 100
   },
   photo: {
     float: 'right',
@@ -62,6 +62,7 @@ export const tripPageIdeaStyles = {
     color: '#999999'
   },
   comment: {
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    marginTop: 10
   }
 };
