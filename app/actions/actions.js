@@ -345,6 +345,7 @@ export function apiCreateTrip() {
     const dest = getState().tripsState.newDestination;
     const visibility = getState().tripsState.newVisibility || 'public';
     const loc = dest.geometry.location;
+    const viewport = dest.geometry.viewport;
 
     let destParams = {
       googlePlaceId: dest.place_id,
@@ -353,6 +354,16 @@ export function apiCreateTrip() {
       loc: {
         type: 'Point',
         coordinates: [loc.lng(), loc.lat()]
+      },
+      viewport: {
+        northeast: {
+          type: 'Point',
+          coordinates: [viewport.b.f, viewport.f.b]
+        },
+        southwest: {
+          type: 'Point',
+          coordinates: [viewport.b.b, viewport.f.f]
+        }
       },
       types: dest.types
     };
