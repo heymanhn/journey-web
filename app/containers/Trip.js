@@ -2,34 +2,21 @@
 
 import { connect } from 'react-redux';
 import {
-  apiGetTrip,
-  apiGetTripFailure,
-  clearCurrentTrip,
-  clearTripsError
+  apiGetTrip
 } from '../actions/actions';
 import TripPage from '../components/TripPage';
 
 const mapStateToProps = (state) => {
   return {
-    error: state.tripsState.tripError ? state.tripsState.tripError : '',
-    trip: state.tripsState.trip,
-    trips: state.tripsState.trips
+    error: state.tripState.error ? state.tripState.error : '',
+    trip: state.tripState.trip
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClearCurrentTrip: () => {
-      dispatch(clearCurrentTrip());
-    },
-    onClearTripsError: () => {
-      dispatch(clearTripsError());
-    },
     onGetTrip: (tripId) => {
       dispatch(apiGetTrip(tripId));
-    },
-    onNoTripFound: () => {
-      dispatch(apiGetTripFailure('Trip not found'));
     }
   };
 };

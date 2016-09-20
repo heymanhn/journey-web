@@ -32,11 +32,13 @@ export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
 export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
+export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
+
+// Individual Trip
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
-export const CLEAR_CURRENT_TRIP = 'CLEAR_CURRENT_TRIP';
-export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
+
 
 /*
  * Action Creators
@@ -148,12 +150,6 @@ export function createTripSaveVisibility(visibility) {
   };
 }
 
-export function clearCurrentTrip() {
-  return {
-    type: CLEAR_CURRENT_TRIP
-  };
-}
-
 export function clearTripsError() {
   return {
     type: CLEAR_TRIPS_ERROR
@@ -180,26 +176,6 @@ export function apiGetTripsFailure(error) {
   };
 }
 
-export function apiGetTripRequest() {
-  return {
-    type: API_GET_TRIP_REQUEST
-  };
-}
-
-export function apiGetTripSuccess(json) {
-  return {
-    type: API_GET_TRIP_SUCCESS,
-    trip: json.trip
-  };
-}
-
-export function apiGetTripFailure(error) {
-  return {
-    type: API_GET_TRIP_FAILURE,
-    error
-  };
-}
-
 export function apiCreateTripRequest() {
   return {
     type: API_CREATE_TRIP_REQUEST
@@ -216,6 +192,27 @@ export function apiCreateTripSuccess(json) {
 export function apiCreateTripFailure(error) {
   return {
     type: API_CREATE_TRIP_FAILURE,
+    error
+  };
+}
+
+// Individual Trip
+export function apiGetTripRequest() {
+  return {
+    type: API_GET_TRIP_REQUEST
+  };
+}
+
+export function apiGetTripSuccess(json) {
+  return {
+    type: API_GET_TRIP_SUCCESS,
+    trip: json.trip
+  };
+}
+
+export function apiGetTripFailure(error) {
+  return {
+    type: API_GET_TRIP_FAILURE,
     error
   };
 }
@@ -311,31 +308,6 @@ export function apiGetTrips() {
   };
 }
 
-export function apiGetTrip(tripId) {
-  return (dispatch, getState) => {
-    dispatch(apiGetTripRequest());
-
-    const userTrip = journeyAPI.trip.get(tripId);
-    let opts = {
-      ...optsTemplate,
-      method: userTrip.method
-    };
-
-    // Only add Authorization header if a user has authenticated
-    if (getState().authState.token) {
-      opts.headers['Authorization'] = getState().authState.token;
-    }
-
-    fetch(userTrip.route, opts)
-      .then(handleErrors)
-      .then(response => response.json())
-      .then(json => {
-        dispatch(apiGetTripSuccess(json));
-      })
-      .catch(error => { dispatch(apiGetTripFailure(error.message)); });
-  };
-}
-
 export function apiCreateTrip() {
   return (dispatch, getState) => {
     dispatch(apiCreateTripRequest());
@@ -389,5 +361,31 @@ export function apiCreateTrip() {
         viewTripPage(json.trip._id);
       })
       .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
+  };
+}
+
+// Individual trip
+export function apiGetTrip(tripId) {
+  return (dispatch, getState) => {
+    dispatch(apiGetTripRequest());
+
+    const userTrip = journeyAPI.trip.get(tripId);
+    let opts = {
+      ...optsTemplate,
+      method: userTrip.method
+    };
+
+    // Only add Authorization header if a user has authenticated
+    if (getState().authState.token) {
+      opts.headers['Authorization'] = getState().authState.token;
+    }
+
+    fetch(userTrip.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiGetTripSuccess(json));
+      })
+      .catch(error => { dispatch(apiGetTripFailure(error.message)); });
   };
 }

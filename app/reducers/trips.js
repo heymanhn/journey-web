@@ -5,14 +5,10 @@ import {
   CREATE_TRIP_SAVE_TITLE,
   CREATE_TRIP_SAVE_DEST,
   CREATE_TRIP_SAVE_VISIBILITY,
-  CLEAR_CURRENT_TRIP,
   CLEAR_TRIPS_ERROR,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
-  API_GET_TRIP_REQUEST,
-  API_GET_TRIP_SUCCESS,
-  API_GET_TRIP_FAILURE,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
   API_CREATE_TRIP_FAILURE,
@@ -38,10 +34,9 @@ export default function tripsState(state = initialTripsState, action) {
         newVisibility: action.visibility
       };
     case API_GET_TRIPS_REQUEST:
-    case API_GET_TRIP_REQUEST:
     case API_CREATE_TRIP_REQUEST:
       return {
-        ...(_.omit(state, ['error', 'trip'])),
+        ...(_.omit(state, ['error'])),
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
@@ -61,12 +56,6 @@ export default function tripsState(state = initialTripsState, action) {
         trips: [action.trip].concat(state.trips),
         isFetching: false
       };
-    case API_GET_TRIP_SUCCESS:
-      return {
-        ...state,
-        trip: action.trip,
-        isFetching: false
-      };
     case API_GET_TRIPS_FAILURE:
     case API_CREATE_TRIP_FAILURE:
       return {
@@ -74,16 +63,8 @@ export default function tripsState(state = initialTripsState, action) {
         isFetching: false,
         error: action.error
       };
-    case API_GET_TRIP_FAILURE:
-      return {
-        ...state,
-        isFetching: false,
-        tripError: action.error
-      };
-    case CLEAR_CURRENT_TRIP:
-      return _.omit(state, ['trip']);
     case CLEAR_TRIPS_ERROR:
-      return _.omit(state, ['error', 'tripError']);
+      return _.omit(state, ['error']);
     case LOGOUT:
       return initialTripsState;
   }

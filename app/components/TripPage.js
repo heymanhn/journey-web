@@ -6,38 +6,16 @@ import TripPageIdeasList from './TripPageIdeasList';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.props.onClearCurrentTrip();
-    this.props.onClearTripsError();
-    this.state = {
-      trip: {}
-    };
-  }
-
   componentWillMount() {
     const { tripId } = this.props.params;
-    const { onGetTrip, onNoTripFound, trip, trips } = this.props;
+    const { onGetTrip } = this.props;
 
-    // Fetch the trip from the server if trip not loaded yet
-    if (trip && trip._id === tripId) {
-      this.setState({ trip });
-    } else {
-      onGetTrip(tripId);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { trip } = nextProps;
-    if (trip && trip._id) {
-      this.setState({ trip });
-    }
+    // Fetch the trip from the server upon load
+    onGetTrip(tripId);
   }
 
   render() {
-    const { error } = this.props;
-    const { trip } = this.state;
+    const { error, trip } = this.props;
 
     if (error) {
       return (
@@ -45,7 +23,7 @@ class TripPage extends Component {
       );
     }
 
-    if (trip && !trip._id) {
+    if (!trip) {
       return null;
     }
 
@@ -90,12 +68,8 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
-  onClearCurrentTrip: PropTypes.func.isRequired,
-  onClearTripsError: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
-  onNoTripFound: PropTypes.func.isRequired,
-  trip: PropTypes.object,
-  trips: PropTypes.array
+  trip: PropTypes.object
 };
 
 export default TripPage;

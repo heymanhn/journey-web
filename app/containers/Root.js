@@ -21,7 +21,12 @@ export default class Root extends Component {
    * of whack
    */
   componentWillMount() {
-    persistStore(this.props.store, { storage: localForage }, () => {
+    const config = {
+      storage: localForage,
+      blacklist: ['tripState']
+    };
+
+    persistStore(this.props.store, config, () => {
       this.setState({ rehydrated: true });
     });
   }

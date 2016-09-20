@@ -40,3 +40,7 @@ export const initialTripsState = {
   isFetching: false,
   trips: []
 };
+
+export const initialTripState = {
+  isFetching: false
+};
