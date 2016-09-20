@@ -28,7 +28,13 @@ export const journeyAPI = {
     get: (tripId) => ({
       method: 'GET',
       route: journeyAPIHost + '/trips/' + tripId
-    })
+    }),
+    ideas: {
+      create: (tripId) => ({
+        method: 'POST',
+        route: journeyAPIHost + '/trips/' + tripId + '/ideas'
+      })
+    }
   }
 };
 
@@ -42,5 +48,6 @@ export const initialTripsState = {
 };
 
 export const initialTripState = {
-  isFetching: false
+  isFetching: false,
+  resetIdeaBox: false
 };

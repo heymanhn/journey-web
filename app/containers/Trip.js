@@ -2,21 +2,35 @@
 
 import { connect } from 'react-redux';
 import {
-  apiGetTrip
+  apiAddTripIdea,
+  apiGetTrip,
+  saveNewTripIdea,
+  tripIdeaCleared
 } from '../actions/actions';
 import TripPage from '../components/TripPage';
 
 const mapStateToProps = (state) => {
+  const ts = state.tripState;
   return {
-    error: state.tripState.error ? state.tripState.error : '',
-    trip: state.tripState.trip
+    error: ts.error ? ts.error : '',
+    resetIdeaBox: ts.resetIdeaBox,
+    trip: ts.trip
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onAddIdeaPress: (tripId) => {
+      dispatch(apiAddTripIdea(tripId));
+    },
+    onEnterIdea: (idea) => {
+      dispatch(saveNewTripIdea(idea));
+    },
     onGetTrip: (tripId) => {
       dispatch(apiGetTrip(tripId));
+    },
+    onIdeaCleared: () => {
+      dispatch(tripIdeaCleared());
     }
   };
 };

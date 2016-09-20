@@ -35,9 +35,14 @@ export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
 // Individual Trip
+export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
+export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
+export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
+export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
+export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
 
 
 /*
@@ -197,6 +202,19 @@ export function apiCreateTripFailure(error) {
 }
 
 // Individual Trip
+export function saveNewTripIdea(idea) {
+  return {
+    type: SAVE_NEW_TRIP_IDEA,
+    idea
+  };
+}
+
+export function tripIdeaCleared() {
+  return {
+    type: NEW_TRIP_IDEA_CLEARED
+  };
+}
+
 export function apiGetTripRequest() {
   return {
     type: API_GET_TRIP_REQUEST
@@ -213,6 +231,26 @@ export function apiGetTripSuccess(json) {
 export function apiGetTripFailure(error) {
   return {
     type: API_GET_TRIP_FAILURE,
+    error
+  };
+}
+
+export function apiAddTripIdeaRequest() {
+  return {
+    type: API_ADD_TRIP_IDEA_REQUEST
+  };
+}
+
+export function apiAddTripIdeaSuccess(json) {
+  return {
+    type: API_ADD_TRIP_IDEA_SUCCESS,
+    ideas: json.ideas
+  };
+}
+
+export function apiAddTripIdeaFailure(error) {
+  return {
+    type: API_ADD_TRIP_IDEA_FAILURE,
     error
   };
 }
@@ -387,5 +425,47 @@ export function apiGetTrip(tripId) {
         dispatch(apiGetTripSuccess(json));
       })
       .catch(error => { dispatch(apiGetTripFailure(error.message)); });
+  };
+}
+
+export function apiAddTripIdea() {
+  return (dispatch, getState) => {
+    dispatch(apiAddTripIdeaRequest());
+
+    // Format the idea object before saving
+    const tripId = getState().tripState.trip._id;
+    const idea = getState().tripState.newIdea;
+    const loc = idea.geometry.location;
+
+    let ideaParams = {
+      googlePlaceId: idea.place_id,
+      name: idea.name,
+      loc: {
+        type: 'Point',
+        coordinates: [loc.lng(), loc.lat()]
+      },
+      address: idea.formatted_address,
+      phone: idea.international_phone_number,
+      types: idea.types,
+      photo: idea.photos.length > 0 ?
+        idea.photos[0].getUrl({ 'maxWidth': 300 }) : '',
+      url: idea.url
+    };
+
+    const createTripIdea = journeyAPI.trip.ideas.create(tripId);
+    let opts = {
+      ...optsTemplate,
+      method: createTripIdea.method,
+      body: JSON.stringify(ideaParams)
+    };
+    opts.headers['Authorization'] = getState().authState.token;
+
+    fetch(createTripIdea.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiAddTripIdeaSuccess(json));
+      })
+      .catch(error => { dispatch(apiAddTripIdeaFailure(error.message)); });
   };
 }

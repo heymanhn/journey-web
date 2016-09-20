@@ -15,7 +15,14 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, trip } = this.props;
+    const {
+      error,
+      onAddIdeaPress,
+      onEnterIdea,
+      onIdeaCleared,
+      resetIdeaBox,
+      trip
+    } = this.props;
 
     if (error) {
       return (
@@ -45,7 +52,14 @@ class TripPage extends Component {
         </Row>
         <Row>
           <Col md={4}>
-            <TripPageIdeasList ideas={trip.ideas} />
+            <TripPageIdeasList
+              ideas={trip.ideas}
+              destination={trip.destination}
+              onAddIdeaPress={onAddIdeaPress}
+              onEnterIdea={onEnterIdea}
+              onIdeaCleared={onIdeaCleared}
+              resetIdeaBox={resetIdeaBox}
+            />
           </Col>
           <Col md={8}>
             <h3>Plan</h3>
@@ -68,7 +82,11 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
+  onAddIdeaPress: PropTypes.func.isRequired,
+  onEnterIdea: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
+  onIdeaCleared: PropTypes.func.isRequired,
+  resetIdeaBox: PropTypes.bool.isRequired,
   trip: PropTypes.object
 };
 
