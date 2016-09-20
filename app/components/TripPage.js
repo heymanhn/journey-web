@@ -44,8 +44,7 @@ class TripPage extends Component {
       <Grid>
         <Row>
           <Col md={12}>
-            <h1>Trip page</h1>
-            <p>Name: {trip.title}</p>
+            <h1>{trip.title}</h1>
             <p>Destination: {trip.destination && trip.destination.name}</p>
             <p>Visibility: {trip.visibility}</p>
           </Col>
