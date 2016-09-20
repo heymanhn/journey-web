@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import TripPageIdeasList from './TripPageIdeasList';
 import { viewTripsPage } from '../actions/navigation';
+import { tripPageStyles as styles } from '../stylesheets/styles';
 
 class TripPage extends Component {
   componentWillMount() {
@@ -43,8 +44,8 @@ class TripPage extends Component {
     return (
       <Grid>
         <Row>
-          <Col md={12}>
-            <h1>{trip.title}</h1>
+          <Col md={12} style={styles.titleSection}>
+            <h1 style={styles.h1}>{trip.title}</h1>
             <p>Destination: {trip.destination && trip.destination.name}</p>
             <p>Visibility: {trip.visibility}</p>
           </Col>

@@ -40,6 +40,15 @@ export const tripsListItemStyle = {
   width: 300
 };
 
+export const tripPageStyles = {
+  titleSection: {
+    textAlign: 'center'
+  },
+  h1: {
+    fontSize: 48
+  }
+}
+
 export const tripPageIdeaStyles = {
   idea: {
     backgroundColor: '#fdfdfd'
