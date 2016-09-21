@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
-import TripPageIdeasList from './TripPageIdeasList';
+import TripPageIdeas from '../containers/TripPageIdeas';
 import { viewTripsPage } from '../actions/navigation';
 import { tripPageStyles as styles } from '../stylesheets/styles';
 
@@ -16,15 +16,7 @@ class TripPage extends Component {
   }
 
   render() {
-    const {
-      error,
-      onAddIdeaPress,
-      onEnterIdea,
-      onEnterIdeaComment,
-      onIdeaCleared,
-      resetIdeaBox,
-      trip
-    } = this.props;
+    const { error, trip } = this.props;
 
     if (error) {
       return (
@@ -53,15 +45,7 @@ class TripPage extends Component {
         </Row>
         <Row>
           <Col md={4}>
-            <TripPageIdeasList
-              ideas={trip.ideas}
-              destination={trip.destination}
-              onAddIdeaPress={onAddIdeaPress}
-              onEnterIdea={onEnterIdea}
-              onEnterIdeaComment={onEnterIdeaComment}
-              onIdeaCleared={onIdeaCleared}
-              resetIdeaBox={resetIdeaBox}
-            />
+            <TripPageIdeas />
           </Col>
           <Col md={8}>
             <h3>Plan</h3>
@@ -84,12 +68,7 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
-  onAddIdeaPress: PropTypes.func.isRequired,
-  onEnterIdea: PropTypes.func.isRequired,
-  onEnterIdeaComment: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
-  onIdeaCleared: PropTypes.func.isRequired,
-  resetIdeaBox: PropTypes.bool.isRequired,
   trip: PropTypes.object
 };
 
