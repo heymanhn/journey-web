@@ -34,6 +34,9 @@ export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
+export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
+export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
+export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
@@ -167,6 +170,27 @@ export function apiAddTripIdeaFailure(error) {
     error
   };
 }
+
+export function apiRemoveTripIdeaRequest() {
+  return {
+    type: API_REMOVE_TRIP_IDEA_REQUEST
+  };
+}
+
+export function apiRemoveTripIdeaSuccess(json) {
+  return {
+    type: API_REMOVE_TRIP_IDEA_SUCCESS,
+    ideas: json.ideas
+  };
+}
+
+export function apiRemoveTripIdeaFailure(error) {
+  return {
+    type: API_REMOVE_TRIP_IDEA_FAILURE,
+    error
+  };
+}
+
 
 // Trip Errors
 export function clearTripsError() {
@@ -324,5 +348,27 @@ export function apiAddTripIdea() {
         dispatch(apiAddTripIdeaSuccess(json));
       })
       .catch(error => { dispatch(apiAddTripIdeaFailure(error.message)); });
+  };
+}
+
+export function apiRemoveTripIdea(ideaId) {
+  return (dispatch, getState) => {
+    dispatch(apiRemoveTripIdeaRequest());
+
+    const tripId = getState().tripState.trip._id;
+    const removeTripIdea = journeyAPI.trip.ideas.delete(tripId, ideaId);
+    let opts = {
+      ...fetchOptsTemplate,
+      method: removeTripIdea.method
+    };
+    opts.headers['Authorization'] = getState().authState.token;
+
+    fetch(removeTripIdea.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiRemoveTripIdeaSuccess(json));
+      })
+      .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
   };
 }

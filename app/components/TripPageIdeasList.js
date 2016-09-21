@@ -28,14 +28,25 @@ class TripPageIdeasList extends Component {
   }
 
   render() {
-    const { ideas, onAddIdeaPress, onEnterIdeaComment } = this.props;
+    const {
+      ideas,
+      onAddIdeaPress,
+      onEnterIdeaComment,
+      onRemoveIdea
+    } = this.props;
 
     // Sort the ideas in descending order for display purposes
     const tripIdeas =
       ideas
         .sort((a,b) => a._id < b._id ? 1 : -1)
         .map(idea => {
-          return <TripPageIdea key={idea._id} idea={idea} />;
+          return (
+            <TripPageIdea
+              key={idea._id}
+              idea={idea}
+              onRemoveIdea={onRemoveIdea}
+            />
+          );
         });
 
     const commentBox = (
@@ -116,6 +127,7 @@ TripPageIdeasList.propTypes = {
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
+  onRemoveIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
 

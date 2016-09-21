@@ -6,7 +6,7 @@ import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 
 class TripPageIdea extends Component {
   render() {
-    const { idea } = this.props;
+    const { idea, onRemoveIdea } = this.props;
     const commentSection = (
       <div>
         <p style={styles.comment}>{idea.comment}</p>
@@ -15,7 +15,10 @@ class TripPageIdea extends Component {
 
     return (
       <div>
-        <div style={styles.removeButton.div}>
+        <div
+          onClick={onRemoveIdea.bind(null, idea._id)}
+          style={styles.removeButton.div}
+        >
           <Glyphicon
             glyph="remove-circle"
             style={styles.removeButton.glyph}
@@ -35,7 +38,8 @@ class TripPageIdea extends Component {
 }
 
 TripPageIdea.propTypes = {
-  idea: PropTypes.object
+  idea: PropTypes.object,
+  onRemoveIdea: PropTypes.func.isRequired
 };
 
 export default TripPageIdea;

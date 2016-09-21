@@ -36,6 +36,10 @@ export const journeyAPI = {
       create: (tripId) => ({
         method: 'POST',
         route: journeyAPIHost + '/trips/' + tripId + '/ideas'
+      }),
+      delete: (tripId, ideaId) => ({
+        method: 'DELETE',
+        route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId
       })
     }
   }

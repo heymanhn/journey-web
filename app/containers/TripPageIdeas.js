@@ -3,6 +3,7 @@
 import { connect } from 'react-redux';
 import {
   apiAddTripIdea,
+  apiRemoveTripIdea,
   saveNewTripIdea,
   saveIdeaComment,
   tripIdeaCleared
@@ -32,6 +33,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onIdeaCleared: () => {
       dispatch(tripIdeaCleared());
+    },
+    onRemoveIdea: (ideaId) => {
+      dispatch(apiRemoveTripIdea(ideaId));
     }
   };
 };
