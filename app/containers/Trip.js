@@ -7,7 +7,7 @@ import {
   saveNewTripIdea,
   saveIdeaComment,
   tripIdeaCleared
-} from '../actions/actions';
+} from '../actions/trips';
 import TripPage from '../components/TripPage';
 
 const mapStateToProps = (state) => {

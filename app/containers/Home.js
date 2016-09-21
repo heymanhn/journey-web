@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Intro from './Intro';
 import Trips from './Trips';
-import { apiGetTrips } from '../actions/actions';
+import { apiGetTrips } from '../actions/trips';
 
 class Home extends Component {
   componentWillMount() {

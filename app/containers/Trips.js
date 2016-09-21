@@ -1,7 +1,8 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { clearTripsError, logout } from '../actions/actions';
+import { clearTripsError } from '../actions/trips';
+import { logout } from '../actions/auth';
 import { createTrip } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
 
