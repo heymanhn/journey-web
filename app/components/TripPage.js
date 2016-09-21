@@ -20,6 +20,7 @@ class TripPage extends Component {
       error,
       onAddIdeaPress,
       onEnterIdea,
+      onEnterIdeaComment,
       onIdeaCleared,
       resetIdeaBox,
       trip
@@ -57,6 +58,7 @@ class TripPage extends Component {
               destination={trip.destination}
               onAddIdeaPress={onAddIdeaPress}
               onEnterIdea={onEnterIdea}
+              onEnterIdeaComment={onEnterIdeaComment}
               onIdeaCleared={onIdeaCleared}
               resetIdeaBox={resetIdeaBox}
             />
@@ -84,6 +86,7 @@ TripPage.propTypes = {
   error: PropTypes.string,
   onAddIdeaPress: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
+  onEnterIdeaComment: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired,

@@ -74,7 +74,7 @@ export const tripPageIdeaStyles = {
     fontStyle: 'italic',
     marginTop: 10
   },
-  searchBox: {
+  textBox: {
     display: 'inline',
     width: 300,
     marginBottom: 10

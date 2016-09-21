@@ -36,6 +36,7 @@ export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
 // Individual Trip
 export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
+export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
 export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
@@ -206,6 +207,13 @@ export function saveNewTripIdea(idea) {
   return {
     type: SAVE_NEW_TRIP_IDEA,
     idea
+  };
+}
+
+export function saveIdeaComment(comment) {
+  return {
+    type: SAVE_IDEA_COMMENT,
+    comment
   };
 }
 
@@ -433,8 +441,10 @@ export function apiAddTripIdea() {
     dispatch(apiAddTripIdeaRequest());
 
     // Format the idea object before saving
-    const tripId = getState().tripState.trip._id;
-    const idea = getState().tripState.newIdea;
+    const ts = getState().tripState;
+    const tripId = ts.trip._id;
+    const idea = ts.newIdea;
+    const comment = ts.newComment || '';
     const loc = idea.geometry.location;
 
     let ideaParams = {
@@ -447,9 +457,9 @@ export function apiAddTripIdea() {
       address: idea.formatted_address,
       phone: idea.international_phone_number,
       types: idea.types,
-      photo: idea.photos.length > 0 ?
-        idea.photos[0].getUrl({ 'maxWidth': 300 }) : '',
-      url: idea.url
+      photo: idea.photos ? idea.photos[0].getUrl({ 'maxWidth': 300 }) : '',
+      url: idea.url,
+      comment
     };
 
     const createTripIdea = journeyAPI.trip.ideas.create(tripId);

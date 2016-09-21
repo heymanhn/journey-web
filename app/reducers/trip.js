@@ -9,6 +9,7 @@ import {
   API_ADD_TRIP_IDEA_SUCCESS,
   API_ADD_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
+  SAVE_IDEA_COMMENT,
   NEW_TRIP_IDEA_CLEARED,
   CLEAR_TRIP_ERROR,
   LOGOUT
@@ -44,7 +45,7 @@ export default function tripState(state = initialTripState, action) {
       const newTrip = _.clone(state.trip);
       newTrip.ideas = action.ideas;
       return {
-        ...state,
+        ...(_.omit(state, ['newIdea', 'newComment'])),
         trip: newTrip,
         resetIdeaBox: true,
         isFetching: false
@@ -55,6 +56,11 @@ export default function tripState(state = initialTripState, action) {
       return {
         ...state,
         newIdea: action.idea
+      };
+    case SAVE_IDEA_COMMENT:
+      return {
+        ...state,
+        newComment: action.comment
       };
     case NEW_TRIP_IDEA_CLEARED:
       return {

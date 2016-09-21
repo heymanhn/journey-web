@@ -5,6 +5,7 @@ import {
   apiAddTripIdea,
   apiGetTrip,
   saveNewTripIdea,
+  saveIdeaComment,
   tripIdeaCleared
 } from '../actions/actions';
 import TripPage from '../components/TripPage';
@@ -25,6 +26,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onEnterIdea: (idea) => {
       dispatch(saveNewTripIdea(idea));
+    },
+    onEnterIdeaComment: (event) => {
+      dispatch(saveIdeaComment(event.target.value));
     },
     onGetTrip: (tripId) => {
       dispatch(apiGetTrip(tripId));

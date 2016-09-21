@@ -8,10 +8,7 @@ import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 class TripPageIdeasList extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      newIdea: ''
-    };
+    this.state = { showCommentBox: false };
   }
 
   componentDidMount() {
@@ -22,13 +19,16 @@ class TripPageIdeasList extends Component {
     const { onIdeaCleared, resetIdeaBox } = nextProps;
 
     if (resetIdeaBox) {
-      this.setState({ newIdea: '' });
+      // Workaround to access the search Box without React
+      document.getElementById('tripIdeaSearchBox').value = '';
+
+      this.setState({ showCommentBox: false });
       onIdeaCleared();
     }
   }
 
   render() {
-    const { ideas, onAddIdeaPress } = this.props;
+    const { ideas, onAddIdeaPress, onEnterIdeaComment } = this.props;
 
     // Sort the ideas in descending order for display purposes
     const tripIdeas =
@@ -38,6 +38,15 @@ class TripPageIdeasList extends Component {
           return <TripPageIdea key={idea._id} idea={idea} />;
         });
 
+    const commentBox = (
+      <FormControl
+        type="text"
+        placeholder="Add a comment"
+        style={styles.textBox}
+        onChange={onEnterIdeaComment}
+      />
+    );
+
     return (
       <div>
         <h3>Ideas</h3>
@@ -45,9 +54,7 @@ class TripPageIdeasList extends Component {
           id="tripIdeaSearchBox"
           type="text"
           placeholder="Add an idea"
-          style={styles.searchBox}
-          value={this.state.newIdea}
-          onChange={this.handleIdeaInput.bind(this)}
+          style={styles.textBox}
         />
         <Button
           bsStyle="success"
@@ -56,19 +63,17 @@ class TripPageIdeasList extends Component {
         >
           Add
         </Button>
+        {this.state.showCommentBox && commentBox}
         {tripIdeas}
       </div>
     );
-  }
-
-  handleIdeaInput(event) {
-    this.setState({ newIdea: event.target.value });
   }
 
   // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
   loadGoogleAutocompleteAPI() {
     const { onEnterIdea, destination } = this.props;
     const { northeast, southwest } = destination.viewport;
+    const rootPage = this;
 
     /*
      * Initiate the Google Maps Javascript API with the bounds set to the trip's
@@ -93,7 +98,11 @@ class TripPageIdeasList extends Component {
     const ac = new window.google.maps.places.Autocomplete(input, options);
     ac.addListener(
       'place_changed',
-      () => { onEnterIdea(ac.getPlace()); }
+      () => {
+        const place = ac.getPlace();
+        onEnterIdea(place);
+        rootPage.setState({ showCommentBox: true });
+      }
     );
   }
 }
@@ -103,6 +112,7 @@ TripPageIdeasList.propTypes = {
   ideas: PropTypes.array,
   onAddIdeaPress: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
+  onEnterIdeaComment: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
