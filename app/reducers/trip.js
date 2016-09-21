@@ -10,11 +10,11 @@ import {
   API_ADD_TRIP_IDEA_SUCCESS,
   API_ADD_TRIP_IDEA_FAILURE,
   API_REMOVE_TRIP_IDEA_REQUEST,
-  API_REMOVE_TRIP_IDEA_SUCCESS,
   API_REMOVE_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
   NEW_TRIP_IDEA_CLEARED,
+  REMOVE_TRIP_IDEA,
   CLEAR_TRIP_ERROR
 } from '../actions/trips';
 import { initialTripState } from '../constants';
@@ -53,12 +53,6 @@ export default function tripState(state = initialTripState, action) {
         resetIdeaBox: true,
         isFetching: false
       };
-    case API_REMOVE_TRIP_IDEA_SUCCESS:
-      return {
-        ...state,
-        trip: _.extend(state.trip, { ideas: action.ideas }),
-        isFetching: false
-      };
     case CLEAR_TRIP_ERROR:
       return _.omit(state, ['error']);
     case SAVE_NEW_TRIP_IDEA:
@@ -75,6 +69,15 @@ export default function tripState(state = initialTripState, action) {
       return {
         ...state,
         resetIdeaBox: false
+      };
+    case REMOVE_TRIP_IDEA:
+      return {
+        ...state,
+        trip: _.extend(state.trip, {
+          ideas: _.reject(state.trip.ideas, (idea) =>
+            idea._id === action.ideaId
+          )
+        })
       };
     case LOGOUT:
       return initialTripState;
