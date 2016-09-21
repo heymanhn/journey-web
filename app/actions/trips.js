@@ -1,140 +1,73 @@
 'use strict';
 
 import fetch from 'isomorphic-fetch';
-import { viewTripsPage, viewTripPage } from './navigation'
-import { journeyAPI } from '../constants';
+import { viewTripPage } from './navigation'
+import { fetchOptsTemplate, handleErrors, journeyAPI } from '../constants';
+
 
 /*
  * Action Types
  */
 
-// Authentication
-export const LOGIN_SAVE_EMAIL = 'LOGIN_SAVE_EMAIL';
-export const LOGIN_SAVE_PASSWORD = 'LOGIN_SAVE_PASSWORD';
-export const SIGNUP_SAVE_NAME = 'SIGNUP_SAVE_NAME';
-export const SIGNUP_SAVE_EMAIL = 'SIGNUP_SAVE_EMAIL';
-export const SIGNUP_SAVE_PASSWORD = 'SIGNUP_SAVE_PASSWORD';
-export const API_LOGIN_REQUEST = 'API_LOGIN_REQUEST';
-export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS';
-export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
-export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
-export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
-export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
-export const LOGOUT = 'LOGOUT';
+// Get Trips
+export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
+export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
+export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 
-// Trip Management
+// Create Trip
 export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
 export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
 export const CREATE_TRIP_SAVE_VISIBILITY = 'CREATE_TRIP_SAVE_VISIBILITY';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
-export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
-export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
-export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
-export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
-// Individual Trip
-export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
-export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
-export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
+// Get a trip
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
+
+// Trip Ideas
+export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
+export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
+export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
+export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
+export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
+export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
+
+// Trip Errors
+export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 
 
 /*
  * Action Creators
  */
 
-// Authentication
-export function loginSaveEmail(email) {
+// Get Trips
+export function apiGetTripsRequest() {
   return {
-    type: LOGIN_SAVE_EMAIL,
-    email
+    type: API_GET_TRIPS_REQUEST
   };
 }
 
-export function loginSavePassword(password) {
+export function apiGetTripsSuccess(json) {
   return {
-    type: LOGIN_SAVE_PASSWORD,
-    password
+    type: API_GET_TRIPS_SUCCESS,
+    trips: json.trips
   };
 }
 
-export function signupSaveName(name) {
+export function apiGetTripsFailure(error) {
   return {
-    type: SIGNUP_SAVE_NAME,
-    name
-  };
-}
-
-export function signupSaveEmail(email) {
-  return {
-    type: SIGNUP_SAVE_EMAIL,
-    email
-  };
-}
-
-export function signupSavePassword(password) {
-  return {
-    type: SIGNUP_SAVE_PASSWORD,
-    password
-  };
-}
-
-export function apiLoginRequest() {
-  return {
-    type: API_LOGIN_REQUEST
-  };
-}
-
-export function apiLoginSuccess(json) {
-  return {
-    type: API_LOGIN_SUCCESS,
-    user: json.user,
-    token: json.token
-  };
-}
-
-export function apiLoginFailure(error) {
-  return {
-    type: API_LOGIN_FAILURE,
+    type: API_GET_TRIPS_FAILURE,
     error
   };
 }
 
-export function apiSignupRequest() {
-  return {
-    type: API_SIGNUP_REQUEST
-  };
-}
-
-export function apiSignupSuccess(json) {
-  return {
-    type: API_SIGNUP_SUCCESS,
-    user: json.user,
-    token: json.token
-  };
-}
-
-export function apiSignupFailure(error) {
-  return {
-    type: API_SIGNUP_FAILURE,
-    error
-  };
-}
-
-export function logout() {
-  return {
-    type: LOGOUT
-  };
-}
-
-// Trip Management
+// Create Trip
 export function createTripSaveTitle(title) {
   return {
     type: CREATE_TRIP_SAVE_TITLE,
@@ -153,32 +86,6 @@ export function createTripSaveVisibility(visibility) {
   return {
     type: CREATE_TRIP_SAVE_VISIBILITY,
     visibility
-  };
-}
-
-export function clearTripsError() {
-  return {
-    type: CLEAR_TRIPS_ERROR
-  };
-}
-
-export function apiGetTripsRequest() {
-  return {
-    type: API_GET_TRIPS_REQUEST
-  };
-}
-
-export function apiGetTripsSuccess(json) {
-  return {
-    type: API_GET_TRIPS_SUCCESS,
-    trips: json.trips
-  };
-}
-
-export function apiGetTripsFailure(error) {
-  return {
-    type: API_GET_TRIPS_FAILURE,
-    error
   };
 }
 
@@ -202,27 +109,7 @@ export function apiCreateTripFailure(error) {
   };
 }
 
-// Individual Trip
-export function saveNewTripIdea(idea) {
-  return {
-    type: SAVE_NEW_TRIP_IDEA,
-    idea
-  };
-}
-
-export function saveIdeaComment(comment) {
-  return {
-    type: SAVE_IDEA_COMMENT,
-    comment
-  };
-}
-
-export function tripIdeaCleared() {
-  return {
-    type: NEW_TRIP_IDEA_CLEARED
-  };
-}
-
+// Get a Trip
 export function apiGetTripRequest() {
   return {
     type: API_GET_TRIP_REQUEST
@@ -240,6 +127,27 @@ export function apiGetTripFailure(error) {
   return {
     type: API_GET_TRIP_FAILURE,
     error
+  };
+}
+
+// Trip Ideas
+export function saveNewTripIdea(idea) {
+  return {
+    type: SAVE_NEW_TRIP_IDEA,
+    idea
+  };
+}
+
+export function saveIdeaComment(comment) {
+  return {
+    type: SAVE_IDEA_COMMENT,
+    comment
+  };
+}
+
+export function tripIdeaCleared() {
+  return {
+    type: NEW_TRIP_IDEA_CLEARED
   };
 }
 
@@ -263,75 +171,39 @@ export function apiAddTripIdeaFailure(error) {
   };
 }
 
+export function apiRemoveTripIdeaRequest() {
+  return {
+    type: API_REMOVE_TRIP_IDEA_REQUEST
+  };
+}
+
+export function apiRemoveTripIdeaSuccess(json) {
+  return {
+    type: API_REMOVE_TRIP_IDEA_SUCCESS,
+    ideas: json.ideas
+  };
+}
+
+export function apiRemoveTripIdeaFailure(error) {
+  return {
+    type: API_REMOVE_TRIP_IDEA_FAILURE,
+    error
+  };
+}
+
+
+// Trip Errors
+export function clearTripsError() {
+  return {
+    type: CLEAR_TRIPS_ERROR
+  };
+}
+
 
 /*
  * Action Creator thunks
  */
 
-// Authentication
-let optsTemplate = {
-  mode: 'cors',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
-};
-
-let handleErrors = (response) => {
-  if (response.ok) {
-    return response;
-  } else {
-    return response.json().then(json => Promise.reject(json));
-  }
-};
-
-export function apiLogin() {
-  return (dispatch, getState) => {
-    dispatch(apiLoginRequest());
-
-    let { email, password } = getState().authState;
-    let opts = {...optsTemplate};
-    opts.method = journeyAPI.login().method;
-    opts.body = JSON.stringify({ email, password });
-
-    fetch(journeyAPI.login().route, opts)
-      .then(handleErrors)
-      .then(response => response.json())
-      .then(json => {
-        dispatch(apiLoginSuccess(json));
-        dispatch(apiGetTrips());
-        viewTripsPage();
-      })
-      .catch(error => { dispatch(apiLoginFailure(error.message)) });
-  };
-}
-
-export function apiSignup() {
-  return (dispatch, getState) => {
-    dispatch(apiSignupRequest());
-
-    let { newName, newEmail, newPassword } = getState().authState;
-    let opts = {...optsTemplate};
-    opts.method = journeyAPI.signup().method;
-    opts.body = JSON.stringify({
-      name: newName,
-      email: newEmail,
-      password: newPassword
-    });
-
-    fetch(journeyAPI.signup().route, opts)
-      .then(handleErrors)
-      .then(response => response.json())
-      .then(json => {
-        dispatch(apiSignupSuccess(json));
-        dispatch(apiGetTrips());
-        viewTripsPage();
-      })
-      .catch(error => { dispatch(apiSignupFailure(error.message)); });
-  };
-}
-
-// Trip Management
 export function apiGetTrips() {
   return (dispatch, getState) => {
     dispatch(apiGetTripsRequest());
@@ -339,7 +211,7 @@ export function apiGetTrips() {
     const { user } = getState().authState;
     const userTrips = journeyAPI.trips.get(user._id);
     let opts = {
-      ...optsTemplate,
+      ...fetchOptsTemplate,
       method: userTrips.method
     };
     opts.headers['Authorization'] = getState().authState.token;
@@ -388,7 +260,7 @@ export function apiCreateTrip() {
 
     const createTrip = journeyAPI.trips.create();
     let opts = {
-      ...optsTemplate,
+      ...fetchOptsTemplate,
       method: createTrip.method,
       body: JSON.stringify({
         title,
@@ -410,14 +282,13 @@ export function apiCreateTrip() {
   };
 }
 
-// Individual trip
 export function apiGetTrip(tripId) {
   return (dispatch, getState) => {
     dispatch(apiGetTripRequest());
 
     const userTrip = journeyAPI.trip.get(tripId);
     let opts = {
-      ...optsTemplate,
+      ...fetchOptsTemplate,
       method: userTrip.method
     };
 
@@ -464,7 +335,7 @@ export function apiAddTripIdea() {
 
     const createTripIdea = journeyAPI.trip.ideas.create(tripId);
     let opts = {
-      ...optsTemplate,
+      ...fetchOptsTemplate,
       method: createTripIdea.method,
       body: JSON.stringify(ideaParams)
     };
@@ -477,5 +348,27 @@ export function apiAddTripIdea() {
         dispatch(apiAddTripIdeaSuccess(json));
       })
       .catch(error => { dispatch(apiAddTripIdeaFailure(error.message)); });
+  };
+}
+
+export function apiRemoveTripIdea(ideaId) {
+  return (dispatch, getState) => {
+    dispatch(apiRemoveTripIdeaRequest());
+
+    const tripId = getState().tripState.trip._id;
+    const removeTripIdea = journeyAPI.trip.ideas.delete(tripId, ideaId);
+    let opts = {
+      ...fetchOptsTemplate,
+      method: removeTripIdea.method
+    };
+    opts.headers['Authorization'] = getState().authState.token;
+
+    fetch(removeTripIdea.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiRemoveTripIdeaSuccess(json));
+      })
+      .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
   };
 }

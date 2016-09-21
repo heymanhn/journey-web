@@ -2,12 +2,11 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import { viewTripPage } from '../actions/navigation';
 import { tripsListItemStyle } from '../stylesheets/styles';
 
 class TripsListItem extends Component {
   render() {
-    const { trip } = this.props;
+    const { onViewTrip, trip } = this.props;
 
     return (
       <div style={tripsListItemStyle}>
@@ -16,7 +15,7 @@ class TripsListItem extends Component {
         <p>Visibility: {trip.visibility}</p>
         <Button
           bsStyle="default"
-          onClick={viewTripPage.bind(null, trip._id)}
+          onClick={onViewTrip.bind(null, trip._id)}
         >
           View Trip
         </Button>
@@ -26,6 +25,7 @@ class TripsListItem extends Component {
 }
 
 TripsListItem.propTypes = {
+  onViewTrip: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
 

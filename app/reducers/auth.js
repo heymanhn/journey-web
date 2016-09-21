@@ -13,7 +13,7 @@ import {
   API_SIGNUP_SUCCESS,
   API_SIGNUP_FAILURE,
   LOGOUT
-} from '../actions/actions';
+} from '../actions/auth';
 import { initialAuthState } from '../constants';
 
 export default function authState(state = initialAuthState, action) {

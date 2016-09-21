@@ -28,14 +28,25 @@ class TripPageIdeasList extends Component {
   }
 
   render() {
-    const { ideas, onAddIdeaPress, onEnterIdeaComment } = this.props;
+    const {
+      ideas,
+      onAddIdeaPress,
+      onEnterIdeaComment,
+      onRemoveIdea
+    } = this.props;
 
     // Sort the ideas in descending order for display purposes
     const tripIdeas =
       ideas
         .sort((a,b) => a._id < b._id ? 1 : -1)
         .map(idea => {
-          return <TripPageIdea key={idea._id} idea={idea} />;
+          return (
+            <TripPageIdea
+              key={idea._id}
+              idea={idea}
+              onRemoveIdea={onRemoveIdea}
+            />
+          );
         });
 
     const commentBox = (
@@ -49,21 +60,23 @@ class TripPageIdeasList extends Component {
 
     return (
       <div>
-        <h3>Ideas</h3>
-        <FormControl
-          id="tripIdeaSearchBox"
-          type="text"
-          placeholder="Add an idea"
-          style={styles.searchBox}
-        />
-        <Button
-          bsStyle="success"
-          onClick={onAddIdeaPress}
-          style={styles.searchBoxButton}
-        >
-          Add
-        </Button>
-        {this.state.showCommentBox && commentBox}
+        <div style={styles.inputSection}>
+          <h3>Ideas</h3>
+          <FormControl
+            id="tripIdeaSearchBox"
+            type="text"
+            placeholder="Add an idea"
+            style={styles.searchBox}
+          />
+          <Button
+            bsStyle="success"
+            onClick={onAddIdeaPress}
+            style={styles.searchBoxButton}
+          >
+            Add
+          </Button>
+          {this.state.showCommentBox && commentBox}
+        </div>
         {tripIdeas}
       </div>
     );
@@ -114,6 +127,7 @@ TripPageIdeasList.propTypes = {
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
+  onRemoveIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
 

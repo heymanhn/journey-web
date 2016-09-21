@@ -6,7 +6,7 @@ import {
   createTripSaveDest,
   createTripSaveTitle,
   createTripSaveVisibility
-} from '../actions/actions';
+} from '../actions/trips';
 import CreateTripPage from '../components/CreateTripPage';
 
 const mapStateToProps = (state) => {

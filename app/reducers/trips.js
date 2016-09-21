@@ -11,9 +11,9 @@ import {
   API_GET_TRIPS_FAILURE,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
-  API_CREATE_TRIP_FAILURE,
-  LOGOUT
-} from '../actions/actions';
+  API_CREATE_TRIP_FAILURE
+} from '../actions/trips';
+import { LOGOUT } from '../actions/auth';
 import { initialTripsState } from '../constants';
 
 export default function tripsState(state = initialTripsState, action) {

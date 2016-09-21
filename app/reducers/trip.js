@@ -1,6 +1,7 @@
 'use strict';
 
 import _ from 'underscore';
+import { LOGOUT } from '../actions/auth';
 import {
   API_GET_TRIP_REQUEST,
   API_GET_TRIP_SUCCESS,
@@ -8,12 +9,14 @@ import {
   API_ADD_TRIP_IDEA_REQUEST,
   API_ADD_TRIP_IDEA_SUCCESS,
   API_ADD_TRIP_IDEA_FAILURE,
+  API_REMOVE_TRIP_IDEA_REQUEST,
+  API_REMOVE_TRIP_IDEA_SUCCESS,
+  API_REMOVE_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
   NEW_TRIP_IDEA_CLEARED,
-  CLEAR_TRIP_ERROR,
-  LOGOUT
-} from '../actions/actions';
+  CLEAR_TRIP_ERROR
+} from '../actions/trips';
 import { initialTripState } from '../constants';
 
 export default function tripState(state = initialTripState, action) {
@@ -31,23 +34,29 @@ export default function tripState(state = initialTripState, action) {
       };
     case API_GET_TRIP_FAILURE:
     case API_ADD_TRIP_IDEA_FAILURE:
+    case API_REMOVE_TRIP_IDEA_FAILURE:
       return {
         ...state,
         isFetching: false,
         error: action.error
       };
     case API_ADD_TRIP_IDEA_REQUEST:
+    case API_REMOVE_TRIP_IDEA_REQUEST:
       return {
         ...(_.omit(state, ['error'])),
         isFetching: true
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
-      const newTrip = _.clone(state.trip);
-      newTrip.ideas = action.ideas;
       return {
         ...(_.omit(state, ['newIdea', 'newComment'])),
-        trip: newTrip,
+        trip: _.extend(state.trip, { ideas: action.ideas }),
         resetIdeaBox: true,
+        isFetching: false
+      };
+    case API_REMOVE_TRIP_IDEA_SUCCESS:
+      return {
+        ...state,
+        trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false
       };
     case CLEAR_TRIP_ERROR:
