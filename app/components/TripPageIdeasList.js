@@ -87,6 +87,7 @@ class TripPageIdeasList extends Component {
     const { onEnterIdea, destination } = this.props;
     const { northeast, southwest } = destination.viewport;
     const rootPage = this;
+    const google = window.google;
 
     /*
      * Initiate the Google Maps Javascript API with the bounds set to the trip's
@@ -108,7 +109,7 @@ class TripPageIdeasList extends Component {
       bounds,
       types: ['geocode', 'establishment']
     };
-    const ac = new window.google.maps.places.Autocomplete(input, options);
+    const ac = new google.maps.places.Autocomplete(input, options);
     ac.addListener(
       'place_changed',
       () => {

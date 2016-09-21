@@ -1,6 +1,9 @@
 'use strict';
 
+import _ from 'underscore';
 import fetch from 'isomorphic-fetch';
+import ObjectID from 'bson-objectid';
+
 import { viewTripPage } from './navigation'
 import { fetchOptsTemplate, handleErrors, journeyAPI } from '../constants';
 
@@ -31,15 +34,17 @@ export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
 export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
 export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
+export const ADD_TRIP_IDEA = 'ADD_TRIP_IDEA';
+export const REMOVE_TRIP_IDEA = 'REMOVE_TRIP_IDEA';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
 export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
-export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
 export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
+export const CLEAR_TRIP_ERROR = 'CLEAR_TRIP_ERROR';
 
 
 /*
@@ -151,6 +156,20 @@ export function tripIdeaCleared() {
   };
 }
 
+export function addTripIdea(idea) {
+  return {
+    type: ADD_TRIP_IDEA,
+    idea
+  };
+}
+
+export function removeTripIdea(ideaId) {
+  return {
+    type: REMOVE_TRIP_IDEA,
+    ideaId
+  };
+}
+
 export function apiAddTripIdeaRequest() {
   return {
     type: API_ADD_TRIP_IDEA_REQUEST
@@ -177,13 +196,6 @@ export function apiRemoveTripIdeaRequest() {
   };
 }
 
-export function apiRemoveTripIdeaSuccess(json) {
-  return {
-    type: API_REMOVE_TRIP_IDEA_SUCCESS,
-    ideas: json.ideas
-  };
-}
-
 export function apiRemoveTripIdeaFailure(error) {
   return {
     type: API_REMOVE_TRIP_IDEA_FAILURE,
@@ -196,6 +208,12 @@ export function apiRemoveTripIdeaFailure(error) {
 export function clearTripsError() {
   return {
     type: CLEAR_TRIPS_ERROR
+  };
+}
+
+export function clearTripError() {
+  return {
+    type: CLEAR_TRIP_ERROR
   };
 }
 
@@ -333,15 +351,19 @@ export function apiAddTripIdea() {
       comment
     };
 
-    const createTripIdea = journeyAPI.trip.ideas.create(tripId);
+    // Update UI state first, using a stubbed idea ID
+    const _id = ObjectID().toString();
+    dispatch(addTripIdea(_.extend(ideaParams, { _id })));
+
+    const addTripIdeaAPI = journeyAPI.trip.ideas.create(tripId);
     let opts = {
       ...fetchOptsTemplate,
-      method: createTripIdea.method,
+      method: addTripIdeaAPI.method,
       body: JSON.stringify(ideaParams)
     };
     opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(createTripIdea.route, opts)
+    fetch(addTripIdeaAPI.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -353,22 +375,19 @@ export function apiAddTripIdea() {
 
 export function apiRemoveTripIdea(ideaId) {
   return (dispatch, getState) => {
+    dispatch(removeTripIdea(ideaId)); // Update UI state first
     dispatch(apiRemoveTripIdeaRequest());
 
     const tripId = getState().tripState.trip._id;
-    const removeTripIdea = journeyAPI.trip.ideas.delete(tripId, ideaId);
+    const removeTripIdeaAPI = journeyAPI.trip.ideas.delete(tripId, ideaId);
     let opts = {
       ...fetchOptsTemplate,
-      method: removeTripIdea.method
+      method: removeTripIdeaAPI.method
     };
     opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(removeTripIdea.route, opts)
+    fetch(removeTripIdeaAPI.route, opts)
       .then(handleErrors)
-      .then(response => response.json())
-      .then(json => {
-        dispatch(apiRemoveTripIdeaSuccess(json));
-      })
       .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
   };
 }
