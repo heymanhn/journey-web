@@ -1,50 +1,30 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import Button from './Button';
+import { Button, Col, Grid, Row } from 'react-bootstrap';
+import TripPageIdeasList from './TripPageIdeasList';
 import { viewTripsPage } from '../actions/navigation';
+import { tripPageStyles as styles } from '../stylesheets/styles';
 
 class TripPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.props.onClearTripsError();
-    this.state = {
-      trip: {}
-    };
-  }
-
   componentWillMount() {
     const { tripId } = this.props.params;
-    const { onGetTrip, onNoTripFound, trip, trips } = this.props;
+    const { onGetTrip } = this.props;
 
-    // If trips array is not present, fetch the trip from the server
-    if (trips.length > 0) {
-      const tripFromTrips = trips.find(trip => (trip._id === tripId));
-      if (tripFromTrips) {
-        this.setState({ trip: tripFromTrips });
-      } else {
-        onGetTrip(tripId);
-      }
-    } else {
-      if (trip && trip._id === tripId) {
-        this.setState({ trip });
-      } else {
-        onGetTrip(tripId);
-      }
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { trip } = nextProps;
-    if (trip && trip._id) {
-      this.setState({ trip });
-    }
+    // Fetch the trip from the server upon load
+    onGetTrip(tripId);
   }
 
   render() {
-    const { error } = this.props;
-    const { trip } = this.state;
+    const {
+      error,
+      onAddIdeaPress,
+      onEnterIdea,
+      onEnterIdeaComment,
+      onIdeaCleared,
+      resetIdeaBox,
+      trip
+    } = this.props;
 
     if (error) {
       return (
@@ -52,18 +32,9 @@ class TripPage extends Component {
       );
     }
 
-    if (trip && !trip._id) {
+    if (!trip) {
       return null;
     }
-
-    const tripIdeas = trip.ideas.map(idea => {
-      return (
-        <div key={idea._id}>
-          <p>Name: {idea.name}</p>
-          <p>Comment: {idea.comment}</p>
-        </div>
-      );
-    });
 
     const tripPlan = trip.plan.map(day => {
       return (
@@ -72,28 +43,54 @@ class TripPage extends Component {
     });
 
     return (
-      <div>
-        <h1>Trip page</h1>
-        <p>Name: {trip.title}</p>
-        <p>Destination: {trip.destination && trip.destination.name}</p>
-        <p>Visibility: {trip.visibility}</p>
-        <p>Ideas:</p>
-        <div>{tripIdeas}</div>
-        <p>Plan:</p>
-        <div>{tripPlan}</div>
-        <Button label="Home" onClick={viewTripsPage} />
-      </div>
+      <Grid>
+        <Row>
+          <Col md={12} style={styles.titleSection}>
+            <h1 style={styles.h1}>{trip.title}</h1>
+            <p>Destination: {trip.destination && trip.destination.name}</p>
+            <p>Visibility: {trip.visibility}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={4}>
+            <TripPageIdeasList
+              ideas={trip.ideas}
+              destination={trip.destination}
+              onAddIdeaPress={onAddIdeaPress}
+              onEnterIdea={onEnterIdea}
+              onEnterIdeaComment={onEnterIdeaComment}
+              onIdeaCleared={onIdeaCleared}
+              resetIdeaBox={resetIdeaBox}
+            />
+          </Col>
+          <Col md={8}>
+            <h3>Plan</h3>
+            <div>{tripPlan}</div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button
+              bsStyle="primary"
+              onClick={viewTripsPage}>
+              Home
+            </Button>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
 
 TripPage.propTypes = {
   error: PropTypes.string,
-  onClearTripsError: PropTypes.func.isRequired,
+  onAddIdeaPress: PropTypes.func.isRequired,
+  onEnterIdea: PropTypes.func.isRequired,
+  onEnterIdeaComment: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
-  onNoTripFound: PropTypes.func.isRequired,
-  trip: PropTypes.object,
-  trips: PropTypes.array
+  onIdeaCleared: PropTypes.func.isRequired,
+  resetIdeaBox: PropTypes.bool.isRequired,
+  trip: PropTypes.object
 };
 
 export default TripPage;

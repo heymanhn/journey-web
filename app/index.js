@@ -10,7 +10,7 @@ import { autoRehydrate } from 'redux-persist';
 import thunkMiddleware from 'redux-thunk';
 
 import Root from './containers/Root';
-import reducers from './reducers';
+import reducers from './reducers/reducers';
 
 const loggerMiddleware = createLogger();
 const store = compose(

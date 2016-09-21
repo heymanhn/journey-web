@@ -1,8 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Button } from 'react-bootstrap';
 import { viewSignupPage } from '../actions/navigation';
-import Button from './Button';
 import TextInput from './TextInput';
 import { errorMessageStyle } from '../stylesheets/styles';
 
@@ -31,8 +31,8 @@ class IntroPage extends Component {
             type="password"
           />
           <div style={errorMessageStyle}>{error}</div>
-          <Button label="Log In" onClick={onLoginPress} />
-          <Button label="Sign Up" onClick={viewSignupPage} />
+          <Button bsStyle="default" onClick={onLoginPress}>Log In</Button>
+          <Button bsStyle="default" onClick={viewSignupPage}>Sign Up</Button>
         </div>
       </div>
     );

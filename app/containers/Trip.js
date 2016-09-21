@@ -2,30 +2,39 @@
 
 import { connect } from 'react-redux';
 import {
+  apiAddTripIdea,
   apiGetTrip,
-  apiGetTripFailure,
-  clearTripsError
+  saveNewTripIdea,
+  saveIdeaComment,
+  tripIdeaCleared
 } from '../actions/actions';
 import TripPage from '../components/TripPage';
 
 const mapStateToProps = (state) => {
+  const ts = state.tripState;
   return {
-    error: state.tripsState.tripError ? state.tripsState.tripError : '',
-    trip: state.tripsState.trip,
-    trips: state.tripsState.trips
+    error: ts.error ? ts.error : '',
+    resetIdeaBox: ts.resetIdeaBox,
+    trip: ts.trip
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClearTripsError: () => {
-      dispatch(clearTripsError());
+    onAddIdeaPress: (tripId) => {
+      dispatch(apiAddTripIdea(tripId));
+    },
+    onEnterIdea: (idea) => {
+      dispatch(saveNewTripIdea(idea));
+    },
+    onEnterIdeaComment: (event) => {
+      dispatch(saveIdeaComment(event.target.value));
     },
     onGetTrip: (tripId) => {
       dispatch(apiGetTrip(tripId));
     },
-    onNoTripFound: () => {
-      dispatch(apiGetTripFailure('Trip not found'));
+    onIdeaCleared: () => {
+      dispatch(tripIdeaCleared());
     }
   };
 };

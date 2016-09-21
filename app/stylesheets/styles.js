@@ -39,3 +39,47 @@ export const tripsListItemStyle = {
   padding: 5,
   width: 300
 };
+
+export const tripPageStyles = {
+  titleSection: {
+    textAlign: 'center'
+  },
+  h1: {
+    fontSize: 48
+  }
+}
+
+export const tripPageIdeaStyles = {
+  idea: {
+    backgroundColor: '#fdfdfd'
+  },
+  info: {
+    height: 100
+  },
+  photo: {
+    float: 'right',
+    marginLeft: 10,
+    width: '33%',
+    height: 100,
+    objectFit: 'cover'
+  },
+  name: {
+    fontWeight: 'bold'
+  },
+  address: {
+    fontSize: 12,
+    color: '#999999'
+  },
+  comment: {
+    fontStyle: 'italic',
+    marginTop: 10
+  },
+  textBox: {
+    display: 'inline',
+    width: 300,
+    marginBottom: 10
+  },
+  searchBoxButton: {
+    float: 'right'
+  }
+};
