@@ -42,7 +42,7 @@ class TripPageIdeasList extends Component {
       <FormControl
         type="text"
         placeholder="Add a comment"
-        style={styles.textBox}
+        style={styles.commentBox}
         onChange={onEnterIdeaComment}
       />
     );
@@ -54,7 +54,7 @@ class TripPageIdeasList extends Component {
           id="tripIdeaSearchBox"
           type="text"
           placeholder="Add an idea"
-          style={styles.textBox}
+          style={styles.searchBox}
         />
         <Button
           bsStyle="success"
