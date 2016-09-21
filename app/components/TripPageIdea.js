@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Image, Panel } from 'react-bootstrap';
+import { Button, Glyphicon, Image, Panel } from 'react-bootstrap';
 import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 
 class TripPageIdea extends Component {
@@ -14,14 +14,22 @@ class TripPageIdea extends Component {
     );
 
     return (
-      <Panel style={styles.idea}>
-        <div style={styles.info}>
-          <Image src={idea.photo} style={styles.photo} />
-          <p style={styles.name}>{idea.name}</p>
-          <p style={styles.address}>{idea.address}</p>
+      <div>
+        <div style={styles.removeButton.div}>
+          <Glyphicon
+            glyph="remove-circle"
+            style={styles.removeButton.glyph}
+          />
         </div>
-        { idea.comment && commentSection }
-      </Panel>
+        <Panel style={styles.idea}>
+          <div style={styles.info}>
+            <Image src={idea.photo} style={styles.photo} />
+            <p style={styles.name}>{idea.name}</p>
+            <p style={styles.address}>{idea.address}</p>
+          </div>
+          { idea.comment && commentSection }
+        </Panel>
+      </div>
     );
   }
 }

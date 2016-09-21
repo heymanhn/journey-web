@@ -49,21 +49,23 @@ class TripPageIdeasList extends Component {
 
     return (
       <div>
-        <h3>Ideas</h3>
-        <FormControl
-          id="tripIdeaSearchBox"
-          type="text"
-          placeholder="Add an idea"
-          style={styles.searchBox}
-        />
-        <Button
-          bsStyle="success"
-          onClick={onAddIdeaPress}
-          style={styles.searchBoxButton}
-        >
-          Add
-        </Button>
-        {this.state.showCommentBox && commentBox}
+        <div style={styles.inputSection}>
+          <h3>Ideas</h3>
+          <FormControl
+            id="tripIdeaSearchBox"
+            type="text"
+            placeholder="Add an idea"
+            style={styles.searchBox}
+          />
+          <Button
+            bsStyle="success"
+            onClick={onAddIdeaPress}
+            style={styles.searchBoxButton}
+          >
+            Add
+          </Button>
+          {this.state.showCommentBox && commentBox}
+        </div>
         {tripIdeas}
       </div>
     );

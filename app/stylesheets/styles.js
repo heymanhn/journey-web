@@ -50,6 +50,9 @@ export const tripPageStyles = {
 }
 
 export const tripPageIdeaStyles = {
+  inputSection: {
+    marginBottom: 10
+  },
   idea: {
     backgroundColor: '#fdfdfd'
   },
@@ -86,5 +89,19 @@ export const tripPageIdeaStyles = {
   },
   searchBoxButton: {
     float: 'right'
+  },
+  removeButton: {
+    div: {
+      backgroundColor: 'rgba(255,255,255,0.0)',
+      cursor: 'pointer'
+    },
+    glyph: {
+      borderRadius: 22,
+      backgroundColor: '#ffffff',
+      fontSize: 22,
+      float: 'right',
+      top: -8,
+      left: 8
+    }
   }
 };
