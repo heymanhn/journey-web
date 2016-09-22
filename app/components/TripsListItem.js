@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import { tripsListItemStyle } from '../stylesheets/styles';
 
 class TripsListItem extends Component {
   render() {
@@ -27,6 +26,14 @@ class TripsListItem extends Component {
 TripsListItem.propTypes = {
   onViewTrip: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
+};
+
+const tripsListItemStyle = {
+  backgroundColor: '#eeeeee',
+  border: '1px solid #333333',
+  margin: 5,
+  padding: 5,
+  width: 300
 };
 
 export default TripsListItem;

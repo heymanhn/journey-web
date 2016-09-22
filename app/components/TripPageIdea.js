@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button, Glyphicon, Image, Panel } from 'react-bootstrap';
-import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 
 class TripPageIdea extends Component {
   render() {
@@ -40,6 +39,48 @@ class TripPageIdea extends Component {
 TripPageIdea.propTypes = {
   idea: PropTypes.object,
   onRemoveIdea: PropTypes.func.isRequired
+};
+
+const styles = {
+  address: {
+    fontSize: 12,
+    color: '#999999'
+  },
+  comment: {
+    fontStyle: 'italic',
+    marginTop: 10
+  },
+  idea: {
+    backgroundColor: '#fdfdfd'
+  },
+  info: {
+    minHeight: 100
+  },
+  name: {
+    fontWeight: 'bold'
+  },
+  photo: {
+    float: 'right',
+    marginLeft: 10,
+    width: '33%',
+    height: 100,
+    objectFit: 'cover',
+    border: '1px solid #eeeeee'
+  },
+  removeButton: {
+    div: {
+      backgroundColor: 'rgba(255,255,255,0.0)',
+      cursor: 'pointer'
+    },
+    glyph: {
+      borderRadius: 22,
+      backgroundColor: '#ffffff',
+      fontSize: 22,
+      float: 'right',
+      top: -8,
+      left: 8
+    }
+  }
 };
 
 export default TripPageIdea;

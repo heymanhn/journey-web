@@ -4,7 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import TextInput from './TextInput';
 import TripPageIdea from './TripPageIdea';
-import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 
 class TripPageIdeasList extends Component {
   constructor(props) {
@@ -131,6 +130,25 @@ TripPageIdeasList.propTypes = {
   onIdeaCleared: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
+};
+
+const styles = {
+  commentBox: {
+    display: 'inline',
+    width: '100%',
+    marginBottom: 10
+  },
+  inputSection: {
+    marginBottom: 10
+  },
+  searchBox: {
+    display: 'inline',
+    width: '80%',
+    marginBottom: 10
+  },
+  searchBoxButton: {
+    float: 'right'
+  }
 };
 
 export default TripPageIdeasList;
