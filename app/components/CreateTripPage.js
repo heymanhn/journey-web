@@ -2,11 +2,11 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 import {
   destTextInputStyle,
   inlineDivStyle,
-  errorMessageStyle
 } from '../stylesheets/styles';
 
 class CreateTripPage extends Component {
@@ -51,7 +51,7 @@ class CreateTripPage extends Component {
               onChange={onSetVisibility}
             />Private
           </div>
-          <div style={errorMessageStyle}>{error}</div>
+          {error && <ErrorMessage error={error} />}
           <Button
             bsStyle="default"
             onClick={onCreateTripPress}

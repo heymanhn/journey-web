@@ -1,18 +1,5 @@
 'use strict';
 
-export const buttonStyle = {
-  backgroundColor: 'blue',
-  color: 'white',
-  margin: 10
-};
-
-export const errorMessageStyle = {
-  backgroundColor: 'orange',
-  color: 'black',
-  margin: 5,
-  width: 200
-};
-
 export const destTextInputStyle = {
   display: 'block',
   color: '#333333',
