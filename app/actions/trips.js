@@ -292,9 +292,9 @@ export function apiCreateTrip() {
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
+        const tripId = json.trip._id;
         dispatch(apiCreateTripSuccess(json));
-        dispatch(apiGetTrips());
-        viewTripPage(json.trip._id);
+        viewTripPage(tripId);
       })
       .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
   };

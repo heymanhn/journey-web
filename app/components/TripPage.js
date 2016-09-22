@@ -9,10 +9,12 @@ import { tripPageStyles as styles } from '../stylesheets/styles';
 class TripPage extends Component {
   componentWillMount() {
     const { tripId } = this.props.params;
-    const { onGetTrip } = this.props;
+    const { onGetTrip, trip } = this.props;
 
     // Fetch the trip from the server upon load
-    onGetTrip(tripId);
+    if (!trip) {
+      onGetTrip(tripId);
+    }
   }
 
   render() {

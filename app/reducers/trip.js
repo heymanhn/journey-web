@@ -3,6 +3,7 @@
 import _ from 'underscore';
 import { LOGOUT } from '../actions/auth';
 import {
+  API_CREATE_TRIP_SUCCESS,
   API_GET_TRIP_REQUEST,
   API_GET_TRIP_SUCCESS,
   API_GET_TRIP_FAILURE,
@@ -22,6 +23,11 @@ import { initialTripState } from '../constants';
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
+    case API_CREATE_TRIP_SUCCESS:
+      return {
+        ...state,
+        trip: action.trip
+      };
     case SAVE_NEW_TRIP_IDEA:
       return {
         ...state,
