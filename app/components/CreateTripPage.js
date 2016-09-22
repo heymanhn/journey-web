@@ -4,10 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
-import {
-  destTextInputStyle,
-  inlineDivStyle,
-} from '../stylesheets/styles';
 
 class CreateTripPage extends Component {
   componentDidMount() {
@@ -33,9 +29,9 @@ class CreateTripPage extends Component {
           <TextInput
             id="destinationInput"
             placeholder="Where do you want to go?"
-            style={destTextInputStyle}
+            style={styles.destinationInputStyle}
           />
-          <div style={inlineDivStyle}>
+          <div style={styles.inlineDivStyle}>
             Visibility:
             <input
               type="radio"
@@ -83,6 +79,19 @@ CreateTripPage.propTypes = {
   onEnterTitle: PropTypes.func.isRequired,
   onEnterDestination: PropTypes.func.isRequired,
   onSetVisibility: PropTypes.func.isRequired
+};
+
+const styles = {
+  destinationInputStyle: {
+    display: 'block',
+    color: '#333333',
+    fontSize: '16px',
+    width: 400,
+    margin: 5
+  },
+  inlineDivStyle: {
+    display: 'inline'
+  }
 };
 
 export default CreateTripPage;
