@@ -25,11 +25,13 @@ class SignupPage extends Component {
             defaultValue={name}
             onChange={onEnterName}
             placeholder="Name"
+            type="text"
           />
           <TextInput
             defaultValue={email}
             onChange={onEnterEmail}
             placeholder="Email Address"
+            type="text"
           />
           <TextInput
             onChange={onEnterPassword}

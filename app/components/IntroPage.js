@@ -24,6 +24,7 @@ class IntroPage extends Component {
             defaultValue={email}
             onChange={onEnterEmail}
             placeholder="Email Address"
+            type="text"
           />
           <TextInput
             onChange={onEnterPassword}
