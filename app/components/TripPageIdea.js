@@ -1,24 +1,48 @@
 'use strict';
 
 import _ from 'underscore';
+import flow from 'lodash/flow';
 import React, { Component, PropTypes } from 'react';
 import { Button, Glyphicon, Image, Panel } from 'react-bootstrap';
-import { DragSource } from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import { dndTypes } from '../constants';
 
 /*
- * React-dnd setup
+ * React-dnd drag source
  */
 const ideaSource = {
-  beginDrag(props) {
-    return { ideaId: props.idea._id };
+  beginDrag(props, monitor) {
+    return {
+      id: props.idea._id
+    };
   }
 };
 
-function collect(connect, monitor) {
+function ideaSourceCollect(connect) {
   return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
+    connectDragSource: connect.dragSource()
+  };
+}
+
+/*
+ * React-dnd drop target
+ */
+const ideaTarget = {
+  drop(props, monitor) {
+    const draggedIdea = monitor.getItem().id;
+    const destIdea = props.idea._id;
+
+    // Debug statement only for now
+    console.log(`moved idea ${draggedIdea}
+      to position of idea ${destIdea}`);
+  }
+};
+
+function ideaTargetCollect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    draggedIdea: monitor.getItem(),
+    isOver: monitor.isOver()
   };
 }
 
@@ -26,53 +50,71 @@ class TripPageIdea extends Component {
   render() {
     const {
       connectDragSource,
+      connectDropTarget,
+      draggedIdea,
       idea,
-      isDragging,
+      isOver,
       onRemoveIdea
     } = this.props;
 
-    const commentSection = (
+    const infoSection = connectDropTarget(
+      <div style={styles.info}>
+        <Image src={idea.photo} style={styles.photo} />
+        <p style={styles.name}>{idea.name}</p>
+        <p style={styles.address}>{idea.address}</p>
+        </div>
+    );
+
+    const fullIdeaSection = (
       <div>
-        <p style={styles.comment}>{idea.comment}</p>
+        <div
+          onClick={onRemoveIdea.bind(null, idea._id)}
+          style={styles.removeButton.div}
+        >
+          <Glyphicon
+            glyph="remove-circle"
+            style={styles.removeButton.glyph}
+          />
+        </div>
+        <Panel id={idea._id} style={styles.idea}>
+          {infoSection}
+          {idea.comment && (
+            <div>
+              <p style={styles.comment}>{idea.comment}</p>
+            </div>
+          )}
+        </Panel>
       </div>
     );
 
+    // State machine, based on drag and drop booleans
     let ideaSection;
-    if (isDragging) {
-      ideaSection = <div style={styles.emptySpace}/>;
-    } else {
-      ideaSection = (
-        <div>
-          <div
-            onClick={onRemoveIdea.bind(null, idea._id)}
-            style={styles.removeButton.div}
-          >
-            <Glyphicon
-              glyph="remove-circle"
-              style={styles.removeButton.glyph}
-            />
-          </div>
-          <Panel style={styles.idea}>
-            <div style={styles.info}>
-              <Image src={idea.photo} style={styles.photo} />
-              <p style={styles.name}>{idea.name}</p>
-              <p style={styles.address}>{idea.address}</p>
-            </div>
-            { idea.comment && commentSection }
-          </Panel>
-        </div>
+    if (isOver) {
+      ideaSection = connectDropTarget(
+        <div id={idea._id} style={this.loadEmptyStyle()}/>
       );
+    } else {
+      ideaSection = fullIdeaSection;
     }
 
     return connectDragSource(ideaSection);
+  }
+
+  // Displays the grey placeholder box
+  loadEmptyStyle() {
+    const id = this.props.draggedIdea.id;
+    const height = document.getElementById(id).clientHeight;
+    return _.extend(styles.emptySpace, { height });
   }
 }
 
 TripPageIdea.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired,
+  draggedIdea: PropTypes.object,
   idea: PropTypes.object,
-  isDragging: PropTypes.bool.isRequired,
-  onRemoveIdea: PropTypes.func.isRequired
+  isOver: PropTypes.bool.isRequired,
+  onRemoveIdea: PropTypes.func.isRequired,
 };
 
 const styles = {
@@ -87,7 +129,7 @@ const styles = {
   emptySpace: {
     backgroundColor: '#eeeeee',
     borderRadius: 4,
-    height: 50,
+    height: 80,
     marginBottom: 20
   },
   idea: {
@@ -124,4 +166,7 @@ const styles = {
   }
 };
 
-export default DragSource(dndTypes.IDEA, ideaSource, collect)(TripPageIdea);
+export default flow(
+  DragSource(dndTypes.IDEA, ideaSource, ideaSourceCollect),
+  DropTarget(dndTypes.IDEA, ideaTarget, ideaTargetCollect)
+)(TripPageIdea);
