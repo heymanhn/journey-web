@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiGetTrip, clearTripsError } from '../actions/trips';
+import { apiGetTrip, apiDeleteTrip, clearTripsError } from '../actions/trips';
 import { logout } from '../actions/auth';
 import { createTrip, viewTripPage } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
@@ -18,6 +18,9 @@ const mapDispatchToProps = (dispatch) => {
     onCreateTripPress: () => {
       dispatch(clearTripsError());
       createTrip();
+    },
+    onDeleteTripPress: (tripId) => {
+      dispatch(apiDeleteTrip(tripId));
     },
     onLogoutPress: () => {
       dispatch(logout());

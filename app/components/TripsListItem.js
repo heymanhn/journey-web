@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 
 class TripsListItem extends Component {
   render() {
-    const { onViewTrip, trip } = this.props;
+    const { onDeleteTripPress, onViewTrip, trip } = this.props;
 
     return (
       <div style={tripsListItemStyle}>
@@ -18,12 +18,19 @@ class TripsListItem extends Component {
         >
           View Trip
         </Button>
+        <Button
+          bsStyle="warning"
+          onClick={onDeleteTripPress.bind(null, trip._id)}
+        >
+          Delete Trip
+        </Button>
       </div>
     );
   }
 }
 
 TripsListItem.propTypes = {
+  onDeleteTripPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
