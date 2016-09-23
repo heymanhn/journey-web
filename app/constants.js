@@ -82,3 +82,10 @@ export const initialTripState = {
   isFetching: false,
   resetIdeaBox: false
 };
+
+/*
+ * Drag and drop functionality variables
+ */
+export const dndTypes = {
+  IDEA: 'idea'
+};

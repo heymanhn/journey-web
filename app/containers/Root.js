@@ -2,13 +2,15 @@
 
 import localForage from 'localforage';
 import React, { Component, PropTypes } from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
 import routes from '../routes';
 
-export default class Root extends Component {
+class Root extends Component {
   constructor() {
     super();
     this.state = { rehydrated: false };
@@ -51,3 +53,5 @@ Root.propTypes = {
   store: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };
+
+export default DragDropContext(HTML5Backend)(Root);

@@ -2,17 +2,40 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button, Glyphicon, Image, Panel } from 'react-bootstrap';
+import { DragSource } from 'react-dnd';
+import { dndTypes } from '../constants';
+
+/*
+ * React-dnd setup
+ */
+const ideaSource = {
+  beginDrag(props) {
+    return { ideaId: props.idea._id };
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
+}
 
 class TripPageIdea extends Component {
   render() {
-    const { idea, onRemoveIdea } = this.props;
+    const {
+      connectDragSource,
+      idea,
+      isDragging,
+      onRemoveIdea
+    } = this.props;
     const commentSection = (
       <div>
         <p style={styles.comment}>{idea.comment}</p>
       </div>
     );
 
-    return (
+    return connectDragSource(
       <div>
         <div
           onClick={onRemoveIdea.bind(null, idea._id)}
@@ -23,7 +46,7 @@ class TripPageIdea extends Component {
             style={styles.removeButton.glyph}
           />
         </div>
-        <Panel style={styles.idea}>
+        <Panel style={isDragging ? styles.selectedIdea : styles.idea}>
           <div style={styles.info}>
             <Image src={idea.photo} style={styles.photo} />
             <p style={styles.name}>{idea.name}</p>
@@ -37,7 +60,9 @@ class TripPageIdea extends Component {
 }
 
 TripPageIdea.propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
   idea: PropTypes.object,
+  isDragging: PropTypes.bool.isRequired,
   onRemoveIdea: PropTypes.func.isRequired
 };
 
@@ -50,8 +75,12 @@ const styles = {
     fontStyle: 'italic',
     marginTop: 10
   },
+  selectedIdea: {
+    backgroundColor: '#eeeeee'
+  },
   idea: {
-    backgroundColor: '#fdfdfd'
+    backgroundColor: '#fdfdfd',
+    cursor: 'pointer'
   },
   info: {
     minHeight: 100
@@ -83,4 +112,4 @@ const styles = {
   }
 };
 
-export default TripPageIdea;
+export default DragSource(dndTypes.IDEA, ideaSource, collect)(TripPageIdea);
