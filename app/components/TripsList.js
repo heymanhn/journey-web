@@ -5,13 +5,14 @@ import TripsListItem from './TripsListItem';
 
 class TripsList extends Component {
   render() {
-    const { onViewTrip, trips } = this.props;
+    const { onDeleteTripPress, onViewTrip, trips } = this.props;
 
     var tripsList = trips.map(trip => {
       return (
         <TripsListItem
           key={trip._id}
           trip={trip}
+          onDeleteTripPress={onDeleteTripPress}
           onViewTrip={onViewTrip}
         />
       );
@@ -26,6 +27,7 @@ class TripsList extends Component {
 }
 
 TripsList.propTypes = {
+  onDeleteTripPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired
 };

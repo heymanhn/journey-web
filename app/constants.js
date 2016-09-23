@@ -19,7 +19,7 @@ export const journeyAPI = {
   trips: {
     get: (userId) => ({
       method: 'GET',
-      route: journeyAPIHost + '/users/' + userId + '/trips'
+      route: journeyAPIHost + '/users/' + userId + '/trips?count=100'
     }),
     create: () => ({
       method: 'POST',
@@ -30,6 +30,10 @@ export const journeyAPI = {
   trip: {
     get: (tripId) => ({
       method: 'GET',
+      route: journeyAPIHost + '/trips/' + tripId
+    }),
+    delete: (tripId) => ({
+      method: 'DELETE',
       route: journeyAPIHost + '/trips/' + tripId
     }),
     ideas: {

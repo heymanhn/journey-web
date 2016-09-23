@@ -30,6 +30,11 @@ export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
+// Delete a trip
+export const DELETE_TRIP = 'DELETE_TRIP';
+export const API_DELETE_TRIP_REQUEST = 'API_DELETE_TRIP_REQUEST';
+export const API_DELETE_TRIP_FAILURE = 'API_DELETE_TRIP_FAILURE';
+
 // Trip Ideas
 export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
 export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
@@ -131,6 +136,27 @@ export function apiGetTripSuccess(json) {
 export function apiGetTripFailure(error) {
   return {
     type: API_GET_TRIP_FAILURE,
+    error
+  };
+}
+
+// Delete a Trip
+export function deleteTrip(tripId) {
+  return {
+    type: DELETE_TRIP,
+    tripId
+  };
+}
+
+export function apiDeleteTripRequest() {
+  return {
+    type: API_DELETE_TRIP_REQUEST
+  };
+}
+
+export function apiDeleteTripFailure(error) {
+  return {
+    type: API_DELETE_TRIP_FAILURE,
     error
   };
 }
@@ -322,6 +348,24 @@ export function apiGetTrip(tripId) {
         dispatch(apiGetTripSuccess(json));
       })
       .catch(error => { dispatch(apiGetTripFailure(error.message)); });
+  };
+}
+
+export function apiDeleteTrip(tripId) {
+  return (dispatch, getState) => {
+    dispatch(deleteTrip(tripId)); // Update UI state first
+    dispatch(apiDeleteTripRequest());
+
+    const deleteTripAPI = journeyAPI.trip.delete(tripId);
+    let opts = {
+      ...fetchOptsTemplate,
+      method: deleteTripAPI.method
+    };
+    opts.headers['Authorization'] = getState().authState.token;
+
+    fetch(deleteTripAPI.route, opts)
+      .then(handleErrors)
+      .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
   };
 }
 

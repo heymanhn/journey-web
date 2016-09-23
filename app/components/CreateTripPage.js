@@ -2,12 +2,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
-import {
-  destTextInputStyle,
-  inlineDivStyle,
-  errorMessageStyle
-} from '../stylesheets/styles';
 
 class CreateTripPage extends Component {
   componentDidMount() {
@@ -29,11 +25,14 @@ class CreateTripPage extends Component {
           <TextInput
             onChange={onEnterTitle}
             placeholder="Trip Title"
+            type="text"
+            width={400}
           />
           <TextInput
             id="destinationInput"
             placeholder="Where do you want to go?"
-            style={destTextInputStyle}
+            type="text"
+            width={400}
           />
           <div style={inlineDivStyle}>
             Visibility:
@@ -51,7 +50,7 @@ class CreateTripPage extends Component {
               onChange={onSetVisibility}
             />Private
           </div>
-          <div style={errorMessageStyle}>{error}</div>
+          {error && <ErrorMessage error={error} />}
           <Button
             bsStyle="default"
             onClick={onCreateTripPress}
@@ -83,6 +82,10 @@ CreateTripPage.propTypes = {
   onEnterTitle: PropTypes.func.isRequired,
   onEnterDestination: PropTypes.func.isRequired,
   onSetVisibility: PropTypes.func.isRequired
+};
+
+const inlineDivStyle = {
+  display: 'inline'
 };
 
 export default CreateTripPage;

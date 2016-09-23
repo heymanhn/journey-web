@@ -3,8 +3,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { viewSignupPage } from '../actions/navigation';
+import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
-import { errorMessageStyle } from '../stylesheets/styles';
 
 class IntroPage extends Component {
   render() {
@@ -24,13 +24,14 @@ class IntroPage extends Component {
             defaultValue={email}
             onChange={onEnterEmail}
             placeholder="Email Address"
+            type="text"
           />
           <TextInput
             onChange={onEnterPassword}
             placeholder="Password"
             type="password"
           />
-          <div style={errorMessageStyle}>{error}</div>
+          {error && <ErrorMessage error={error} />}
           <Button bsStyle="default" onClick={onLoginPress}>Log In</Button>
           <Button bsStyle="default" onClick={viewSignupPage}>Sign Up</Button>
         </div>

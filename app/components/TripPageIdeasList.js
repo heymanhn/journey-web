@@ -1,9 +1,9 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Button, FormControl } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import TextInput from './TextInput';
 import TripPageIdea from './TripPageIdea';
-import { tripPageIdeaStyles as styles } from '../stylesheets/styles';
 
 class TripPageIdeasList extends Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class TripPageIdeasList extends Component {
         });
 
     const commentBox = (
-      <FormControl
+      <TextInput
         type="text"
         placeholder="Add a comment"
         style={styles.commentBox}
@@ -62,7 +62,7 @@ class TripPageIdeasList extends Component {
       <div>
         <div style={styles.inputSection}>
           <h3>Ideas</h3>
-          <FormControl
+          <TextInput
             id="tripIdeaSearchBox"
             type="text"
             placeholder="Add an idea"
@@ -130,6 +130,25 @@ TripPageIdeasList.propTypes = {
   onIdeaCleared: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
+};
+
+const styles = {
+  commentBox: {
+    display: 'inline',
+    width: '100%',
+    marginBottom: 10
+  },
+  inputSection: {
+    marginBottom: 10
+  },
+  searchBox: {
+    display: 'inline',
+    width: '80%',
+    marginBottom: 10
+  },
+  searchBoxButton: {
+    float: 'right'
+  }
 };
 
 export default TripPageIdeasList;

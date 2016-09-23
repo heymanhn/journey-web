@@ -4,7 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import TripPageIdeas from '../containers/TripPageIdeas';
 import { viewTripsPage } from '../actions/navigation';
-import { tripPageStyles as styles } from '../stylesheets/styles';
 
 class TripPage extends Component {
   componentWillMount() {
@@ -72,6 +71,15 @@ TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
   trip: PropTypes.object
+};
+
+const styles = {
+  titleSection: {
+    textAlign: 'center'
+  },
+  h1: {
+    fontSize: 48
+  }
 };
 
 export default TripPage;

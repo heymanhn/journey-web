@@ -2,8 +2,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
-import { errorMessageStyle } from '../stylesheets/styles';
 
 class SignupPage extends Component {
   render() {
@@ -25,18 +25,20 @@ class SignupPage extends Component {
             defaultValue={name}
             onChange={onEnterName}
             placeholder="Name"
+            type="text"
           />
           <TextInput
             defaultValue={email}
             onChange={onEnterEmail}
             placeholder="Email Address"
+            type="text"
           />
           <TextInput
             onChange={onEnterPassword}
             placeholder="Password"
             type="password"
           />
-          <div style={errorMessageStyle}>{error}</div>
+          {error && <ErrorMessage error={error} />}
           <Button
             bsStyle="default"
             onClick={onSignupPress}

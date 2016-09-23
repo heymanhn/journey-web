@@ -9,6 +9,7 @@ class TripsPage extends Component {
     const {
       name,
       onCreateTripPress,
+      onDeleteTripPress,
       onLogoutPress,
       onViewTrip,
       trips
@@ -24,7 +25,11 @@ class TripsPage extends Component {
         >
           Create Trip
         </Button>
-        <TripsList trips={trips} onViewTrip={onViewTrip} />
+        <TripsList
+          trips={trips}
+          onDeleteTripPress={onDeleteTripPress}
+          onViewTrip={onViewTrip}
+        />
         <Button
           bsStyle="primary"
           onClick={onLogoutPress}
@@ -39,6 +44,7 @@ class TripsPage extends Component {
 TripsPage.propTypes = {
   name: PropTypes.string,
   onCreateTripPress: PropTypes.func.isRequired,
+  onDeleteTripPress: PropTypes.func.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired

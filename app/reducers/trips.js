@@ -9,6 +9,9 @@ import {
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
+  DELETE_TRIP,
+  API_DELETE_TRIP_REQUEST,
+  API_DELETE_TRIP_FAILURE,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
   API_CREATE_TRIP_FAILURE
@@ -35,6 +38,7 @@ export default function tripsState(state = initialTripsState, action) {
       };
     case API_GET_TRIPS_REQUEST:
     case API_CREATE_TRIP_REQUEST:
+    case API_DELETE_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error'])),
         isFetching: true
@@ -44,6 +48,12 @@ export default function tripsState(state = initialTripsState, action) {
         ...(_.omit(state, ['error'])),
         isFetching: false,
         trips: action.trips
+      };
+    case DELETE_TRIP:
+      return {
+        ...state,
+        isFetching: false,
+        trips: _.reject(state.trips, (trip) => trip._id === action.tripId)
       };
     case API_CREATE_TRIP_SUCCESS:
       return {
@@ -58,6 +68,7 @@ export default function tripsState(state = initialTripsState, action) {
       };
     case API_GET_TRIPS_FAILURE:
     case API_CREATE_TRIP_FAILURE:
+    case API_DELETE_TRIP_FAILURE:
       return {
         ...state,
         isFetching: false,
