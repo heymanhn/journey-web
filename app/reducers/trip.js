@@ -17,6 +17,8 @@ import {
   NEW_TRIP_IDEA_CLEARED,
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
+  SET_DRAG_INDEX,
+  CLEAR_DRAG_INDEX,
   CLEAR_TRIP_ERROR
 } from '../actions/trips';
 import { initialTripState } from '../constants';
@@ -60,6 +62,15 @@ export default function tripState(state = initialTripState, action) {
             idea._id === action.ideaId
           )
         })
+      };
+    case SET_DRAG_INDEX:
+      return {
+        ...state,
+        dragIndex: action.index
+      };
+    case CLEAR_DRAG_INDEX:
+      return {
+        ...(_.omit(state, ['dragIndex']))
       };
     case CLEAR_TRIP_ERROR:
       return _.omit(state, ['error']);

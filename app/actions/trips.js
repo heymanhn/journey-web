@@ -7,7 +7,6 @@ import ObjectID from 'bson-objectid';
 import { viewTripPage } from './navigation'
 import { fetchOptsTemplate, handleErrors, journeyAPI } from '../constants';
 
-
 /*
  * Action Types
  */
@@ -41,6 +40,8 @@ export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
 export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
 export const ADD_TRIP_IDEA = 'ADD_TRIP_IDEA';
 export const REMOVE_TRIP_IDEA = 'REMOVE_TRIP_IDEA';
+export const SET_DRAG_INDEX = 'SET_DRAG_INDEX';
+export const CLEAR_DRAG_INDEX = 'CLEAR_DRAG_INDEX';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
@@ -193,6 +194,19 @@ export function removeTripIdea(ideaId) {
   return {
     type: REMOVE_TRIP_IDEA,
     ideaId
+  };
+}
+
+export function setDragIndex(index) {
+  return {
+    type: SET_DRAG_INDEX,
+    index
+  };
+}
+
+export function clearDragIndex() {
+  return {
+    type: CLEAR_DRAG_INDEX
   };
 }
 
