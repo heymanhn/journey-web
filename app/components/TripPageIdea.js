@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { Button, Glyphicon, Image, Panel } from 'react-bootstrap';
 import { DragSource } from 'react-dnd';
@@ -29,33 +30,41 @@ class TripPageIdea extends Component {
       isDragging,
       onRemoveIdea
     } = this.props;
+
     const commentSection = (
       <div>
         <p style={styles.comment}>{idea.comment}</p>
       </div>
     );
 
-    return connectDragSource(
-      <div>
-        <div
-          onClick={onRemoveIdea.bind(null, idea._id)}
-          style={styles.removeButton.div}
-        >
-          <Glyphicon
-            glyph="remove-circle"
-            style={styles.removeButton.glyph}
-          />
-        </div>
-        <Panel style={isDragging ? styles.selectedIdea : styles.idea}>
-          <div style={styles.info}>
-            <Image src={idea.photo} style={styles.photo} />
-            <p style={styles.name}>{idea.name}</p>
-            <p style={styles.address}>{idea.address}</p>
+    let ideaSection;
+    if (isDragging) {
+      ideaSection = <div style={styles.emptySpace}/>;
+    } else {
+      ideaSection = (
+        <div>
+          <div
+            onClick={onRemoveIdea.bind(null, idea._id)}
+            style={styles.removeButton.div}
+          >
+            <Glyphicon
+              glyph="remove-circle"
+              style={styles.removeButton.glyph}
+            />
           </div>
-          { idea.comment && commentSection }
-        </Panel>
-      </div>
-    );
+          <Panel style={styles.idea}>
+            <div style={styles.info}>
+              <Image src={idea.photo} style={styles.photo} />
+              <p style={styles.name}>{idea.name}</p>
+              <p style={styles.address}>{idea.address}</p>
+            </div>
+            { idea.comment && commentSection }
+          </Panel>
+        </div>
+      );
+    }
+
+    return connectDragSource(ideaSection);
   }
 }
 
@@ -75,8 +84,11 @@ const styles = {
     fontStyle: 'italic',
     marginTop: 10
   },
-  selectedIdea: {
-    backgroundColor: '#eeeeee'
+  emptySpace: {
+    backgroundColor: '#eeeeee',
+    borderRadius: 4,
+    height: 50,
+    marginBottom: 20
   },
   idea: {
     backgroundColor: '#fdfdfd',
