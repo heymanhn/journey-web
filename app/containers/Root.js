@@ -1,9 +1,11 @@
 'use strict';
 
 import localForage from 'localforage';
+import MobileDetect from 'mobile-detect';
 import React, { Component, PropTypes } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { default as TouchBackend } from 'react-dnd-touch-backend';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
@@ -54,4 +56,7 @@ Root.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default DragDropContext(HTML5Backend)(Root);
+
+const md = new MobileDetect(window.navigator.userAgent);
+const backend = md.mobile() ? TouchBackend : HTML5Backend;
+export default DragDropContext(backend)(Root);
