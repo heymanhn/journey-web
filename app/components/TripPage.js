@@ -1,7 +1,10 @@
 'use strict';
 
+require('../stylesheets/react-spinner.css');
+
 import React, { Component, PropTypes } from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
+import Spinner from './Spinner';
 import TripPageIdeas from '../containers/TripPageIdeas';
 import { viewTripsPage } from '../actions/navigation';
 
@@ -26,7 +29,14 @@ class TripPage extends Component {
     }
 
     if (!trip) {
-      return null;
+      return (
+        <div>
+          <p style={styles.loadingText}>Loading Trip</p>
+          <div>
+            <Spinner />
+          </div>
+        </div>
+      );
     }
 
     const tripPlan = trip.plan.map(day => {
@@ -79,6 +89,13 @@ const styles = {
   },
   h1: {
     fontSize: 48
+  },
+  loadingText: {
+    color: '#333333',
+    fontFamily: 'Arial',
+    fontSize: 24,
+    textAlign: 'center',
+    margin: 20
   }
 };
 
