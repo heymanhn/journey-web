@@ -16,15 +16,13 @@ const ideaSource = {
       id: props.idea._id,
       index: props.index
     };
-  },
-  endDrag(props) {
-    props.onClearDragIndex();
   }
 };
 
-function ideaSourceCollect(connect) {
+function ideaSourceCollect(connect, monitor) {
   return {
-    connectDragSource: connect.dragSource()
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
   };
 }
 
@@ -41,17 +39,13 @@ const ideaTarget = {
       to position of idea ${destIdea}`);
   },
   hover(props) {
-    const { dragIndex, index, onSetDragIndex } = props;
-    if (typeof dragIndex === 'undefined' || dragIndex !== index) {
-      onSetDragIndex(index);
-    }
+
   }
 };
 
-function ideaTargetCollect(connect, monitor) {
+function ideaTargetCollect(connect) {
   return {
-    connectDropTarget: connect.dropTarget(),
-    draggedIdea: monitor.getItem()
+    connectDropTarget: connect.dropTarget()
   };
 }
 
@@ -60,12 +54,10 @@ class TripPageIdea extends Component {
     const {
       connectDragSource,
       connectDropTarget,
-      draggedIdea,
-      dragIndex,
       idea,
       index,
-      onRemoveIdea,
-      onSetDragIndex
+      isDragging,
+      onRemoveIdea
     } = this.props;
 
     const infoSection = connectDropTarget(
@@ -98,9 +90,8 @@ class TripPageIdea extends Component {
       </div>
     );
 
-    // State machine, based on drag and drop booleans
     let ideaSection;
-    if (typeof dragIndex !== 'undefined' && dragIndex === index) {
+    if (isDragging) {
       ideaSection = connectDropTarget(
         <div id={idea._id} style={this.loadEmptyStyle()}/>
       );
@@ -113,8 +104,7 @@ class TripPageIdea extends Component {
 
   // Displays the grey placeholder box
   loadEmptyStyle() {
-    const { draggedIdea, idea } = this.props;
-    const id = draggedIdea ? draggedIdea.id : idea._id;
+    const id = this.props.idea._id;
     const height = document.getElementById(id).clientHeight;
     return _.extend(styles.emptySpace, { height });
   }
@@ -123,13 +113,11 @@ class TripPageIdea extends Component {
 TripPageIdea.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
-  draggedIdea: PropTypes.object,
-  dragIndex: PropTypes.number,
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
-  onClearDragIndex: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
-  onSetDragIndex: PropTypes.func.isRequired
+  onReorderIdea: PropTypes.func.isRequired
 };
 
 const styles = {

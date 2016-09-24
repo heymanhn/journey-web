@@ -29,13 +29,11 @@ class TripPageIdeasList extends Component {
 
   render() {
     const {
-      dragIndex,
       ideas,
       onAddIdeaPress,
-      onClearDragIndex,
       onEnterIdeaComment,
       onRemoveIdea,
-      onSetDragIndex
+      onReorderIdea
     } = this.props;
 
     // Sort the ideas in descending order for display purposes
@@ -45,13 +43,11 @@ class TripPageIdeasList extends Component {
         .map((idea, index) => {
           return (
             <TripPageIdea
-              dragIndex={dragIndex}
               key={idea._id}
               idea={idea}
               index={index}
-              onClearDragIndex={onClearDragIndex}
               onRemoveIdea={onRemoveIdea}
-              onSetDragIndex={onSetDragIndex}
+              onReorderIdea={onReorderIdea}
             />
           );
         });
@@ -130,15 +126,13 @@ class TripPageIdeasList extends Component {
 
 TripPageIdeasList.propTypes = {
   destination: PropTypes.object,
-  dragIndex: PropTypes.number,
   ideas: PropTypes.array,
   onAddIdeaPress: PropTypes.func.isRequired,
-  onClearDragIndex: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
-  onSetDragIndex: PropTypes.func.isRequired,
+  onReorderIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
 

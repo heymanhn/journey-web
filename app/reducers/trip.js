@@ -17,8 +17,7 @@ import {
   NEW_TRIP_IDEA_CLEARED,
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
-  SET_DRAG_INDEX,
-  CLEAR_DRAG_INDEX,
+  REORDER_TRIP_IDEA,
   CLEAR_TRIP_ERROR
 } from '../actions/trips';
 import { initialTripState } from '../constants';
@@ -54,6 +53,17 @@ export default function tripState(state = initialTripState, action) {
         resetIdeaBox: true,
         isFetching: false
       };
+    case REORDER_TRIP_IDEA:
+      let ideas = state.trip.ideas;
+      let idea1 = ideas[action.index1];
+      ideas.splice(action.index1, 1);
+      ideas.splice(action.index2, 0, idea1);
+      return {
+        ...state,
+        trip: _.extend(state.trip, {
+          ideas
+        })
+      };
     case REMOVE_TRIP_IDEA:
       return {
         ...state,
@@ -62,15 +72,6 @@ export default function tripState(state = initialTripState, action) {
             idea._id === action.ideaId
           )
         })
-      };
-    case SET_DRAG_INDEX:
-      return {
-        ...state,
-        dragIndex: action.index
-      };
-    case CLEAR_DRAG_INDEX:
-      return {
-        ...(_.omit(state, ['dragIndex']))
       };
     case CLEAR_TRIP_ERROR:
       return _.omit(state, ['error']);
