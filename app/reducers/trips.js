@@ -11,6 +11,7 @@ import {
   API_GET_TRIPS_FAILURE,
   DELETE_TRIP,
   API_DELETE_TRIP_REQUEST,
+  API_DELETE_TRIP_SUCCESS,
   API_DELETE_TRIP_FAILURE,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
@@ -44,6 +45,7 @@ export default function tripsState(state = initialTripsState, action) {
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
+    case API_DELETE_TRIP_SUCCESS:
       return {
         ...(_.omit(state, ['error'])),
         isFetching: false,

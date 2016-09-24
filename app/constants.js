@@ -41,6 +41,10 @@ export const journeyAPI = {
         method: 'POST',
         route: journeyAPIHost + '/trips/' + tripId + '/ideas'
       }),
+      update: (tripId, ideaId) => ({
+        method: 'PUT',
+        route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId
+      }),
       delete: (tripId, ideaId) => ({
         method: 'DELETE',
         route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId
@@ -81,4 +85,11 @@ export const initialTripsState = {
 export const initialTripState = {
   isFetching: false,
   resetIdeaBox: false
+};
+
+/*
+ * Drag and drop functionality variables
+ */
+export const dndTypes = {
+  IDEA: 'idea'
 };

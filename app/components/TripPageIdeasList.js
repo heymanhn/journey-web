@@ -32,19 +32,23 @@ class TripPageIdeasList extends Component {
       ideas,
       onAddIdeaPress,
       onEnterIdeaComment,
-      onRemoveIdea
+      onRemoveIdea,
+      onReorderIdea,
+      onUpdateIdea
     } = this.props;
 
     // Sort the ideas in descending order for display purposes
     const tripIdeas =
       ideas
-        .sort((a,b) => a._id < b._id ? 1 : -1)
-        .map(idea => {
+        .map((idea, index) => {
           return (
             <TripPageIdea
               key={idea._id}
               idea={idea}
+              index={index}
               onRemoveIdea={onRemoveIdea}
+              onReorderIdea={onReorderIdea}
+              onUpdateIdea={onUpdateIdea}
             />
           );
         });
@@ -129,6 +133,8 @@ TripPageIdeasList.propTypes = {
   onEnterIdeaComment: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
+  onReorderIdea: PropTypes.func.isRequired,
+  onUpdateIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
 
