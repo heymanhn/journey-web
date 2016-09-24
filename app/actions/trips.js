@@ -32,6 +32,7 @@ export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 // Delete a trip
 export const DELETE_TRIP = 'DELETE_TRIP';
 export const API_DELETE_TRIP_REQUEST = 'API_DELETE_TRIP_REQUEST';
+export const API_DELETE_TRIP_SUCCESS = 'API_DELETE_TRIP_SUCCESS';
 export const API_DELETE_TRIP_FAILURE = 'API_DELETE_TRIP_FAILURE';
 
 // Create new trip idea
@@ -52,6 +53,7 @@ export const API_UPDATE_TRIP_IDEA_FAILURE = 'API_UPDATE_TRIP_IDEA_FAILURE';
 // Remove a trip idea
 export const REMOVE_TRIP_IDEA = 'REMOVE_TRIP_IDEA';
 export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
+export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
 export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
 // Trip Errors
@@ -161,6 +163,13 @@ export function apiDeleteTripRequest() {
   };
 }
 
+export function apiDeleteTripSuccess(json) {
+  return {
+    type: API_DELETE_TRIP_SUCCESS,
+    trips: json.trips
+  };
+}
+
 export function apiDeleteTripFailure(error) {
   return {
     type: API_DELETE_TRIP_FAILURE,
@@ -256,6 +265,13 @@ export function removeTripIdea(ideaId) {
 export function apiRemoveTripIdeaRequest() {
   return {
     type: API_REMOVE_TRIP_IDEA_REQUEST
+  };
+}
+
+export function apiRemoveTripIdeaSuccess(json) {
+  return {
+    type: API_REMOVE_TRIP_IDEA_SUCCESS,
+    ideas: json.ideas
   };
 }
 
@@ -402,6 +418,10 @@ export function apiDeleteTrip(tripId) {
 
     fetch(deleteTripAPI.route, opts)
       .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiDeleteTripSuccess(json));
+      })
       .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
   };
 }
@@ -496,6 +516,10 @@ export function apiRemoveTripIdea(ideaId) {
 
     fetch(removeTripIdeaAPI.route, opts)
       .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiRemoveTripIdeaSuccess(json));
+      })
       .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
   };
 }

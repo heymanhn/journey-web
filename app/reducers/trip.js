@@ -14,6 +14,7 @@ import {
   API_UPDATE_TRIP_IDEA_SUCCESS,
   API_UPDATE_TRIP_IDEA_FAILURE,
   API_REMOVE_TRIP_IDEA_REQUEST,
+  API_REMOVE_TRIP_IDEA_SUCCESS,
   API_REMOVE_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
@@ -91,6 +92,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
     case API_UPDATE_TRIP_IDEA_SUCCESS:
+    case API_REMOVE_TRIP_IDEA_SUCCESS:
       return {
         ...state,
         trip: _.extend(state.trip, { ideas: action.ideas }),
