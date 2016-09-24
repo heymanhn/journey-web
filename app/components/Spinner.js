@@ -43,15 +43,6 @@ const styles = {
     height: 30,
     top: '50%',
     left: '50%'
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: '#333333',
-    position: 'absolute',
-    width: '20%',
-    height: '7.8%',
-    top: '-3.9%',
-    left: '-10%'
   }
 };
 
