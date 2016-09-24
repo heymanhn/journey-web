@@ -10,6 +10,9 @@ import {
   API_ADD_TRIP_IDEA_REQUEST,
   API_ADD_TRIP_IDEA_SUCCESS,
   API_ADD_TRIP_IDEA_FAILURE,
+  API_UPDATE_TRIP_IDEA_REQUEST,
+  API_UPDATE_TRIP_IDEA_SUCCESS,
+  API_UPDATE_TRIP_IDEA_FAILURE,
   API_REMOVE_TRIP_IDEA_REQUEST,
   API_REMOVE_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
@@ -87,12 +90,15 @@ export default function tripState(state = initialTripState, action) {
         isFetching: false
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
+    case API_UPDATE_TRIP_IDEA_SUCCESS:
       return {
         ...state,
-        trip: _.extend(state.trip, { ideas: action.ideas })
+        trip: _.extend(state.trip, { ideas: action.ideas }),
+        isFetching: false
       };
     case API_GET_TRIP_FAILURE:
     case API_ADD_TRIP_IDEA_FAILURE:
+    case API_UPDATE_TRIP_IDEA_FAILURE:
     case API_REMOVE_TRIP_IDEA_FAILURE:
       return {
         ...state,
@@ -100,6 +106,7 @@ export default function tripState(state = initialTripState, action) {
         error: action.error
       };
     case API_ADD_TRIP_IDEA_REQUEST:
+    case API_UPDATE_TRIP_IDEA_REQUEST:
     case API_REMOVE_TRIP_IDEA_REQUEST:
       return {
         ...(_.omit(state, ['error'])),

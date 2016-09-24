@@ -14,7 +14,8 @@ const ideaSource = {
   beginDrag(props, monitor) {
     return {
       id: props.idea._id,
-      index: props.index
+      initialIndex: props.index,
+      currentIndex: props.index
     };
   }
 };
@@ -31,26 +32,28 @@ function ideaSourceCollect(connect, monitor) {
  */
 const ideaTarget = {
   drop(props, monitor) {
-    const draggedIdea = monitor.getItem().id;
-    const destIdea = props.idea._id;
 
-    // Debug statement only for now
-    console.log(`moved idea ${draggedIdea}
-      to position of idea ${destIdea}`);
+    const { index, onUpdateIdea } = props;
+    const draggedIdea = monitor.getItem();
+
+    if (draggedIdea.initialIndex === index) {
+      return;
+    }
+
+    onUpdateIdea(index);
+    draggedIdea.initialIndex = index;
   },
 
   hover(props, monitor) {
     const { index, onReorderIdea } = props;
     const draggedIdea = monitor.getItem();
 
-    if (draggedIdea.index === index) {
+    if (draggedIdea.currentIndex === index) {
       return;
     }
 
-    onReorderIdea(draggedIdea.index, index);
-
-    // Update the drag source's index to maintain state
-    draggedIdea.index = index;
+    onReorderIdea(draggedIdea.currentIndex, index);
+    draggedIdea.currentIndex = index;
   }
 };
 
@@ -128,7 +131,8 @@ TripPageIdea.propTypes = {
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
-  onReorderIdea: PropTypes.func.isRequired
+  onReorderIdea: PropTypes.func.isRequired,
+  onUpdateIdea: PropTypes.func.isRequired
 };
 
 const styles = {

@@ -41,6 +41,10 @@ export const journeyAPI = {
         method: 'POST',
         route: journeyAPIHost + '/trips/' + tripId + '/ideas'
       }),
+      update: (tripId, ideaId) => ({
+        method: 'PUT',
+        route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId
+      }),
       delete: (tripId, ideaId) => ({
         method: 'DELETE',
         route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId

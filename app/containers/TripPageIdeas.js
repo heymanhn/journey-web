@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   apiAddTripIdea,
   apiRemoveTripIdea,
+  apiUpdateTripIdea,
   reorderTripIdea,
   saveNewTripIdea,
   saveIdeaComment,
@@ -40,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onReorderIdea: (index1, index2) => {
       dispatch(reorderTripIdea(index1, index2));
+    },
+    onUpdateIdea: (index) => {
+      dispatch(apiUpdateTripIdea(index));
     }
   };
 };

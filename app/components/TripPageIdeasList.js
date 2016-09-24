@@ -33,7 +33,8 @@ class TripPageIdeasList extends Component {
       onAddIdeaPress,
       onEnterIdeaComment,
       onRemoveIdea,
-      onReorderIdea
+      onReorderIdea,
+      onUpdateIdea
     } = this.props;
 
     // Sort the ideas in descending order for display purposes
@@ -47,6 +48,7 @@ class TripPageIdeasList extends Component {
               index={index}
               onRemoveIdea={onRemoveIdea}
               onReorderIdea={onReorderIdea}
+              onUpdateIdea={onUpdateIdea}
             />
           );
         });
@@ -132,6 +134,7 @@ TripPageIdeasList.propTypes = {
   onIdeaCleared: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
+  onUpdateIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
 
