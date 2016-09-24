@@ -38,8 +38,19 @@ const ideaTarget = {
     console.log(`moved idea ${draggedIdea}
       to position of idea ${destIdea}`);
   },
-  hover(props) {
 
+  hover(props, monitor) {
+    const { index, onReorderIdea } = props;
+    const draggedIdea = monitor.getItem();
+
+    if (draggedIdea.index === index) {
+      return;
+    }
+
+    onReorderIdea(draggedIdea.index, index);
+
+    // Update the drag source's index to maintain state
+    draggedIdea.index = index;
   }
 };
 

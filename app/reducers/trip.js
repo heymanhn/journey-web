@@ -54,7 +54,7 @@ export default function tripState(state = initialTripState, action) {
         isFetching: false
       };
     case REORDER_TRIP_IDEA:
-      let ideas = state.trip.ideas;
+      let ideas = state.trip.ideas.slice();
       let idea1 = ideas[action.index1];
       ideas.splice(action.index1, 1);
       ideas.splice(action.index2, 0, idea1);
