@@ -39,7 +39,6 @@ class TripPageIdeasList extends Component {
     // Sort the ideas in descending order for display purposes
     const tripIdeas =
       ideas
-        .sort((a,b) => a._id < b._id ? 1 : -1)
         .map((idea, index) => {
           return (
             <TripPageIdea
