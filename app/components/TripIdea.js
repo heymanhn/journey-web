@@ -68,18 +68,9 @@ function ideaTargetCollect(connect) {
 }
 
 class TripIdea extends Component {
-  componentDidMount() {
-    // Display the custom drag layer if this is a mobile device
-    if (isMobile) {
-      this.props.connectDragPreview(getEmptyImage(), {
-        // IE fallback
-        captureDraggingState: true
-      });
-    }
-  }
-
   render() {
     const {
+      connectDragPreview,
       connectDragSource,
       connectDropTarget,
       idea,
@@ -107,14 +98,22 @@ class TripIdea extends Component {
       </div>
     );
 
+    let fullSection;
     if (isDragging) {
       // Displays the grey placeholder box
-      return compose(connectDragSource, connectDropTarget)(
+      fullSection = compose(connectDragSource, connectDropTarget)(
         <div id={idea._id} style={this.loadEmptyStyle()}/>
       );
     } else {
-      return connectDragSource(ideaPanel);
+      fullSection = connectDragSource(ideaPanel);
     }
+
+    // Only connect the drag preview if the touch backend is used
+    if (isMobile) {
+      fullSection = connectDragPreview(fullSection);
+    }
+
+    return fullSection;
   }
 
   loadEmptyStyle() {
@@ -125,6 +124,7 @@ class TripIdea extends Component {
 }
 
 TripIdea.propTypes = {
+  connectDragPreview: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   idea: PropTypes.object,
