@@ -3,8 +3,10 @@
 import _ from 'underscore';
 import flow from 'lodash/flow';
 import React, { Component, PropTypes } from 'react';
-import { Button, Glyphicon, Image, Panel } from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 import { DragSource, DropTarget } from 'react-dnd';
+import { compose } from 'redux';
+import TripPageIdeaPanel from './TripPageIdeaPanel';
 import { dndTypes } from '../constants';
 
 /*
@@ -69,20 +71,11 @@ class TripPageIdea extends Component {
       connectDragSource,
       connectDropTarget,
       idea,
-      index,
       isDragging,
       onRemoveIdea
     } = this.props;
 
-    const infoSection = connectDropTarget(
-      <div style={styles.info}>
-        <Image src={idea.photo} style={styles.photo} />
-        <p style={styles.name}>{idea.name}</p>
-        <p style={styles.address}>{idea.address}</p>
-        </div>
-    );
-
-    const fullIdeaSection = (
+    const ideaPanel = (
       <div>
         <div
           onClick={onRemoveIdea.bind(null, idea._id)}
@@ -93,30 +86,25 @@ class TripPageIdea extends Component {
             style={styles.removeButton.glyph}
           />
         </div>
-        <Panel id={idea._id} style={styles.idea}>
-          {infoSection}
-          {idea.comment && (
-            <div>
-              <p style={styles.comment}>{idea.comment}</p>
-            </div>
-          )}
-        </Panel>
+        <TripPageIdeaPanel
+          {..._.pick(this.props, [
+            'connectDropTarget',
+            'idea'
+          ])}
+        />
       </div>
     );
 
-    let ideaSection;
     if (isDragging) {
-      ideaSection = connectDropTarget(
+      // Displays the grey placeholder box
+      return compose(connectDragSource, connectDropTarget)(
         <div id={idea._id} style={this.loadEmptyStyle()}/>
       );
     } else {
-      ideaSection = fullIdeaSection;
+      return connectDragSource(ideaPanel);
     }
-
-    return connectDragSource(ideaSection);
   }
 
-  // Displays the grey placeholder box
   loadEmptyStyle() {
     const id = this.props.idea._id;
     const height = document.getElementById(id).clientHeight;
@@ -136,37 +124,11 @@ TripPageIdea.propTypes = {
 };
 
 const styles = {
-  address: {
-    fontSize: 12,
-    color: '#999999'
-  },
-  comment: {
-    fontStyle: 'italic',
-    marginTop: 10
-  },
   emptySpace: {
     backgroundColor: '#eeeeee',
     borderRadius: 4,
     height: 80,
     marginBottom: 20
-  },
-  idea: {
-    backgroundColor: '#fdfdfd',
-    cursor: 'pointer'
-  },
-  info: {
-    minHeight: 100
-  },
-  name: {
-    fontWeight: 'bold'
-  },
-  photo: {
-    float: 'right',
-    marginLeft: 10,
-    width: '33%',
-    height: 100,
-    objectFit: 'cover',
-    border: '1px solid #eeeeee'
   },
   removeButton: {
     div: {
