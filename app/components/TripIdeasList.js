@@ -2,10 +2,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import TextInput from './TextInput';
-import TripPageIdea from './TripPageIdea';
 
-class TripPageIdeasList extends Component {
+import { isMobile } from '../constants';
+import TripIdeaDragPreview from './TripIdeaDragPreview';
+import TextInput from './TextInput';
+import TripIdea from './TripIdea';
+
+class TripIdeasList extends Component {
   constructor(props) {
     super(props);
     this.state = { showCommentBox: false };
@@ -42,7 +45,7 @@ class TripPageIdeasList extends Component {
       ideas
         .map((idea, index) => {
           return (
-            <TripPageIdea
+            <TripIdea
               key={idea._id}
               idea={idea}
               index={index}
@@ -60,6 +63,10 @@ class TripPageIdeasList extends Component {
         style={styles.commentBox}
         onChange={onEnterIdeaComment}
       />
+    );
+
+    const dragPreview = (
+      <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
 
     return (
@@ -81,7 +88,10 @@ class TripPageIdeasList extends Component {
           </Button>
           {this.state.showCommentBox && commentBox}
         </div>
-        {tripIdeas}
+        <div>
+          {tripIdeas}
+          {isMobile && dragPreview}
+        </div>
       </div>
     );
   }
@@ -125,7 +135,7 @@ class TripPageIdeasList extends Component {
   }
 }
 
-TripPageIdeasList.propTypes = {
+TripIdeasList.propTypes = {
   destination: PropTypes.object,
   ideas: PropTypes.array,
   onAddIdeaPress: PropTypes.func.isRequired,
@@ -157,4 +167,4 @@ const styles = {
   }
 };
 
-export default TripPageIdeasList;
+export default TripIdeasList;
