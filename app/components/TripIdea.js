@@ -5,9 +5,10 @@ import flow from 'lodash/flow';
 import React, { Component, PropTypes } from 'react';
 import { Glyphicon } from 'react-bootstrap';
 import { DragSource, DropTarget } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
-import TripPageIdeaPanel from './TripPageIdeaPanel';
-import { dndTypes } from '../constants';
+import TripIdeaPanel from './TripIdeaPanel';
+import { dndTypes, isMobile } from '../constants';
 
 /*
  * React-dnd drag source
@@ -24,6 +25,7 @@ const ideaSource = {
 
 function ideaSourceCollect(connect, monitor) {
   return {
+    connectDragPreview: connect.dragPreview(),
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
   };
@@ -65,7 +67,17 @@ function ideaTargetCollect(connect) {
   };
 }
 
-class TripPageIdea extends Component {
+class TripIdea extends Component {
+  componentDidMount() {
+    // Display the custom drag layer if this is a mobile device
+    if (isMobile) {
+      this.props.connectDragPreview(getEmptyImage(), {
+        // IE fallback
+        captureDraggingState: true
+      });
+    }
+  }
+
   render() {
     const {
       connectDragSource,
@@ -86,7 +98,7 @@ class TripPageIdea extends Component {
             style={styles.removeButton.glyph}
           />
         </div>
-        <TripPageIdeaPanel
+        <TripIdeaPanel
           {..._.pick(this.props, [
             'connectDropTarget',
             'idea'
@@ -112,7 +124,7 @@ class TripPageIdea extends Component {
   }
 }
 
-TripPageIdea.propTypes = {
+TripIdea.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   idea: PropTypes.object,
@@ -149,4 +161,4 @@ const styles = {
 export default flow(
   DragSource(dndTypes.IDEA, ideaSource, ideaSourceCollect),
   DropTarget(dndTypes.IDEA, ideaTarget, ideaTargetCollect)
-)(TripPageIdea);
+)(TripIdea);

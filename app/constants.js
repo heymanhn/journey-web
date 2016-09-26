@@ -1,5 +1,7 @@
 'use strict';
 
+import MobileDetect from 'mobile-detect';
+
 /*
  * Network request constants
  */
@@ -93,3 +95,6 @@ export const initialTripState = {
 export const dndTypes = {
   IDEA: 'idea'
 };
+
+const md = new MobileDetect(window.navigator.userAgent);
+export const isMobile = md.mobile() ? true : false;

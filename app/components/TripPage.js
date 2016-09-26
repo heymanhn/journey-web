@@ -5,7 +5,7 @@ require('../stylesheets/react-spinner.css');
 import React, { Component, PropTypes } from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import Spinner from './Spinner';
-import TripPageIdeas from '../containers/TripPageIdeas';
+import TripIdeas from '../containers/TripIdeas';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
@@ -56,7 +56,7 @@ class TripPage extends Component {
         </Row>
         <Row>
           <Col md={4}>
-            <TripPageIdeas />
+            <TripIdeas />
           </Col>
           <Col md={8}>
             <h3>Plan</h3>

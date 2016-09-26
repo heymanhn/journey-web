@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Image, Panel } from 'react-bootstrap';
 
-class TripPageIdeaPanel extends Component {
+class TripIdeaPanel extends Component {
   render() {
     const {
       connectDropTarget,
@@ -21,7 +21,10 @@ class TripPageIdeaPanel extends Component {
     );
 
     return (
-      <Panel id={idea._id} style={styles.idea}>
+      <Panel
+        id={connectDropTarget ? idea._id : '__preview'}
+        style={styles.idea}
+      >
         {infoSection}
         {idea.comment && (
           <div>
@@ -33,7 +36,7 @@ class TripPageIdeaPanel extends Component {
   }
 }
 
-TripPageIdeaPanel.propTypes = {
+TripIdeaPanel.propTypes = {
   connectDropTarget: PropTypes.func,
   idea: PropTypes.object
 };
@@ -55,6 +58,7 @@ const styles = {
     minHeight: 100
   },
   name: {
+    fontSize: 14,
     fontWeight: 'bold'
   },
   photo: {
@@ -67,4 +71,4 @@ const styles = {
   }
 };
 
-export default TripPageIdeaPanel;
+export default TripIdeaPanel;

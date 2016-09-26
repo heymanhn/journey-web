@@ -10,7 +10,7 @@ import {
   saveIdeaComment,
   tripIdeaCleared
 } from '../actions/trips';
-import TripPageIdeasList from '../components/TripPageIdeasList';
+import TripIdeasList from '../components/TripIdeasList';
 
 const mapStateToProps = (state) => {
   const ts = state.tripState;
@@ -51,4 +51,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TripPageIdeasList);
+)(TripIdeasList);
