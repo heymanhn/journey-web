@@ -65,7 +65,7 @@ class TripPage extends Component {
             Home
           </Button>
         </div>
-        <div>
+        <div style={styles.rightColumn}>
           <h1>Map</h1>
         </div>
       </div>
@@ -94,6 +94,10 @@ const styles = {
     fontSize: 24,
     textAlign: 'center',
     margin: 20
+  },
+  rightColumn: {
+    marginLeft: 400,
+    padding: '0 20 0'
   },
   titleSection: {
     marginBottom: 30
