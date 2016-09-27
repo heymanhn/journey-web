@@ -24,9 +24,13 @@ class TripMapDisplay extends Component {
       southwest.coordinates,
       northeast.coordinates
     );
+
     map.fitBounds(bounds, {
       linear: true
     });
+
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.Navigation());
   }
 
   render() {
@@ -48,10 +52,12 @@ TripMapDisplay.propTypes = {
 
 const styles = {
   mapContainer: {
+    paddingLeft: 400,
     position: 'absolute',
     top: 0,
     bottom: 0,
-    width: '100%'
+    width: '100%',
+    zIndex: 1
   }
 };
 

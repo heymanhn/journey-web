@@ -18,6 +18,10 @@
     cursor: grabbing;
 }
 
+.mapboxgl-canvas {
+    outline: none;
+}
+
 .mapboxgl-ctrl-top-left,
 .mapboxgl-ctrl-top-right,
 .mapboxgl-ctrl-bottom-left,
