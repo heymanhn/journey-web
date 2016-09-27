@@ -1,5 +1,7 @@
 'use strict';
 
+require('../stylesheets/mapbox-gl.css');
+
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
 import { mapbox } from '../constants';
