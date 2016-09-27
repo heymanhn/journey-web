@@ -98,3 +98,10 @@ export const dndTypes = {
 
 const md = new MobileDetect(window.navigator.userAgent);
 export const isMobile = md.mobile() ? true : false;
+
+/*
+ * Mapbox API
+ */
+export const mapbox = {
+  token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
+};

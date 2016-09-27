@@ -6,6 +6,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import Spinner from './Spinner';
 import TripIdeas from '../containers/TripIdeas';
+import TripMap from '../containers/TripMap';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
@@ -66,7 +67,7 @@ class TripPage extends Component {
           </Button>
         </div>
         <div style={styles.rightColumn}>
-          <h1>Map</h1>
+          <TripMap />
         </div>
       </div>
     );
