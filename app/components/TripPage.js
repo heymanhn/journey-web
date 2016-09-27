@@ -85,6 +85,7 @@ const styles = {
     fontSize: 32
   },
   leftColumn: {
+    float: 'left',
     height: '100%',
     overflow: 'scroll',
     padding: '0 30 0',

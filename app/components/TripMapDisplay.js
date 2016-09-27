@@ -7,12 +7,41 @@ import React, { Component, PropTypes } from 'react';
 import { mapbox } from '../constants';
 
 class TripMapDisplay extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      markers: []
+    };
+  }
+
   componentDidMount() {
+    this.loadMap();
+    this.loadMarkers();
+  }
+
+  // Update the map markers if there are any changes
+  componentWillReceiveProps(nextProps) {
+    this.loadMarkers(nextProps);
+  }
+
+  render() {
+    const { destination, ideas } = this.props;
+
+    return (
+      <div
+        ref={x => this.container = x}
+        style={styles.mapContainer}
+      ></div>
+    );
+  }
+
+  loadMap() {
     // Initialize the map and set it to the viewport of the destination
     const { destination } = this.props;
     mapboxgl.accessToken = mapbox.token;
 
-    const map = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
       container: this.container,
       style: mapbox.streetsStyle,
       attributionControl: true,
@@ -25,23 +54,40 @@ class TripMapDisplay extends Component {
       northeast.coordinates
     );
 
-    map.fitBounds(bounds, {
+    this.map.fitBounds(bounds, {
       linear: true
     });
 
     // Add zoom and rotation controls to the map.
-    map.addControl(new mapboxgl.Navigation());
+    this.map.addControl(new mapboxgl.Navigation());
   }
 
-  render() {
-    const { destination, ideas } = this.props;
+  loadMarkers(props) {
+    let { markers } = this.state;
+    const { ideas } = props || this.props;
 
-    return (
-      <div
-        ref={x => this.container = x}
-        style={styles.mapContainer}
-      ></div>
-    );
+    if (markers.length === ideas.length) {
+      return;
+    }
+
+    // Remove all previous markers
+    markers.forEach((marker) => {
+      marker.remove();
+    });
+    markers = [];
+
+    // Add markers corresponding to the ideas
+    ideas.forEach((idea) => {
+      let marker = document.createElement('div');
+      marker.className = 'marker';
+
+      let mapMarker = new mapboxgl.Marker(marker)
+        .setLngLat(idea.loc.coordinates)
+        .addTo(this.map);
+
+      markers.push(mapMarker);
+      this.setState({ markers });
+    });
   }
 }
 

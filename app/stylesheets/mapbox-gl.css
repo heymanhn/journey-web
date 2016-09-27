@@ -22,6 +22,17 @@
     outline: none;
 }
 
+.marker {
+    display: block;
+    background-color: rgba(28,191,28,1);
+    border: 1px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    width: 15px;
+    height: 15px;
+}
+
 .mapboxgl-ctrl-top-left,
 .mapboxgl-ctrl-top-right,
 .mapboxgl-ctrl-bottom-left,
@@ -246,7 +257,7 @@
 .mapboxgl-marker {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 400;
     will-change: transform;
 }
 
