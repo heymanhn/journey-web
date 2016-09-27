@@ -163,10 +163,9 @@ export function apiDeleteTripRequest() {
   };
 }
 
-export function apiDeleteTripSuccess(json) {
+export function apiDeleteTripSuccess() {
   return {
-    type: API_DELETE_TRIP_SUCCESS,
-    trips: json.trips
+    type: API_DELETE_TRIP_SUCCESS
   };
 }
 
@@ -421,6 +420,7 @@ export function apiDeleteTrip(tripId) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiDeleteTripSuccess(json));
+        dispatch(apiGetTrips());
       })
       .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
   };

@@ -45,11 +45,15 @@ export default function tripsState(state = initialTripsState, action) {
         isFetching: true
       };
     case API_GET_TRIPS_SUCCESS:
-    case API_DELETE_TRIP_SUCCESS:
       return {
         ...(_.omit(state, ['error'])),
         isFetching: false,
         trips: action.trips
+      };
+    case API_DELETE_TRIP_SUCCESS:
+      return {
+        ...(_.omit(state, ['error'])),
+        isFetching: false
       };
     case DELETE_TRIP:
       return {
