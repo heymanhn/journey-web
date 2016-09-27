@@ -86,7 +86,9 @@ const styles = {
   },
   leftColumn: {
     float: 'left',
-    padding: '0 20 0',
+    height: '100%',
+    overflow: 'scroll',
+    padding: '0 30 0',
     width: 400
   },
   loadingText: {
@@ -97,8 +99,7 @@ const styles = {
     margin: 20
   },
   rightColumn: {
-    marginLeft: 400,
-    padding: '0 20 0'
+    marginLeft: 400
   },
   titleSection: {
     marginBottom: 30
