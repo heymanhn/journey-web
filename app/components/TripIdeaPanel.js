@@ -13,9 +13,10 @@ class TripIdeaPanel extends Component {
 
     // Insert a dummy function if connectDropTarget is not specified
     const wrapperFn = connectDropTarget || ((x) => { return x; });
+    const imageSection = <Image src={idea.photo} style={styles.photo} />;
     const infoSection = wrapperFn(
       <div style={styles.info}>
-        <Image src={idea.photo} style={styles.photo} />
+        {idea.photo && imageSection}
         <p style={styles.name}>{idea.name}</p>
         <p style={styles.address}>{idea.address}</p>
       </div>
