@@ -29,8 +29,11 @@
     border-radius: 50%;
     cursor: pointer;
     padding: 0;
-    width: 15px;
-    height: 15px;
+    z-index: 1;
+}
+
+.hover-marker {
+  z-index: 2;
 }
 
 .mapboxgl-ctrl-top-left,
@@ -257,7 +260,6 @@
 .mapboxgl-marker {
     position: absolute;
     top: 0;
-    left: 400;
     will-change: transform;
 }
 

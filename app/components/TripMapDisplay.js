@@ -4,7 +4,7 @@ require('../stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { mapbox } from '../constants';
+import { mapbox, mapMarkers } from '../constants';
 
 class TripMapDisplay extends Component {
   constructor(props) {
@@ -63,12 +63,8 @@ class TripMapDisplay extends Component {
   }
 
   loadMarkers(props) {
-    let { markers } = this.state;
-    const { ideas } = props || this.props;
-
-    if (markers.length === ideas.length) {
-      return;
-    }
+    let { hoverMarker, markers } = this.state;
+    const { ideas, mouseOverIdea } = props || this.props;
 
     // Remove all previous markers
     markers.forEach((marker) => {
@@ -76,24 +72,51 @@ class TripMapDisplay extends Component {
     });
     markers = [];
 
+    if (hoverMarker) {
+      hoverMarker.remove();
+      hoverMarker = null;
+    }
+
     // Add markers corresponding to the ideas
     ideas.forEach((idea) => {
       let marker = document.createElement('div');
       marker.className = 'marker';
+      marker.style.width = mapMarkers.diameter;
+      marker.style.height= mapMarkers.diameter;
 
-      let mapMarker = new mapboxgl.Marker(marker)
+      let mapMarker = new mapboxgl.Marker(
+        marker,
+        { offset: [-mapMarkers.diameter/2, -mapMarkers.diameter/2] }
+      )
         .setLngLat(idea.loc.coordinates)
         .addTo(this.map);
 
+      // Display the hover marker if needed
+      if (mouseOverIdea && mouseOverIdea === idea._id) {
+        let newHover = document.createElement('div');
+        newHover.className = 'hover-marker';
+        newHover.style.backgroundImage = 'url("../assets/marker-icon.png")';
+        newHover.style.width = mapMarkers.icon.width;
+        newHover.style.height = mapMarkers.icon.height;
+
+        hoverMarker = new mapboxgl.Marker(
+          newHover,
+          { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
+        )
+          .setLngLat(idea.loc.coordinates)
+          .addTo(this.map);
+      }
+
       markers.push(mapMarker);
-      this.setState({ markers });
+      this.setState({ hoverMarker, markers });
     });
   }
 }
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
-  ideas: PropTypes.array
+  ideas: PropTypes.array,
+  mouseOverIdea: PropTypes.string.isRequired
 };
 
 const styles = {

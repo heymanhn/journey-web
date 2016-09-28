@@ -7,7 +7,8 @@ const mapStateToProps = (state) => {
   const ts = state.tripState;
   return {
     destination: ts.trip.destination,
-    ideas: ts.trip.ideas
+    ideas: ts.trip.ideas,
+    mouseOverIdea: ts.mouseOverIdea || ''
   };
 };
 

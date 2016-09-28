@@ -106,3 +106,11 @@ export const mapbox = {
   streetsStyle: 'mapbox://styles/mapbox/streets-v9',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
 };
+
+export const mapMarkers = {
+  diameter: 15,
+  icon: {
+    width: 25,
+    height: 41
+  }
+};
