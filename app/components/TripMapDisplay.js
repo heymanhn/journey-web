@@ -95,32 +95,11 @@ class TripMapDisplay extends Component {
         .addTo(this.map);
 
       // Add popup UI to marker
-      let popupHTML = '';
-      if (idea.photo) {
-        popupHTML += `<img src="${idea.photo}">`;
-      }
-
-      popupHTML += `
-        <p class="popup-name">${idea.name}</p>
-        <p class="popup-address">${idea.address}</p>`;
-
-      if (idea.comment) {
-        popupHTML += `<p class="popup-comment">${idea.comment}</p>`
-      }
-
-      let popup = new mapboxgl.Popup({
-        offset: [mapbox.displayOffset, 0],
-        closeButton: false
-      }).setHTML(popupHTML);
-      mapMarker.setPopup(popup);
+      mapMarker.setPopup(createPopup(idea));
 
       // Display the hover marker if needed
       if (mouseOverIdea && mouseOverIdea === idea._id) {
-        let newHover = document.createElement('div');
-        newHover.className = 'hover-marker';
-        newHover.style.backgroundImage = 'url("../assets/marker-icon.png")';
-        newHover.style.width = mapMarkers.icon.width;
-        newHover.style.height = mapMarkers.icon.height;
+        let newHover = createHoverMarker();
 
         hoverMarker = new mapboxgl.Marker(
           newHover,
@@ -134,6 +113,30 @@ class TripMapDisplay extends Component {
       this.setState({ hoverMarker, markers });
     });
   }
+}
+
+function createHoverMarker() {
+  let newMarker = document.createElement('div');
+  newMarker.className = 'hover-marker';
+  newMarker.style.backgroundImage = 'url("../assets/marker-icon.png")';
+  newMarker.style.width = mapMarkers.icon.width;
+  newMarker.style.height = mapMarkers.icon.height;
+
+  return newMarker;
+}
+
+function createPopup(idea) {
+  let popupHTML = idea.photo ? `<img src="${idea.photo}">` : '';
+  popupHTML += `
+    <p class="popup-name">${idea.name}</p>
+    <p class="popup-address">${idea.address}</p>`;
+  popupHTML += idea.comment ?
+    `<p class="popup-comment">${idea.comment}</p>` : '';
+
+  return new mapboxgl.Popup({
+    offset: [mapbox.displayOffset, 0],
+    closeButton: false
+  }).setHTML(popupHTML);
 }
 
 TripMapDisplay.propTypes = {
