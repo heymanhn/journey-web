@@ -56,6 +56,10 @@ export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
 export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
 export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
+// Trip idea hover states
+export const SET_MOUSEOVER_IDEA = 'SET_MOUSEOVER_IDEA';
+export const CLEAR_MOUSEOVER_IDEA = 'CLEAR_MOUSEOVER_IDEA';
+
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 export const CLEAR_TRIP_ERROR = 'CLEAR_TRIP_ERROR';
@@ -281,6 +285,20 @@ export function apiRemoveTripIdeaFailure(error) {
   };
 }
 
+// Trip idea hover state
+export function setMouseOverIdea(ideaId) {
+  return {
+    type: SET_MOUSEOVER_IDEA,
+    ideaId
+  };
+}
+
+export function clearMouseOverIdea(ideaId) {
+  return {
+    type: CLEAR_MOUSEOVER_IDEA,
+    ideaId
+  };
+}
 
 // Trip Errors
 export function clearTripsError() {

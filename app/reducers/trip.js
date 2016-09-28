@@ -22,6 +22,8 @@ import {
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
   REORDER_TRIP_IDEA,
+  SET_MOUSEOVER_IDEA,
+  CLEAR_MOUSEOVER_IDEA,
   CLEAR_TRIP_ERROR
 } from '../actions/trips';
 import { initialTripState } from '../constants';
@@ -77,8 +79,15 @@ export default function tripState(state = initialTripState, action) {
           )
         })
       };
+    case SET_MOUSEOVER_IDEA:
+      return {
+        ...state,
+        mouseOverIdea: action.ideaId
+      };
+    case CLEAR_MOUSEOVER_IDEA:
+      return _.omit(state, 'mouseOverIdea');
     case CLEAR_TRIP_ERROR:
-      return _.omit(state, ['error']);
+      return _.omit(state, 'error');
     case API_GET_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error', 'trip'])),
@@ -111,7 +120,7 @@ export default function tripState(state = initialTripState, action) {
     case API_UPDATE_TRIP_IDEA_REQUEST:
     case API_REMOVE_TRIP_IDEA_REQUEST:
       return {
-        ...(_.omit(state, ['error'])),
+        ...(_.omit(state, 'error')),
         isFetching: true
       };
     case LOGOUT:

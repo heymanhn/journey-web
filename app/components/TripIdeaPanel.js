@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { Image, Panel } from 'react-bootstrap';
 
@@ -23,7 +24,7 @@ class TripIdeaPanel extends Component {
     return (
       <Panel
         id={connectDropTarget ? idea._id : '__preview'}
-        style={styles.idea}
+        style={this.loadIdeaStyle()}
       >
         {infoSection}
         {idea.comment && (
@@ -34,10 +35,17 @@ class TripIdeaPanel extends Component {
       </Panel>
     );
   }
+
+  loadIdeaStyle() {
+    const { hover } = this.props;
+    const style = _.clone(styles.idea);
+    return hover ? { ...style, backgroundColor: 'rgb(240, 240, 240)' } : style;
+  }
 }
 
 TripIdeaPanel.propTypes = {
   connectDropTarget: PropTypes.func,
+  hover: PropTypes.bool.isRequired,
   idea: PropTypes.object
 };
 

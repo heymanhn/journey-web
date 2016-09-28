@@ -3,11 +3,8 @@
 import { connect } from 'react-redux';
 import {
   apiAddTripIdea,
-  apiRemoveTripIdea,
-  apiUpdateTripIdea,
-  reorderTripIdea,
-  saveNewTripIdea,
   saveIdeaComment,
+  saveNewTripIdea,
   tripIdeaCleared
 } from '../actions/trips';
 import TripIdeasList from '../components/TripIdeasList';
@@ -35,15 +32,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     onIdeaCleared: () => {
       dispatch(tripIdeaCleared());
-    },
-    onRemoveIdea: (ideaId) => {
-      dispatch(apiRemoveTripIdea(ideaId));
-    },
-    onReorderIdea: (index1, index2) => {
-      dispatch(reorderTripIdea(index1, index2));
-    },
-    onUpdateIdea: (index) => {
-      dispatch(apiUpdateTripIdea(index));
     }
   };
 };

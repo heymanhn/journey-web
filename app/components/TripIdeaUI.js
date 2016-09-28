@@ -67,7 +67,7 @@ function ideaTargetCollect(connect) {
   };
 }
 
-class TripIdea extends Component {
+class TripIdeaUI extends Component {
   render() {
     const {
       connectDragPreview,
@@ -75,11 +75,16 @@ class TripIdea extends Component {
       connectDropTarget,
       idea,
       isDragging,
+      mouseOverIdea,
       onRemoveIdea
     } = this.props;
 
     const ideaPanel = (
-      <div>
+      <div
+        onMouseOver={this.onMouseOverIdea.bind(this)}
+        onMouseLeave={this.onMouseLeaveIdea.bind(this)}
+        style={styles.mainDiv}
+      >
         <div
           onClick={onRemoveIdea.bind(null, idea._id)}
           style={styles.removeButton.div}
@@ -94,6 +99,7 @@ class TripIdea extends Component {
             'connectDropTarget',
             'idea'
           ])}
+          hover={mouseOverIdea === idea._id}
         />
       </div>
     );
@@ -116,6 +122,19 @@ class TripIdea extends Component {
     return fullSection;
   }
 
+  /*
+   * When the mouse hovers over an idea, dim the idea's background color
+   * slightly and display a marker pin above the idea's location on the map to
+   * indicate that that location is selected
+   */
+  onMouseOverIdea(event) {
+    this.props.onSetMouseOverIdea(this.props.idea._id);
+  }
+
+  onMouseLeaveIdea(event) {
+    this.props.onClearMouseOverIdea(this.props.idea._id);
+  }
+
   loadEmptyStyle() {
     const id = this.props.idea._id;
     const height = document.getElementById(id).clientHeight;
@@ -123,15 +142,18 @@ class TripIdea extends Component {
   }
 }
 
-TripIdea.propTypes = {
+TripIdeaUI.propTypes = {
   connectDragPreview: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  mouseOverIdea: PropTypes.string.isRequired,
+  onClearMouseOverIdea: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
+  onSetMouseOverIdea: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired
 };
 
@@ -141,6 +163,9 @@ const styles = {
     borderRadius: 4,
     height: 80,
     marginBottom: 20
+  },
+  mainDiv: {
+    backgroundColor: '#ffffff'
   },
   removeButton: {
     div: {
@@ -161,4 +186,4 @@ const styles = {
 export default flow(
   DragSource(dndTypes.IDEA, ideaSource, ideaSourceCollect),
   DropTarget(dndTypes.IDEA, ideaTarget, ideaTargetCollect)
-)(TripIdea);
+)(TripIdeaUI);
