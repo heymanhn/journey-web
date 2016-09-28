@@ -83,6 +83,9 @@ class TripMapDisplay extends Component {
       marker.className = 'marker';
       marker.style.width = mapMarkers.diameter;
       marker.style.height= mapMarkers.diameter;
+      marker.addEventListener('mouseover', () => mapMarker.togglePopup());
+      marker.addEventListener('mouseout', () => mapMarker.togglePopup());
+      marker.addEventListener('click', () => mapMarker.togglePopup());
 
       let mapMarker = new mapboxgl.Marker(
         marker,
@@ -90,6 +93,26 @@ class TripMapDisplay extends Component {
       )
         .setLngLat(idea.loc.coordinates)
         .addTo(this.map);
+
+      // Add popup UI to marker
+      let popupHTML = '';
+      if (idea.photo) {
+        popupHTML += `<img src="${idea.photo}">`;
+      }
+
+      popupHTML += `
+        <p class="popup-name">${idea.name}</p>
+        <p class="popup-address">${idea.address}</p>`;
+
+      if (idea.comment) {
+        popupHTML += `<p class="popup-comment">${idea.comment}</p>`
+      }
+
+      let popup = new mapboxgl.Popup({
+        offset: [mapbox.displayOffset, 0],
+        closeButton: false
+      }).setHTML(popupHTML);
+      mapMarker.setPopup(popup);
 
       // Display the hover marker if needed
       if (mouseOverIdea && mouseOverIdea === idea._id) {
@@ -121,7 +144,7 @@ TripMapDisplay.propTypes = {
 
 const styles = {
   mapContainer: {
-    paddingLeft: 400,
+    paddingLeft: mapbox.displayOffset,
     position: 'absolute',
     top: 0,
     bottom: 0,
