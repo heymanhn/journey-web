@@ -45,7 +45,7 @@ class TripMapDisplay extends Component {
 
   loadMap() {
     // Initialize the map and set it to the viewport of the destination
-    const { destination } = this.props;
+    const { destination, ideas } = this.props;
     mapboxgl.accessToken = mapbox.token;
 
     this.map = new mapboxgl.Map({
@@ -61,9 +61,9 @@ class TripMapDisplay extends Component {
       northeast.coordinates
     );
 
-    this.map.fitBounds(bounds, {
-      linear: true
-    });
+    // Ensure the bounds captures all the ideas' locations
+    ideas.map((idea) => bounds.extend(idea.loc.coordinates));
+    this.map.fitBounds(bounds, { linear: true, padding: 100 });
 
     // Add zoom and rotation controls to the map.
     this.map.addControl(new mapboxgl.Navigation());
