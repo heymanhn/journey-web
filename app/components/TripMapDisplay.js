@@ -33,7 +33,7 @@ class TripMapDisplay extends Component {
         this.focusMapOnIdea(focusedIdea);
       }
     } else if (ideas.length !== this.props.ideas.length) {
-      this.fitMapToMarkers(true);
+      this.fitMapToMarkers(true, ideas);
     }
   }
 
@@ -63,8 +63,8 @@ class TripMapDisplay extends Component {
     this.map.addControl(new mapboxgl.Navigation());
   }
 
-  fitMapToMarkers(gradualFit = false) {
-    const { destination, ideas } = this.props;
+  fitMapToMarkers(gradualFit = false, ideas = this.props.ideas) {
+    const { destination } = this.props;
     const { southwest, northeast } = destination.viewport;
     const bounds = new mapboxgl.LngLatBounds(
       southwest.coordinates,
@@ -75,7 +75,7 @@ class TripMapDisplay extends Component {
     ideas.map((idea) => bounds.extend(idea.loc.coordinates));
     this.map.fitBounds(bounds, {
       linear: !gradualFit,
-      padding: 80,
+      padding: 100,
       curve: 1,
       easing: easeInOutQuad
     });
