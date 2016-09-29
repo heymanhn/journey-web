@@ -24,7 +24,7 @@ class TripMapDisplay extends Component {
   // Update the map markers if there are any changes
   componentWillReceiveProps(nextProps) {
     const { focusedMarker } = this.state;
-    const { focusedIdea } = nextProps;
+    const { focusedIdea, ideas } = nextProps;
     this.loadMarkers(nextProps);
 
     // Focus the map if it's not already focused
@@ -32,7 +32,7 @@ class TripMapDisplay extends Component {
       if (!focusedMarker) {
         this.focusMapOnIdea(focusedIdea);
       }
-    } else {
+    } else if (ideas.length !== this.props.ideas.length) {
       this.fitMapToMarkers(true);
     }
   }
@@ -75,7 +75,7 @@ class TripMapDisplay extends Component {
     ideas.map((idea) => bounds.extend(idea.loc.coordinates));
     this.map.fitBounds(bounds, {
       linear: !gradualFit,
-      padding: 100,
+      padding: 80,
       curve: 1,
       easing: easeInOutQuad
     });
