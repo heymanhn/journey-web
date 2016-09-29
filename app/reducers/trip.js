@@ -24,6 +24,8 @@ import {
   REORDER_TRIP_IDEA,
   SET_MOUSEOVER_IDEA,
   CLEAR_MOUSEOVER_IDEA,
+  SET_FOCUSED_IDEA,
+  CLEAR_FOCUSED_IDEA,
   CLEAR_TRIP_ERROR
 } from '../actions/trips';
 import { initialTripState } from '../constants';
@@ -86,6 +88,13 @@ export default function tripState(state = initialTripState, action) {
       };
     case CLEAR_MOUSEOVER_IDEA:
       return _.omit(state, 'mouseOverIdea');
+    case SET_FOCUSED_IDEA:
+      return {
+        ...state,
+        focusedIdea: action.ideaId
+      };
+    case CLEAR_FOCUSED_IDEA:
+      return _.omit(state, 'focusedIdea');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
     case API_GET_TRIP_REQUEST:

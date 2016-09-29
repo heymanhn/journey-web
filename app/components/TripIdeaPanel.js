@@ -8,7 +8,8 @@ class TripIdeaPanel extends Component {
   render() {
     const {
       connectDropTarget,
-      idea
+      idea,
+      onFocusIdea
     } = this.props;
 
     // Insert a dummy function if connectDropTarget is not specified
@@ -24,6 +25,7 @@ class TripIdeaPanel extends Component {
 
     return (
       <Panel
+        onClick={onFocusIdea}
         id={connectDropTarget ? idea._id : '__preview'}
         style={this.loadIdeaStyle()}
       >
@@ -47,7 +49,8 @@ class TripIdeaPanel extends Component {
 TripIdeaPanel.propTypes = {
   connectDropTarget: PropTypes.func,
   hover: PropTypes.bool.isRequired,
-  idea: PropTypes.object
+  idea: PropTypes.object,
+  onFocusIdea: PropTypes.func.isRequired
 };
 
 const styles = {

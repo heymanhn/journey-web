@@ -6,6 +6,7 @@ import {
   apiUpdateTripIdea,
   clearMouseOverIdea,
   reorderTripIdea,
+  setFocusedIdea,
   setMouseOverIdea
 } from '../actions/trips';
 import TripIdeaUI from '../components/TripIdeaUI';
@@ -21,6 +22,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onClearMouseOverIdea: (ideaId) => {
       dispatch(clearMouseOverIdea(ideaId));
+    },
+    onFocusIdea: (ideaId) => {
+      dispatch(setFocusedIdea(ideaId));
     },
     onRemoveIdea: (ideaId) => {
       dispatch(apiRemoveTripIdea(ideaId));

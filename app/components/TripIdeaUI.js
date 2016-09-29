@@ -76,14 +76,23 @@ class TripIdeaUI extends Component {
       idea,
       isDragging,
       mouseOverIdea,
-      onRemoveIdea
+      onClearMouseOverIdea,
+      onFocusIdea,
+      onRemoveIdea,
+      onSetMouseOverIdea
     } = this.props;
 
     const ideaPanel = (
       <div
-        onMouseOver={this.onMouseOverIdea.bind(this)}
-        onMouseLeave={this.onMouseLeaveIdea.bind(this)}
         style={styles.mainDiv}
+
+        /*
+         * When the mouse hovers over an idea, dim the idea's background color
+         * slightly and display a marker pin above the idea's location on the map to
+         * indicate that that location is selected
+         */
+        onMouseOver={onSetMouseOverIdea.bind(null, idea._id)}
+        onMouseLeave={onClearMouseOverIdea.bind(null, idea._id)}
       >
         <div
           onClick={onRemoveIdea.bind(null, idea._id)}
@@ -100,6 +109,9 @@ class TripIdeaUI extends Component {
             'idea'
           ])}
           hover={mouseOverIdea === idea._id}
+
+          // Upon clicking on an idea, zoom in on the idea in the map
+          onFocusIdea={onFocusIdea.bind(null, idea._id)}
         />
       </div>
     );
@@ -122,19 +134,6 @@ class TripIdeaUI extends Component {
     return fullSection;
   }
 
-  /*
-   * When the mouse hovers over an idea, dim the idea's background color
-   * slightly and display a marker pin above the idea's location on the map to
-   * indicate that that location is selected
-   */
-  onMouseOverIdea(event) {
-    this.props.onSetMouseOverIdea(this.props.idea._id);
-  }
-
-  onMouseLeaveIdea(event) {
-    this.props.onClearMouseOverIdea(this.props.idea._id);
-  }
-
   loadEmptyStyle() {
     const id = this.props.idea._id;
     const height = document.getElementById(id).clientHeight;
@@ -151,6 +150,7 @@ TripIdeaUI.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   mouseOverIdea: PropTypes.string.isRequired,
   onClearMouseOverIdea: PropTypes.func.isRequired,
+  onFocusIdea: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
   onSetMouseOverIdea: PropTypes.func.isRequired,
