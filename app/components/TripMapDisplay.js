@@ -18,17 +18,22 @@ class TripMapDisplay extends Component {
   componentDidMount() {
     this.loadMap();
     this.loadMarkers();
+    this.fitMapToMarkers();
   }
 
   // Update the map markers if there are any changes
   componentWillReceiveProps(nextProps) {
     const { focusedMarker } = this.state;
-    const { focusedIdea } = nextProps;
+    const { focusedIdea, ideas } = nextProps;
     this.loadMarkers(nextProps);
 
     // Focus the map if it's not already focused
-    if (focusedIdea && !focusedMarker) {
-      this.focusMapOnIdea(focusedIdea);
+    if (focusedIdea) {
+      if (!focusedMarker) {
+        this.focusMapOnIdea(focusedIdea);
+      }
+    } else if (ideas.length !== this.props.ideas.length) {
+      this.fitMapToMarkers(true, ideas);
     }
   }
 
@@ -45,28 +50,35 @@ class TripMapDisplay extends Component {
 
   loadMap() {
     // Initialize the map and set it to the viewport of the destination
-    const { destination } = this.props;
     mapboxgl.accessToken = mapbox.token;
 
     this.map = new mapboxgl.Map({
       container: this.container,
       style: mapbox.streetsStyle,
       attributionControl: true,
-      center: destination.loc.coordinates,
+      center: this.props.destination.loc.coordinates,
     });
 
+    // Add zoom and rotation controls to the map.
+    this.map.addControl(new mapboxgl.Navigation());
+  }
+
+  fitMapToMarkers(gradualFit = false, ideas = this.props.ideas) {
+    const { destination } = this.props;
     const { southwest, northeast } = destination.viewport;
     const bounds = new mapboxgl.LngLatBounds(
       southwest.coordinates,
       northeast.coordinates
     );
 
+    // Ensure the bounds captures all the ideas' locations
+    ideas.map((idea) => bounds.extend(idea.loc.coordinates));
     this.map.fitBounds(bounds, {
-      linear: true
+      linear: !gradualFit,
+      padding: 100,
+      curve: 1,
+      easing: easeInOutQuad
     });
-
-    // Add zoom and rotation controls to the map.
-    this.map.addControl(new mapboxgl.Navigation());
   }
 
   loadMarkers(props) {
@@ -174,7 +186,7 @@ class TripMapDisplay extends Component {
       center: lngLat,
       zoom: 15,
       curve: 1,
-      easing: (t) => t<.5 ? 2*t*t : -1+2*(2-t)*t  // easeInOutQuad
+      easing: easeInOutQuad
     });
   }
 }
@@ -191,6 +203,10 @@ function createPopup(idea) {
     offset: [0, 0],
     closeButton: false
   }).setHTML(popupHTML);
+}
+
+function easeInOutQuad(t) {
+  return t<.5 ? 2*t*t : -1+2*(2-t)*t;
 }
 
 TripMapDisplay.propTypes = {
