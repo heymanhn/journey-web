@@ -97,7 +97,10 @@ class TripMapDisplay extends Component {
       marker.style.height= mapMarkers.diameter;
       marker.addEventListener('mouseover', () => mapMarker.togglePopup());
       marker.addEventListener('mouseout', () => mapMarker.togglePopup());
-      marker.addEventListener('click', () => mapMarker.togglePopup());
+      marker.addEventListener('click', (() => {
+        mapMarker.togglePopup();
+        this.flyToLocation(idea.loc.coordinates);
+      }).bind(this));
 
       let mapMarker = new mapboxgl.Marker(
         marker,
@@ -147,6 +150,7 @@ class TripMapDisplay extends Component {
 
     const marker = this.state.markers[index];
     const lngLat = marker.getLngLat();
+
     let focusedMarker = new mapboxgl.Marker(
       createHoverMarkerElement(true),
       { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
@@ -154,14 +158,17 @@ class TripMapDisplay extends Component {
       .setLngLat(lngLat)
       .addTo(this.map);
 
+    this.flyToLocation(lngLat);
+    this.setState({ focusedMarker });
+  }
+
+  flyToLocation(lngLat) {
     this.map.flyTo({
       center: lngLat,
       zoom: 15,
       curve: 1,
       easing: (t) => t<.5 ? 2*t*t : -1+2*(2-t)*t  // easeInOutQuad
     });
-
-    this.setState({ focusedMarker });
   }
 }
 
