@@ -54,7 +54,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case ADD_TRIP_IDEA:
       return {
-        ...(_.omit(state, ['newIdea', 'newComment'])),
+        ..._.omit(state, ['focusedIdea', 'newIdea', 'newComment']),
         trip: _.extend(state.trip, {
           ideas: [action.idea].concat(state.trip.ideas)
         }),
