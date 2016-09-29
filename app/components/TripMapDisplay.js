@@ -193,7 +193,7 @@ function createPopup(idea) {
     `<p class="popup-comment">${idea.comment}</p>` : '';
 
   return new mapboxgl.Popup({
-    offset: [mapbox.displayOffset, 0],
+    offset: [0, 0],
     closeButton: false
   }).setHTML(popupHTML);
 }
@@ -208,11 +208,11 @@ TripMapDisplay.propTypes = {
 
 const styles = {
   mapContainer: {
-    paddingLeft: mapbox.displayOffset,
+    left: mapbox.displayOffset,
     position: 'absolute',
     top: 0,
     bottom: 0,
-    width: '100%',
+    width: window.innerWidth - mapbox.displayOffset,
     zIndex: 1
   }
 };
