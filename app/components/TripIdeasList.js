@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { isMobile } from '../constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
-import TripIdea from './TripIdea';
+import TripIdea from '../containers/TripIdea';
 
 class TripIdeasList extends Component {
   constructor(props) {
@@ -34,10 +34,7 @@ class TripIdeasList extends Component {
     const {
       ideas,
       onAddIdeaPress,
-      onEnterIdeaComment,
-      onRemoveIdea,
-      onReorderIdea,
-      onUpdateIdea
+      onEnterIdeaComment
     } = this.props;
 
     // Sort the ideas in descending order for display purposes
@@ -49,9 +46,6 @@ class TripIdeasList extends Component {
               key={idea._id}
               idea={idea}
               index={index}
-              onRemoveIdea={onRemoveIdea}
-              onReorderIdea={onReorderIdea}
-              onUpdateIdea={onUpdateIdea}
             />
           );
         });
@@ -142,9 +136,6 @@ TripIdeasList.propTypes = {
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired,
   onIdeaCleared: PropTypes.func.isRequired,
-  onRemoveIdea: PropTypes.func.isRequired,
-  onReorderIdea: PropTypes.func.isRequired,
-  onUpdateIdea: PropTypes.func.isRequired,
   resetIdeaBox: PropTypes.bool.isRequired
 };
 

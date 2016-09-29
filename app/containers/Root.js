@@ -56,6 +56,4 @@ Root.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default DragDropContext(
-  isMobile ? TouchBackend({ enableMouseEvents: true }) : HTML5Backend
-)(Root);
+export default DragDropContext(isMobile ? TouchBackend : HTML5Backend)(Root);

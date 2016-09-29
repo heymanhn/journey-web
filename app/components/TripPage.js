@@ -3,9 +3,10 @@
 require('../stylesheets/react-spinner.css');
 
 import React, { Component, PropTypes } from 'react';
-import { Button, Col, Grid, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Spinner from './Spinner';
 import TripIdeas from '../containers/TripIdeas';
+import TripMap from '../containers/TripMap';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
@@ -28,6 +29,7 @@ class TripPage extends Component {
       );
     }
 
+    // Loading UI
     if (!trip) {
       return (
         <div>
@@ -45,34 +47,29 @@ class TripPage extends Component {
       );
     });
 
+    const titleSection = (
+      <div style={styles.titleSection}>
+        <h1 style={styles.h1}>{trip.title}</h1>
+        <p>Destination: {trip.destination && trip.destination.name}</p>
+        <p>Visibility: {trip.visibility}</p>
+      </div>
+    );
+
     return (
-      <Grid>
-        <Row>
-          <Col md={12} style={styles.titleSection}>
-            <h1 style={styles.h1}>{trip.title}</h1>
-            <p>Destination: {trip.destination && trip.destination.name}</p>
-            <p>Visibility: {trip.visibility}</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={4}>
-            <TripIdeas />
-          </Col>
-          <Col md={8}>
-            <h3>Plan</h3>
-            <div>{tripPlan}</div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button
-              bsStyle="primary"
-              onClick={viewTripsPage}>
-              Home
-            </Button>
-          </Col>
-        </Row>
-      </Grid>
+      <div>
+        <div style={styles.leftColumn}>
+          {titleSection}
+          <TripIdeas />
+          <Button
+            bsStyle="primary"
+            onClick={viewTripsPage}>
+            Home
+          </Button>
+        </div>
+        <div>
+          <TripMap />
+        </div>
+      </div>
     );
   }
 }
@@ -84,11 +81,18 @@ TripPage.propTypes = {
 };
 
 const styles = {
-  titleSection: {
-    textAlign: 'center'
-  },
   h1: {
-    fontSize: 48
+    fontSize: 32
+  },
+  leftColumn: {
+    backgroundColor: 'white',
+    float: 'left',
+    height: '100%',
+    overflow: 'scroll',
+    padding: '0 30 0',
+    position: 'absolute',
+    width: 400,
+    zIndex: 2
   },
   loadingText: {
     color: '#333333',
@@ -96,6 +100,9 @@ const styles = {
     fontSize: 24,
     textAlign: 'center',
     margin: 20
+  },
+  titleSection: {
+    marginBottom: 30
   }
 };
 

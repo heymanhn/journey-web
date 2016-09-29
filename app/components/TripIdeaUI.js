@@ -67,28 +67,33 @@ function ideaTargetCollect(connect) {
   };
 }
 
-class TripIdea extends Component {
-  componentDidMount() {
-    // Display the custom drag layer if this is a mobile device
-    if (isMobile) {
-      this.props.connectDragPreview(getEmptyImage(), {
-        // IE fallback
-        captureDraggingState: true
-      });
-    }
-  }
-
+class TripIdeaUI extends Component {
   render() {
     const {
+      connectDragPreview,
       connectDragSource,
       connectDropTarget,
       idea,
       isDragging,
-      onRemoveIdea
+      mouseOverIdea,
+      onClearMouseOverIdea,
+      onFocusIdea,
+      onRemoveIdea,
+      onSetMouseOverIdea
     } = this.props;
 
     const ideaPanel = (
-      <div>
+      <div
+        style={styles.mainDiv}
+
+        /*
+         * When the mouse hovers over an idea, dim the idea's background color
+         * slightly and display a marker pin above the idea's location on the map to
+         * indicate that that location is selected
+         */
+        onMouseOver={onSetMouseOverIdea.bind(null, idea._id)}
+        onMouseLeave={onClearMouseOverIdea.bind(null, idea._id)}
+      >
         <div
           onClick={onRemoveIdea.bind(null, idea._id)}
           style={styles.removeButton.div}
@@ -103,18 +108,30 @@ class TripIdea extends Component {
             'connectDropTarget',
             'idea'
           ])}
+          hover={mouseOverIdea === idea._id}
+
+          // Upon clicking on an idea, zoom in on the idea in the map
+          onFocusIdea={onFocusIdea.bind(null, idea._id)}
         />
       </div>
     );
 
+    let fullSection;
     if (isDragging) {
       // Displays the grey placeholder box
-      return compose(connectDragSource, connectDropTarget)(
+      fullSection = compose(connectDragSource, connectDropTarget)(
         <div id={idea._id} style={this.loadEmptyStyle()}/>
       );
     } else {
-      return connectDragSource(ideaPanel);
+      fullSection = connectDragSource(ideaPanel);
     }
+
+    // Only connect the drag preview if the touch backend is used
+    if (isMobile) {
+      fullSection = connectDragPreview(fullSection);
+    }
+
+    return fullSection;
   }
 
   loadEmptyStyle() {
@@ -124,14 +141,19 @@ class TripIdea extends Component {
   }
 }
 
-TripIdea.propTypes = {
+TripIdeaUI.propTypes = {
+  connectDragPreview: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  mouseOverIdea: PropTypes.string.isRequired,
+  onClearMouseOverIdea: PropTypes.func.isRequired,
+  onFocusIdea: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
+  onSetMouseOverIdea: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired
 };
 
@@ -141,6 +163,9 @@ const styles = {
     borderRadius: 4,
     height: 80,
     marginBottom: 20
+  },
+  mainDiv: {
+    backgroundColor: '#ffffff'
   },
   removeButton: {
     div: {
@@ -161,4 +186,4 @@ const styles = {
 export default flow(
   DragSource(dndTypes.IDEA, ideaSource, ideaSourceCollect),
   DropTarget(dndTypes.IDEA, ideaTarget, ideaTargetCollect)
-)(TripIdea);
+)(TripIdeaUI);

@@ -56,6 +56,12 @@ export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
 export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
 export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
+// Trip idea hover and focus states
+export const SET_MOUSEOVER_IDEA = 'SET_MOUSEOVER_IDEA';
+export const CLEAR_MOUSEOVER_IDEA = 'CLEAR_MOUSEOVER_IDEA';
+export const SET_FOCUSED_IDEA = 'SET_FOCUSED_IDEA';
+export const CLEAR_FOCUSED_IDEA = 'CLEAR_FOCUSED_IDEA';
+
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 export const CLEAR_TRIP_ERROR = 'CLEAR_TRIP_ERROR';
@@ -163,10 +169,9 @@ export function apiDeleteTripRequest() {
   };
 }
 
-export function apiDeleteTripSuccess(json) {
+export function apiDeleteTripSuccess() {
   return {
-    type: API_DELETE_TRIP_SUCCESS,
-    trips: json.trips
+    type: API_DELETE_TRIP_SUCCESS
   };
 }
 
@@ -282,6 +287,32 @@ export function apiRemoveTripIdeaFailure(error) {
   };
 }
 
+// Trip idea hover and focus states
+export function setMouseOverIdea(ideaId) {
+  return {
+    type: SET_MOUSEOVER_IDEA,
+    ideaId
+  };
+}
+
+export function clearMouseOverIdea() {
+  return {
+    type: CLEAR_MOUSEOVER_IDEA
+  };
+}
+
+export function setFocusedIdea(ideaId) {
+  return {
+    type: SET_FOCUSED_IDEA,
+    ideaId
+  };
+}
+
+export function clearFocusedIdea() {
+  return {
+    type: CLEAR_FOCUSED_IDEA
+  };
+}
 
 // Trip Errors
 export function clearTripsError() {
@@ -421,6 +452,7 @@ export function apiDeleteTrip(tripId) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiDeleteTripSuccess(json));
+        dispatch(apiGetTrips());
       })
       .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
   };

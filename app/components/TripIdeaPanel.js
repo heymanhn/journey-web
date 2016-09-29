@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { Image, Panel } from 'react-bootstrap';
 
@@ -7,14 +8,16 @@ class TripIdeaPanel extends Component {
   render() {
     const {
       connectDropTarget,
-      idea
+      idea,
+      onFocusIdea
     } = this.props;
 
     // Insert a dummy function if connectDropTarget is not specified
     const wrapperFn = connectDropTarget || ((x) => { return x; });
+    const imageSection = <Image src={idea.photo} style={styles.photo} />;
     const infoSection = wrapperFn(
       <div style={styles.info}>
-        <Image src={idea.photo} style={styles.photo} />
+        {idea.photo && imageSection}
         <p style={styles.name}>{idea.name}</p>
         <p style={styles.address}>{idea.address}</p>
       </div>
@@ -22,8 +25,9 @@ class TripIdeaPanel extends Component {
 
     return (
       <Panel
+        onClick={onFocusIdea}
         id={connectDropTarget ? idea._id : '__preview'}
-        style={styles.idea}
+        style={this.loadIdeaStyle()}
       >
         {infoSection}
         {idea.comment && (
@@ -34,11 +38,19 @@ class TripIdeaPanel extends Component {
       </Panel>
     );
   }
+
+  loadIdeaStyle() {
+    const { hover } = this.props;
+    const style = _.clone(styles.idea);
+    return hover ? { ...style, backgroundColor: 'rgb(240, 240, 240)' } : style;
+  }
 }
 
 TripIdeaPanel.propTypes = {
   connectDropTarget: PropTypes.func,
-  idea: PropTypes.object
+  hover: PropTypes.bool.isRequired,
+  idea: PropTypes.object,
+  onFocusIdea: PropTypes.func.isRequired
 };
 
 const styles = {
