@@ -421,8 +421,9 @@ export function apiGetTrip(tripId) {
     };
 
     // Only add Authorization header if a user has authenticated
-    if (getState().authState.token) {
-      opts.headers['Authorization'] = getState().authState.token;
+    const token = getState().authState.token;
+    if (token) {
+      opts.headers['Authorization'] = token;
     }
 
     fetch(userTrip.route, opts)
@@ -494,7 +495,11 @@ export function apiAddTripIdea() {
       method: addTripIdeaAPI.method,
       body: JSON.stringify(ideaParams)
     };
-    opts.headers['Authorization'] = getState().authState.token;
+
+    const token = getState().authState.token;
+    if (token) {
+      opts.headers['Authorization'] = token;
+    }
 
     fetch(addTripIdeaAPI.route, opts)
       .then(handleErrors)
@@ -521,7 +526,11 @@ export function apiUpdateTripIdea(index) {
       method: updateTripIdeaAPI.method,
       body: JSON.stringify({ index })
     };
-    opts.headers['Authorization'] = getState().authState.token;
+
+    const token = getState().authState.token;
+    if (token) {
+      opts.headers['Authorization'] = token;
+    }
 
     fetch(updateTripIdeaAPI.route, opts)
       .then(handleErrors)
@@ -544,7 +553,11 @@ export function apiRemoveTripIdea(ideaId) {
       ...fetchOptsTemplate,
       method: removeTripIdeaAPI.method
     };
-    opts.headers['Authorization'] = getState().authState.token;
+
+    const token = getState().authState.token;
+    if (token) {
+      opts.headers['Authorization'] = token;
+    }
 
     fetch(removeTripIdeaAPI.route, opts)
       .then(handleErrors)
