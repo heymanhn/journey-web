@@ -136,6 +136,7 @@ export const analytics = {
   },
   pages: {
     TRIP_PAGE: 'Trip Page',
+    TRIP_IDEA: 'Trip Idea',
     TRIPS_PAGE: 'Trips Page'
   }
 };

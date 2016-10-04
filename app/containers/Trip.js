@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiPageEvent } from '../actions/analytics';
+import { apiTripPageEvent } from '../actions/analytics';
 import { apiGetTrip } from '../actions/trips';
 import { analytics } from '../constants';
 import TripPage from '../components/TripPage';
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch, props) => {
     },
 
     trackPageView() {
-      dispatch(apiPageEvent(analytics.pages.TRIP_PAGE, undefined, { tripId }));
+      dispatch(apiTripPageEvent(analytics.pages.TRIP_PAGE, { tripId } ));
     }
   };
 };

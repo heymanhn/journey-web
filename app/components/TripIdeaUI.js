@@ -44,7 +44,7 @@ const ideaTarget = {
       return;
     }
 
-    onUpdateIdea(index);
+    onUpdateIdea();
     draggedIdea.initialIndex = index;
   },
 
@@ -91,11 +91,11 @@ class TripIdeaUI extends Component {
          * slightly and display a marker pin above the idea's location on the map to
          * indicate that that location is selected
          */
-        onMouseOver={onSetMouseOverIdea.bind(null, idea._id)}
-        onMouseLeave={onClearMouseOverIdea.bind(null, idea._id)}
+        onMouseOver={onSetMouseOverIdea}
+        onMouseLeave={onClearMouseOverIdea}
       >
         <div
-          onClick={onRemoveIdea.bind(null, idea._id)}
+          onClick={onRemoveIdea}
           style={styles.removeButton.div}
         >
           <Glyphicon
