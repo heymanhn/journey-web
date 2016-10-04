@@ -3,6 +3,7 @@
 import { connect } from 'react-redux';
 import { apiTrackEvent } from '../actions/analytics';
 import { apiDeleteTrip, apiGetTrip, clearTripsError } from '../actions/trips';
+import { apiPageEvent } from '../actions/analytics';
 import { logout } from '../actions/auth';
 import { createTrip, viewTripPage } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
@@ -17,18 +18,25 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onCreateTripPress: () => {
+    onCreateTripPress() {
       dispatch(clearTripsError());
       createTrip();
     },
-    onDeleteTripPress: (tripId) => {
+
+    onDeleteTripPress(tripId) {
       dispatch(apiDeleteTrip(tripId));
     },
-    onLogoutPress: () => {
+
+    onLogoutPress() {
       dispatch(apiTrackEvent(analytics.events.LOG_OUT));
       dispatch(logout());
     },
-    onViewTrip: (tripId) => {
+
+    onPageLoaded() {
+      dispatch(apiPageEvent(analytics.pages.TRIPS_PAGE));
+    },
+
+    onViewTrip(tripId) {
       dispatch(apiGetTrip(tripId));
       viewTripPage(tripId);
     }

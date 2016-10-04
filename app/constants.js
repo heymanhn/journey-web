@@ -58,6 +58,10 @@ export const journeyAPI = {
     track: () => ({
       method: 'POST',
       route: journeyAPIHost + '/analytics/track'
+    }),
+    page: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/page'
     })
   }
 };
@@ -129,5 +133,8 @@ export const mapMarkers = {
 export const analytics = {
   events: {
     LOG_OUT: 'Log Out'
+  },
+  pages: {
+    TRIPS_PAGE: 'Trips Page'
   }
 };

@@ -22,3 +22,19 @@ export function apiTrackEvent(event, properties) {
       .catch(error => console.log(`Track event error: ${error.message}`));
   };
 }
+
+export function apiPageEvent(name, category, properties) {
+  return (dispatch, getState) => {
+    const pageEvent = journeyAPI.analytics.page();
+    let opts = {
+      ...fetchOptsTemplate,
+      method: pageEvent.method,
+      body: JSON.stringify({ name, category, properties })
+    };
+    opts.headers['Authorization'] = getState().authState.token;
+
+    fetch(pageEvent.route, opts)
+      .then(handleErrors)
+      .catch(error => console.log(`Page event error: ${error.message}`));
+  };
+}
