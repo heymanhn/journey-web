@@ -1,7 +1,9 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { apiPageEvent } from '../actions/analytics';
 import { apiGetTrip } from '../actions/trips';
+import { analytics } from '../constants';
 import TripPage from '../components/TripPage';
 
 const mapStateToProps = (state) => {
@@ -12,10 +14,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, props) => {
+  const { tripId } = props.params;
   return {
-    onGetTrip: (tripId) => {
+    onGetTrip() {
       dispatch(apiGetTrip(tripId));
+    },
+
+    trackPageView() {
+      dispatch(apiPageEvent(analytics.pages.TRIP_PAGE, undefined, { tripId }));
     }
   };
 };

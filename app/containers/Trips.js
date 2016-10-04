@@ -1,9 +1,8 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiTrackEvent } from '../actions/analytics';
+import { apiPageEvent, apiTrackEvent } from '../actions/analytics';
 import { apiDeleteTrip, apiGetTrip, clearTripsError } from '../actions/trips';
-import { apiPageEvent } from '../actions/analytics';
 import { logout } from '../actions/auth';
 import { createTrip, viewTripPage } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
@@ -32,13 +31,13 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(logout());
     },
 
-    onPageLoaded() {
-      dispatch(apiPageEvent(analytics.pages.TRIPS_PAGE));
-    },
-
     onViewTrip(tripId) {
       dispatch(apiGetTrip(tripId));
       viewTripPage(tripId);
+    },
+
+    trackPageView() {
+      dispatch(apiPageEvent(analytics.pages.TRIPS_PAGE));
     }
   };
 };

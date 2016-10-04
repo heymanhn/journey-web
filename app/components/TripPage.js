@@ -10,13 +10,16 @@ import TripMap from '../containers/TripMap';
 import { viewTripsPage } from '../actions/navigation';
 
 class TripPage extends Component {
+  componentDidMount() {
+    this.props.trackPageView();
+  }
+
   componentWillMount() {
-    const { tripId } = this.props.params;
     const { onGetTrip, trip } = this.props;
 
     // Fetch the trip from the server upon load
     if (!trip) {
-      onGetTrip(tripId);
+      onGetTrip();
     }
   }
 
@@ -77,6 +80,7 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
+  trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };
 

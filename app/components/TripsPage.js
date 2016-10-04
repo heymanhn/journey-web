@@ -6,7 +6,7 @@ import TripsList from './TripsList';
 
 class TripsPage extends Component {
   componentDidMount() {
-    this.props.onPageLoaded();
+    this.props.trackPageView();
   }
 
   render() {
@@ -50,8 +50,8 @@ TripsPage.propTypes = {
   onCreateTripPress: PropTypes.func.isRequired,
   onDeleteTripPress: PropTypes.func.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
-  onPageLoaded: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
+  trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired
 };
 

@@ -135,6 +135,7 @@ export const analytics = {
     LOG_OUT: 'Log Out'
   },
   pages: {
+    TRIP_PAGE: 'Trip Page',
     TRIPS_PAGE: 'Trips Page'
   }
 };
