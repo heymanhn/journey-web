@@ -3,7 +3,7 @@
 import { connect } from 'react-redux';
 import { apiPageEvent, apiTrackEvent } from '../actions/analytics';
 import { apiDeleteTrip, apiGetTrip, clearTripsError } from '../actions/trips';
-import { logout } from '../actions/auth';
+import { processLogout } from '../actions/auth';
 import { createTrip, viewTripPage } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
 import { analytics } from '../constants';
@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch) => {
 
     onLogoutPress() {
       dispatch(apiTrackEvent(analytics.events.LOG_OUT));
-      dispatch(logout());
+      dispatch(processLogout());
     },
 
     onViewTrip(tripId) {

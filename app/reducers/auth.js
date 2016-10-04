@@ -62,11 +62,12 @@ export default function authState(state = initialAuthState, action) {
         error: action.error
       };
     case CREATE_ANONYMOUS_ID:
-    case LOGOUT:
       return {
-        ...initialAuthState,
+        ...state,
         anonymousId: generateGUID()
       };
+    case LOGOUT:
+      return initialAuthState;
   }
 
   return state;

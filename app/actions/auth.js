@@ -167,3 +167,10 @@ export function apiSignup() {
       .catch(error => { dispatch(apiSignupFailure(error.message)); });
   };
 }
+
+export function processLogout() {
+  return (dispatch) => {
+    dispatch(logout());
+    dispatch(createAnonymousId());
+  };
+}
