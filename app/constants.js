@@ -52,6 +52,13 @@ export const journeyAPI = {
         route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId
       })
     }
+  },
+
+  analytics: {
+    track: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/track'
+    })
   }
 };
 
@@ -113,5 +120,14 @@ export const mapMarkers = {
   icon: {
     width: 25,
     height: 41
+  }
+};
+
+/*
+ * Analytics Event Names
+ */
+export const analytics = {
+  events: {
+    LOG_OUT: 'Log Out'
   }
 };

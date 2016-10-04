@@ -1,10 +1,12 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiGetTrip, apiDeleteTrip, clearTripsError } from '../actions/trips';
+import { apiTrackEvent } from '../actions/analytics';
+import { apiDeleteTrip, apiGetTrip, clearTripsError } from '../actions/trips';
 import { logout } from '../actions/auth';
 import { createTrip, viewTripPage } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
+import { analytics } from '../constants';
 
 const mapStateToProps = (state) => {
   return {
@@ -23,6 +25,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(apiDeleteTrip(tripId));
     },
     onLogoutPress: () => {
+      dispatch(apiTrackEvent(analytics.events.LOG_OUT));
       dispatch(logout());
     },
     onViewTrip: (tripId) => {
