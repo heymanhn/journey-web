@@ -6,6 +6,8 @@ import {
   loginSaveEmail,
   loginSavePassword
 } from '../actions/auth';
+import { apiPageEvent } from '../actions/analytics';
+import { analytics } from '../constants';
 import IntroPage from '../components/IntroPage';
 
 const mapStateToProps = (state) => {
@@ -17,16 +19,20 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onEnterEmail: (event) => {
+    onEnterEmail(event) {
       dispatch(loginSaveEmail(event.target.value));
     },
 
-    onEnterPassword: (event) => {
+    onEnterPassword(event) {
       dispatch(loginSavePassword(event.target.value));
     },
 
-    onLoginPress: () => {
+    onLoginPress() {
       dispatch(apiLogin());
+    },
+
+    onPageLoaded() {
+      dispatch(apiPageEvent(analytics.pages.LANDING_PAGE));
     }
   };
 };

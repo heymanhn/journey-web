@@ -7,6 +7,10 @@ import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 
 class IntroPage extends Component {
+  componentDidMount() {
+    this.props.onPageLoaded();
+  }
+
   render() {
     const {
       email,
@@ -45,7 +49,8 @@ IntroPage.propTypes = {
   error: PropTypes.string,
   onEnterEmail: PropTypes.func.isRequired,
   onEnterPassword: PropTypes.func.isRequired,
-  onLoginPress: PropTypes.func.isRequired
+  onLoginPress: PropTypes.func.isRequired,
+  onPageLoaded: PropTypes.func.isRequired
 };
 
 export default IntroPage;

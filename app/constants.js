@@ -161,6 +161,8 @@ export const analytics = {
     LOG_OUT: 'Log Out'
   },
   pages: {
+    LANDING_PAGE: 'Landing Page',
+    SIGNUP_PAGE: 'Signup Page',
     TRIP_PAGE: 'Trip Page',
     TRIP_IDEA: 'Trip Idea',
     TRIPS_PAGE: 'Trips Page'

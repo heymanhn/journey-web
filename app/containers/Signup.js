@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { apiPageEvent } from '../actions/analytics';
 import {
   apiSignup,
   signupSaveName,
@@ -8,6 +9,7 @@ import {
   signupSavePassword
 } from '../actions/auth';
 import SignupPage from '../components/SignupPage';
+import { analytics } from '../constants';
 
 const mapStateToProps = (state) => {
   return {
@@ -19,19 +21,23 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onEnterEmail: (event) => {
+    onEnterEmail(event) {
       dispatch(signupSaveEmail(event.target.value));
     },
 
-    onEnterName: (event) => {
+    onEnterName(event) {
       dispatch(signupSaveName(event.target.value));
     },
 
-    onEnterPassword: (event) => {
+    onEnterPassword(event) {
       dispatch(signupSavePassword(event.target.value));
     },
 
-    onSignupPress: () => {
+    onPageLoaded() {
+      dispatch(apiPageEvent(analytics.pages.SIGNUP_PAGE));
+    },
+
+    onSignupPress() {
       dispatch(apiSignup());
     }
   };
