@@ -15,7 +15,7 @@ import {
   CREATE_ANONYMOUS_ID,
   LOGOUT
 } from '../actions/auth';
-import { generateGUID, initialAuthState } from '../constants';
+import { initialAuthState } from '../constants';
 
 export default function authState(state = initialAuthState, action) {
   switch (action.type) {
@@ -64,7 +64,7 @@ export default function authState(state = initialAuthState, action) {
     case CREATE_ANONYMOUS_ID:
       return {
         ...state,
-        anonymousId: generateGUID()
+        anonymousId: action.anonymousId
       };
     case LOGOUT:
       return initialAuthState;

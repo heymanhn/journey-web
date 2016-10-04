@@ -55,6 +55,10 @@ export const journeyAPI = {
   },
 
   analytics: {
+    identify: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/identify'
+    }),
     track: () => ({
       method: 'POST',
       route: journeyAPIHost + '/analytics/track'
@@ -66,13 +70,24 @@ export const journeyAPI = {
   }
 };
 
-export const fetchOptsTemplate = {
-  mode: 'cors',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
+export function fetchOptsTemplate(authState) {
+  let opts = {
+    mode: 'cors',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const { anonymousId, token } = authState;
+  if (token) {
+    opts.headers['Authorization'] = token;
+  } else {
+    opts.headers['AnonymousID'] = anonymousId;
   }
-};
+
+  return opts;
+}
 
 export const handleErrors = (response) => {
   if (response.ok) {

@@ -1,6 +1,7 @@
 'use strict';
 
 import fetch from 'isomorphic-fetch';
+import { apiIdentifyGuest } from './analytics';
 import { viewTripsPage } from './navigation'
 import { fetchOptsTemplate, handleErrors, journeyAPI } from '../constants';
 import { apiGetTrips } from './trips';
@@ -105,9 +106,10 @@ export function apiSignupFailure(error) {
   };
 }
 
-export function createAnonymousId() {
+export function createAnonymousId(anonymousId) {
   return {
-    type: CREATE_ANONYMOUS_ID
+    type: CREATE_ANONYMOUS_ID,
+    anonymousId
   };
 }
 
@@ -126,12 +128,13 @@ export function apiLogin() {
   return (dispatch, getState) => {
     dispatch(apiLoginRequest());
 
-    let { email, password } = getState().authState;
-    let opts = {...fetchOptsTemplate};
+    const { authState } = getState();
+    let { email, password } = authState;
+    let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.login().method;
     opts.body = JSON.stringify({ email, password });
 
-    fetch(journeyAPI.login().route, opts)
+    return fetch(journeyAPI.login().route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -147,8 +150,9 @@ export function apiSignup() {
   return (dispatch, getState) => {
     dispatch(apiSignupRequest());
 
-    let { newName, newEmail, newPassword } = getState().authState;
-    let opts = {...fetchOptsTemplate};
+    const { authState } = getState();
+    let { newName, newEmail, newPassword } = authState;
+    let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.signup().method;
     opts.body = JSON.stringify({
       name: newName,
@@ -156,7 +160,7 @@ export function apiSignup() {
       password: newPassword
     });
 
-    fetch(journeyAPI.signup().route, opts)
+    return fetch(journeyAPI.signup().route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -171,6 +175,6 @@ export function apiSignup() {
 export function processLogout() {
   return (dispatch) => {
     dispatch(logout());
-    dispatch(createAnonymousId());
+    dispatch(apiIdentifyGuest());
   };
 }

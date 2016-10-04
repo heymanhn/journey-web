@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
-import { createAnonymousId } from '../actions/auth';
+import { apiIdentifyGuest } from '../actions/analytics';
 import { isMobile } from '../constants';
 import routes from '../routes';
 
@@ -33,11 +33,15 @@ class Root extends Component {
     };
 
     persistStore(store, config, () => {
-      this.setState({ rehydrated: true });
-
-      // Generate the anonymous ID if not yet present
+      // Don't render anything until the anonymousId is generated as well
       if (!store.getState().authState.anonymousId) {
-        store.dispatch(createAnonymousId());
+        store
+          .dispatch(apiIdentifyGuest())
+          .then(() => {
+            this.setState({ rehydrated: true });
+          });
+      } else {
+        this.setState({ rehydrated: true });
       }
     });
   }
