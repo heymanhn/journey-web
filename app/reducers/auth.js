@@ -12,9 +12,10 @@ import {
   API_SIGNUP_REQUEST,
   API_SIGNUP_SUCCESS,
   API_SIGNUP_FAILURE,
+  CREATE_ANONYMOUS_ID,
   LOGOUT
 } from '../actions/auth';
-import { initialAuthState } from '../constants';
+import { generateGUID, initialAuthState } from '../constants';
 
 export default function authState(state = initialAuthState, action) {
   switch (action.type) {
@@ -60,8 +61,12 @@ export default function authState(state = initialAuthState, action) {
         isFetching: false,
         error: action.error
       };
+    case CREATE_ANONYMOUS_ID:
     case LOGOUT:
-      return initialAuthState;
+      return {
+        ...initialAuthState,
+        anonymousId: generateGUID()
+      };
   }
 
   return state;

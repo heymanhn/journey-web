@@ -20,6 +20,7 @@ export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
 export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
+export const CREATE_ANONYMOUS_ID = 'CREATE_ANONYMOUS_ID';
 export const LOGOUT = 'LOGOUT';
 
 
@@ -101,6 +102,12 @@ export function apiSignupFailure(error) {
   return {
     type: API_SIGNUP_FAILURE,
     error
+  };
+}
+
+export function createAnonymousId() {
+  return {
+    type: CREATE_ANONYMOUS_ID
   };
 }
 

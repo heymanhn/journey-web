@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
+import { createAnonymousId } from '../actions/auth';
 import { isMobile } from '../constants';
 import routes from '../routes';
 
@@ -25,13 +26,19 @@ class Root extends Component {
    * of whack
    */
   componentWillMount() {
+    const { store } = this.props;
     const config = {
       storage: localForage,
       blacklist: ['tripState']
     };
 
-    persistStore(this.props.store, config, () => {
+    persistStore(store, config, () => {
       this.setState({ rehydrated: true });
+
+      // Generate the anonymous ID if not yet present
+      if (!store.getState().authState.anonymousId) {
+        store.dispatch(createAnonymousId());
+      }
     });
   }
 

@@ -86,6 +86,14 @@ export const handleErrors = (response) => {
 /*
  * Redux store default states
  */
+
+export function generateGUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    let r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    return v.toString(16);
+  });
+}
+
 export const initialAuthState = {
   isFetching: false
 };
@@ -100,6 +108,7 @@ export const initialTripState = {
   resetIdeaBox: false
 };
 
+
 /*
  * Drag and drop functionality variables
  */
@@ -109,6 +118,7 @@ export const dndTypes = {
 
 const md = new MobileDetect(window.navigator.userAgent);
 export const isMobile = md.mobile() ? true : false;
+
 
 /*
  * Mapbox API
@@ -126,6 +136,7 @@ export const mapMarkers = {
     height: 41
   }
 };
+
 
 /*
  * Analytics Event Names
