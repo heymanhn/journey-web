@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'underscore';
-import { LOGOUT } from '../actions/auth';
+import { LOGOUT } from 'app/actions/auth';
 import {
   API_CREATE_TRIP_SUCCESS,
   API_GET_TRIP_REQUEST,
@@ -27,8 +27,8 @@ import {
   SET_FOCUSED_IDEA,
   CLEAR_FOCUSED_IDEA,
   CLEAR_TRIP_ERROR
-} from '../actions/trips';
-import { initialTripState } from '../constants';
+} from 'app/actions/trips';
+import { initialTripState } from 'app/constants';
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
@@ -54,12 +54,13 @@ export default function tripState(state = initialTripState, action) {
       };
     case ADD_TRIP_IDEA:
       return {
-        ..._.omit(state, ['focusedIdea', 'newIdea', 'newComment']),
+        ..._.omit(state, ['newIdea', 'newComment']),
         trip: _.extend(state.trip, {
           ideas: [action.idea].concat(state.trip.ideas)
         }),
         resetIdeaBox: true,
-        isFetching: false
+        isFetching: false,
+        focusedIdea: action.idea._id
       };
     case REORDER_TRIP_IDEA:
       let ideas = state.trip.ideas.slice();
@@ -74,7 +75,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case REMOVE_TRIP_IDEA:
       return {
-        ...state,
+        ..._.omit(state, ['focusedIdea', 'mouseOverIdea']),
         trip: _.extend(state.trip, {
           ideas: _.reject(state.trip.ideas, (idea) =>
             idea._id === action.ideaId
@@ -109,6 +110,12 @@ export default function tripState(state = initialTripState, action) {
         isFetching: false
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
+      return {
+        ...state,
+        trip: _.extend(state.trip, { ideas: action.ideas }),
+        isFetching: false,
+        focusedIdea: action.ideas[0]._id
+      };
     case API_UPDATE_TRIP_IDEA_SUCCESS:
     case API_REMOVE_TRIP_IDEA_SUCCESS:
       return {

@@ -1,20 +1,12 @@
 'use strict';
 
-require('../stylesheets/mapbox-gl.css');
+require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { mapbox, mapMarkers } from '../constants';
+import { mapbox, mapMarkers } from 'app/constants';
 
 class TripMapDisplay extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      markers: []
-    };
-  }
-
   componentDidMount() {
     this.loadMap();
     this.loadMarkers();
@@ -22,18 +14,24 @@ class TripMapDisplay extends Component {
   }
 
   // Update the map markers if there are any changes
-  componentWillReceiveProps(nextProps) {
-    const { focusedMarker } = this.state;
-    const { focusedIdea, ideas } = nextProps;
-    this.loadMarkers(nextProps);
+  componentWillReceiveProps(newProps) {
+    const { focusedIdea, ideas, mouseOverIdea } = this.props;
+    const {
+      focusedIdea: newFocusedIdea,
+      ideas: newIdeas,
+      mouseOverIdea: newMouseOverIdea
+    } = newProps;
 
-    // Focus the map if it's not already focused
-    if (focusedIdea) {
-      if (!focusedMarker) {
-        this.focusMapOnIdea(focusedIdea);
-      }
-    } else if (ideas.length !== this.props.ideas.length) {
-      this.fitMapToMarkers(true, ideas);
+    if (newMouseOverIdea !== mouseOverIdea) {
+      this.loadHoverMarker(newProps);
+    }
+
+    if (newIdeas.length !== ideas.length) {
+      this.loadMarkers(newProps);
+    }
+
+    if (newFocusedIdea !== focusedIdea) {
+      this.focusMapOnIdea(newProps);
     }
   }
 
@@ -63,8 +61,108 @@ class TripMapDisplay extends Component {
     this.map.addControl(new mapboxgl.Navigation());
   }
 
-  fitMapToMarkers(gradualFit = false, ideas = this.props.ideas) {
-    const { destination } = this.props;
+  loadMarkers(props) {
+    const {
+      ideas,
+      markers,
+      onSaveMarkers,
+      trackIdeaView
+    } = props || this.props;
+    let newMarkers = [];
+
+    // Remove all previous markers
+    markers.forEach((marker) => marker.remove());
+
+    // Create markers corresponding to the ideas
+    ideas.forEach((idea) => {
+      let markerElem = document.createElement('div');
+      markerElem.className = 'marker';
+      markerElem.style.width = markerElem.style.height = mapMarkers.diameter;
+      markerElem.addEventListener('mouseover', () => marker.togglePopup());
+      markerElem.addEventListener('mouseout', () => marker.togglePopup());
+      markerElem.addEventListener('click', () => {
+        marker.togglePopup();
+        trackIdeaView(idea._id);
+        this.flyToLocation(idea.loc.coordinates);
+      });
+
+      let marker = new mapboxgl.Marker(
+        markerElem, { offset: [-mapMarkers.diameter/2, -mapMarkers.diameter/2] }
+      )
+        .setLngLat(idea.loc.coordinates)
+        .addTo(this.map);
+
+      marker.setPopup(createPopup(idea));
+      newMarkers.push(marker);
+    });
+
+    onSaveMarkers(newMarkers);
+  }
+
+  createHoverMarker(ideas, ideaId, isFocusMarker = false) {
+    const {
+      onDeleteFocusMarker,
+      onDeleteHoverMarker,
+      onSaveFocusMarker,
+      onSaveHoverMarker
+    } = this.props;
+
+    const targetIdea = ideas.find((idea) => idea._id === ideaId);
+    if (!targetIdea) {
+      return isFocusMarker ? onDeleteFocusMarker() : onDeleteHoverMarker();
+    }
+
+    let markerElem = document.createElement('div');
+    markerElem.className = 'hover-marker';
+    markerElem.style.backgroundImage = isFocusMarker ?
+      'url("../assets/marker-icon-focus.png")' :
+      'url("../assets/marker-icon.png")';
+    markerElem.style.width = mapMarkers.icon.width;
+    markerElem.style.height = mapMarkers.icon.height;
+
+    const marker = new mapboxgl.Marker(
+      markerElem,
+      { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
+    )
+      .setLngLat(targetIdea.loc.coordinates)
+      .addTo(this.map);
+
+    isFocusMarker ? onSaveFocusMarker(marker) : onSaveHoverMarker(marker);
+  }
+
+  loadHoverMarker(props) {
+    const {
+      focusedIdea,
+      focusMarker,
+      hoverMarker,
+      ideas,
+      mouseOverIdea,
+      onClearFocusedIdea,
+      onDeleteFocusMarker,
+      onDeleteHoverMarker
+    } = props;
+
+    if (hoverMarker) {
+      onDeleteHoverMarker(hoverMarker);
+    }
+
+    if (mouseOverIdea) {
+      if (!focusedIdea) {
+        this.createHoverMarker(ideas, mouseOverIdea);
+      } else if (mouseOverIdea !== focusedIdea) {
+        onDeleteFocusMarker(focusMarker);
+        onClearFocusedIdea();
+        this.createHoverMarker(ideas, mouseOverIdea);
+      }
+    }
+  }
+
+  createFocusMarker(ideas, ideaId) {
+    this.createHoverMarker(ideas, ideaId, true);
+  }
+
+  fitMapToMarkers() {
+    const { destination, ideas } = this.props;
     const { southwest, northeast } = destination.viewport;
     const bounds = new mapboxgl.LngLatBounds(
       southwest.coordinates,
@@ -74,113 +172,28 @@ class TripMapDisplay extends Component {
     // Ensure the bounds captures all the ideas' locations
     ideas.map((idea) => bounds.extend(idea.loc.coordinates));
     this.map.fitBounds(bounds, {
-      linear: !gradualFit,
+      linear: true,
       padding: 100,
       curve: 1,
       easing: easeInOutQuad
     });
   }
 
-  loadMarkers(props) {
-    let { focusedMarker, hoverMarker, markers } = this.state;
-    const {
-      focusedIdea,
-      ideas,
-      mouseOverIdea,
-      onClearFocusedIdea,
-      trackIdeaView
-    } = props || this.props;
+  focusMapOnIdea(props) {
+    const { focusMarker, focusedIdea, ideas, onDeleteFocusMarker } = props;
 
-    // Remove all previous markers
-    markers.forEach((marker) => {
-      marker.remove();
-    });
-    markers = [];
-
-    if (hoverMarker) {
-      hoverMarker.remove();
-      hoverMarker = null;
+    if (focusMarker) {
+      onDeleteFocusMarker(focusMarker);
     }
 
-    // Add markers corresponding to the ideas
-    ideas.forEach((idea) => {
-      let marker = document.createElement('div');
-      marker.className = 'marker';
-      marker.style.width = mapMarkers.diameter;
-      marker.style.height= mapMarkers.diameter;
-      marker.addEventListener('mouseover', () => mapMarker.togglePopup());
-      marker.addEventListener('mouseout', () => mapMarker.togglePopup());
-      marker.addEventListener('click', (() => {
-        mapMarker.togglePopup();
-        trackIdeaView(idea._id);
-        this.flyToLocation(idea.loc.coordinates);
-      }).bind(this));
+    if (focusedIdea) {
+      this.createFocusMarker(ideas, focusedIdea);
 
-      let mapMarker = new mapboxgl.Marker(
-        marker,
-        { offset: [-mapMarkers.diameter/2, -mapMarkers.diameter/2] }
-      )
-        .setLngLat(idea.loc.coordinates)
-        .addTo(this.map);
-
-      // Add popup UI to marker
-      mapMarker.setPopup(createPopup(idea));
-
-      // Display the hover marker if specified
-      if (mouseOverIdea && mouseOverIdea === idea._id) {
-        if (focusedMarker) {
-          /*
-           * If a different idea from the previously focused idea is hovered
-           * over, clear the focused hover marker, so that there is always at
-           * mostone hover marker visible on the map
-           */
-          if (mouseOverIdea !== focusedIdea) {
-            focusedMarker.remove();
-            focusedMarker = null;
-            onClearFocusedIdea();
-            hoverMarker = this.createHoverMarker(idea.loc.coordinates);
-          }
-        } else {
-          hoverMarker = this.createHoverMarker(idea.loc.coordinates);
-        }
+      const targetIdea = ideas.find((idea) => idea._id === focusedIdea);
+      if (targetIdea) {
+        this.flyToLocation(targetIdea.loc.coordinates);
       }
-
-      markers.push(mapMarker);
-      this.setState({ focusedMarker, hoverMarker, markers });
-    });
-  }
-
-  createHoverMarker(lngLat, isFocused = false) {
-    let newMarker = document.createElement('div');
-    newMarker.className = 'hover-marker';
-    newMarker.style.backgroundImage = isFocused ?
-      'url("../assets/marker-icon-focus.png")' :
-      'url("../assets/marker-icon.png")';
-    newMarker.style.width = mapMarkers.icon.width;
-    newMarker.style.height = mapMarkers.icon.height;
-
-    return new mapboxgl.Marker(
-      newMarker,
-      { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
-    )
-      .setLngLat(lngLat)
-      .addTo(this.map);
-  }
-
-  focusMapOnIdea(focusedIdeaId) {
-    const { ideas, onClearFocusedIdea } = this.props;
-    const index = ideas.findIndex((idea) => idea._id === focusedIdeaId);
-
-    // Don't do anything if the idea isn't found
-    if (index < 0) {
-      onClearFocusedIdea();
-      return;
     }
-
-    const lngLat = this.state.markers[index].getLngLat();
-    const focusedMarker = this.createHoverMarker(lngLat, true);
-    this.flyToLocation(lngLat);
-    this.setState({ focusedMarker });
   }
 
   flyToLocation(lngLat) {
@@ -213,10 +226,18 @@ function easeInOutQuad(t) {
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
+  focusMarker: PropTypes.object,
+  hoverMarker: PropTypes.object,
   focusedIdea: PropTypes.string.isRequired,
   ideas: PropTypes.array,
+  markers: PropTypes.array.isRequired,
   mouseOverIdea: PropTypes.string.isRequired,
   onClearFocusedIdea: PropTypes.func.isRequired,
+  onDeleteFocusMarker: PropTypes.func.isRequired,
+  onDeleteHoverMarker: PropTypes.func.isRequired,
+  onSaveFocusMarker: PropTypes.func.isRequired,
+  onSaveHoverMarker: PropTypes.func.isRequired,
+  onSaveMarkers: PropTypes.func.isRequired,
   trackIdeaView: PropTypes.func.isRequired
 };
 

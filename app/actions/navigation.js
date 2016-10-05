@@ -1,14 +1,19 @@
 'use strict';
 import { browserHistory } from 'react-router';
+import { apiGetTrip, apiGetTrips } from './trips';
 
-// Authentication
+export function viewLandingPage() {
+  return browserHistory.push('/');
+}
+
 export function viewSignupPage() {
   return browserHistory.push('/signup');
 }
 
-// Trip Management
 export function viewTripsPage() {
-  return browserHistory.push('/');
+  return (dispatch) => {
+    dispatch(apiGetTrips()).then(() => { browserHistory.push('/trips'); });
+  };
 }
 
 export function createTrip() {
@@ -16,5 +21,9 @@ export function createTrip() {
 }
 
 export function viewTripPage(tripId) {
-  return browserHistory.push('/trips/' + tripId);
+  return (dispatch) => {
+    dispatch(apiGetTrip(tripId)).then(() => {
+      browserHistory.push('/trips/' + tripId);
+    });
+  };
 }

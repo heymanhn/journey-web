@@ -6,8 +6,8 @@ import {
   saveIdeaComment,
   saveNewTripIdea,
   tripIdeaCleared
-} from '../actions/trips';
-import TripIdeasList from '../components/TripIdeasList';
+} from 'app/actions/trips';
+import TripIdeasList from 'app/components/TripIdeasList';
 
 const mapStateToProps = (state) => {
   const ts = state.tripState;

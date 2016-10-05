@@ -113,6 +113,10 @@ export const initialAuthState = {
   isFetching: false
 };
 
+export const initialMapState = {
+  markers: []
+};
+
 export const initialTripsState = {
   isFetching: false,
   trips: []

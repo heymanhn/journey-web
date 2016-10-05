@@ -5,7 +5,7 @@ import fetch from 'isomorphic-fetch';
 import ObjectID from 'bson-objectid';
 
 import { viewTripPage } from './navigation'
-import { fetchOptsTemplate, handleErrors, journeyAPI } from '../constants';
+import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
 
 /*
  * Action Types
@@ -402,7 +402,7 @@ export function apiCreateTrip() {
       .then(json => {
         const tripId = json.trip._id;
         dispatch(apiCreateTripSuccess(json));
-        viewTripPage(tripId);
+        dispatch(viewTripPage(tripId));
       })
       .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
   };

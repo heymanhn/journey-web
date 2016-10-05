@@ -9,9 +9,9 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
-import { apiIdentifyGuest } from '../actions/analytics';
-import { isMobile } from '../constants';
-import routes from '../routes';
+import { apiIdentifyGuest } from 'app/actions/analytics';
+import { isMobile } from 'app/constants';
+import routes from 'app/routes';
 
 class Root extends Component {
   constructor() {
@@ -29,7 +29,7 @@ class Root extends Component {
     const { store } = this.props;
     const config = {
       storage: localForage,
-      blacklist: ['tripState']
+      blacklist: ['mapState', 'tripState']
     };
 
     persistStore(store, config, () => {

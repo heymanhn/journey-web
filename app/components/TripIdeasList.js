@@ -3,10 +3,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 
-import { isMobile } from '../constants';
+import { isMobile } from 'app/constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
-import TripIdea from '../containers/TripIdea';
+import TripIdea from 'app/containers/TripIdea';
 
 class TripIdeasList extends Component {
   constructor(props) {

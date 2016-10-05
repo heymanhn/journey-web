@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import { viewSignupPage } from '../actions/navigation';
+import { viewSignupPage } from 'app/actions/navigation';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 

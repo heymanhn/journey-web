@@ -1,13 +1,10 @@
 'use strict';
 
-require('../stylesheets/react-spinner.css');
-
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import Spinner from './Spinner';
-import TripIdeas from '../containers/TripIdeas';
-import TripMap from '../containers/TripMap';
-import { viewTripsPage } from '../actions/navigation';
+import LoadingAnimation from './LoadingAnimation';
+import TripIdeas from 'app/containers/TripIdeas';
+import TripMap from 'app/containers/TripMap';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -24,7 +21,7 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, trip } = this.props;
+    const { error, onViewTrips, trip } = this.props;
 
     if (error) {
       return (
@@ -34,14 +31,7 @@ class TripPage extends Component {
 
     // Loading UI
     if (!trip) {
-      return (
-        <div>
-          <p style={styles.loadingText}>Loading Trip</p>
-          <div>
-            <Spinner />
-          </div>
-        </div>
-      );
+      return <LoadingAnimation element="Trip" />;
     }
 
     const tripPlan = trip.plan.map(day => {
@@ -65,7 +55,7 @@ class TripPage extends Component {
           <TripIdeas />
           <Button
             bsStyle="primary"
-            onClick={viewTripsPage}>
+            onClick={onViewTrips}>
             Home
           </Button>
         </div>
@@ -80,6 +70,7 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
+  onViewTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };

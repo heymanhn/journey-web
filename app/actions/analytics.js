@@ -8,7 +8,7 @@ import {
   generateGUID,
   handleErrors,
   journeyAPI
-} from '../constants';
+} from 'app/constants';
 
 /*
  * Action Creator thunks
