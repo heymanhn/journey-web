@@ -8,7 +8,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
 import TripIdeaPanel from './TripIdeaPanel';
-import { dndTypes, isMobile } from '../constants';
+import { dndTypes, isMobile } from 'app/constants';
 
 /*
  * React-dnd drag source

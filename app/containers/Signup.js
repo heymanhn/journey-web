@@ -1,15 +1,15 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiPageEvent } from '../actions/analytics';
+import { apiPageEvent } from 'app/actions/analytics';
 import {
   apiSignup,
   signupSaveName,
   signupSaveEmail,
   signupSavePassword
-} from '../actions/auth';
-import SignupPage from '../components/SignupPage';
-import { analytics } from '../constants';
+} from 'app/actions/auth';
+import SignupPage from 'app/components/SignupPage';
+import { analytics } from 'app/constants';
 
 const mapStateToProps = (state) => {
   return {

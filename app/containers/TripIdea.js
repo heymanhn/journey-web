@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiTripPageEvent } from '../actions/analytics';
+import { apiTripPageEvent } from 'app/actions/analytics';
 import {
   apiRemoveTripIdea,
   apiUpdateTripIdea,
@@ -9,9 +9,9 @@ import {
   reorderTripIdea,
   setFocusedIdea,
   setMouseOverIdea
-} from '../actions/trips';
-import TripIdeaUI from '../components/TripIdeaUI';
-import { analytics } from '../constants';
+} from 'app/actions/trips';
+import TripIdeaUI from 'app/components/TripIdeaUI';
+import { analytics } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const ts = state.tripState;

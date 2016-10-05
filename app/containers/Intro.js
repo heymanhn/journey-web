@@ -5,10 +5,10 @@ import {
   apiLogin,
   loginSaveEmail,
   loginSavePassword
-} from '../actions/auth';
-import { apiPageEvent } from '../actions/analytics';
-import { analytics } from '../constants';
-import IntroPage from '../components/IntroPage';
+} from 'app/actions/auth';
+import { apiPageEvent } from 'app/actions/analytics';
+import { analytics } from 'app/constants';
+import IntroPage from 'app/components/IntroPage';
 
 const mapStateToProps = (state) => {
   return {

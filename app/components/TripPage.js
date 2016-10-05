@@ -1,13 +1,13 @@
 'use strict';
 
-require('../stylesheets/react-spinner.css');
+require('app/stylesheets/react-spinner.css');
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import Spinner from './Spinner';
-import TripIdeas from '../containers/TripIdeas';
-import TripMap from '../containers/TripMap';
-import { viewTripsPage } from '../actions/navigation';
+import TripIdeas from 'app/containers/TripIdeas';
+import TripMap from 'app/containers/TripMap';
+import { viewTripsPage } from 'app/actions/navigation';
 
 class TripPage extends Component {
   componentDidMount() {

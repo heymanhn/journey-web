@@ -14,8 +14,8 @@ import {
   API_SIGNUP_FAILURE,
   CREATE_ANONYMOUS_ID,
   LOGOUT
-} from '../actions/auth';
-import { initialAuthState } from '../constants';
+} from 'app/actions/auth';
+import { initialAuthState } from 'app/constants';
 
 export default function authState(state = initialAuthState, action) {
   switch (action.type) {

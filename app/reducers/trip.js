@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'underscore';
-import { LOGOUT } from '../actions/auth';
+import { LOGOUT } from 'app/actions/auth';
 import {
   API_CREATE_TRIP_SUCCESS,
   API_GET_TRIP_REQUEST,
@@ -27,8 +27,8 @@ import {
   SET_FOCUSED_IDEA,
   CLEAR_FOCUSED_IDEA,
   CLEAR_TRIP_ERROR
-} from '../actions/trips';
-import { initialTripState } from '../constants';
+} from 'app/actions/trips';
+import { initialTripState } from 'app/constants';
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {

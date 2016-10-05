@@ -1,10 +1,10 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiTripPageEvent } from '../actions/analytics';
-import { clearFocusedIdea } from '../actions/trips';
-import TripMapDisplay from '../components/TripMapDisplay';
-import { analytics } from '../constants';
+import { apiTripPageEvent } from 'app/actions/analytics';
+import { clearFocusedIdea } from 'app/actions/trips';
+import TripMapDisplay from 'app/components/TripMapDisplay';
+import { analytics } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const ts = state.tripState;

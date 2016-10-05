@@ -3,7 +3,7 @@
 import fetch from 'isomorphic-fetch';
 import { apiIdentifyGuest } from './analytics';
 import { viewTripsPage } from './navigation'
-import { fetchOptsTemplate, handleErrors, journeyAPI } from '../constants';
+import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
 import { apiGetTrips } from './trips';
 
 /*

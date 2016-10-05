@@ -1,12 +1,12 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiPageEvent, apiTrackEvent } from '../actions/analytics';
-import { apiDeleteTrip, apiGetTrip, clearTripsError } from '../actions/trips';
-import { processLogout } from '../actions/auth';
-import { createTrip, viewTripPage } from '../actions/navigation';
-import TripsPage from '../components/TripsPage';
-import { analytics } from '../constants';
+import { apiPageEvent, apiTrackEvent } from 'app/actions/analytics';
+import { apiDeleteTrip, apiGetTrip, clearTripsError } from 'app/actions/trips';
+import { processLogout } from 'app/actions/auth';
+import { createTrip, viewTripPage } from 'app/actions/navigation';
+import TripsPage from 'app/components/TripsPage';
+import { analytics } from 'app/constants';
 
 const mapStateToProps = (state) => {
   return {

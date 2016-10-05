@@ -1,10 +1,10 @@
 'use strict';
 
-require('../stylesheets/mapbox-gl.css');
+require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { mapbox, mapMarkers } from '../constants';
+import { mapbox, mapMarkers } from 'app/constants';
 
 class TripMapDisplay extends Component {
   constructor(props) {
@@ -154,8 +154,8 @@ class TripMapDisplay extends Component {
     let newMarker = document.createElement('div');
     newMarker.className = 'hover-marker';
     newMarker.style.backgroundImage = isFocused ?
-      'url("../assets/marker-icon-focus.png")' :
-      'url("../assets/marker-icon.png")';
+      'url("app/assets/marker-icon-focus.png")' :
+      'url("app/assets/marker-icon.png")';
     newMarker.style.width = mapMarkers.icon.width;
     newMarker.style.height = mapMarkers.icon.height;
 
