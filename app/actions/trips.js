@@ -339,12 +339,11 @@ export function apiGetTrips() {
     const { user } = getState().authState;
     const userTrips = journeyAPI.trips.get(user._id);
     let opts = {
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: userTrips.method
     };
-    opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(userTrips.route, opts)
+    return fetch(userTrips.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -388,7 +387,7 @@ export function apiCreateTrip() {
 
     const createTrip = journeyAPI.trips.create();
     let opts = {
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: createTrip.method,
       body: JSON.stringify({
         title,
@@ -396,9 +395,8 @@ export function apiCreateTrip() {
         destination: destParams
       })
     };
-    opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(createTrip.route, opts)
+    return fetch(createTrip.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -416,16 +414,11 @@ export function apiGetTrip(tripId) {
 
     const userTrip = journeyAPI.trip.get(tripId);
     let opts = {
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: userTrip.method
     };
 
-    // Only add Authorization header if a user has authenticated
-    if (getState().authState.token) {
-      opts.headers['Authorization'] = getState().authState.token;
-    }
-
-    fetch(userTrip.route, opts)
+    return fetch(userTrip.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -442,12 +435,11 @@ export function apiDeleteTrip(tripId) {
 
     const deleteTripAPI = journeyAPI.trip.delete(tripId);
     let opts = {
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: deleteTripAPI.method
     };
-    opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(deleteTripAPI.route, opts)
+    return fetch(deleteTripAPI.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -490,13 +482,12 @@ export function apiAddTripIdea() {
 
     const addTripIdeaAPI = journeyAPI.trip.ideas.create(tripId);
     let opts = {
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: addTripIdeaAPI.method,
       body: JSON.stringify(ideaParams)
     };
-    opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(addTripIdeaAPI.route, opts)
+    return fetch(addTripIdeaAPI.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -517,13 +508,12 @@ export function apiUpdateTripIdea(index) {
 
     const updateTripIdeaAPI = journeyAPI.trip.ideas.update(tripId, ideaId);
     let opts ={
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: updateTripIdeaAPI.method,
       body: JSON.stringify({ index })
     };
-    opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(updateTripIdeaAPI.route, opts)
+    return fetch(updateTripIdeaAPI.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
@@ -541,12 +531,11 @@ export function apiRemoveTripIdea(ideaId) {
     const tripId = getState().tripState.trip._id;
     const removeTripIdeaAPI = journeyAPI.trip.ideas.delete(tripId, ideaId);
     let opts = {
-      ...fetchOptsTemplate,
+      ...fetchOptsTemplate(getState().authState),
       method: removeTripIdeaAPI.method
     };
-    opts.headers['Authorization'] = getState().authState.token;
 
-    fetch(removeTripIdeaAPI.route, opts)
+    return fetch(removeTripIdeaAPI.route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {

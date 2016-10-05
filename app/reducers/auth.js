@@ -12,6 +12,7 @@ import {
   API_SIGNUP_REQUEST,
   API_SIGNUP_SUCCESS,
   API_SIGNUP_FAILURE,
+  CREATE_ANONYMOUS_ID,
   LOGOUT
 } from '../actions/auth';
 import { initialAuthState } from '../constants';
@@ -59,6 +60,11 @@ export default function authState(state = initialAuthState, action) {
         ...state,
         isFetching: false,
         error: action.error
+      };
+    case CREATE_ANONYMOUS_ID:
+      return {
+        ...state,
+        anonymousId: action.anonymousId
       };
     case LOGOUT:
       return initialAuthState;

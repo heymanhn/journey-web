@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { apiTripPageEvent } from '../actions/analytics';
 import {
   apiRemoveTripIdea,
   apiUpdateTripIdea,
@@ -10,6 +11,7 @@ import {
   setMouseOverIdea
 } from '../actions/trips';
 import TripIdeaUI from '../components/TripIdeaUI';
+import { analytics } from '../constants';
 
 const mapStateToProps = (state) => {
   const ts = state.tripState;
@@ -18,25 +20,32 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, props) => {
+  const { _id: ideaId } = props.idea;
   return {
-    onClearMouseOverIdea: (ideaId) => {
+    onClearMouseOverIdea() {
       dispatch(clearMouseOverIdea(ideaId));
     },
-    onFocusIdea: (ideaId) => {
+
+    onFocusIdea() {
+      dispatch(apiTripPageEvent(analytics.pages.TRIP_IDEA, { ideaId } ));
       dispatch(setFocusedIdea(ideaId));
     },
-    onRemoveIdea: (ideaId) => {
+
+    onRemoveIdea() {
       dispatch(apiRemoveTripIdea(ideaId));
     },
+
     onReorderIdea: (index1, index2) => {
       dispatch(reorderTripIdea(index1, index2));
     },
-    onSetMouseOverIdea: (ideaId) => {
+
+    onSetMouseOverIdea() {
       dispatch(setMouseOverIdea(ideaId));
     },
-    onUpdateIdea: (index) => {
-      dispatch(apiUpdateTripIdea(index));
+
+    onUpdateIdea() {
+      dispatch(apiUpdateTripIdea(props.index));
     }
   };
 };

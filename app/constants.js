@@ -52,16 +52,42 @@ export const journeyAPI = {
         route: journeyAPIHost + '/trips/' + tripId + '/ideas/' + ideaId
       })
     }
+  },
+
+  analytics: {
+    identify: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/identify'
+    }),
+    track: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/track'
+    }),
+    page: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/page'
+    })
   }
 };
 
-export const fetchOptsTemplate = {
-  mode: 'cors',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
+export function fetchOptsTemplate(authState) {
+  let opts = {
+    mode: 'cors',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const { anonymousId, token } = authState;
+  if (token) {
+    opts.headers['Authorization'] = token;
+  } else {
+    opts.headers['AnonymousID'] = anonymousId;
   }
-};
+
+  return opts;
+}
 
 export const handleErrors = (response) => {
   if (response.ok) {
@@ -75,6 +101,14 @@ export const handleErrors = (response) => {
 /*
  * Redux store default states
  */
+
+export function generateGUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    let r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    return v.toString(16);
+  });
+}
+
 export const initialAuthState = {
   isFetching: false
 };
@@ -89,6 +123,7 @@ export const initialTripState = {
   resetIdeaBox: false
 };
 
+
 /*
  * Drag and drop functionality variables
  */
@@ -98,6 +133,7 @@ export const dndTypes = {
 
 const md = new MobileDetect(window.navigator.userAgent);
 export const isMobile = md.mobile() ? true : false;
+
 
 /*
  * Mapbox API
@@ -113,5 +149,22 @@ export const mapMarkers = {
   icon: {
     width: 25,
     height: 41
+  }
+};
+
+
+/*
+ * Analytics Event Names
+ */
+export const analytics = {
+  events: {
+    LOG_OUT: 'Log Out'
+  },
+  pages: {
+    LANDING_PAGE: 'Landing Page',
+    SIGNUP_PAGE: 'Signup Page',
+    TRIP_PAGE: 'Trip Page',
+    TRIP_IDEA: 'Trip Idea',
+    TRIPS_PAGE: 'Trips Page'
   }
 };

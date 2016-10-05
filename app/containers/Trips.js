@@ -1,10 +1,12 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { apiGetTrip, apiDeleteTrip, clearTripsError } from '../actions/trips';
-import { logout } from '../actions/auth';
+import { apiPageEvent, apiTrackEvent } from '../actions/analytics';
+import { apiDeleteTrip, apiGetTrip, clearTripsError } from '../actions/trips';
+import { processLogout } from '../actions/auth';
 import { createTrip, viewTripPage } from '../actions/navigation';
 import TripsPage from '../components/TripsPage';
+import { analytics } from '../constants';
 
 const mapStateToProps = (state) => {
   return {
@@ -15,19 +17,27 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onCreateTripPress: () => {
+    onCreateTripPress() {
       dispatch(clearTripsError());
       createTrip();
     },
-    onDeleteTripPress: (tripId) => {
+
+    onDeleteTripPress(tripId) {
       dispatch(apiDeleteTrip(tripId));
     },
-    onLogoutPress: () => {
-      dispatch(logout());
+
+    onLogoutPress() {
+      dispatch(apiTrackEvent(analytics.events.LOG_OUT));
+      dispatch(processLogout());
     },
-    onViewTrip: (tripId) => {
+
+    onViewTrip(tripId) {
       dispatch(apiGetTrip(tripId));
       viewTripPage(tripId);
+    },
+
+    trackPageView() {
+      dispatch(apiPageEvent(analytics.pages.TRIPS_PAGE));
     }
   };
 };

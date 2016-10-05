@@ -6,6 +6,10 @@ import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 
 class SignupPage extends Component {
+  componentDidMount() {
+    this.props.onPageLoaded();
+  }
+
   render() {
     const {
       email,
@@ -58,6 +62,7 @@ SignupPage.propTypes = {
   onEnterEmail: PropTypes.func.isRequired,
   onEnterName: PropTypes.func.isRequired,
   onEnterPassword: PropTypes.func.isRequired,
+  onPageLoaded: PropTypes.func.isRequired,
   onSignupPress: PropTypes.func.isRequired
 };
 

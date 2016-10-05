@@ -5,6 +5,10 @@ import { Button } from 'react-bootstrap';
 import TripsList from './TripsList';
 
 class TripsPage extends Component {
+  componentDidMount() {
+    this.props.trackPageView();
+  }
+
   render() {
     const {
       name,
@@ -47,6 +51,7 @@ TripsPage.propTypes = {
   onDeleteTripPress: PropTypes.func.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
+  trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired
 };
 

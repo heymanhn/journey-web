@@ -87,7 +87,8 @@ class TripMapDisplay extends Component {
       focusedIdea,
       ideas,
       mouseOverIdea,
-      onClearFocusedIdea
+      onClearFocusedIdea,
+      trackIdeaView
     } = props || this.props;
 
     // Remove all previous markers
@@ -111,6 +112,7 @@ class TripMapDisplay extends Component {
       marker.addEventListener('mouseout', () => mapMarker.togglePopup());
       marker.addEventListener('click', (() => {
         mapMarker.togglePopup();
+        trackIdeaView(idea._id);
         this.flyToLocation(idea.loc.coordinates);
       }).bind(this));
 
@@ -214,7 +216,8 @@ TripMapDisplay.propTypes = {
   focusedIdea: PropTypes.string.isRequired,
   ideas: PropTypes.array,
   mouseOverIdea: PropTypes.string.isRequired,
-  onClearFocusedIdea: PropTypes.func.isRequired
+  onClearFocusedIdea: PropTypes.func.isRequired,
+  trackIdeaView: PropTypes.func.isRequired
 };
 
 const styles = {
