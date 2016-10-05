@@ -1,10 +1,8 @@
 'use strict';
 
-require('app/stylesheets/react-spinner.css');
-
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import Spinner from './Spinner';
+import LoadingAnimation from './LoadingAnimation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 
@@ -33,14 +31,7 @@ class TripPage extends Component {
 
     // Loading UI
     if (!trip) {
-      return (
-        <div>
-          <p style={styles.loadingText}>Loading Trip</p>
-          <div>
-            <Spinner />
-          </div>
-        </div>
-      );
+      return <LoadingAnimation element="Trip" />;
     }
 
     const tripPlan = trip.plan.map(day => {
