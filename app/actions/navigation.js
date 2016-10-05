@@ -1,5 +1,6 @@
 'use strict';
 import { browserHistory } from 'react-router';
+import { apiGetTrips } from './trips';
 
 export function viewLandingPage() {
   return browserHistory.push('/');
@@ -10,7 +11,9 @@ export function viewSignupPage() {
 }
 
 export function viewTripsPage() {
-  return browserHistory.push('/trips');
+  return (dispatch, getState) => {
+    dispatch(apiGetTrips()).then(() => { browserHistory.push('/trips'); });
+  };
 }
 
 export function createTrip() {

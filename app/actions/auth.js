@@ -4,7 +4,6 @@ import fetch from 'isomorphic-fetch';
 import { apiIdentifyGuest } from './analytics';
 import { viewLandingPage, viewTripsPage } from './navigation'
 import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
-import { apiGetTrips } from './trips';
 
 /*
  * Action Types
@@ -139,8 +138,7 @@ export function apiLogin() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiLoginSuccess(json));
-        dispatch(apiGetTrips());
-        viewTripsPage();
+        dispatch(viewTripsPage());
       })
       .catch(error => { dispatch(apiLoginFailure(error.message)) });
   };
@@ -165,8 +163,7 @@ export function apiSignup() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
-        dispatch(apiGetTrips());
-        viewTripsPage();
+        dispatch(viewTripsPage());
       })
       .catch(error => { dispatch(apiSignupFailure(error.message)); });
   };

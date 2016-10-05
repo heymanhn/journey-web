@@ -5,14 +5,12 @@ import { connect } from 'react-redux';
 
 import Intro from './Intro';
 import { viewTripsPage } from 'app/actions/navigation';
-import { apiGetTrips } from 'app/actions/trips';
 
 class Home extends Component {
   componentWillMount() {
     const { authState } = this.props;
     if (authState.token) {
-      this.props.onLoadHome();
-      viewTripsPage();
+      this.props.onViewTripsPage();
     }
   }
 
@@ -27,7 +25,7 @@ class Home extends Component {
 
 Home.propTypes = {
   authState: PropTypes.object,
-  onLoadHome: PropTypes.func.isRequired
+  onViewTripsPage: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -35,8 +33,8 @@ export default connect(
     authState: state.authState
   }),
   dispatch => ({
-    onLoadHome: () => {
-      dispatch(apiGetTrips());
+    onViewTripsPage() {
+      dispatch(viewTripsPage());
     }
   })
 )(Home);

@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap';
 import Spinner from './Spinner';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
-import { viewTripsPage } from 'app/actions/navigation';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -24,7 +23,7 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, trip } = this.props;
+    const { error, onViewTrips, trip } = this.props;
 
     if (error) {
       return (
@@ -65,7 +64,7 @@ class TripPage extends Component {
           <TripIdeas />
           <Button
             bsStyle="primary"
-            onClick={viewTripsPage}>
+            onClick={onViewTrips}>
             Home
           </Button>
         </div>
@@ -80,6 +79,7 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
+  onViewTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };
