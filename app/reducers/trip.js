@@ -54,7 +54,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case ADD_TRIP_IDEA:
       return {
-        ..._.omit(state, ['focusedIdea', 'newIdea', 'newComment']),
+        ..._.omit(state, ['newIdea', 'newComment']),
         trip: _.extend(state.trip, {
           ideas: [action.idea].concat(state.trip.ideas)
         }),
@@ -75,7 +75,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case REMOVE_TRIP_IDEA:
       return {
-        ...state,
+        ..._.omit(state, ['focusedIdea', 'mouseOverIdea']),
         trip: _.extend(state.trip, {
           ideas: _.reject(state.trip.ideas, (idea) =>
             idea._id === action.ideaId

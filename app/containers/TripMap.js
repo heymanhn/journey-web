@@ -33,12 +33,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(clearFocusedIdea());
     },
 
-    onDeleteHoverMarker() {
+    onDeleteHoverMarker(marker) {
+      marker.remove();
       dispatch(deleteHoverMarker());
     },
 
-    onDeleteFocusMarker() {
-      dispatch(deleteFocusMarker());
+    onDeleteFocusMarker(marker) {
+      if (marker) {
+        marker.remove();
+        dispatch(deleteFocusMarker());
+      }
     },
 
     onSaveHoverMarker(marker) {
