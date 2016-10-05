@@ -33,8 +33,10 @@ class Root extends Component {
     };
 
     persistStore(store, config, () => {
+      const { anonymousId, token } = store.getState().authState;
+
       // Don't render anything until the anonymousId is generated as well
-      if (!store.getState().authState.anonymousId) {
+      if (!anonymousId && !token) {
         store
           .dispatch(apiIdentifyGuest())
           .then(() => {
