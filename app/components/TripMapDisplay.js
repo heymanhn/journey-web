@@ -10,9 +10,7 @@ class TripMapDisplay extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      markers: []
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -24,19 +22,22 @@ class TripMapDisplay extends Component {
   // Update the map markers if there are any changes
   componentWillReceiveProps(nextProps) {
     const { focusedMarker } = this.state;
-    const { focusedIdea: previousFocus } = this.props;
+    const { focusedIdea: previousFocus, ideas: previousIdeas } = this.props;
     const { focusedIdea, ideas } = nextProps;
-    this.loadMarkers(nextProps);
+
+    if (ideas.length !== previousIdeas.length) {
+      this.loadMarkers(nextProps);
+    }
 
     // Focus the map if it's not already focused
     if (focusedIdea) {
       if (!focusedMarker) {
-        return this.focusMapOnIdea(focusedIdea, ideas);
+        return this.focusMapOnIdea(focusedIdea, nextProps);
       }
 
       if (focusedIdea !== previousFocus) {
         this.clearFocusMarker();
-        this.focusMapOnIdea(focusedIdea, ideas);
+        this.focusMapOnIdea(focusedIdea, nextProps);
       }
     }
   }
@@ -67,39 +68,23 @@ class TripMapDisplay extends Component {
     this.map.addControl(new mapboxgl.Navigation());
   }
 
-  fitMapToMarkers(gradualFit = false, ideas = this.props.ideas) {
-    const { destination } = this.props;
-    const { southwest, northeast } = destination.viewport;
-    const bounds = new mapboxgl.LngLatBounds(
-      southwest.coordinates,
-      northeast.coordinates
-    );
-
-    // Ensure the bounds captures all the ideas' locations
-    ideas.map((idea) => bounds.extend(idea.loc.coordinates));
-    this.map.fitBounds(bounds, {
-      linear: !gradualFit,
-      padding: 100,
-      curve: 1,
-      easing: easeInOutQuad
-    });
-  }
-
   loadMarkers(props) {
-    let { focusedMarker, hoverMarker, markers } = this.state;
+    let { hoverMarker, focusedMarker } = this.state;
     const {
+      // focusMarker,
       focusedIdea,
+      // hoverMarker,
       ideas,
+      markers,
       mouseOverIdea,
       onClearFocusedIdea,
+      onSaveMarkers,
       trackIdeaView
     } = props || this.props;
+    let newMarkers = [];
 
     // Remove all previous markers
-    markers.forEach((marker) => {
-      marker.remove();
-    });
-    markers = [];
+    this.clearMarkers();
 
     if (hoverMarker) {
       hoverMarker.remove();
@@ -112,15 +97,15 @@ class TripMapDisplay extends Component {
       marker.className = 'marker';
       marker.style.width = mapMarkers.diameter;
       marker.style.height= mapMarkers.diameter;
-      marker.addEventListener('mouseover', () => mapMarker.togglePopup());
-      marker.addEventListener('mouseout', () => mapMarker.togglePopup());
+      marker.addEventListener('mouseover', () => newMarker.togglePopup());
+      marker.addEventListener('mouseout', () => newMarker.togglePopup());
       marker.addEventListener('click', (() => {
-        mapMarker.togglePopup();
+        newMarker.togglePopup();
         trackIdeaView(idea._id);
         this.flyToLocation(idea.loc.coordinates);
       }).bind(this));
 
-      let mapMarker = new mapboxgl.Marker(
+      let newMarker = new mapboxgl.Marker(
         marker,
         { offset: [-mapMarkers.diameter/2, -mapMarkers.diameter/2] }
       )
@@ -128,7 +113,7 @@ class TripMapDisplay extends Component {
         .addTo(this.map);
 
       // Add popup UI to marker
-      mapMarker.setPopup(createPopup(idea));
+      newMarker.setPopup(createPopup(idea));
 
       // Display the hover marker if specified
       if (mouseOverIdea && mouseOverIdea === idea._id) {
@@ -148,10 +133,15 @@ class TripMapDisplay extends Component {
         }
       }
 
-      markers.push(mapMarker);
+      newMarkers.push(newMarker);
     });
 
-    this.setState({ hoverMarker, markers });
+    onSaveMarkers(newMarkers);
+    this.setState({ hoverMarker });
+  }
+
+  clearMarkers() {
+    this.props.markers.forEach((marker) => marker.remove());
   }
 
   createHoverMarker(lngLat, isFocused = false) {
@@ -171,9 +161,26 @@ class TripMapDisplay extends Component {
       .addTo(this.map);
   }
 
-  focusMapOnIdea(focusedIdeaId, newIdeas) {
-    const ideas = newIdeas || this.props.ideas;
-    const { onClearFocusedIdea } = this.props;
+  fitMapToMarkers(gradualFit = false, ideas = this.props.ideas) {
+    const { destination } = this.props;
+    const { southwest, northeast } = destination.viewport;
+    const bounds = new mapboxgl.LngLatBounds(
+      southwest.coordinates,
+      northeast.coordinates
+    );
+
+    // Ensure the bounds captures all the ideas' locations
+    ideas.map((idea) => bounds.extend(idea.loc.coordinates));
+    this.map.fitBounds(bounds, {
+      linear: !gradualFit,
+      padding: 100,
+      curve: 1,
+      easing: easeInOutQuad
+    });
+  }
+
+  focusMapOnIdea(focusedIdeaId, props) {
+    const { ideas, markers, onClearFocusedIdea } = props;
     const index = ideas.findIndex((idea) => idea._id === focusedIdeaId);
 
     // Don't do anything if the idea isn't found
@@ -182,7 +189,7 @@ class TripMapDisplay extends Component {
       return;
     }
 
-    const lngLat = this.state.markers[index].getLngLat();
+    const lngLat = markers[index].getLngLat();
     const focusedMarker = this.createHoverMarker(lngLat, true);
     this.flyToLocation(lngLat);
     this.setState({ focusedMarker });
@@ -225,10 +232,18 @@ function easeInOutQuad(t) {
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
+  focusMarker: PropTypes.object,
+  hoverMarker: PropTypes.object,
   focusedIdea: PropTypes.string.isRequired,
   ideas: PropTypes.array,
+  markers: PropTypes.array.isRequired,
   mouseOverIdea: PropTypes.string.isRequired,
   onClearFocusedIdea: PropTypes.func.isRequired,
+  onDeleteFocusMarker: PropTypes.func.isRequired,
+  onDeleteHoverMarker: PropTypes.func.isRequired,
+  onSaveFocusMarker: PropTypes.func.isRequired,
+  onSaveHoverMarker: PropTypes.func.isRequired,
+  onSaveMarkers: PropTypes.func.isRequired,
   trackIdeaView: PropTypes.func.isRequired
 };
 
