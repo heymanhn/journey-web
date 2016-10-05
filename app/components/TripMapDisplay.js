@@ -24,15 +24,21 @@ class TripMapDisplay extends Component {
   // Update the map markers if there are any changes
   componentWillReceiveProps(nextProps) {
     const { focusedMarker } = this.state;
+    const { focusedIdea: previousFocus } = this.props;
     const { focusedIdea, ideas } = nextProps;
     this.loadMarkers(nextProps);
 
     // Focus the map if it's not already focused
     if (focusedIdea) {
       if (!focusedMarker) {
-        this.focusMapOnIdea(focusedIdea);
+        return this.focusMapOnIdea(focusedIdea, ideas);
       }
-    } else if (ideas.length !== this.props.ideas.length) {
+
+      if (focusedIdea !== previousFocus) {
+        this.clearFocusMarker();
+        this.focusMapOnIdea(focusedIdea, ideas);
+      }
+    } else if (ideas.length < this.props.ideas.length) {
       this.fitMapToMarkers(true, ideas);
     }
   }
@@ -135,8 +141,7 @@ class TripMapDisplay extends Component {
            * mostone hover marker visible on the map
            */
           if (mouseOverIdea !== focusedIdea) {
-            focusedMarker.remove();
-            focusedMarker = null;
+            this.clearFocusMarker();
             onClearFocusedIdea();
             hoverMarker = this.createHoverMarker(idea.loc.coordinates);
           }
@@ -146,16 +151,17 @@ class TripMapDisplay extends Component {
       }
 
       markers.push(mapMarker);
-      this.setState({ focusedMarker, hoverMarker, markers });
     });
+
+    this.setState({ hoverMarker, markers });
   }
 
   createHoverMarker(lngLat, isFocused = false) {
     let newMarker = document.createElement('div');
     newMarker.className = 'hover-marker';
     newMarker.style.backgroundImage = isFocused ?
-      'url("app/assets/marker-icon-focus.png")' :
-      'url("app/assets/marker-icon.png")';
+      'url("../assets/marker-icon-focus.png")' :
+      'url("../assets/marker-icon.png")';
     newMarker.style.width = mapMarkers.icon.width;
     newMarker.style.height = mapMarkers.icon.height;
 
@@ -167,8 +173,9 @@ class TripMapDisplay extends Component {
       .addTo(this.map);
   }
 
-  focusMapOnIdea(focusedIdeaId) {
-    const { ideas, onClearFocusedIdea } = this.props;
+  focusMapOnIdea(focusedIdeaId, newIdeas) {
+    const ideas = newIdeas || this.props.ideas;
+    const { onClearFocusedIdea } = this.props;
     const index = ideas.findIndex((idea) => idea._id === focusedIdeaId);
 
     // Don't do anything if the idea isn't found
@@ -190,6 +197,13 @@ class TripMapDisplay extends Component {
       curve: 1,
       easing: easeInOutQuad
     });
+  }
+
+  clearFocusMarker() {
+    let { focusedMarker } = this.state;
+    focusedMarker.remove();
+    focusedMarker = null;
+    this.setState({ focusedMarker });
   }
 }
 

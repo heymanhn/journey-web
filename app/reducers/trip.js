@@ -59,7 +59,8 @@ export default function tripState(state = initialTripState, action) {
           ideas: [action.idea].concat(state.trip.ideas)
         }),
         resetIdeaBox: true,
-        isFetching: false
+        isFetching: false,
+        focusedIdea: action.idea._id
       };
     case REORDER_TRIP_IDEA:
       let ideas = state.trip.ideas.slice();
@@ -109,6 +110,12 @@ export default function tripState(state = initialTripState, action) {
         isFetching: false
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
+      return {
+        ...state,
+        trip: _.extend(state.trip, { ideas: action.ideas }),
+        isFetching: false,
+        focusedIdea: action.ideas[0]._id
+      };
     case API_UPDATE_TRIP_IDEA_SUCCESS:
     case API_REMOVE_TRIP_IDEA_SUCCESS:
       return {
