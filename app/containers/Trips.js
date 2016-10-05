@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 import { apiPageEvent, apiTrackEvent } from 'app/actions/analytics';
-import { apiDeleteTrip, apiGetTrip, clearTripsError } from 'app/actions/trips';
+import { apiDeleteTrip, clearTripsError } from 'app/actions/trips';
 import { processLogout } from 'app/actions/auth';
 import { createTrip, viewTripPage } from 'app/actions/navigation';
 import TripsPage from 'app/components/TripsPage';
@@ -32,8 +32,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onViewTrip(tripId) {
-      dispatch(apiGetTrip(tripId));
-      viewTripPage(tripId);
+      dispatch(viewTripPage(tripId));
     },
 
     trackPageView() {

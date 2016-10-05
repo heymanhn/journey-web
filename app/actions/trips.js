@@ -402,7 +402,7 @@ export function apiCreateTrip() {
       .then(json => {
         const tripId = json.trip._id;
         dispatch(apiCreateTripSuccess(json));
-        viewTripPage(tripId);
+        dispatch(viewTripPage(tripId));
       })
       .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
   };
