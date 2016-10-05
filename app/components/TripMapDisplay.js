@@ -38,8 +38,6 @@ class TripMapDisplay extends Component {
         this.clearFocusMarker();
         this.focusMapOnIdea(focusedIdea, ideas);
       }
-    } else if (ideas.length < this.props.ideas.length) {
-      this.fitMapToMarkers(true, ideas);
     }
   }
 
