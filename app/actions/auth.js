@@ -2,7 +2,7 @@
 
 import fetch from 'isomorphic-fetch';
 import { apiIdentifyGuest } from './analytics';
-import { viewTripsPage } from './navigation'
+import { viewLandingPage, viewTripsPage } from './navigation'
 import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
 import { apiGetTrips } from './trips';
 
@@ -175,6 +175,7 @@ export function apiSignup() {
 export function processLogout() {
   return (dispatch) => {
     dispatch(logout());
+    viewLandingPage();
     dispatch(apiIdentifyGuest());
   };
 }

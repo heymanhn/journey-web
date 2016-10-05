@@ -1,14 +1,16 @@
 'use strict';
 import { browserHistory } from 'react-router';
 
-// Authentication
+export function viewLandingPage() {
+  return browserHistory.push('/');
+}
+
 export function viewSignupPage() {
   return browserHistory.push('/signup');
 }
 
-// Trip Management
 export function viewTripsPage() {
-  return browserHistory.push('/');
+  return browserHistory.push('/trips');
 }
 
 export function createTrip() {

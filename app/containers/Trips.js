@@ -10,8 +10,8 @@ import { analytics } from 'app/constants';
 
 const mapStateToProps = (state) => {
   return {
-    name: state.authState.user.name,
-    trips: state.tripsState.trips
+    trips: state.tripsState.trips,
+    user: state.authState.user
   };
 };
 

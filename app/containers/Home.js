@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Intro from './Intro';
-import Trips from './Trips';
+import { viewTripsPage } from 'app/actions/navigation';
 import { apiGetTrips } from 'app/actions/trips';
 
 class Home extends Component {
@@ -12,16 +12,16 @@ class Home extends Component {
     const { authState } = this.props;
     if (authState.token) {
       this.props.onLoadHome();
+      viewTripsPage();
     }
   }
 
   render() {
-    const { authState } = this.props;
-    if (authState.token) {
-      return <Trips />;
-    } else {
-      return <Intro />;
+    if (this.props.authState.token) {
+      return null;
     }
+
+    return <Intro />;
   }
 }
 

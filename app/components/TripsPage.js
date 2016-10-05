@@ -1,17 +1,26 @@
-'use strict';
+  'use strict';
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import TripsList from './TripsList';
+import { viewLandingPage } from 'app/actions/navigation';
 
 class TripsPage extends Component {
+  componentWillMount() {
+    if (!this.props.user) {
+      viewLandingPage();
+    }
+  }
+
   componentDidMount() {
-    this.props.trackPageView();
+    if (this.props.user) {
+      this.props.trackPageView();
+    }
   }
 
   render() {
     const {
-      name,
+      user,
       onCreateTripPress,
       onDeleteTripPress,
       onLogoutPress,
@@ -19,10 +28,14 @@ class TripsPage extends Component {
       trips
     } = this.props;
 
+    if (!user) {
+      return null;
+    }
+
     return (
       <div>
         <h1>Trips page</h1>
-        <p>Welcome, {name}!</p>
+        <p>Welcome, {user.name}!</p>
         <Button
           bsStyle="primary"
           onClick={onCreateTripPress}
@@ -46,13 +59,13 @@ class TripsPage extends Component {
 }
 
 TripsPage.propTypes = {
-  name: PropTypes.string,
   onCreateTripPress: PropTypes.func.isRequired,
   onDeleteTripPress: PropTypes.func.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
-  trips: PropTypes.array.isRequired
+  trips: PropTypes.array.isRequired,
+  user: PropTypes.object
 };
 
 export default TripsPage;
