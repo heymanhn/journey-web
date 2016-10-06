@@ -180,13 +180,21 @@ class TripMapDisplay extends Component {
   }
 
   focusMapOnIdea(props) {
-    const { focusMarker, focusedIdea, ideas, onDeleteFocusMarker } = props;
+    const {
+      focusMarker,
+      focusedIdea,
+      hoverMarker,
+      ideas,
+      onDeleteFocusMarker,
+      onDeleteHoverMarker
+    } = props;
 
     if (focusMarker) {
       onDeleteFocusMarker(focusMarker);
     }
 
     if (focusedIdea) {
+      onDeleteHoverMarker(hoverMarker);
       this.createFocusMarker(ideas, focusedIdea);
 
       const targetIdea = ideas.find((idea) => idea._id === focusedIdea);

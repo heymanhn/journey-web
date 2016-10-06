@@ -170,8 +170,8 @@ export const mapbox = {
 export const mapMarkers = {
   diameter: 15,
   icon: {
-    width: 25,
-    height: 41
+    width: 29,
+    height: 40
   }
 };
 

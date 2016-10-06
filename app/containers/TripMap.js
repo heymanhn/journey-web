@@ -34,15 +34,13 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onDeleteHoverMarker(marker) {
-      marker.remove();
+      marker && marker.remove();
       dispatch(deleteHoverMarker());
     },
 
     onDeleteFocusMarker(marker) {
-      if (marker) {
-        marker.remove();
-        dispatch(deleteFocusMarker());
-      }
+      marker && marker.remove();
+      dispatch(deleteFocusMarker());
     },
 
     onSaveHoverMarker(marker) {
