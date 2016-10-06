@@ -6,8 +6,14 @@ import { viewLandingPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
 class NavigationBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { gravatarFocused: false };
+  }
+
   render() {
     const { user } = this.props;
+    const { gravatarFocused } = this.state;
 
     const loginButton = (
       <Button
@@ -19,7 +25,19 @@ class NavigationBar extends Component {
     );
 
     const gravatar = user && (
-      <img src={user.gravatar} style={styles.gravatar}/>
+      <div
+        style={styles.gravatarBackground}
+
+        // Attach to these mouse events to mimic active state for profile pic
+        onMouseUp={this.onGravatarInactive.bind(this)}
+        onDragEnd={this.onGravatarInactive.bind(this)}
+        onMouseDown={this.onGravatarActive.bind(this)}
+      >
+        <img
+          src={user.gravatar}
+          style={gravatarFocused ? styles.gravatarDimmed : styles.gravatar}
+        />
+      </div>
     );
 
     return (
@@ -30,6 +48,14 @@ class NavigationBar extends Component {
         {user ? gravatar : loginButton}
       </div>
     );
+  }
+
+  onGravatarInactive() {
+    this.setState({ gravatarFocused: false });
+  }
+
+  onGravatarActive() {
+    this.setState({ gravatarFocused: true });
   }
 }
 
@@ -49,7 +75,17 @@ const styles = {
   },
   gravatar: {
     borderRadius: '50%',
+    cursor: 'pointer',
     width : 40
+  },
+  gravatarBackground: {
+    backgroundColor: 'black',
+    borderRadius: '50%'
+  },
+  gravatarDimmed: {
+    borderRadius: '50%',
+    width : 40,
+    opacity: 0.8
   },
   loginButton: {
     background: 'linear-gradient(#ffffff, #e1e1e1)',
