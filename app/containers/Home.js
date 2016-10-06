@@ -4,19 +4,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Intro from './Intro';
+import Trips from './Trips';
 import { viewTripsPage } from 'app/actions/navigation';
 
 class Home extends Component {
-  componentWillMount() {
-    const { authState } = this.props;
-    if (authState.token) {
-      this.props.onViewTripsPage();
-    }
-  }
-
   render() {
     if (this.props.authState.token) {
-      return null;
+      return <Trips />;
     }
 
     return <Intro />;
@@ -24,7 +18,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  authState: PropTypes.object,
+  authState: PropTypes.object.isRequired,
   onViewTripsPage: PropTypes.func.isRequired
 };
 
