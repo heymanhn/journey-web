@@ -7,23 +7,34 @@ import { colors, dimensions } from 'app/constants';
 
 class NavigationBar extends Component {
   render() {
+    const { user } = this.props;
+
+    const loginButton = (
+      <Button
+        onClick={viewLandingPage}
+        style={styles.loginButton}
+      >
+        Log in
+      </Button>
+    );
+
+    const gravatar = user && (
+      <img src={user.gravatar} style={styles.gravatar}/>
+    );
+
     return (
       <div style={styles.container}>
         <span onClick={viewLandingPage} style={styles.logo}>
           Journey
         </span>
-        <Button
-          onClick={viewLandingPage}
-          style={styles.loginButton}
-        >
-          Log in
-        </Button>
+        {user ? gravatar : loginButton}
       </div>
     );
   }
 }
 
 NavigationBar.propTypes = {
+  user: PropTypes.object
 };
 
 const styles = {
@@ -35,6 +46,10 @@ const styles = {
     justifyContent: 'space-between',
     padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0',
     width: dimensions.leftColumn.width
+  },
+  gravatar: {
+    borderRadius: '50%',
+    width : 40
   },
   loginButton: {
     background: 'linear-gradient(#ffffff, #e1e1e1)',

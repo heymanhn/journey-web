@@ -4,7 +4,7 @@ require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { mapbox, mapMarkers } from 'app/constants';
+import { dimensions, mapbox, mapMarkers } from 'app/constants';
 
 class TripMapDisplay extends Component {
   componentDidMount() {
@@ -251,11 +251,11 @@ TripMapDisplay.propTypes = {
 
 const styles = {
   mapContainer: {
-    left: mapbox.displayOffset,
+    left: dimensions.leftColumn.width,
     position: 'absolute',
     top: 0,
     bottom: 0,
-    width: window.innerWidth - mapbox.displayOffset,
+    width: window.innerWidth - dimensions.leftColumn.width,
     zIndex: 1
   }
 };

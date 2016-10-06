@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import NavigationBar from 'app/components/NavigationBar';
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    user: state.authState.user
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
