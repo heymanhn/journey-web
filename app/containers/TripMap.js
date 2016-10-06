@@ -7,7 +7,8 @@ import {
   deleteHoverMarker,
   saveFocusMarker,
   saveHoverMarker,
-  saveMarkers
+  saveMarkers,
+  updateMapWidth
 } from 'app/actions/map';
 import { clearFocusedIdea } from 'app/actions/trips';
 import TripMapDisplay from 'app/components/TripMapDisplay';
@@ -22,6 +23,7 @@ const mapStateToProps = (state) => {
     focusedIdea: ts.focusedIdea || '',
     hoverMarker: ms.hoverMarker,
     ideas: ts.trip.ideas,
+    mapWidth: ms.mapWidth,
     markers: ms.markers,
     mouseOverIdea: ts.mouseOverIdea || ''
   };
@@ -53,6 +55,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onSaveMarkers(markers) {
       dispatch(saveMarkers(markers));
+    },
+
+    onUpdateMapWidth(width) {
+      dispatch(updateMapWidth(width));
     },
 
     trackIdeaView(ideaId) {

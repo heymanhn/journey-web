@@ -89,13 +89,13 @@ export function fetchOptsTemplate(authState) {
   return opts;
 }
 
-export const handleErrors = (response) => {
+export function handleErrors(response) {
   if (response.ok) {
     return response;
   } else {
     return response.json().then(json => Promise.reject(json));
   }
-};
+}
 
 
 /*
@@ -133,6 +133,7 @@ export const initialAuthState = {
 };
 
 export const initialMapState = {
+  mapWidth: calcMapWidth(),
   markers: []
 };
 
@@ -173,6 +174,10 @@ export const mapMarkers = {
     height: 40
   }
 };
+
+export function calcMapWidth() {
+  return window.innerWidth - dimensions.leftColumn.width;
+}
 
 
 /*
