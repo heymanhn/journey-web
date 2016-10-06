@@ -99,6 +99,25 @@ export const handleErrors = (response) => {
 
 
 /*
+ * Web app layout constants
+ */
+export const dimensions = {
+  leftColumn: {
+    sidePadding: 30,
+    width: 400
+  },
+  navigationBar: {
+    height: 60
+  }
+};
+
+export const colors = {
+  primary: 'rgb(233, 30, 99)',
+  primaryDark: 'rgb(143, 23, 64)'
+};
+
+
+/*
  * Redux store default states
  */
 
