@@ -27,7 +27,6 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onLogoutPress() {
-      dispatch(apiTrackEvent(analytics.events.LOG_OUT));
       dispatch(processLogout());
     },
 

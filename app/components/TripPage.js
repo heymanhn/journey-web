@@ -104,7 +104,7 @@ const styles = {
   },
   navigationBar: {
     position: 'fixed',
-    zIndex: 3
+    zIndex: 1
   },
   titleSection: {
     marginBottom: 30

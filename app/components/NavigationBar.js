@@ -4,16 +4,11 @@ import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { viewLandingPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
+import NavigationAvatar from './NavigationAvatar';
 
 class NavigationBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { gravatarFocused: false };
-  }
-
   render() {
-    const { user } = this.props;
-    const { gravatarFocused } = this.state;
+    const { onLogoutPress, user } = this.props;
 
     const loginButton = (
       <Button
@@ -24,20 +19,13 @@ class NavigationBar extends Component {
       </Button>
     );
 
-    const gravatar = user && (
-      <div
-        style={styles.gravatarBackground}
-
-        // Attach to these mouse events to mimic active state for profile pic
-        onMouseUp={this.onGravatarInactive.bind(this)}
-        onDragEnd={this.onGravatarInactive.bind(this)}
-        onMouseDown={this.onGravatarActive.bind(this)}
-      >
-        <img
-          src={user.gravatar}
-          style={gravatarFocused ? styles.gravatarDimmed : styles.gravatar}
-        />
-      </div>
+    const gravatar = (
+      <NavigationAvatar
+        name={user.name}
+        onLogoutPress={onLogoutPress}
+        viewLandingPage={viewLandingPage}
+        picture={user.gravatar}
+      />
     );
 
     return (
@@ -49,17 +37,10 @@ class NavigationBar extends Component {
       </div>
     );
   }
-
-  onGravatarInactive() {
-    this.setState({ gravatarFocused: false });
-  }
-
-  onGravatarActive() {
-    this.setState({ gravatarFocused: true });
-  }
 }
 
 NavigationBar.propTypes = {
+  onLogoutPress: PropTypes.func.isRequired,
   user: PropTypes.object
 };
 
@@ -72,20 +53,6 @@ const styles = {
     justifyContent: 'space-between',
     padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0',
     width: dimensions.leftColumn.width
-  },
-  gravatar: {
-    borderRadius: '50%',
-    cursor: 'pointer',
-    width : 40
-  },
-  gravatarBackground: {
-    backgroundColor: 'black',
-    borderRadius: '50%'
-  },
-  gravatarDimmed: {
-    borderRadius: '50%',
-    width : 40,
-    opacity: 0.8
   },
   loginButton: {
     background: 'linear-gradient(#ffffff, #e1e1e1)',

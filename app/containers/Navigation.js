@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { processLogout } from 'app/actions/auth';
 import NavigationBar from 'app/components/NavigationBar';
 
 const mapStateToProps = (state) => {
@@ -10,7 +11,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    onLogoutPress() {
+      dispatch(processLogout());
+    },
+  };
 };
 
 export default connect(
