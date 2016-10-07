@@ -18,11 +18,8 @@ class TripIdeasList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { onIdeaCleared, resetIdeaBox } = nextProps;
-
-    if (resetIdeaBox) {
+    if (!nextProps.newIdea) {
       findDOMNode(this.searchBox).value = '';
-      onIdeaCleared();
     }
   }
 
@@ -123,9 +120,7 @@ TripIdeasList.propTypes = {
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
-  onEnterIdeaComment: PropTypes.func.isRequired,
-  onIdeaCleared: PropTypes.func.isRequired,
-  resetIdeaBox: PropTypes.bool.isRequired
+  onEnterIdeaComment: PropTypes.func.isRequired
 };
 
 const styles = {

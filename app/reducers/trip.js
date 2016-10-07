@@ -18,7 +18,6 @@ import {
   API_REMOVE_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
-  NEW_TRIP_IDEA_CLEARED,
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
   REORDER_TRIP_IDEA,
@@ -47,18 +46,12 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         newComment: action.comment
       };
-    case NEW_TRIP_IDEA_CLEARED:
-      return {
-        ...state,
-        resetIdeaBox: false
-      };
     case ADD_TRIP_IDEA:
       return {
         ..._.omit(state, ['newIdea', 'newComment']),
         trip: _.extend(state.trip, {
           ideas: [action.idea].concat(state.trip.ideas)
         }),
-        resetIdeaBox: true,
         isFetching: false,
         focusedIdea: action.idea._id
       };

@@ -38,7 +38,6 @@ export const API_DELETE_TRIP_FAILURE = 'API_DELETE_TRIP_FAILURE';
 // Create new trip idea
 export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
 export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
-export const NEW_TRIP_IDEA_CLEARED = 'NEW_TRIP_IDEA_CLEARED';
 export const ADD_TRIP_IDEA = 'ADD_TRIP_IDEA';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
@@ -194,12 +193,6 @@ export function saveIdeaComment(comment) {
   return {
     type: SAVE_IDEA_COMMENT,
     comment
-  };
-}
-
-export function tripIdeaCleared() {
-  return {
-    type: NEW_TRIP_IDEA_CLEARED
   };
 }
 
