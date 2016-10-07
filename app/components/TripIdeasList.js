@@ -17,18 +17,12 @@ class TripIdeasList extends Component {
     this.loadGoogleAutocompleteAPI();
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Clear the search box if idea is cleared
-    if (!nextProps.newIdea) {
-      findDOMNode(this.searchBox).value = '';
-    }
-  }
-
   render() {
     const {
       ideas,
       newIdea,
       onAddIdeaPress,
+      onClearTripIdea,
       onEnterIdeaComment
     } = this.props;
 
@@ -55,6 +49,7 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <h3>Ideas</h3>
           <TextInput
+            onChange={newIdea && onClearTripIdea}
             onKeyDown={this.handleSearchBoxKeys.bind(this)}
             ref={x => this.searchBox = x}
             type="text"
@@ -64,7 +59,7 @@ class TripIdeasList extends Component {
           />
           <Button
             disabled={!newIdea}
-            onClick={onAddIdeaPress}
+            onClick={this.clearSearchBoxAnd.bind(this, onAddIdeaPress)}
             style={this.loadAddIdeaButtonStyle()}
             tabIndex={3}
           >
@@ -123,11 +118,16 @@ class TripIdeasList extends Component {
 
     switch(event.key) {
       case 'Enter':
-        return newIdea && onAddIdeaPress();
+        return newIdea && this.clearSearchBoxAnd(onAddIdeaPress);
       case 'Backspace':
       case 'Escape':
-        return newIdea && onClearTripIdea();
+        return newIdea && this.clearSearchBoxAnd(onClearTripIdea);
     }
+  }
+
+  clearSearchBoxAnd(next) {
+    findDOMNode(this.searchBox).value = '';
+    return next && next();
   }
 }
 
