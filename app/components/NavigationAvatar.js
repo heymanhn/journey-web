@@ -24,12 +24,26 @@ class NavigationAvatar extends Component {
     const { gravatarFocused, tooltipVisible } = this.state;
 
     const accountPopover = (
-      <ListGroup style={styles.popover}>
-        <ListGroupItem style={styles.popoverName}>{name}</ListGroupItem>
-        <ListGroupItem style={styles.popoverTBD}>View Account</ListGroupItem>
-        <ListGroupItem href="/trips">My Trips</ListGroupItem>
-        <ListGroupItem onClick={onLogoutPress}>Log Out</ListGroupItem>
-      </ListGroup>
+      <div style={styles.popover}>
+        <div style={styles.popoverArrowBorder}/>
+        <div style={styles.popoverArrow}/>
+        <ListGroup style={styles.popoverList}>
+          <ListGroupItem style={styles.popoverName}>{name}</ListGroupItem>
+          <ListGroupItem style={styles.popoverTBD}>View account</ListGroupItem>
+          <ListGroupItem
+            style={styles.popoverListItem}
+            href="/trips"
+          >
+            My trips
+          </ListGroupItem>
+          <ListGroupItem
+            style={styles.popoverListItem}
+            onClick={onLogoutPress}
+          >
+            Log out
+          </ListGroupItem>
+        </ListGroup>
+      </div>
     );
 
     return (
@@ -105,14 +119,49 @@ const styles = {
     opacity: 0.8
   },
   popover: {
-    boxShadow: '0 5px 10px rgba(0,0,0,.2)',
     borderRadius: 4,
-    paddingTop: 5,
+    boxShadow: '0 5px 10px rgba(0,0,0,.2)',
+    paddingTop: 3,
     position: 'absolute',
     zIndex: 1
   },
+  popoverList: {
+    backgroundColor: 'white',
+    border: '1px solid #dddddd',
+    borderRadius: 4,
+    marginBottom: 0,
+    padding: 1
+  },
+  popoverArrow: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    left: '50%',
+    top: -5,
+    borderRight: '10px solid transparent',
+    borderLeft: '10px solid transparent',
+    borderBottom: '10px solid #ffffff',
+    transform: 'translate(-50%)',
+    zIndex: 1
+  },
+  popoverArrowBorder: {
+    position: 'absolute',
+    width: 0,
+    height: 0,
+    left: '50%',
+    top: -6,
+    borderRight: '10px solid transparent',
+    borderLeft: '10px solid transparent',
+    borderBottom: '10px solid #dddddd',
+    transform: 'translate(-50%)',
+    zIndex: 1
+  },
+  popoverListItem: {
+    border: 'none'
+  },
   popoverName: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#f3f3f3',
+    border: 'none',
     cursor: 'default',
     fontWeight: 500,
 
@@ -122,6 +171,8 @@ const styles = {
     msUserSelect: 'none'
   },
   popoverTBD: {
+    border: 'none',
+    borderTop: '1px solid #e3e3e3',
     color: '#cccccc',
     cursor: 'default',
 
