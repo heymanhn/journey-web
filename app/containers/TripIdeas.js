@@ -15,6 +15,7 @@ const mapStateToProps = (state) => {
     destination: ts.trip.destination,
     error: ts.error ? ts.error : '',
     ideas: ts.trip.ideas,
+    newIdea: ts.newIdea,
     resetIdeaBox: ts.resetIdeaBox
   };
 };

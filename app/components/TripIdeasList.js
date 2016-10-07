@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 
@@ -33,22 +34,14 @@ class TripIdeasList extends Component {
   render() {
     const {
       ideas,
+      newIdea,
       onAddIdeaPress,
       onEnterIdeaComment
     } = this.props;
 
-    // Sort the ideas in descending order for display purposes
-    const tripIdeas =
-      ideas
-        .map((idea, index) => {
-          return (
-            <TripIdea
-              key={idea._id}
-              idea={idea}
-              index={index}
-            />
-          );
-        });
+    const tripIdeas = ideas.map((idea, index) => {
+      return <TripIdea key={idea._id} idea={idea} index={index} />;
+    });
 
     const commentBox = (
       <TextInput
@@ -70,12 +63,13 @@ class TripIdeasList extends Component {
           <TextInput
             id="tripIdeaSearchBox"
             type="text"
-            placeholder="Add an idea"
+            placeholder="Enter a place or destination"
             style={styles.searchBox}
           />
           <Button
             onClick={onAddIdeaPress}
-            style={styles.searchBoxButton}
+            disabled={!newIdea}
+            style={this.loadAddIdeaButtonStyle()}
           >
             Add
           </Button>
@@ -126,11 +120,20 @@ class TripIdeasList extends Component {
       }
     );
   }
+
+  loadAddIdeaButtonStyle() {
+    let style = styles.searchBoxButton;
+    const disabledStyle = styles.searchBoxButtonDisabled;
+    const { newIdea } = this.props;
+
+    return newIdea ? style : {...style, ...disabledStyle};
+  }
 }
 
 TripIdeasList.propTypes = {
   destination: PropTypes.object,
   ideas: PropTypes.array,
+  newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired,
@@ -140,23 +143,29 @@ TripIdeasList.propTypes = {
 
 const styles = {
   commentBox: {
-    display: 'inline',
-    width: '100%',
+    display: "inline",
+    width: "100%",
     marginBottom: 10
   },
   inputSection: {
     marginBottom: 10
   },
   searchBox: {
-    display: 'inline',
-    width: '80%',
+    display: "inline",
+    width: "80%",
     marginBottom: 10
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
-    border: 'none',
-    color: 'white',
-    float: 'right'
+    border: "none",
+    color: "white",
+    float: "right"
+  },
+  searchBoxButtonDisabled: {
+    backgroundColor: "#f3f3f3",
+    border: "1px solid #e1e1e1",
+    color: "#cccccc",
+    cursor: "default"
   }
 };
 

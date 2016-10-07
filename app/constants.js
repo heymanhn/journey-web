@@ -112,8 +112,8 @@ export const dimensions = {
 };
 
 export const colors = {
-  primary: 'rgb(233, 30, 99)',
-  primaryDark: 'rgb(143, 23, 64)'
+  primary: "rgb(233, 30, 99)",
+  primaryDark: "rgb(143, 23, 64)"
 };
 
 
