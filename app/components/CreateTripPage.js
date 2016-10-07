@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
@@ -29,7 +30,7 @@ class CreateTripPage extends Component {
             width={400}
           />
           <TextInput
-            id="destinationInput"
+            ref={x => this.destinationInput = x}
             placeholder="Where do you want to go?"
             type="text"
             width={400}
@@ -66,8 +67,8 @@ class CreateTripPage extends Component {
     const { onEnterDestination } = this.props;
 
     // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
-    const input = document.getElementById('destinationInput');
     const options = { types: ['(regions)'] };
+    const input = findDOMNode(this.destinationInput);
     const ac = new window.google.maps.places.Autocomplete(input, options);
     ac.addListener(
       'place_changed',

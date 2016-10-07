@@ -2,6 +2,7 @@
 
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
 import { colors, isMobile } from 'app/constants';
@@ -61,7 +62,7 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <h3>Ideas</h3>
           <TextInput
-            id="tripIdeaSearchBox"
+            ref={x => this.searchBox = x}
             type="text"
             placeholder="Enter a place or destination"
             style={styles.searchBox}
@@ -105,11 +106,11 @@ class TripIdeasList extends Component {
       )
     );
 
-    const input = document.getElementById('tripIdeaSearchBox');
     const options = {
       bounds,
       types: ['geocode', 'establishment']
     };
+    const input = findDOMNode(this.searchBox);
     const ac = new google.maps.places.Autocomplete(input, options);
     ac.addListener(
       'place_changed',
