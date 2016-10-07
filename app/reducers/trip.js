@@ -17,6 +17,7 @@ import {
   API_REMOVE_TRIP_IDEA_SUCCESS,
   API_REMOVE_TRIP_IDEA_FAILURE,
   SAVE_NEW_TRIP_IDEA,
+  CLEAR_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
@@ -41,6 +42,8 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         newIdea: action.idea
       };
+    case CLEAR_NEW_TRIP_IDEA:
+      return _.omit(state, 'newIdea', 'newComment');
     case SAVE_IDEA_COMMENT:
       return {
         ...state,

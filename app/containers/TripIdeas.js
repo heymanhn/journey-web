@@ -3,6 +3,7 @@
 import { connect } from 'react-redux';
 import {
   apiAddTripIdea,
+  clearNewTripIdea,
   saveIdeaComment,
   saveNewTripIdea
 } from 'app/actions/trips';
@@ -20,13 +21,19 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddIdeaPress: (tripId) => {
-      dispatch(apiAddTripIdea(tripId));
+    onAddIdeaPress() {
+      dispatch(apiAddTripIdea());
     },
-    onEnterIdea: (idea) => {
+
+    onClearTripIdea() {
+      dispatch(clearNewTripIdea());
+    },
+
+    onEnterIdea(idea) {
       dispatch(saveNewTripIdea(idea));
     },
-    onEnterIdeaComment: (event) => {
+
+    onEnterIdeaComment(event) {
       dispatch(saveIdeaComment(event.target.value));
     }
   };

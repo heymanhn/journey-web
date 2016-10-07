@@ -18,6 +18,7 @@ class TripIdeasList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // Clear the search box if idea is cleared
     if (!nextProps.newIdea) {
       findDOMNode(this.searchBox).value = '';
     }
@@ -53,6 +54,7 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <h3>Ideas</h3>
           <TextInput
+            onKeyDown={this.handleSearchBoxKeys.bind(this)}
             ref={x => this.searchBox = x}
             type="text"
             placeholder="Enter a place or destination"
@@ -112,6 +114,18 @@ class TripIdeasList extends Component {
 
     return newIdea ? style : {...style, ...disabledStyle};
   }
+
+  handleSearchBoxKeys(event) {
+    const { newIdea, onAddIdeaPress, onClearTripIdea } = this.props;
+
+    switch(event.key) {
+      case 'Enter':
+        return newIdea && onAddIdeaPress();
+      case 'Backspace':
+      case 'Escape':
+        return newIdea && onClearTripIdea();
+    }
+  }
 }
 
 TripIdeasList.propTypes = {
@@ -119,6 +133,7 @@ TripIdeasList.propTypes = {
   ideas: PropTypes.array,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
+  onClearTripIdea: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired
 };
