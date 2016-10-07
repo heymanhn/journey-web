@@ -102,7 +102,10 @@ class TripIdeasList extends Component {
     };
     const input = findDOMNode(this.searchBox);
     const ac = new google.maps.places.Autocomplete(input, options);
-    ac.addListener('place_changed', () => onEnterIdea(ac.getPlace()));
+    ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      return place.place_id && onEnterIdea(place);
+    });
   }
 
   loadAddIdeaButtonStyle() {
