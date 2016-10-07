@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 
-import { isMobile } from 'app/constants';
+import { colors, isMobile } from 'app/constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
@@ -74,7 +74,6 @@ class TripIdeasList extends Component {
             style={styles.searchBox}
           />
           <Button
-            bsStyle="success"
             onClick={onAddIdeaPress}
             style={styles.searchBoxButton}
           >
@@ -154,6 +153,9 @@ const styles = {
     marginBottom: 10
   },
   searchBoxButton: {
+    backgroundColor: colors.primary,
+    border: 'none',
+    color: 'white',
     float: 'right'
   }
 };

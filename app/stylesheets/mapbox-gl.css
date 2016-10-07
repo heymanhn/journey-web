@@ -24,7 +24,7 @@
 
 .marker {
     display: block;
-    background-color: rgba(28,191,28,1);
+    background-color: rgb(233, 30, 99);
     border: 1px solid #fff;
     border-radius: 50%;
     cursor: pointer;

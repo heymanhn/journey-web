@@ -4,10 +4,11 @@ require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { mapbox, mapMarkers } from 'app/constants';
+import { calcMapWidth, dimensions, mapbox, mapMarkers } from 'app/constants';
 
 class TripMapDisplay extends Component {
   componentDidMount() {
+    window.addEventListener('resize', this.updateMapWidth.bind(this));
     this.loadMap();
     this.loadMarkers();
     this.fitMapToMarkers();
@@ -41,7 +42,7 @@ class TripMapDisplay extends Component {
     return (
       <div
         ref={x => this.container = x}
-        style={styles.mapContainer}
+        style={this.loadMapContainerStyle()}
       ></div>
     );
   }
@@ -180,13 +181,21 @@ class TripMapDisplay extends Component {
   }
 
   focusMapOnIdea(props) {
-    const { focusMarker, focusedIdea, ideas, onDeleteFocusMarker } = props;
+    const {
+      focusMarker,
+      focusedIdea,
+      hoverMarker,
+      ideas,
+      onDeleteFocusMarker,
+      onDeleteHoverMarker
+    } = props;
 
     if (focusMarker) {
       onDeleteFocusMarker(focusMarker);
     }
 
     if (focusedIdea) {
+      onDeleteHoverMarker(hoverMarker);
       this.createFocusMarker(ideas, focusedIdea);
 
       const targetIdea = ideas.find((idea) => idea._id === focusedIdea);
@@ -203,6 +212,23 @@ class TripMapDisplay extends Component {
       curve: 1,
       easing: easeInOutQuad
     });
+  }
+
+  loadMapContainerStyle() {
+    const { mapWidth: width } = this.props;
+
+    return {
+      left: dimensions.leftColumn.width,
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      width,
+      zIndex: 1
+    };
+  }
+
+  updateMapWidth() {
+    this.props.onUpdateMapWidth(calcMapWidth());
   }
 }
 
@@ -230,6 +256,7 @@ TripMapDisplay.propTypes = {
   hoverMarker: PropTypes.object,
   focusedIdea: PropTypes.string.isRequired,
   ideas: PropTypes.array,
+  mapWidth: PropTypes.number.isRequired,
   markers: PropTypes.array.isRequired,
   mouseOverIdea: PropTypes.string.isRequired,
   onClearFocusedIdea: PropTypes.func.isRequired,
@@ -238,18 +265,8 @@ TripMapDisplay.propTypes = {
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
   onSaveMarkers: PropTypes.func.isRequired,
+  onUpdateMapWidth: PropTypes.func.isRequired,
   trackIdeaView: PropTypes.func.isRequired
-};
-
-const styles = {
-  mapContainer: {
-    left: mapbox.displayOffset,
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    width: window.innerWidth - mapbox.displayOffset,
-    zIndex: 1
-  }
 };
 
 export default TripMapDisplay;

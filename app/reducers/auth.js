@@ -45,6 +45,8 @@ export default function authState(state = initialAuthState, action) {
     case API_SIGNUP_SUCCESS:
       return {
         ...(_.omit(state, [
+          'email',
+          'password',
           'error',
           'newName',
           'newEmail',

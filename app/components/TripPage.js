@@ -3,8 +3,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import LoadingAnimation from './LoadingAnimation';
+import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
+import { dimensions } from 'app/constants';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -51,13 +53,13 @@ class TripPage extends Component {
     return (
       <div>
         <div style={styles.leftColumn}>
-          {titleSection}
-          <TripIdeas />
-          <Button
-            bsStyle="primary"
-            onClick={onViewTrips}>
-            Home
-          </Button>
+          <div style={styles.navigationBar}>
+            <Navigation />
+          </div>
+          <div style={styles.ideasSection}>
+            {titleSection}
+            <TripIdeas />
+          </div>
         </div>
         <div>
           <TripMap />
@@ -77,16 +79,20 @@ TripPage.propTypes = {
 
 const styles = {
   h1: {
-    fontSize: 32
+    fontSize: 32,
+    marginTop: 0,
+    paddingTop: 20
+  },
+  ideasSection: {
+    marginTop: dimensions.navigationBar.height,
+    padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0'
   },
   leftColumn: {
     backgroundColor: 'white',
     float: 'left',
     height: '100%',
     overflow: 'scroll',
-    padding: '0 30 0',
-    position: 'absolute',
-    width: 400,
+    width: dimensions.leftColumn.width,
     zIndex: 2
   },
   loadingText: {
@@ -95,6 +101,10 @@ const styles = {
     fontSize: 24,
     textAlign: 'center',
     margin: 20
+  },
+  navigationBar: {
+    position: 'fixed',
+    zIndex: 1
   },
   titleSection: {
     marginBottom: 30

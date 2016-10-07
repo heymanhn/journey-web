@@ -346,9 +346,7 @@ export function apiGetTrips() {
     return fetch(userTrips.route, opts)
       .then(handleErrors)
       .then(response => response.json())
-      .then(json => {
-        dispatch(apiGetTripsSuccess(json));
-      })
+      .then(json => dispatch(apiGetTripsSuccess(json)))
       .catch(error => { dispatch(apiGetTripsFailure(error.message)); });
   };
 }

@@ -1,9 +1,14 @@
 'use strict';
 
 import fetch from 'isomorphic-fetch';
-import { apiIdentifyGuest } from './analytics';
+import { apiIdentifyGuest, apiTrackEvent } from './analytics';
 import { viewLandingPage, viewTripsPage } from './navigation'
-import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
+import {
+  analytics,
+  fetchOptsTemplate,
+  handleErrors,
+  journeyAPI
+} from 'app/constants';
 
 /*
  * Action Types
@@ -171,6 +176,7 @@ export function apiSignup() {
 
 export function processLogout() {
   return (dispatch) => {
+    dispatch(apiTrackEvent(analytics.events.LOG_OUT));
     dispatch(logout());
     viewLandingPage();
     dispatch(apiIdentifyGuest());

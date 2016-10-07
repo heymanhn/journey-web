@@ -7,6 +7,7 @@ import {
   DELETE_HOVER_MARKER,
   SAVE_FOCUS_MARKER,
   DELETE_FOCUS_MARKER,
+  UPDATE_MAP_WIDTH,
   LOGOUT
 } from 'app/actions/map';
 import { initialMapState } from 'app/constants';
@@ -23,6 +24,8 @@ export default function mapState(state = initialMapState, action) {
       return { ...state, focusMarker: action.marker };
     case DELETE_FOCUS_MARKER:
       return _.omit(state, 'focusMarker');
+    case UPDATE_MAP_WIDTH:
+      return { ...state, mapWidth: action.width };
     case LOGOUT:
       return initialMapState;
   }

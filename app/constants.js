@@ -89,12 +89,31 @@ export function fetchOptsTemplate(authState) {
   return opts;
 }
 
-export const handleErrors = (response) => {
+export function handleErrors(response) {
   if (response.ok) {
     return response;
   } else {
     return response.json().then(json => Promise.reject(json));
   }
+}
+
+
+/*
+ * Web app layout constants
+ */
+export const dimensions = {
+  leftColumn: {
+    sidePadding: 30,
+    width: 400
+  },
+  navigationBar: {
+    height: 60
+  }
+};
+
+export const colors = {
+  primary: 'rgb(233, 30, 99)',
+  primaryDark: 'rgb(143, 23, 64)'
 };
 
 
@@ -114,6 +133,7 @@ export const initialAuthState = {
 };
 
 export const initialMapState = {
+  mapWidth: calcMapWidth(),
   markers: []
 };
 
@@ -143,7 +163,6 @@ export const isMobile = md.mobile() ? true : false;
  * Mapbox API
  */
 export const mapbox = {
-  displayOffset: 400,
   streetsStyle: 'mapbox://styles/mapbox/streets-v9',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
 };
@@ -151,10 +170,14 @@ export const mapbox = {
 export const mapMarkers = {
   diameter: 15,
   icon: {
-    width: 25,
-    height: 41
+    width: 29,
+    height: 40
   }
 };
+
+export function calcMapWidth() {
+  return window.innerWidth - dimensions.leftColumn.width;
+}
 
 
 /*
