@@ -13,11 +13,6 @@ import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
 
 class TripIdeasList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { showCommentBox: false };
-  }
-
   componentDidMount() {
     this.loadGoogleAutocompleteAPI();
   }
@@ -27,7 +22,6 @@ class TripIdeasList extends Component {
 
     if (resetIdeaBox) {
       findDOMNode(this.searchBox).value = '';
-      this.setState({ showCommentBox: false });
       onIdeaCleared();
     }
   }
@@ -74,7 +68,7 @@ class TripIdeasList extends Component {
           >
             Add
           </Button>
-          {this.state.showCommentBox && commentBox}
+          {newIdea && commentBox}
         </div>
         <div>
           {tripIdeas}
@@ -88,7 +82,6 @@ class TripIdeasList extends Component {
   loadGoogleAutocompleteAPI() {
     const { onEnterIdea, destination } = this.props;
     const { northeast, southwest } = destination.viewport;
-    const rootPage = this;
     const google = window.google;
 
     /*
@@ -112,14 +105,7 @@ class TripIdeasList extends Component {
     };
     const input = findDOMNode(this.searchBox);
     const ac = new google.maps.places.Autocomplete(input, options);
-    ac.addListener(
-      'place_changed',
-      () => {
-        const place = ac.getPlace();
-        onEnterIdea(place);
-        rootPage.setState({ showCommentBox: true });
-      }
-    );
+    ac.addListener('place_changed', () => onEnterIdea(ac.getPlace()));
   }
 
   loadAddIdeaButtonStyle() {
