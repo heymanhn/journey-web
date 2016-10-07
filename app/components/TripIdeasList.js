@@ -1,5 +1,7 @@
 'use strict';
 
+require('app/stylesheets/tripIdeasList.css');
+
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
@@ -24,9 +26,7 @@ class TripIdeasList extends Component {
     const { onIdeaCleared, resetIdeaBox } = nextProps;
 
     if (resetIdeaBox) {
-      // Workaround to access the search Box without React
-      document.getElementById('tripIdeaSearchBox').value = '';
-
+      findDOMNode(this.searchBox).value = '';
       this.setState({ showCommentBox: false });
       onIdeaCleared();
     }

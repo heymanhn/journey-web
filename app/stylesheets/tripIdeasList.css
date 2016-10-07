@@ -1,0 +1,7 @@
+/*
+ * Give the autocomplete dropdown a custom width
+ */
+.pac-container {
+  min-width: 340px;
+  margin-top: 2px;
+}
