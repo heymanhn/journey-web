@@ -116,12 +116,14 @@ class TripIdeasList extends Component {
   handleSearchBoxKeys(event) {
     const { newIdea, onAddIdeaPress, onClearTripIdea } = this.props;
 
-    switch(event.key) {
-      case 'Enter':
-        return newIdea && this.clearSearchBoxAnd(onAddIdeaPress);
-      case 'Backspace':
-      case 'Escape':
-        return newIdea && this.clearSearchBoxAnd(onClearTripIdea);
+    if (newIdea) {
+      switch(event.key) {
+        case 'Enter':
+          return this.clearSearchBoxAnd(onAddIdeaPress);
+        case 'Backspace':
+        case 'Escape':
+          return this.clearSearchBoxAnd(onClearTripIdea);
+      }
     }
   }
 
