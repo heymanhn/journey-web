@@ -38,10 +38,11 @@ class TripIdeasList extends Component {
 
     const commentBox = (
       <TextInput
-        type="text"
+        onChange={onEnterIdeaComment}
         placeholder="Add a comment"
         style={styles.commentBox}
-        onChange={onEnterIdeaComment}
+        tabIndex={2}
+        type="text"
       />
     );
 
@@ -59,11 +60,13 @@ class TripIdeasList extends Component {
             type="text"
             placeholder="Enter a place or destination"
             style={styles.searchBox}
+            tabIndex={1}
           />
           <Button
-            onClick={onAddIdeaPress}
             disabled={!newIdea}
+            onClick={onAddIdeaPress}
             style={this.loadAddIdeaButtonStyle()}
+            tabIndex={3}
           >
             Add
           </Button>
