@@ -52,7 +52,10 @@ class TripPage extends Component {
 
     return (
       <div>
-        <div style={styles.leftColumn}>
+        <div
+          id="leftColumn"
+          style={styles.leftColumn}
+        >
           <div style={styles.navigationBar}>
             <Navigation />
           </div>

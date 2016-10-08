@@ -22,7 +22,6 @@ class TripIdeasList extends Component {
       ideas,
       newIdea,
       onAddIdeaPress,
-      onClearTripIdea,
       onEnterIdeaComment
     } = this.props;
 
@@ -49,7 +48,8 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <h3>Ideas</h3>
           <TextInput
-            onChange={newIdea && onClearTripIdea}
+            onBlur={this.unlockLeftColumnScroll}
+            onChange={this.handleSearchBoxChange.bind(this)}
             onKeyDown={this.handleSearchBoxKeys.bind(this)}
             ref={x => this.searchBox = x}
             type="text"
@@ -116,23 +116,43 @@ class TripIdeasList extends Component {
     return newIdea ? style : {...style, ...disabledStyle};
   }
 
+  handleSearchBoxChange() {
+    const { newIdea, onClearTripIdea } = this.props;
+    newIdea && onClearTripIdea();
+
+    if (findDOMNode(this.searchBox).value) {
+      this.lockLeftColumnScroll();
+    }
+  }
+
   handleSearchBoxKeys(event) {
     const { newIdea, onAddIdeaPress, onClearTripIdea } = this.props;
 
-    if (newIdea) {
-      switch(event.key) {
-        case 'Enter':
-          return this.clearSearchBoxAnd(onAddIdeaPress);
-        case 'Backspace':
-        case 'Escape':
-          return this.clearSearchBoxAnd(onClearTripIdea);
-      }
+    switch(event.key) {
+      case 'Enter':
+        newIdea && this.clearSearchBoxAnd(onAddIdeaPress);
+        return this.unlockLeftColumnScroll();
+      case 'Backspace':
+      case 'Escape':
+        newIdea && this.clearSearchBoxAnd(onClearTripIdea);
+        return this.unlockLeftColumnScroll();
     }
   }
 
   clearSearchBoxAnd(next) {
     findDOMNode(this.searchBox).value = '';
     return next && next();
+  }
+
+  unlockLeftColumnScroll() {
+    document.getElementById('leftColumn').style.overflow = "scroll";
+  }
+
+  lockLeftColumnScroll() {
+    const style = document.getElementById('leftColumn').style;
+    if (style.overflow === 'scroll') {
+      style.overflow = 'hidden';
+    }
   }
 }
 
