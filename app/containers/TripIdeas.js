@@ -3,9 +3,9 @@
 import { connect } from 'react-redux';
 import {
   apiAddTripIdea,
+  clearNewTripIdea,
   saveIdeaComment,
-  saveNewTripIdea,
-  tripIdeaCleared
+  saveNewTripIdea
 } from 'app/actions/trips';
 import TripIdeasList from 'app/components/TripIdeasList';
 
@@ -15,23 +15,26 @@ const mapStateToProps = (state) => {
     destination: ts.trip.destination,
     error: ts.error ? ts.error : '',
     ideas: ts.trip.ideas,
-    resetIdeaBox: ts.resetIdeaBox
+    newIdea: ts.newIdea
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddIdeaPress: (tripId) => {
-      dispatch(apiAddTripIdea(tripId));
+    onAddIdeaPress() {
+      dispatch(apiAddTripIdea());
     },
-    onEnterIdea: (idea) => {
+
+    onClearTripIdea() {
+      dispatch(clearNewTripIdea());
+    },
+
+    onEnterIdea(idea) {
       dispatch(saveNewTripIdea(idea));
     },
-    onEnterIdeaComment: (event) => {
+
+    onEnterIdeaComment(event) {
       dispatch(saveIdeaComment(event.target.value));
-    },
-    onIdeaCleared: () => {
-      dispatch(tripIdeaCleared());
     }
   };
 };

@@ -1,6 +1,10 @@
 'use strict';
 
+require('app/stylesheets/tripIdeasList.css');
+
+import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
 import { colors, isMobile } from 'app/constants';
@@ -9,53 +13,29 @@ import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
 
 class TripIdeasList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { showCommentBox: false };
-  }
-
   componentDidMount() {
     this.loadGoogleAutocompleteAPI();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { onIdeaCleared, resetIdeaBox } = nextProps;
-
-    if (resetIdeaBox) {
-      // Workaround to access the search Box without React
-      document.getElementById('tripIdeaSearchBox').value = '';
-
-      this.setState({ showCommentBox: false });
-      onIdeaCleared();
-    }
   }
 
   render() {
     const {
       ideas,
+      newIdea,
       onAddIdeaPress,
       onEnterIdeaComment
     } = this.props;
 
-    // Sort the ideas in descending order for display purposes
-    const tripIdeas =
-      ideas
-        .map((idea, index) => {
-          return (
-            <TripIdea
-              key={idea._id}
-              idea={idea}
-              index={index}
-            />
-          );
-        });
+    const tripIdeas = ideas.map((idea, index) => {
+      return <TripIdea key={idea._id} idea={idea} index={index} />;
+    });
 
     const commentBox = (
       <TextInput
-        type="text"
+        onChange={onEnterIdeaComment}
         placeholder="Add a comment"
         style={styles.commentBox}
-        onChange={onEnterIdeaComment}
+        tabIndex={2}
+        type="text"
       />
     );
 
@@ -68,18 +48,24 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <h3>Ideas</h3>
           <TextInput
-            id="tripIdeaSearchBox"
+            onBlur={this.unlockLeftColumnScroll}
+            onChange={this.handleSearchBoxChange.bind(this)}
+            onKeyDown={this.handleSearchBoxKeys.bind(this)}
+            ref={x => this.searchBox = x}
             type="text"
-            placeholder="Add an idea"
+            placeholder="Enter a place or destination"
             style={styles.searchBox}
+            tabIndex={1}
           />
           <Button
-            onClick={onAddIdeaPress}
-            style={styles.searchBoxButton}
+            disabled={!newIdea}
+            onClick={this.clearSearchBoxAnd.bind(this, onAddIdeaPress)}
+            style={this.loadAddIdeaButtonStyle()}
+            tabIndex={3}
           >
             Add
           </Button>
-          {this.state.showCommentBox && commentBox}
+          {newIdea && commentBox}
         </div>
         <div>
           {tripIdeas}
@@ -93,7 +79,6 @@ class TripIdeasList extends Component {
   loadGoogleAutocompleteAPI() {
     const { onEnterIdea, destination } = this.props;
     const { northeast, southwest } = destination.viewport;
-    const rootPage = this;
     const google = window.google;
 
     /*
@@ -111,52 +96,101 @@ class TripIdeasList extends Component {
       )
     );
 
-    const input = document.getElementById('tripIdeaSearchBox');
     const options = {
       bounds,
       types: ['geocode', 'establishment']
     };
+    const input = findDOMNode(this.searchBox);
     const ac = new google.maps.places.Autocomplete(input, options);
-    ac.addListener(
-      'place_changed',
-      () => {
-        const place = ac.getPlace();
-        onEnterIdea(place);
-        rootPage.setState({ showCommentBox: true });
-      }
-    );
+    ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      return place.place_id && onEnterIdea(place);
+    });
+  }
+
+  loadAddIdeaButtonStyle() {
+    let style = styles.searchBoxButton;
+    const disabledStyle = styles.searchBoxButtonDisabled;
+    const { newIdea } = this.props;
+
+    return newIdea ? style : {...style, ...disabledStyle};
+  }
+
+  handleSearchBoxChange() {
+    const { newIdea, onClearTripIdea } = this.props;
+    newIdea && onClearTripIdea();
+
+    if (findDOMNode(this.searchBox).value) {
+      this.lockLeftColumnScroll();
+    }
+  }
+
+  handleSearchBoxKeys(event) {
+    const { newIdea, onAddIdeaPress, onClearTripIdea } = this.props;
+
+    switch(event.key) {
+      case 'Enter':
+        newIdea && this.clearSearchBoxAnd(onAddIdeaPress);
+        return this.unlockLeftColumnScroll();
+      case 'Backspace':
+      case 'Escape':
+        newIdea && this.clearSearchBoxAnd(onClearTripIdea);
+        return this.unlockLeftColumnScroll();
+    }
+  }
+
+  clearSearchBoxAnd(next) {
+    findDOMNode(this.searchBox).value = '';
+    return next && next();
+  }
+
+  unlockLeftColumnScroll() {
+    document.getElementById('leftColumn').style.overflow = "scroll";
+  }
+
+  lockLeftColumnScroll() {
+    const style = document.getElementById('leftColumn').style;
+    if (style.overflow === 'scroll') {
+      style.overflow = 'hidden';
+    }
   }
 }
 
 TripIdeasList.propTypes = {
   destination: PropTypes.object,
   ideas: PropTypes.array,
+  newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
+  onClearTripIdea: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
-  onEnterIdeaComment: PropTypes.func.isRequired,
-  onIdeaCleared: PropTypes.func.isRequired,
-  resetIdeaBox: PropTypes.bool.isRequired
+  onEnterIdeaComment: PropTypes.func.isRequired
 };
 
 const styles = {
   commentBox: {
-    display: 'inline',
-    width: '100%',
+    display: "inline",
+    width: "100%",
     marginBottom: 10
   },
   inputSection: {
     marginBottom: 10
   },
   searchBox: {
-    display: 'inline',
-    width: '80%',
+    display: "inline",
+    width: "80%",
     marginBottom: 10
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
-    border: 'none',
-    color: 'white',
-    float: 'right'
+    border: "none",
+    color: "white",
+    float: "right"
+  },
+  searchBoxButtonDisabled: {
+    backgroundColor: "#f3f3f3",
+    border: "1px solid #e1e1e1",
+    color: "#cccccc",
+    cursor: "default"
   }
 };
 
