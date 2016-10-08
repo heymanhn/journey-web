@@ -183,7 +183,24 @@ export function apiDeleteTripFailure(error) {
 }
 
 // Create a trip idea
-export function saveNewTripIdea(idea) {
+export function saveNewTripIdea(place) {
+  const loc = place.geometry.location;
+
+  // Format the Google place object to the right shape
+  let idea = {
+    googlePlaceId: place.place_id,
+    name: place.name,
+    loc: {
+      type: 'Point',
+      coordinates: [loc.lng(), loc.lat()]
+    },
+    address: place.formatted_address,
+    phone: place.international_phone_number,
+    types: place.types,
+    photo: place.photos ? place.photos[0].getUrl({ 'maxWidth': 300 }) : '',
+    url: place.url
+  };
+
   return {
     type: SAVE_NEW_TRIP_IDEA,
     idea
@@ -456,33 +473,21 @@ export function apiAddTripIdea() {
     const ts = getState().tripState;
     const tripId = ts.trip._id;
     const idea = ts.newIdea;
-    const comment = ts.newComment || '';
-    const loc = idea.geometry.location;
+    const comment = ts.newComment;
 
-    let ideaParams = {
-      googlePlaceId: idea.place_id,
-      name: idea.name,
-      loc: {
-        type: 'Point',
-        coordinates: [loc.lng(), loc.lat()]
-      },
-      address: idea.formatted_address,
-      phone: idea.international_phone_number,
-      types: idea.types,
-      photo: idea.photos ? idea.photos[0].getUrl({ 'maxWidth': 300 }) : '',
-      url: idea.url,
-      comment
-    };
+    if (ts.newComment) {
+      idea.comment = ts.newComment;
+    }
 
     // Update UI state first, using a stubbed idea ID
     const _id = ObjectID().toString();
-    dispatch(addTripIdea(_.extend(ideaParams, { _id })));
+    dispatch(addTripIdea(_.extend(idea, { _id })));
 
     const addTripIdeaAPI = journeyAPI.trip.ideas.create(tripId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
       method: addTripIdeaAPI.method,
-      body: JSON.stringify(ideaParams)
+      body: JSON.stringify(idea)
     };
 
     return fetch(addTripIdeaAPI.route, opts)
