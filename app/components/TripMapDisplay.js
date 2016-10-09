@@ -164,7 +164,7 @@ class TripMapDisplay extends Component {
     }
 
     if (focusLngLat) {
-      onDeleteHoverMarker(hoverMarker);
+      hoverMarker && onDeleteHoverMarker(hoverMarker);
       this.createFocusMarker(focusLngLat);
       this.flyToLocation(focusLngLat);
     }

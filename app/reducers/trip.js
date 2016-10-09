@@ -39,7 +39,6 @@ export default function tripState(state = initialTripState, action) {
       };
     case SAVE_NEW_TRIP_IDEA:
       return {
-        ...state,
         ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
         focusLngLat: action.idea.loc.coordinates,
         newIdea: action.idea

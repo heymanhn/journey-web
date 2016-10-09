@@ -19,21 +19,23 @@ class NavigationBar extends Component {
       </Button>
     );
 
-    const gravatar = (
-      <NavigationAvatar
-        name={user.name}
-        onLogoutPress={onLogoutPress}
-        viewLandingPage={viewLandingPage}
-        picture={user.gravatar}
-      />
-    );
+    function generateGravatar(user) {
+      return (
+        <NavigationAvatar
+          name={user.name}
+          onLogoutPress={onLogoutPress}
+          viewLandingPage={viewLandingPage}
+          picture={user.gravatar}
+       />
+     );
+    }
 
     return (
       <div style={styles.container}>
         <span onClick={viewLandingPage} style={styles.logo}>
           Journey
         </span>
-        {user ? gravatar : loginButton}
+        {user ? generateGravatar(user) : loginButton}
       </div>
     );
   }
