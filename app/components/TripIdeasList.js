@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
-import { colors, isMobile } from 'app/constants';
+import { colors } from 'app/constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
@@ -69,7 +69,7 @@ class TripIdeasList extends Component {
         </div>
         <div>
           {tripIdeas}
-          {isMobile && dragPreview}
+          {dragPreview}
         </div>
       </div>
     );

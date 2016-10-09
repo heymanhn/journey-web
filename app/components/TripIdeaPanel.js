@@ -48,9 +48,9 @@ class TripIdeaPanel extends Component {
 
 TripIdeaPanel.propTypes = {
   connectDropTarget: PropTypes.func,
-  hover: PropTypes.bool.isRequired,
+  hover: PropTypes.bool,
   idea: PropTypes.object,
-  onFocusIdea: PropTypes.func.isRequired
+  onFocusIdea: PropTypes.func
 };
 
 const styles = {

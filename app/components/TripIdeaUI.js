@@ -8,7 +8,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
 import TripIdeaPanel from './TripIdeaPanel';
-import { dndTypes, isMobile } from 'app/constants';
+import { dndTypes } from 'app/constants';
 
 /*
  * React-dnd drag source
@@ -68,9 +68,19 @@ function ideaTargetCollect(connect) {
 }
 
 class TripIdeaUI extends Component {
+  componentDidMount() {
+    /*
+     * Set an empty image as drag preview so that the user only sees the
+     * custom drag layer
+     */
+    this.props.connectDragPreview(getEmptyImage(), {
+      // IE fallback
+      captureDraggingState: true
+    });
+  }
+
   render() {
     const {
-      connectDragPreview,
       connectDragSource,
       connectDropTarget,
       idea,
@@ -124,11 +134,6 @@ class TripIdeaUI extends Component {
       );
     } else {
       fullSection = connectDragSource(ideaPanel);
-    }
-
-    // Only connect the drag preview if the touch backend is used
-    if (isMobile) {
-      fullSection = connectDragPreview(fullSection);
     }
 
     return fullSection;
