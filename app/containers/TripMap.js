@@ -10,7 +10,7 @@ import {
   saveMarkers,
   updateMapWidth
 } from 'app/actions/map';
-import { clearFocusedIdea } from 'app/actions/trips';
+import { clearFocusLngLat } from 'app/actions/trips';
 import TripMapDisplay from 'app/components/TripMapDisplay';
 import { analytics } from 'app/constants';
 
@@ -19,20 +19,20 @@ const mapStateToProps = (state) => {
   const ms = state.mapState;
   return {
     destination: ts.trip.destination,
+    focusLngLat: ts.focusLngLat,
     focusMarker: ms.focusMarker,
-    focusedIdea: ts.focusedIdea || '',
+    hoverLngLat: ts.hoverLngLat,
     hoverMarker: ms.hoverMarker,
     ideas: ts.trip.ideas,
     mapWidth: ms.mapWidth,
-    markers: ms.markers,
-    mouseOverIdea: ts.mouseOverIdea || ''
+    markers: ms.markers
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClearFocusedIdea() {
-      dispatch(clearFocusedIdea());
+    onClearFocusLngLat() {
+      dispatch(clearFocusLngLat());
     },
 
     onDeleteHoverMarker(marker) {

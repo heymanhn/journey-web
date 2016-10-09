@@ -22,10 +22,10 @@ import {
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
   REORDER_TRIP_IDEA,
-  SET_MOUSEOVER_IDEA,
-  CLEAR_MOUSEOVER_IDEA,
-  SET_FOCUSED_IDEA,
-  CLEAR_FOCUSED_IDEA,
+  SET_HOVER_LNGLAT,
+  CLEAR_HOVER_LNGLAT,
+  SET_FOCUS_LNGLAT,
+  CLEAR_FOCUS_LNGLAT,
   CLEAR_TRIP_ERROR
 } from 'app/actions/trips';
 import { initialTripState } from 'app/constants';
@@ -40,10 +40,12 @@ export default function tripState(state = initialTripState, action) {
     case SAVE_NEW_TRIP_IDEA:
       return {
         ...state,
+        ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
+        focusLngLat: action.idea.loc.coordinates,
         newIdea: action.idea
       };
     case CLEAR_NEW_TRIP_IDEA:
-      return _.omit(state, 'newIdea', 'newComment');
+      return _.omit(state, ['focusLngLat', 'newIdea', 'newComment']);
     case SAVE_IDEA_COMMENT:
       return {
         ...state,
@@ -56,7 +58,7 @@ export default function tripState(state = initialTripState, action) {
           ideas: [action.idea].concat(state.trip.ideas)
         }),
         isFetching: false,
-        focusedIdea: action.idea._id
+        focusLngLat: action.idea.loc.coordinates
       };
     case REORDER_TRIP_IDEA:
       let ideas = state.trip.ideas.slice();
@@ -71,27 +73,27 @@ export default function tripState(state = initialTripState, action) {
       };
     case REMOVE_TRIP_IDEA:
       return {
-        ..._.omit(state, ['focusedIdea', 'mouseOverIdea']),
+        ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
         trip: _.extend(state.trip, {
           ideas: _.reject(state.trip.ideas, (idea) =>
             idea._id === action.ideaId
           )
         })
       };
-    case SET_MOUSEOVER_IDEA:
+    case SET_HOVER_LNGLAT:
       return {
         ...state,
-        mouseOverIdea: action.ideaId
+        hoverLngLat: action.lngLat
       };
-    case CLEAR_MOUSEOVER_IDEA:
-      return _.omit(state, 'mouseOverIdea');
-    case SET_FOCUSED_IDEA:
+    case CLEAR_HOVER_LNGLAT:
+      return _.omit(state, 'hoverLngLat');
+    case SET_FOCUS_LNGLAT:
       return {
         ...state,
-        focusedIdea: action.ideaId
+        focusLngLat: action.lngLat
       };
-    case CLEAR_FOCUSED_IDEA:
-      return _.omit(state, 'focusedIdea');
+    case CLEAR_FOCUS_LNGLAT:
+      return _.omit(state, 'focusLngLat');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
     case API_GET_TRIP_REQUEST:
@@ -110,7 +112,7 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false,
-        focusedIdea: action.ideas[0]._id
+        focusLngLat: action.ideas[0].loc.coordinates
       };
     case API_UPDATE_TRIP_IDEA_SUCCESS:
     case API_REMOVE_TRIP_IDEA_SUCCESS:

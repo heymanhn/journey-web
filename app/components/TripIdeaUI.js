@@ -75,11 +75,11 @@ class TripIdeaUI extends Component {
       connectDropTarget,
       idea,
       isDragging,
-      mouseOverIdea,
-      onClearMouseOverIdea,
+      hoverLngLat,
+      onClearHoverLngLat,
       onFocusIdea,
       onRemoveIdea,
-      onSetMouseOverIdea
+      onSetHoverLngLat
     } = this.props;
 
     const ideaPanel = (
@@ -91,8 +91,8 @@ class TripIdeaUI extends Component {
          * slightly and display a marker pin above the idea's location on the map to
          * indicate that that location is selected
          */
-        onMouseOver={onSetMouseOverIdea}
-        onMouseLeave={onClearMouseOverIdea}
+        onMouseOver={onSetHoverLngLat}
+        onMouseLeave={onClearHoverLngLat}
       >
         <div
           onClick={onRemoveIdea}
@@ -108,10 +108,10 @@ class TripIdeaUI extends Component {
             'connectDropTarget',
             'idea'
           ])}
-          hover={mouseOverIdea === idea._id}
+          hover={hoverLngLat === idea.loc.coordinates}
 
           // Upon clicking on an idea, zoom in on the idea in the map
-          onFocusIdea={onFocusIdea.bind(null, idea._id)}
+          onFocusIdea={onFocusIdea}
         />
       </div>
     );
@@ -148,12 +148,12 @@ TripIdeaUI.propTypes = {
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
-  mouseOverIdea: PropTypes.string.isRequired,
-  onClearMouseOverIdea: PropTypes.func.isRequired,
+  hoverLngLat: PropTypes.array,
+  onClearHoverLngLat: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
-  onSetMouseOverIdea: PropTypes.func.isRequired,
+  onSetHoverLngLat: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired
 };
 

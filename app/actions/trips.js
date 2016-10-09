@@ -57,10 +57,10 @@ export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
 export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
 // Trip idea hover and focus states
-export const SET_MOUSEOVER_IDEA = 'SET_MOUSEOVER_IDEA';
-export const CLEAR_MOUSEOVER_IDEA = 'CLEAR_MOUSEOVER_IDEA';
-export const SET_FOCUSED_IDEA = 'SET_FOCUSED_IDEA';
-export const CLEAR_FOCUSED_IDEA = 'CLEAR_FOCUSED_IDEA';
+export const SET_HOVER_LNGLAT = 'SET_HOVER_LNGLAT';
+export const CLEAR_HOVER_LNGLAT = 'CLEAR_HOVER_LNGLAT';
+export const SET_FOCUS_LNGLAT = 'SET_FOCUS_LNGLAT';
+export const CLEAR_FOCUS_LNGLAT = 'CLEAR_FOCUS_LNGLAT';
 
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
@@ -183,7 +183,24 @@ export function apiDeleteTripFailure(error) {
 }
 
 // Create a trip idea
-export function saveNewTripIdea(idea) {
+export function saveNewTripIdea(place) {
+  const loc = place.geometry.location;
+
+  // Format the Google place object to the right shape
+  let idea = {
+    googlePlaceId: place.place_id,
+    name: place.name,
+    loc: {
+      type: 'Point',
+      coordinates: [loc.lng(), loc.lat()]
+    },
+    address: place.formatted_address,
+    phone: place.international_phone_number,
+    types: place.types,
+    photo: place.photos ? place.photos[0].getUrl({ 'maxWidth': 300 }) : '',
+    url: place.url
+  };
+
   return {
     type: SAVE_NEW_TRIP_IDEA,
     idea
@@ -288,29 +305,29 @@ export function apiRemoveTripIdeaFailure(error) {
 }
 
 // Trip idea hover and focus states
-export function setMouseOverIdea(ideaId) {
+export function setHoverLngLat(lngLat) {
   return {
-    type: SET_MOUSEOVER_IDEA,
-    ideaId
+    type: SET_HOVER_LNGLAT,
+    lngLat
   };
 }
 
-export function clearMouseOverIdea() {
+export function clearHoverLngLat() {
   return {
-    type: CLEAR_MOUSEOVER_IDEA
+    type: CLEAR_HOVER_LNGLAT
   };
 }
 
-export function setFocusedIdea(ideaId) {
+export function setFocusLngLat(lngLat) {
   return {
-    type: SET_FOCUSED_IDEA,
-    ideaId
+    type: SET_FOCUS_LNGLAT,
+    lngLat
   };
 }
 
-export function clearFocusedIdea() {
+export function clearFocusLngLat() {
   return {
-    type: CLEAR_FOCUSED_IDEA
+    type: CLEAR_FOCUS_LNGLAT
   };
 }
 
@@ -456,33 +473,21 @@ export function apiAddTripIdea() {
     const ts = getState().tripState;
     const tripId = ts.trip._id;
     const idea = ts.newIdea;
-    const comment = ts.newComment || '';
-    const loc = idea.geometry.location;
+    const comment = ts.newComment;
 
-    let ideaParams = {
-      googlePlaceId: idea.place_id,
-      name: idea.name,
-      loc: {
-        type: 'Point',
-        coordinates: [loc.lng(), loc.lat()]
-      },
-      address: idea.formatted_address,
-      phone: idea.international_phone_number,
-      types: idea.types,
-      photo: idea.photos ? idea.photos[0].getUrl({ 'maxWidth': 300 }) : '',
-      url: idea.url,
-      comment
-    };
+    if (ts.newComment) {
+      idea.comment = ts.newComment;
+    }
 
     // Update UI state first, using a stubbed idea ID
     const _id = ObjectID().toString();
-    dispatch(addTripIdea(_.extend(ideaParams, { _id })));
+    dispatch(addTripIdea(_.extend(idea, { _id })));
 
     const addTripIdeaAPI = journeyAPI.trip.ideas.create(tripId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
       method: addTripIdeaAPI.method,
-      body: JSON.stringify(ideaParams)
+      body: JSON.stringify(idea)
     };
 
     return fetch(addTripIdeaAPI.route, opts)
