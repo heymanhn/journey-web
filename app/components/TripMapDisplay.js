@@ -34,7 +34,7 @@ class TripMapDisplay extends Component {
     }
 
     if (newFocusLngLat !== focusLngLat) {
-      this.focusMapOnIdea(newProps);
+      this.loadFocusMarker(newProps);
     }
   }
 
@@ -139,14 +139,9 @@ class TripMapDisplay extends Component {
       onDeleteHoverMarker(hoverMarker);
     }
 
-    if (hoverLngLat) {
-      if (!focusLngLat) {
-        this.createHoverMarker(hoverLngLat);
-      } else if (hoverLngLat !== focusLngLat) {
-        onDeleteFocusMarker(focusMarker);
-        onClearFocusLngLat();
-        this.createHoverMarker(hoverLngLat);
-      }
+    if (hoverLngLat && hoverLngLat !== focusLngLat) {
+      focusLngLat && onClearFocusLngLat();
+      this.createHoverMarker(hoverLngLat);
     }
   }
 
@@ -154,7 +149,7 @@ class TripMapDisplay extends Component {
     this.createHoverMarker(lngLat, true);
   }
 
-  focusMapOnIdea(props) {
+  loadFocusMarker(props) {
     const {
       focusMarker,
       focusLngLat,

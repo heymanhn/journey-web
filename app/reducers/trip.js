@@ -40,10 +40,12 @@ export default function tripState(state = initialTripState, action) {
     case SAVE_NEW_TRIP_IDEA:
       return {
         ...state,
+        ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
+        focusLngLat: action.idea.loc.coordinates,
         newIdea: action.idea
       };
     case CLEAR_NEW_TRIP_IDEA:
-      return _.omit(state, ['newIdea', 'newComment']);
+      return _.omit(state, ['focusLngLat', 'newIdea', 'newComment']);
     case SAVE_IDEA_COMMENT:
       return {
         ...state,
