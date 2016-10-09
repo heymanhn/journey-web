@@ -57,10 +57,10 @@ export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
 export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
 
 // Trip idea hover and focus states
-export const SET_MOUSEOVER_IDEA = 'SET_MOUSEOVER_IDEA';
-export const CLEAR_MOUSEOVER_IDEA = 'CLEAR_MOUSEOVER_IDEA';
-export const SET_FOCUSED_IDEA = 'SET_FOCUSED_IDEA';
-export const CLEAR_FOCUSED_IDEA = 'CLEAR_FOCUSED_IDEA';
+export const SET_HOVER_LNGLAT = 'SET_HOVER_LNGLAT';
+export const CLEAR_HOVER_LNGLAT = 'CLEAR_HOVER_LNGLAT';
+export const SET_FOCUS_LNGLAT = 'SET_FOCUS_LNGLAT';
+export const CLEAR_FOCUS_LNGLAT = 'CLEAR_FOCUS_LNGLAT';
 
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
@@ -305,29 +305,29 @@ export function apiRemoveTripIdeaFailure(error) {
 }
 
 // Trip idea hover and focus states
-export function setMouseOverIdea(ideaId) {
+export function setHoverLngLat(lngLat) {
   return {
-    type: SET_MOUSEOVER_IDEA,
-    ideaId
+    type: SET_HOVER_LNGLAT,
+    lngLat
   };
 }
 
-export function clearMouseOverIdea() {
+export function clearHoverLngLat() {
   return {
-    type: CLEAR_MOUSEOVER_IDEA
+    type: CLEAR_HOVER_LNGLAT
   };
 }
 
-export function setFocusedIdea(ideaId) {
+export function setFocusLngLat(lngLat) {
   return {
-    type: SET_FOCUSED_IDEA,
-    ideaId
+    type: SET_FOCUS_LNGLAT,
+    lngLat
   };
 }
 
-export function clearFocusedIdea() {
+export function clearFocusLngLat() {
   return {
-    type: CLEAR_FOCUSED_IDEA
+    type: CLEAR_FOCUS_LNGLAT
   };
 }
 

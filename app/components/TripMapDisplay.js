@@ -16,22 +16,24 @@ class TripMapDisplay extends Component {
 
   // Update the map markers if there are any changes
   componentWillReceiveProps(newProps) {
-    const { focusedIdea, ideas, mouseOverIdea } = this.props;
+    const { focusLngLat, ideas, hoverLngLat } = this.props;
     const {
-      focusedIdea: newFocusedIdea,
+      focusLngLat: newFocusLngLat,
+      focusMarker,
       ideas: newIdeas,
-      mouseOverIdea: newMouseOverIdea
+      hoverLngLat: newHoverLngLat,
+      onDeleteFocusMarker
     } = newProps;
-
-    if (newMouseOverIdea !== mouseOverIdea) {
-      this.loadHoverMarker(newProps);
-    }
 
     if (newIdeas.length !== ideas.length) {
       this.loadMarkers(newProps);
     }
 
-    if (newFocusedIdea !== focusedIdea) {
+    if (newHoverLngLat !== hoverLngLat) {
+      this.loadHoverMarker(newProps);
+    }
+
+    if (newFocusLngLat !== focusLngLat) {
       this.focusMapOnIdea(newProps);
     }
   }
@@ -100,18 +102,8 @@ class TripMapDisplay extends Component {
     onSaveMarkers(newMarkers);
   }
 
-  createHoverMarker(ideas, ideaId, isFocusMarker = false) {
-    const {
-      onDeleteFocusMarker,
-      onDeleteHoverMarker,
-      onSaveFocusMarker,
-      onSaveHoverMarker
-    } = this.props;
-
-    const targetIdea = ideas.find((idea) => idea._id === ideaId);
-    if (!targetIdea) {
-      return isFocusMarker ? onDeleteFocusMarker() : onDeleteHoverMarker();
-    }
+  createHoverMarker(lngLat, isFocusMarker = false) {
+    const { onSaveFocusMarker, onSaveHoverMarker } = this.props;
 
     let markerElem = document.createElement('div');
     markerElem.className = 'hover-marker';
@@ -125,7 +117,7 @@ class TripMapDisplay extends Component {
       markerElem,
       { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
     )
-      .setLngLat(targetIdea.loc.coordinates)
+      .setLngLat(lngLat)
       .addTo(this.map);
 
     isFocusMarker ? onSaveFocusMarker(marker) : onSaveHoverMarker(marker);
@@ -133,12 +125,12 @@ class TripMapDisplay extends Component {
 
   loadHoverMarker(props) {
     const {
-      focusedIdea,
+      focusLngLat,
       focusMarker,
       hoverMarker,
       ideas,
-      mouseOverIdea,
-      onClearFocusedIdea,
+      hoverLngLat,
+      onClearFocusLngLat,
       onDeleteFocusMarker,
       onDeleteHoverMarker
     } = props;
@@ -147,19 +139,49 @@ class TripMapDisplay extends Component {
       onDeleteHoverMarker(hoverMarker);
     }
 
-    if (mouseOverIdea) {
-      if (!focusedIdea) {
-        this.createHoverMarker(ideas, mouseOverIdea);
-      } else if (mouseOverIdea !== focusedIdea) {
+    if (hoverLngLat) {
+      if (!focusLngLat) {
+        this.createHoverMarker(hoverLngLat);
+      } else if (hoverLngLat !== focusLngLat) {
         onDeleteFocusMarker(focusMarker);
-        onClearFocusedIdea();
-        this.createHoverMarker(ideas, mouseOverIdea);
+        onClearFocusLngLat();
+        this.createHoverMarker(hoverLngLat);
       }
     }
   }
 
-  createFocusMarker(ideas, ideaId) {
-    this.createHoverMarker(ideas, ideaId, true);
+  createFocusMarker(lngLat) {
+    this.createHoverMarker(lngLat, true);
+  }
+
+  focusMapOnIdea(props) {
+    const {
+      focusMarker,
+      focusLngLat,
+      hoverMarker,
+      ideas,
+      onDeleteFocusMarker,
+      onDeleteHoverMarker
+    } = props;
+
+    if (focusMarker) {
+      onDeleteFocusMarker(focusMarker);
+    }
+
+    if (focusLngLat) {
+      onDeleteHoverMarker(hoverMarker);
+      this.createFocusMarker(focusLngLat);
+      this.flyToLocation(focusLngLat);
+    }
+  }
+
+  flyToLocation(lngLat) {
+    this.map.flyTo({
+      center: lngLat,
+      zoom: 15,
+      curve: 1,
+      easing: easeInOutQuad
+    });
   }
 
   fitMapToMarkers() {
@@ -175,40 +197,6 @@ class TripMapDisplay extends Component {
     this.map.fitBounds(bounds, {
       linear: true,
       padding: 100,
-      curve: 1,
-      easing: easeInOutQuad
-    });
-  }
-
-  focusMapOnIdea(props) {
-    const {
-      focusMarker,
-      focusedIdea,
-      hoverMarker,
-      ideas,
-      onDeleteFocusMarker,
-      onDeleteHoverMarker
-    } = props;
-
-    if (focusMarker) {
-      onDeleteFocusMarker(focusMarker);
-    }
-
-    if (focusedIdea) {
-      onDeleteHoverMarker(hoverMarker);
-      this.createFocusMarker(ideas, focusedIdea);
-
-      const targetIdea = ideas.find((idea) => idea._id === focusedIdea);
-      if (targetIdea) {
-        this.flyToLocation(targetIdea.loc.coordinates);
-      }
-    }
-  }
-
-  flyToLocation(lngLat) {
-    this.map.flyTo({
-      center: lngLat,
-      zoom: 15,
       curve: 1,
       easing: easeInOutQuad
     });
@@ -252,14 +240,14 @@ function easeInOutQuad(t) {
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
+  focusLngLat: PropTypes.array,
   focusMarker: PropTypes.object,
+  hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
-  focusedIdea: PropTypes.string.isRequired,
   ideas: PropTypes.array,
   mapWidth: PropTypes.number.isRequired,
   markers: PropTypes.array.isRequired,
-  mouseOverIdea: PropTypes.string.isRequired,
-  onClearFocusedIdea: PropTypes.func.isRequired,
+  onClearFocusLngLat: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,

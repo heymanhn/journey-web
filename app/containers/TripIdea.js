@@ -5,10 +5,10 @@ import { apiTripPageEvent } from 'app/actions/analytics';
 import {
   apiRemoveTripIdea,
   apiUpdateTripIdea,
-  clearMouseOverIdea,
+  clearHoverLngLat,
   reorderTripIdea,
-  setFocusedIdea,
-  setMouseOverIdea
+  setFocusLngLat,
+  setHoverLngLat
 } from 'app/actions/trips';
 import TripIdeaUI from 'app/components/TripIdeaUI';
 import { analytics } from 'app/constants';
@@ -16,20 +16,21 @@ import { analytics } from 'app/constants';
 const mapStateToProps = (state) => {
   const ts = state.tripState;
   return {
-    mouseOverIdea: ts.mouseOverIdea || ''
+    hoverLngLat: ts.hoverLngLat
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  const { _id: ideaId } = props.idea;
+  const { _id: ideaId, loc: { coordinates } } = props.idea;
+
   return {
-    onClearMouseOverIdea() {
-      dispatch(clearMouseOverIdea(ideaId));
+    onClearHoverLngLat() {
+      dispatch(clearHoverLngLat());
     },
 
     onFocusIdea() {
       dispatch(apiTripPageEvent(analytics.pages.TRIP_IDEA, { ideaId } ));
-      dispatch(setFocusedIdea(ideaId));
+      dispatch(setFocusLngLat(coordinates));
     },
 
     onRemoveIdea() {
@@ -40,8 +41,8 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(reorderTripIdea(index1, index2));
     },
 
-    onSetMouseOverIdea() {
-      dispatch(setMouseOverIdea(ideaId));
+    onSetHoverLngLat() {
+      dispatch(setHoverLngLat(coordinates));
     },
 
     onUpdateIdea() {
