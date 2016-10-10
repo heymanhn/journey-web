@@ -8,6 +8,8 @@ import {
   SAVE_FOCUS_MARKER,
   DELETE_FOCUS_MARKER,
   UPDATE_MAP_WIDTH,
+  SHOW_ALL_TRIP_IDEAS,
+  SHOW_ALL_TRIP_IDEAS_COMPLETE,
   LOGOUT
 } from 'app/actions/map';
 import { initialMapState } from 'app/constants';
@@ -26,6 +28,10 @@ export default function mapState(state = initialMapState, action) {
       return _.omit(state, 'focusMarker');
     case UPDATE_MAP_WIDTH:
       return { ...state, mapWidth: action.width };
+    case SHOW_ALL_TRIP_IDEAS:
+      return { ...state, fitMapRequest: true };
+    case SHOW_ALL_TRIP_IDEAS_COMPLETE:
+      return _.omit(state, 'fitMapRequest');
     case LOGOUT:
       return initialMapState;
   }

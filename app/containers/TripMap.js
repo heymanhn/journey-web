@@ -8,6 +8,7 @@ import {
   saveFocusMarker,
   saveHoverMarker,
   saveMarkers,
+  showAllTripIdeasComplete,
   updateMapWidth
 } from 'app/actions/map';
 import { clearFocusLngLat } from 'app/actions/trips';
@@ -19,6 +20,7 @@ const mapStateToProps = (state) => {
   const ms = state.mapState;
   return {
     destination: ts.trip.destination,
+    fitMapRequest: ms.fitMapRequest,
     focusLngLat: ts.focusLngLat,
     focusMarker: ms.focusMarker,
     hoverLngLat: ts.hoverLngLat,
@@ -55,6 +57,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onSaveMarkers(markers) {
       dispatch(saveMarkers(markers));
+    },
+
+    onMapFitComplete() {
+      dispatch(showAllTripIdeasComplete());
     },
 
     onUpdateMapWidth(width) {

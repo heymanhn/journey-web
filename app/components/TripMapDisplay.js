@@ -11,18 +11,20 @@ class TripMapDisplay extends Component {
     window.addEventListener('resize', this.updateMapWidth.bind(this));
     this.loadMap();
     this.loadMarkers();
-    this.fitMapToMarkers();
+    this.fitMapToMarkers(true);
   }
 
   // Update the map markers if there are any changes
   componentWillReceiveProps(newProps) {
     const { focusLngLat, ideas, hoverLngLat } = this.props;
     const {
+      fitMapRequest,
       focusLngLat: newFocusLngLat,
       focusMarker,
       ideas: newIdeas,
       hoverLngLat: newHoverLngLat,
-      onDeleteFocusMarker
+      onDeleteFocusMarker,
+      onMapFitComplete
     } = newProps;
 
     if (newIdeas.length !== ideas.length) {
@@ -35,6 +37,11 @@ class TripMapDisplay extends Component {
 
     if (newFocusLngLat !== focusLngLat) {
       this.loadFocusMarker(newProps);
+    }
+
+    if (fitMapRequest) {
+      this.fitMapToMarkers();
+      onMapFitComplete();
     }
   }
 
@@ -179,7 +186,7 @@ class TripMapDisplay extends Component {
     });
   }
 
-  fitMapToMarkers() {
+  fitMapToMarkers(easeFit) {
     const { destination, ideas } = this.props;
     const { southwest, northeast } = destination.viewport;
     const bounds = new mapboxgl.LngLatBounds(
@@ -190,9 +197,10 @@ class TripMapDisplay extends Component {
     // Ensure the bounds captures all the ideas' locations
     ideas.map((idea) => bounds.extend(idea.loc.coordinates));
     this.map.fitBounds(bounds, {
-      linear: true,
+      linear: easeFit,
       padding: 100,
       curve: 1,
+      speed: 2,
       easing: easeInOutQuad
     });
   }
@@ -235,6 +243,7 @@ function easeInOutQuad(t) {
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
+  fitMapRequest: PropTypes.bool,
   focusLngLat: PropTypes.array,
   focusMarker: PropTypes.object,
   hoverLngLat: PropTypes.array,

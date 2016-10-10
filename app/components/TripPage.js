@@ -1,7 +1,6 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
 import LoadingAnimation from './LoadingAnimation';
 import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
@@ -23,7 +22,7 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, onViewTrips, trip } = this.props;
+    const { error, onShowAllIdeas, onViewTrips, trip } = this.props;
 
     if (error) {
       return (
@@ -47,6 +46,12 @@ class TripPage extends Component {
         <h1 style={styles.h1}>{trip.title}</h1>
         <p>Destination: {trip.destination && trip.destination.name}</p>
         <p>Visibility: {trip.visibility}</p>
+        <p
+          onClick={onShowAllIdeas}
+          style={{textDecoration: 'underline', cursor: 'pointer' }}
+        >
+          Show all ideas
+        </p>
       </div>
     );
 
@@ -75,6 +80,7 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
+  onShowAllIdeas: PropTypes.func.isRequired,
   onViewTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
