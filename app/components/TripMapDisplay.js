@@ -40,7 +40,7 @@ class TripMapDisplay extends Component {
     }
 
     if (fitMapRequest) {
-      this.fitMapToMarkers();
+      this.fitMapToMarkers(false, true);
       onMapFitComplete();
     }
   }
@@ -186,13 +186,14 @@ class TripMapDisplay extends Component {
     });
   }
 
-  fitMapToMarkers(easeFit) {
+  fitMapToMarkers(easeFit, ideasOnly) {
     const { destination, ideas } = this.props;
-    const { southwest, northeast } = destination.viewport;
-    const bounds = new mapboxgl.LngLatBounds(
-      southwest.coordinates,
-      northeast.coordinates
-    );
+    const {
+      southwest: { coordinates: swll },
+      northeast: { coordinates: nell }
+    } = destination.viewport;
+    const coord = ideasOnly ? [] : [swll, nell];
+    const bounds = new mapboxgl.LngLatBounds(...coord);
 
     // Ensure the bounds captures all the ideas' locations
     ideas.map((idea) => bounds.extend(idea.loc.coordinates));

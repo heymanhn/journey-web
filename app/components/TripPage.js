@@ -83,7 +83,7 @@ TripPage.propTypes = {
 
 const styles = {
   h1: {
-    fontSize: 32,
+    fontSize: 36,
     marginTop: 0,
     paddingTop: 20
   },
