@@ -2,7 +2,6 @@
 
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
-import { showAllTripIdeasOnMap } from 'app/actions/map';
 import { viewTripsPage } from 'app/actions/navigation';
 import { apiGetTrip } from 'app/actions/trips';
 import { analytics } from 'app/constants';
@@ -21,10 +20,6 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onGetTrip() {
       dispatch(apiGetTrip(tripId));
-    },
-
-    onShowAllIdeas() {
-      dispatch(showAllTripIdeasOnMap());
     },
 
     onViewTrips() {

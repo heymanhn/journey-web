@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { showAllTripIdeasOnMap } from 'app/actions/map';
 import {
   apiAddTripIdea,
   clearNewTripIdea,
@@ -35,6 +36,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onEnterIdeaComment(event) {
       dispatch(saveIdeaComment(event.target.value));
+    },
+
+    onShowAllIdeas() {
+      dispatch(showAllTripIdeasOnMap());
     }
   };
 };

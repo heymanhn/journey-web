@@ -22,7 +22,7 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, onShowAllIdeas, onViewTrips, trip } = this.props;
+    const { error, onViewTrips, trip } = this.props;
 
     if (error) {
       return (
@@ -41,17 +41,11 @@ class TripPage extends Component {
       );
     });
 
-    const titleSection = (
-      <div style={styles.titleSection}>
+    const titles = (
+      <div style={styles.titles}>
         <h1 style={styles.h1}>{trip.title}</h1>
         <p>Destination: {trip.destination && trip.destination.name}</p>
         <p>Visibility: {trip.visibility}</p>
-        <p
-          onClick={onShowAllIdeas}
-          style={{textDecoration: 'underline', cursor: 'pointer' }}
-        >
-          Show all ideas
-        </p>
       </div>
     );
 
@@ -64,8 +58,10 @@ class TripPage extends Component {
           <div style={styles.navigationBar}>
             <Navigation />
           </div>
+          <div style={styles.titleSection}>
+            {titles}
+          </div>
           <div style={styles.ideasSection}>
-            {titleSection}
             <TripIdeas />
           </div>
         </div>
@@ -80,7 +76,6 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
-  onShowAllIdeas: PropTypes.func.isRequired,
   onViewTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
@@ -93,7 +88,6 @@ const styles = {
     paddingTop: 20
   },
   ideasSection: {
-    marginTop: dimensions.navigationBar.height,
     padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   },
   leftColumn: {
@@ -117,8 +111,11 @@ const styles = {
     position: "fixed",
     zIndex: 1
   },
+  titles: {
+  },
   titleSection: {
-    marginBottom: 30
+    marginTop: dimensions.navigationBar.height,
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   }
 };
 

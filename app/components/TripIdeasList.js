@@ -22,7 +22,8 @@ class TripIdeasList extends Component {
       ideas,
       newIdea,
       onAddIdeaPress,
-      onEnterIdeaComment
+      onEnterIdeaComment,
+      onShowAllIdeas
     } = this.props;
 
     const tripIdeas = ideas.map((idea, index) => {
@@ -46,7 +47,15 @@ class TripIdeasList extends Component {
     return (
       <div>
         <div style={styles.inputSection}>
-          <h3>Ideas</h3>
+          <div style={styles.titleSection}>
+            <h3>Ideas</h3>
+            <span
+              onClick={onShowAllIdeas}
+              style={styles.showAllLink}
+            >
+              Show all
+            </span>
+          </div>
           <TextInput
             onBlur={this.unlockLeftColumnScroll}
             onChange={this.handleSearchBoxChange.bind(this)}
@@ -163,7 +172,8 @@ TripIdeasList.propTypes = {
   onAddIdeaPress: PropTypes.func.isRequired,
   onClearTripIdea: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
-  onEnterIdeaComment: PropTypes.func.isRequired
+  onEnterIdeaComment: PropTypes.func.isRequired,
+  onShowAllIdeas: PropTypes.func.isRequired
 };
 
 const styles = {
@@ -191,6 +201,15 @@ const styles = {
     border: "1px solid #e1e1e1",
     color: "#cccccc",
     cursor: "default"
+  },
+  showAllLink: {
+    cursor: 'pointer',
+    textDecoration: 'underline'
+  },
+  titleSection: {
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between'
   }
 };
 
