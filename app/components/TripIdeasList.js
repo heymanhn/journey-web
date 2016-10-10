@@ -49,12 +49,14 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <div style={styles.titleSection}>
             <h3>Ideas</h3>
-            <span
-              onClick={onShowAllIdeas}
-              style={styles.showAllLink}
-            >
-              Show all
-            </span>
+            {ideas.length > 0 && (
+              <span
+                onClick={onShowAllIdeas}
+                style={styles.showAllLink}
+              >
+                Show all
+              </span>
+            )}
           </div>
           <TextInput
             onBlur={this.unlockLeftColumnScroll}
