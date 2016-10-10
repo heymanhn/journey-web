@@ -94,25 +94,27 @@ const styles = {
   },
   ideasSection: {
     marginTop: dimensions.navigationBar.height,
-    padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0'
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   },
   leftColumn: {
-    backgroundColor: 'white',
-    float: 'left',
-    height: '100%',
-    overflow: 'scroll',
+    backgroundColor: "white",
+    boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
+    float: "left",
+    height: "100%",
+    overflow: "scroll",
+    position: 'absolute',
     width: dimensions.leftColumn.width,
     zIndex: 2
   },
   loadingText: {
-    color: '#333333',
-    fontFamily: 'Arial',
+    color: "#333333",
+    fontFamily: "Arial",
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 20
   },
   navigationBar: {
-    position: 'fixed',
+    position: "fixed",
     zIndex: 1
   },
   titleSection: {
