@@ -198,7 +198,7 @@ class TripMapDisplay extends Component {
     ideas.map((idea) => bounds.extend(idea.loc.coordinates));
     this.map.fitBounds(bounds, {
       linear: easeFit,
-      padding: 100,
+      padding: 70,
       curve: 1,
       speed: 2,
       easing: easeInOutQuad
