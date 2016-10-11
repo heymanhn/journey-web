@@ -40,7 +40,7 @@ class TripMapDisplay extends Component {
     }
 
     if (fitMapRequest) {
-      this.fitMapToMarkers(false, true);
+      this.fitMapToMarkers();
       onMapFitComplete();
     }
   }
@@ -186,24 +186,35 @@ class TripMapDisplay extends Component {
     });
   }
 
-  fitMapToMarkers(easeFit, ideasOnly) {
+  fitMapToMarkers(boundToDestination) {
     const { destination, ideas } = this.props;
     const {
       southwest: { coordinates: swll },
       northeast: { coordinates: nell }
     } = destination.viewport;
-    const coord = ideasOnly ? [] : [swll, nell];
-    const bounds = new mapboxgl.LngLatBounds(...coord);
+    let bounds;
+    if (boundToDestination) {
+      bounds = new mapboxgl.LngLatBounds(swll, nell);
+    } else {
+      bounds = new mapboxgl.LngLatBounds();
+    }
 
     // Ensure the bounds captures all the ideas' locations
-    ideas.map((idea) => bounds.extend(idea.loc.coordinates));
-    this.map.fitBounds(bounds, {
-      linear: easeFit,
-      padding: 70,
-      curve: 1,
-      speed: 2,
-      easing: easeInOutQuad
-    });
+    if (ideas.length === 1 && !bounds) {
+      this.map.easeTo({
+        center: ideas[0].loc.coordinates,
+        zoom: 15
+      });
+    } else {
+      ideas.map(idea => bounds.extend(idea.loc.coordinates));
+      this.map.fitBounds(bounds, {
+        linear: boundToDestination,
+        padding: 100,
+        curve: 1,
+        speed: 2,
+        easing: easeInOutQuad
+      });
+    }
   }
 
   loadMapContainerStyle() {

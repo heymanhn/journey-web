@@ -124,7 +124,7 @@ class TripIdeasList extends Component {
     const disabledStyle = styles.searchBoxButtonDisabled;
     const { newIdea } = this.props;
 
-    return newIdea ? style : {...style, ...disabledStyle};
+    return newIdea ? style : { ...style, ...disabledStyle };
   }
 
   handleSearchBoxChange() {
