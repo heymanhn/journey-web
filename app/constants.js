@@ -133,8 +133,7 @@ export const initialAuthState = {
 };
 
 export const initialMapState = {
-  mapWidth: calcMapWidth(),
-  markers: []
+  mapWidth: calcMapWidth()
 };
 
 export const initialTripsState = {
@@ -163,12 +162,16 @@ export const isMobile = md.mobile() ? true : false;
  * Mapbox API
  */
 export const mapbox = {
+  ids: {
+    hover: 'hoverTargets',
+    markers: 'ideaMarkers'
+  },
   streetsStyle: 'mapbox://styles/mapbox/streets-v9',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
 };
 
 export const mapMarkers = {
-  diameter: 15,
+  radius: 7,
   icon: {
     width: 29,
     height: 40
