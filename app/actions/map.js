@@ -4,7 +4,6 @@
  * Action Types
  */
 
-export const SAVE_MARKERS = 'SAVE_MARKERS';
 export const SAVE_HOVER_MARKER = 'SAVE_HOVER_MARKER';
 export const DELETE_HOVER_MARKER = 'DELETE_HOVER_MARKER';
 export const SAVE_FOCUS_MARKER = 'SAVE_FOCUS_MARKER';
@@ -17,13 +16,6 @@ export const SHOW_ALL_TRIP_IDEAS_COMPLETE = 'SHOW_ALL_TRIP_IDEAS_COMPLETE';
 /*
  * Action Creators
  */
-
-export function saveMarkers(markers) {
-  return {
-    type: SAVE_MARKERS,
-    markers
-  };
-}
 
 export function saveHoverMarker(marker) {
   return {

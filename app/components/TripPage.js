@@ -22,7 +22,7 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, onShowAllIdeas, onViewTrips, trip } = this.props;
+    const { error, onViewTrips, trip } = this.props;
 
     if (error) {
       return (
@@ -41,17 +41,11 @@ class TripPage extends Component {
       );
     });
 
-    const titleSection = (
-      <div style={styles.titleSection}>
+    const titles = (
+      <div style={styles.titles}>
         <h1 style={styles.h1}>{trip.title}</h1>
         <p>Destination: {trip.destination && trip.destination.name}</p>
         <p>Visibility: {trip.visibility}</p>
-        <p
-          onClick={onShowAllIdeas}
-          style={{textDecoration: 'underline', cursor: 'pointer' }}
-        >
-          Show all ideas
-        </p>
       </div>
     );
 
@@ -64,8 +58,10 @@ class TripPage extends Component {
           <div style={styles.navigationBar}>
             <Navigation />
           </div>
+          <div style={styles.titleSection}>
+            {titles}
+          </div>
           <div style={styles.ideasSection}>
-            {titleSection}
             <TripIdeas />
           </div>
         </div>
@@ -80,7 +76,6 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
-  onShowAllIdeas: PropTypes.func.isRequired,
   onViewTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
@@ -88,35 +83,39 @@ TripPage.propTypes = {
 
 const styles = {
   h1: {
-    fontSize: 32,
+    fontSize: 36,
     marginTop: 0,
     paddingTop: 20
   },
   ideasSection: {
-    marginTop: dimensions.navigationBar.height,
-    padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0'
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   },
   leftColumn: {
-    backgroundColor: 'white',
-    float: 'left',
-    height: '100%',
-    overflow: 'scroll',
+    backgroundColor: "white",
+    boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
+    float: "left",
+    height: "100%",
+    overflow: "scroll",
+    position: 'absolute',
     width: dimensions.leftColumn.width,
     zIndex: 2
   },
   loadingText: {
-    color: '#333333',
-    fontFamily: 'Arial',
+    color: "#333333",
+    fontFamily: "Arial",
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 20
   },
   navigationBar: {
-    position: 'fixed',
+    position: "fixed",
     zIndex: 1
   },
+  titles: {
+  },
   titleSection: {
-    marginBottom: 30
+    marginTop: dimensions.navigationBar.height,
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   }
 };
 
