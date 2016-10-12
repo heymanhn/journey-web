@@ -34,6 +34,10 @@ export const journeyAPI = {
       method: 'GET',
       route: journeyAPIHost + '/trips/' + tripId
     }),
+    update: (tripId) => ({
+      method: 'PUT',
+      route: journeyAPIHost + '/trips/' + tripId
+    }),
     delete: (tripId) => ({
       method: 'DELETE',
       route: journeyAPIHost + '/trips/' + tripId
@@ -143,7 +147,7 @@ export const initialTripsState = {
 
 export const initialTripState = {
   isFetching: false,
-  resetIdeaBox: false
+  isFetchingVisibility: false
 };
 
 

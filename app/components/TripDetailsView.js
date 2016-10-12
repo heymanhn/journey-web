@@ -19,16 +19,24 @@ class TripDetailsView extends Component {
             title={destination.name}
             setting="destination"
           />
-          <TripSetting title={camelVis} setting="visibility" />
+          <TripSetting
+            onClick={this.toggleVisibility.bind(this)}
+            title={camelVis} setting="visibility" />
           <TripSetting title="Edit" setting="edit" />
         </div>
       </div>
     );
   }
+
+  toggleVisibility() {
+    const { onSetTripVisibility, trip: { visibility } } = this.props;
+    onSetTripVisibility(visibility === 'private' ? 'public' : 'private');
+  }
 }
 
 TripDetailsView.propTypes = {
   onShowDestination: PropTypes.func.isRequired,
+  onSetTripVisibility: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
 

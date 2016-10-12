@@ -29,6 +29,12 @@ export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
+// Update a trip
+export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
+export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
+export const API_UPDATE_TRIP_SUCCESS = 'API_UPDATE_TRIP_SUCCESS';
+export const API_UPDATE_TRIP_FAILURE = 'API_UPDATE_TRIP_FAILURE';
+
 // Delete a trip
 export const DELETE_TRIP = 'DELETE_TRIP';
 export const API_DELETE_TRIP_REQUEST = 'API_DELETE_TRIP_REQUEST';
@@ -154,6 +160,34 @@ export function apiGetTripFailure(error) {
     error
   };
 }
+
+// Update a trip
+export function apiUpdateTripVisRequest() {
+  return {
+    type: API_UPDATE_TRIP_VIS_REQUEST
+  };
+}
+
+export function apiUpdateTripRequest() {
+  return {
+    type: API_UPDATE_TRIP_REQUEST
+  };
+}
+
+export function apiUpdateTripSuccess(json) {
+  return {
+    type: API_UPDATE_TRIP_SUCCESS,
+    trip: json.trip
+  };
+}
+
+export function apiUpdateTripFailure(error) {
+  return {
+    type: API_UPDATE_TRIP_FAILURE,
+    error
+  };
+}
+
 
 // Delete a Trip
 export function deleteTrip(tripId) {
@@ -440,6 +474,32 @@ export function apiGetTrip(tripId) {
         dispatch(apiGetTripSuccess(json));
       })
       .catch(error => { dispatch(apiGetTripFailure(error.message)); });
+  };
+}
+
+export function apiUpdateTrip(params, visibilityOnly) {
+  return (dispatch, getState) => {
+    if (visibilityOnly) {
+      dispatch(apiUpdateTripVisRequest());
+    } else {
+      dispatch(apiUpdateTripRequest());
+    }
+
+    const { _id: tripId } = getState().tripState.trip;
+    const updateTripAPI = journeyAPI.trip.update(tripId);
+    let opts = {
+      ...fetchOptsTemplate(getState().authState),
+      method: updateTripAPI.method,
+      body: JSON.stringify(params)
+    };
+
+    return fetch(updateTripAPI.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiUpdateTripSuccess(json));
+      })
+      .catch(error => { dispatch(apiUpdateTripFailure(error.message)); });
   };
 }
 

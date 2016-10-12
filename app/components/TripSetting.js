@@ -15,7 +15,7 @@ class TripSetting extends Component {
       >
         <img src={imageURL} style={styles.image}
         />
-        <p style={styles.title}>{title}</p>
+        <span style={styles.title}>{title}</span>
       </Button>
     );
   }
@@ -77,15 +77,15 @@ const styles = {
   },
   darkContainer: {
     backgroundColor: "#1a76c8",
+    border: "1px solid #1a76c8",
     color: "#ffffff"
   },
   image: {
     paddingRight: 6
   },
   title: {
-    display: "inline",
     position: "relative",
-    top: 1
+    top: 2
   }
 };
 
