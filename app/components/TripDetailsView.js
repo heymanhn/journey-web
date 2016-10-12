@@ -52,7 +52,8 @@ const styles = {
   h1: {
     fontSize: 36,
     marginTop: 0,
-    paddingTop: 20
+    paddingTop: 20,
+    wordWrap: "break-word"
   },
   settingsSection: {
     alignItems: "center",
