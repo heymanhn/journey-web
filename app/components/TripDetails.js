@@ -1,16 +1,22 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import TripSetting from './TripSetting';
 import { dimensions } from 'app/constants';
 
 class TripDetails extends Component {
   render() {
-    const { trip } = this.props;
+    const { destination, title, visibility: vis } = this.props.trip;
+    const camelVis = vis[0].toUpperCase() + vis.substring(1);
+
     return (
       <div style={styles.titleSection}>
-        <h1 style={styles.h1}>{trip.title}</h1>
-        <p>Destination: {trip.destination && trip.destination.name}</p>
-        <p>Visibility: {trip.visibility}</p>
+        <h1 style={styles.h1}>{title}</h1>
+        <div style={styles.settingsSection}>
+          <TripSetting title={destination.name} setting="destination" />
+          <TripSetting title={camelVis} setting="visibility" />
+          <TripSetting title="Edit" setting="edit" />
+        </div>
       </div>
     );
   }
@@ -25,6 +31,12 @@ const styles = {
     fontSize: 36,
     marginTop: 0,
     paddingTop: 20
+  },
+  settingsSection: {
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+    margin: "10px 0px"
   },
   titleSection: {
     marginTop: dimensions.navigationBar.height,
