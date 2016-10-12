@@ -5,7 +5,7 @@ import LoadingAnimation from './LoadingAnimation';
 import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
-import TripDetails from './TripDetails';
+import TripDetails from 'app/containers/TripDetails';
 import { dimensions } from 'app/constants';
 
 class TripPage extends Component {
@@ -49,7 +49,7 @@ class TripPage extends Component {
           style={styles.leftColumn}
         >
           <Navigation />
-          <TripDetails trip={trip} />
+          <TripDetails />
           <TripIdeas />
         </div>
         <TripMap />

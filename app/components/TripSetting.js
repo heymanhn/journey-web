@@ -5,10 +5,11 @@ import { Button } from 'react-bootstrap';
 
 class TripSetting extends Component {
   render() {
-    const { title } = this.props;
+    const { onClick, title } = this.props;
     const imageURL = this.pickImage();
     return (
       <Button
+        onClick={onClick}
         style={this.loadContainerStyle.bind(this)()}
         title={this.loadTitle.bind(this)()}
       >
@@ -59,6 +60,7 @@ class TripSetting extends Component {
 }
 
 TripSetting.propTypes = {
+  onClick: PropTypes.func,
   setting: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
 };
@@ -71,7 +73,7 @@ const styles = {
     fontSize: 13,
     margin: "0px 5px 10px 0px",
     outline: 0,
-    padding: "6px 12px 6px"
+    padding: "6px 14px 6px"
   },
   darkContainer: {
     backgroundColor: "#1a76c8",

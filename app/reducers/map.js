@@ -9,6 +9,7 @@ import {
   UPDATE_MAP_WIDTH,
   SHOW_ALL_TRIP_IDEAS,
   SHOW_ALL_TRIP_IDEAS_COMPLETE,
+  SHOW_DESTINATION_ON_MAP,
   LOGOUT
 } from 'app/actions/map';
 import { initialMapState } from 'app/constants';
@@ -26,7 +27,9 @@ export default function mapState(state = initialMapState, action) {
     case UPDATE_MAP_WIDTH:
       return { ...state, mapWidth: action.width };
     case SHOW_ALL_TRIP_IDEAS:
-      return { ...state, fitMapRequest: true };
+      return { ...state, fitMapRequest: 'ideas' };
+    case SHOW_DESTINATION_ON_MAP:
+      return { ...state, fitMapRequest: 'destination' };
     case SHOW_ALL_TRIP_IDEAS_COMPLETE:
       return _.omit(state, 'fitMapRequest');
     case LOGOUT:

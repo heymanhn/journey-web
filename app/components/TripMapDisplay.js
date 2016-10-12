@@ -307,7 +307,7 @@ function easeInOutQuad(t) {
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
-  fitMapRequest: PropTypes.bool,
+  fitMapRequest: PropTypes.string,
   focusLngLat: PropTypes.array,
   focusMarker: PropTypes.object,
   hoverLngLat: PropTypes.array,
