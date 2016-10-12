@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
-import { colors } from 'app/constants';
+import { colors, dimensions } from 'app/constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
@@ -45,7 +45,7 @@ class TripIdeasList extends Component {
     );
 
     return (
-      <div>
+      <div style={styles.ideasSection}>
         <div style={styles.inputSection}>
           <div style={styles.titleSection}>
             <h3>Ideas</h3>
@@ -183,6 +183,9 @@ const styles = {
     display: "inline",
     width: "100%",
     marginBottom: 10
+  },
+  ideasSection: {
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   },
   inputSection: {
     marginBottom: 10

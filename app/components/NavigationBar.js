@@ -54,7 +54,9 @@ const styles = {
     height: dimensions.navigationBar.height,
     justifyContent: 'space-between',
     padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0',
-    width: dimensions.leftColumn.width
+    position: "fixed",
+    width: dimensions.leftColumn.width,
+    zIndex: 1
   },
   loginButton: {
     background: 'linear-gradient(#ffffff, #e1e1e1)',
