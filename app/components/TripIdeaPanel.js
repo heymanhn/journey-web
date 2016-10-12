@@ -1,6 +1,5 @@
 'use strict';
 
-import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { Image, Panel } from 'react-bootstrap';
 
@@ -40,9 +39,8 @@ class TripIdeaPanel extends Component {
   }
 
   loadIdeaStyle() {
-    const { hover } = this.props;
-    const style = _.clone(styles.idea);
-    return hover ? { ...style, backgroundColor: 'rgb(240, 240, 240)' } : style;
+    const { idea, ideaOnHover } = styles;
+    return this.props.hover ? { ...idea, ...ideaOnHover } : idea;
   }
 }
 
@@ -65,6 +63,9 @@ const styles = {
   idea: {
     backgroundColor: "#fdfdfd",
     cursor: "pointer"
+  },
+  ideaOnHover: {
+    backgroundColor: "#f2f2f2"
   },
   info: {
     minHeight: 100
