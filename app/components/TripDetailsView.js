@@ -16,14 +16,20 @@ class TripDetailsView extends Component {
         <div style={styles.settingsSection}>
           <TripSetting
             onClick={onShowDestination}
-            title={destination.name}
             setting="destination"
+            title={destination.name}
           />
           <TripSetting
             isLoading={isFetchingVisibility}
             onClick={this.toggleVisibility.bind(this)}
-            title={camelVis} setting="visibility" />
-          <TripSetting title="Edit" setting="edit" />
+            setting="visibility"
+            title={camelVis}
+          />
+          <TripSetting
+            onClick={() => alert("Coming soon")}
+            setting="edit"
+            title="Edit"
+          />
         </div>
       </div>
     );
