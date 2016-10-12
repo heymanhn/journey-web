@@ -48,32 +48,32 @@ NavigationBar.propTypes = {
 
 const styles = {
   container: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.primary,
-    display: 'flex',
+    display: "flex",
     height: dimensions.navigationBar.height,
-    justifyContent: 'space-between',
-    padding: '0 ' + dimensions.leftColumn.sidePadding + ' 0',
+    justifyContent: "space-between",
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0",
     position: "fixed",
     width: dimensions.leftColumn.width,
     zIndex: 1
   },
   loginButton: {
-    background: 'linear-gradient(#ffffff, #e1e1e1)',
-    padding: '4 12'
+    background: "linear-gradient(#ffffff, #e1e1e1)",
+    padding: "4 12"
   },
   logo: {
-    color: 'white',
-    cursor: 'pointer',
+    color: "white",
+    cursor: "pointer",
     fontFamily: "'Lobster', cursive",
     fontSize: 32,
-    position: 'relative',
+    position: "relative",
     top: -3,
 
     // Disable text selection
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none'
+    MozUserSelect: "none",
+    WebkitUserSelect: "none",
+    msUserSelect: "none"
   }
 };
 

@@ -38,11 +38,11 @@ class Spinner extends Component {
 
 const styles = {
   spinner: {
-    position: 'relative',
+    position: "relative",
     width: 30,
     height: 30,
-    top: '50%',
-    left: '50%'
+    top: "50%",
+    left: "50%"
   }
 };
 

@@ -18,9 +18,9 @@ class TextInput extends Component {
     const { width } = this.props;
 
     return {
-      display: 'block',
-      color: '#333333',
-      fontSize: '16px',
+      display: "block",
+      color: "#333333",
+      fontSize: "16px",
       margin: 5,
       width: width ? width : 300
     };

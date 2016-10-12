@@ -164,24 +164,24 @@ TripIdeaUI.propTypes = {
 
 const styles = {
   emptySpace: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: "#eeeeee",
     borderRadius: 4,
     height: 80,
     marginBottom: 20
   },
   mainDiv: {
-    backgroundColor: '#ffffff'
+    backgroundColor: "#ffffff"
   },
   removeButton: {
     div: {
-      backgroundColor: 'rgba(255,255,255,0.0)',
-      cursor: 'pointer'
+      backgroundColor: "rgba(255,255,255,0.0)",
+      cursor: "pointer"
     },
     glyph: {
       borderRadius: 22,
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
       fontSize: 22,
-      float: 'right',
+      float: "right",
       top: -8,
       left: 8
     }

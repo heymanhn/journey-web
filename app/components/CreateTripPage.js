@@ -86,7 +86,7 @@ CreateTripPage.propTypes = {
 };
 
 const inlineDivStyle = {
-  display: 'inline'
+  display: "inline"
 };
 
 export default CreateTripPage;

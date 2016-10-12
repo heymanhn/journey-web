@@ -105,81 +105,81 @@ NavigationAvatar.propTypes = {
 
 const styles = {
   gravatar: {
-    borderRadius: '50%',
-    cursor: 'pointer',
+    borderRadius: "50%",
+    cursor: "pointer",
     width : 40
   },
   gravatarBackground: {
-    backgroundColor: 'black',
-    borderRadius: '50%'
+    backgroundColor: "black",
+    borderRadius: "50%"
   },
   gravatarDimmed: {
-    borderRadius: '50%',
+    borderRadius: "50%",
     width : 40,
     opacity: 0.8
   },
   popover: {
     borderRadius: 4,
-    boxShadow: '0 5px 10px rgba(0,0,0,.2)',
+    boxShadow: "0 5px 10px rgba(0,0,0,.2)",
     paddingTop: 3,
-    position: 'absolute',
+    position: "absolute",
     zIndex: 2
   },
   popoverList: {
-    backgroundColor: 'white',
-    border: '1px solid #dddddd',
+    backgroundColor: "white",
+    border: "1px solid #dddddd",
     borderRadius: 4,
     marginBottom: 0,
     padding: 1
   },
   popoverArrow: {
-    position: 'absolute',
+    position: "absolute",
     width: 0,
     height: 0,
-    left: '50%',
+    left: "50%",
     top: -5,
-    borderRight: '10px solid transparent',
-    borderLeft: '10px solid transparent',
-    borderBottom: '10px solid #ffffff',
-    transform: 'translate(-50%)',
+    borderRight: "10px solid transparent",
+    borderLeft: "10px solid transparent",
+    borderBottom: "10px solid #ffffff",
+    transform: "translate(-50%)",
     zIndex: 1
   },
   popoverArrowBorder: {
-    position: 'absolute',
+    position: "absolute",
     width: 0,
     height: 0,
-    left: '50%',
+    left: "50%",
     top: -6,
-    borderRight: '10px solid transparent',
-    borderLeft: '10px solid transparent',
-    borderBottom: '10px solid #dddddd',
-    transform: 'translate(-50%)',
+    borderRight: "10px solid transparent",
+    borderLeft: "10px solid transparent",
+    borderBottom: "10px solid #dddddd",
+    transform: "translate(-50%)",
     zIndex: 1
   },
   popoverListItem: {
-    border: 'none'
+    border: "none"
   },
   popoverName: {
-    backgroundColor: '#f3f3f3',
-    border: 'none',
-    cursor: 'default',
+    backgroundColor: "#f3f3f3",
+    border: "none",
+    cursor: "default",
     fontWeight: 500,
 
     // Disable text selection
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none'
+    MozUserSelect: "none",
+    WebkitUserSelect: "none",
+    msUserSelect: "none"
   },
   popoverTBD: {
-    border: 'none',
-    borderTop: '1px solid #e3e3e3',
-    color: '#cccccc',
-    cursor: 'default',
+    border: "none",
+    borderTop: "1px solid #e3e3e3",
+    color: "#cccccc",
+    cursor: "default",
 
     // Disable text selection
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none'
+    MozUserSelect: "none",
+    WebkitUserSelect: "none",
+    msUserSelect: "none"
   }
 };
 
