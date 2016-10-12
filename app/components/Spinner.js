@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class Spinner extends Component {
   /*
@@ -28,13 +28,24 @@ class Spinner extends Component {
       <div
         {...props}
         className={(props.className || '') + ' react-spinner'}
-        style={styles.spinner}
+        style={this.loadStyles.bind(this)()}
       >
         {bars}
       </div>
     );
   }
+
+  loadStyles() {
+    const { customStyle } = this.props;
+    const { spinner } = styles;
+
+    return customStyle ? { ...spinner, ...customStyle } : spinner;
+  }
 }
+
+Spinner.propTypes = {
+  customStyle: PropTypes.object
+};
 
 const styles = {
   spinner: {

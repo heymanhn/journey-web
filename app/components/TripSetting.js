@@ -2,20 +2,31 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import Spinner from './Spinner';
 
 class TripSetting extends Component {
   render() {
-    const { onClick, title } = this.props;
+    const { isLoading, onClick, title } = this.props;
     const imageURL = this.pickImage();
+
+    let buttonImage;
+    if (isLoading) {
+      buttonImage = <Spinner customStyle={styles.spinner} />;
+    } else {
+      buttonImage = <img src={imageURL} style={styles.image} />;
+    }
+
     return (
       <Button
+        disabled={isLoading}
         onClick={onClick}
         style={this.loadContainerStyle.bind(this)()}
         title={this.loadTitle.bind(this)()}
       >
-        <img src={imageURL} style={styles.image}
-        />
-        <span style={styles.title}>{title}</span>
+        {buttonImage}
+        <span style={styles.title}>
+          {title}
+        </span>
       </Button>
     );
   }
@@ -39,9 +50,18 @@ class TripSetting extends Component {
   }
 
   loadContainerStyle() {
-    const { setting } = this.props;
+    const { isLoading, setting } = this.props;
     const { container: style, darkContainer: dark } = styles;
-    return setting === 'edit' ? { ...style, ...dark } : style;
+
+    if (setting === 'edit') {
+      return { ...style, ...dark };
+    } else {
+      if (isLoading) {
+        return { ...style, cursor: "default" };
+      } else {
+        return style;
+      }
+    }
   }
 
   loadTitle() {
@@ -60,6 +80,7 @@ class TripSetting extends Component {
 }
 
 TripSetting.propTypes = {
+  isLoading: PropTypes.bool,
   onClick: PropTypes.func,
   setting: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
@@ -81,7 +102,17 @@ const styles = {
     color: "#ffffff"
   },
   image: {
+    display: "inline",
     paddingRight: 6
+  },
+  spinner: {
+    float: "left",
+    height: 20,
+    left: 5,
+    marginRight: 2,
+    position: "relative",
+    top: 10,
+    width: 20
   },
   title: {
     position: "relative",

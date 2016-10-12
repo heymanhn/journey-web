@@ -6,9 +6,10 @@ import { apiUpdateTrip } from 'app/actions/trips';
 import TripDetailsView from 'app/components/TripDetailsView';
 
 const mapStateToProps = (state) => {
-  const ts = state.tripState;
+  const { isFetchingVisibility, trip } = state.tripState;
   return {
-    trip: ts.trip
+    isFetchingVisibility,
+    trip
   };
 };
 
