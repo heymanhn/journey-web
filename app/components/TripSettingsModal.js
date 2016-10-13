@@ -6,11 +6,15 @@ import TextInput from './TextInput';
 
 class TripSettingsModal extends Component {
   render() {
-    const { onHide, show, trip } = this.props;
-    const { destination, title, visibility } = trip;
+    const { fields, onHide, show } = this.props;
 
+    if (!fields) {
+      return null;
+    }
+
+    const { destination, title, visibility } = fields;
     return (
-      <Modal {...this.props}>
+      <Modal onHide={onHide} show={show}>
         <Modal.Header style={styles.header} closeButton>
           <Modal.Title style={styles.title}>Edit Trip</Modal.Title>
         </Modal.Header>
@@ -34,18 +38,18 @@ class TripSettingsModal extends Component {
           <div style={styles.inputSection}>
             <h4>Visibility:</h4>
             <ButtonGroup>
-              <Button
-                active={visibility === 'public'}
-                style={styles.visibilityButton}
-              >
-                <img src="../assets/setting-public-icon.png" />
+              <Button active={visibility === 'public'}>
+                <img
+                  src="../assets/setting-public-icon.png"
+                  style={styles.visibilityIcon}
+                />
                 <span>Public</span>
               </Button>
-              <Button
-                active={visibility === 'private'}
-                style={styles.visibilityButton}
-              >
-                <img src="../assets/setting-private-icon.png" />
+              <Button active={visibility === 'private'}>
+                <img
+                  src="../assets/setting-private-icon.png"
+                  style={styles.visibilityIcon}
+                />
                 <span>Private</span>
               </Button>
             </ButtonGroup>
@@ -61,9 +65,9 @@ class TripSettingsModal extends Component {
 }
 
 TripSettingsModal.propTypes = {
+  fields: PropTypes.object,
   onHide: PropTypes.func.isRequired,
-  show: PropTypes.bool.isRequired,
-  trip: PropTypes.object.isRequired
+  show: PropTypes.bool.isRequired
 };
 
 const styles = {
@@ -88,8 +92,8 @@ const styles = {
   title: {
     fontWeight: "normal"
   },
-  visibilityButton: {
-
+  visibilityIcon: {
+    paddingRight: 5
   }
 };
 

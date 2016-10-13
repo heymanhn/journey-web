@@ -102,13 +102,15 @@ export default function tripState(state = initialTripState, action) {
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
     case SHOW_TRIP_SETTINGS_MODAL:
+      const { destination, title, visibility } = state.trip;
       return {
         ...state,
+        updatedFields: { destination, title, visibility },
         showModal: true
       };
     case HIDE_TRIP_SETTINGS_MODAL:
       return {
-        ...state,
+        ..._.omit(state, 'updatedFields'),
         showModal: false
       };
     case API_GET_TRIP_REQUEST:

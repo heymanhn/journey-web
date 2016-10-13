@@ -28,7 +28,8 @@ class TripPage extends Component {
       error,
       onHideTripSettingsModal,
       showModal,
-      trip
+      trip,
+      updatedFields
     } = this.props;
 
     if (error) {
@@ -62,7 +63,7 @@ class TripPage extends Component {
         <TripSettingsModal
           onHide={onHideTripSettingsModal}
           show={showModal}
-          trip={trip}
+          fields={updatedFields}
         />
       </div>
     );
@@ -75,7 +76,8 @@ TripPage.propTypes = {
   onHideTripSettingsModal: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
   trackPageView: PropTypes.func.isRequired,
-  trip: PropTypes.object
+  trip: PropTypes.object,
+  updatedFields: PropTypes.object
 };
 
 const styles = {

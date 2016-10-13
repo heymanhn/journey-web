@@ -2,16 +2,20 @@
 
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
-import { apiGetTrip, hideTripSettingsModal } from 'app/actions/trips';
+import {
+  apiGetTrip,
+  hideTripSettingsModal
+} from 'app/actions/trips';
 import { analytics } from 'app/constants';
 import TripPage from 'app/components/TripPage';
 
 const mapStateToProps = (state) => {
-  const ts = state.tripState;
+  const { error, showModal, trip, updatedFields } = state.tripState;
   return {
-    error: ts.error ? ts.error : '',
-    showModal: ts.showModal,
-    trip: ts.trip
+    error,
+    showModal,
+    trip,
+    updatedFields
   };
 };
 
