@@ -30,6 +30,7 @@ export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
 // Update a trip
+export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
 export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
 export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
 export const API_UPDATE_TRIP_SUCCESS = 'API_UPDATE_TRIP_SUCCESS';
@@ -165,6 +166,13 @@ export function apiGetTripFailure(error) {
 }
 
 // Update a trip
+export function updateTripSaveTitle(title) {
+  return {
+    type: UPDATE_TRIP_SAVE_TITLE,
+    title
+  };
+}
+
 export function apiUpdateTripVisRequest() {
   return {
     type: API_UPDATE_TRIP_VIS_REQUEST

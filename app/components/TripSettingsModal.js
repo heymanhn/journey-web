@@ -6,7 +6,7 @@ import TextInput from './TextInput';
 
 class TripSettingsModal extends Component {
   render() {
-    const { fields, onHide, show } = this.props;
+    const { fields, onEnterTitle, onHide, show } = this.props;
 
     if (!fields) {
       return null;
@@ -22,6 +22,7 @@ class TripSettingsModal extends Component {
           <div style={styles.inputSection}>
             <h4>Name your trip:</h4>
             <TextInput
+              onChange={onEnterTitle}
               style={styles.inputField}
               defaultValue={title}
             />
@@ -66,6 +67,7 @@ class TripSettingsModal extends Component {
 
 TripSettingsModal.propTypes = {
   fields: PropTypes.object,
+  onEnterTitle: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired
 };

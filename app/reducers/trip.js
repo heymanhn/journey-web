@@ -7,6 +7,7 @@ import {
   API_GET_TRIP_REQUEST,
   API_GET_TRIP_SUCCESS,
   API_GET_TRIP_FAILURE,
+  UPDATE_TRIP_SAVE_TITLE,
   API_UPDATE_TRIP_VIS_REQUEST,
   API_UPDATE_TRIP_REQUEST,
   API_UPDATE_TRIP_SUCCESS,
@@ -117,6 +118,11 @@ export default function tripState(state = initialTripState, action) {
       return {
         ...(_.omit(state, ['error', 'trip'])),
         isFetching: true
+      };
+    case UPDATE_TRIP_SAVE_TITLE:
+      return {
+        ...state,
+        updatedFields: _.extend(state.updatedFields, { title: action.title })
       };
     case API_UPDATE_TRIP_VIS_REQUEST:
       return {

@@ -26,6 +26,7 @@ class TripPage extends Component {
   render() {
     const {
       error,
+      onEnterTitle,
       onHideTripSettingsModal,
       showModal,
       trip,
@@ -59,8 +60,9 @@ class TripPage extends Component {
           <TripDetails />
           <TripIdeas />
         </div>
-        <TripMap />
+
         <TripSettingsModal
+          onEnterTitle={onEnterTitle}
           onHide={onHideTripSettingsModal}
           show={showModal}
           fields={updatedFields}
@@ -72,6 +74,7 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
+  onEnterTitle: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
   onHideTripSettingsModal: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
