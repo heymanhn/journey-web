@@ -30,6 +30,7 @@ export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
 // Update a trip
+export const UPDATE_TRIP_SAVE_DEST = 'UPDATE_TRIP_SAVE_DEST';
 export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
 export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
 export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
@@ -113,7 +114,7 @@ export function createTripSaveTitle(title) {
 export function createTripSaveDest(destination) {
   return {
     type: CREATE_TRIP_SAVE_DEST,
-    destination
+    destination: formatDestination(destination)
   };
 }
 
@@ -166,6 +167,13 @@ export function apiGetTripFailure(error) {
 }
 
 // Update a trip
+export function updateTripSaveDest(destination) {
+  return {
+    type: UPDATE_TRIP_SAVE_DEST,
+    destination: formatDestination(destination)
+  };
+}
+
 export function updateTripSaveTitle(title) {
   return {
     type: UPDATE_TRIP_SAVE_TITLE,
@@ -432,41 +440,14 @@ export function apiCreateTrip() {
 
     // Format the destination object before saving
     const title = getState().tripsState.newTitle;
-    const dest = getState().tripsState.newDestination;
+    const destination = getState().tripsState.newDestination;
     const visibility = getState().tripsState.newVisibility || 'public';
-    const loc = dest.geometry.location;
-    const viewport = dest.geometry.viewport;
-
-    let destParams = {
-      googlePlaceId: dest.place_id,
-      name: dest.name,
-      formattedAddress: dest.formatted_address,
-      loc: {
-        type: 'Point',
-        coordinates: [loc.lng(), loc.lat()]
-      },
-      viewport: {
-        northeast: {
-          type: 'Point',
-          coordinates: [viewport.b.f, viewport.f.b]
-        },
-        southwest: {
-          type: 'Point',
-          coordinates: [viewport.b.b, viewport.f.f]
-        }
-      },
-      types: dest.types
-    };
 
     const createTrip = journeyAPI.trips.create();
     let opts = {
       ...fetchOptsTemplate(getState().authState),
       method: createTrip.method,
-      body: JSON.stringify({
-        title,
-        visibility,
-        destination: destParams
-      })
+      body: JSON.stringify({ title, destination, visibility })
     };
 
     return fetch(createTrip.route, opts)
@@ -629,5 +610,41 @@ export function apiRemoveTripIdea(ideaId) {
         dispatch(apiRemoveTripIdeaSuccess(json));
       })
       .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
+  };
+}
+
+
+// Helper functions
+function formatDestination(destination) {
+  const {
+    formatted_address,
+    geometry: {
+      location: loc,
+      viewport
+    },
+    name,
+    place_id,
+    types
+  } = destination;
+
+  return {
+    googlePlaceId: place_id,
+    name,
+    formatted_address,
+    loc: {
+      type: 'Point',
+      coordinates: [loc.lng(), loc.lat()]
+    },
+    viewport: {
+      northeast: {
+        type: 'Point',
+        coordinates: [viewport.b.f, viewport.f.b]
+      },
+      southwest: {
+        type: 'Point',
+        coordinates: [viewport.b.b, viewport.f.f]
+      }
+    },
+    types
   };
 }

@@ -2,19 +2,20 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup, Modal } from 'react-bootstrap';
+import { findDOMNode } from 'react-dom';
 import TextInput from './TextInput';
 
 class TripSettingsModal extends Component {
   render() {
-    const { fields, onEnterTitle, onHide, show } = this.props;
+    const {
+      onEnterTitle,
+      onHide,
+      showModal,
+      trip: { title, destination: { name: destinationName }, visibility }
+    } = this.props;
 
-    if (!fields) {
-      return null;
-    }
-
-    const { destination, title, visibility } = fields;
     return (
-      <Modal onHide={onHide} show={show}>
+      <Modal onHide={onHide} show={showModal}>
         <Modal.Header style={styles.header} closeButton>
           <Modal.Title style={styles.title}>Edit Trip</Modal.Title>
         </Modal.Header>
@@ -31,8 +32,12 @@ class TripSettingsModal extends Component {
           <div style={styles.inputSection}>
             <h4>Where do you want to go?</h4>
             <TextInput
+              ref={x => {
+                this.updateDestInput = x;
+                x && this.loadGoogleAutocompleteAPI();
+              }}
               style={styles.inputField}
-              defaultValue={destination.name}
+              defaultValue={destinationName}
             />
           </div>
 
@@ -63,13 +68,27 @@ class TripSettingsModal extends Component {
       </Modal>
     );
   }
+
+  loadGoogleAutocompleteAPI() {
+    const { onEnterDestination } = this.props;
+
+    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
+    const options = { types: ['(regions)'] };
+    const input = findDOMNode(this.updateDestInput);
+    const ac = new window.google.maps.places.Autocomplete(input, options);
+    ac.addListener(
+      'place_changed',
+      () => { onEnterDestination(ac.getPlace()); }
+    );
+  }
 }
 
 TripSettingsModal.propTypes = {
-  fields: PropTypes.object,
+  onEnterDestination: PropTypes.func.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
-  show: PropTypes.bool.isRequired
+  showModal: PropTypes.bool.isRequired,
+  trip: PropTypes.object.isRequired
 };
 
 const styles = {

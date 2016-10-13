@@ -7,6 +7,7 @@ import {
   API_GET_TRIP_REQUEST,
   API_GET_TRIP_SUCCESS,
   API_GET_TRIP_FAILURE,
+  UPDATE_TRIP_SAVE_DEST,
   UPDATE_TRIP_SAVE_TITLE,
   API_UPDATE_TRIP_VIS_REQUEST,
   API_UPDATE_TRIP_REQUEST,
@@ -106,7 +107,7 @@ export default function tripState(state = initialTripState, action) {
       const { destination, title, visibility } = state.trip;
       return {
         ...state,
-        updatedFields: { destination, title, visibility },
+        updatedFields: {},
         showModal: true
       };
     case HIDE_TRIP_SETTINGS_MODAL:
@@ -118,6 +119,14 @@ export default function tripState(state = initialTripState, action) {
       return {
         ...(_.omit(state, ['error', 'trip'])),
         isFetching: true
+      };
+    case UPDATE_TRIP_SAVE_DEST:
+      return {
+        ...state,
+        updatedFields: _.extend(
+          state.updatedFields,
+          { destination: action.destination }
+        )
       };
     case UPDATE_TRIP_SAVE_TITLE:
       return {
