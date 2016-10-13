@@ -8,22 +8,24 @@ class TextInput extends Component {
   render() {
     return (
       <FormControl
+        {..._.omit(this.props, 'style')}
         style={this.loadStyles()}
-        {..._.omit(this.props, 'width')}
       />
     );
   }
 
   loadStyles() {
-    const { width } = this.props;
+    const { style: newStyle, width } = this.props;
 
-    return {
+    let style = {
       display: "block",
       color: "#333333",
       fontSize: "16px",
       margin: 5,
-      width: width ? width : 300
+      width: 300
     };
+
+    return newStyle ? { ...style, ...newStyle} : style;
   }
 }
 
@@ -31,8 +33,8 @@ TextInput.propTypes = {
   defaultValue: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
-  type: PropTypes.string,
-  width: PropTypes.number
+  style: PropTypes.object,
+  type: PropTypes.string
 };
 
 export default TextInput;

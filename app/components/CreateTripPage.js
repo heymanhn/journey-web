@@ -26,16 +26,16 @@ class CreateTripPage extends Component {
           <TextInput
             onChange={onEnterTitle}
             placeholder="Trip Title"
+            style={styles.inputField}
             type="text"
-            width={400}
           />
           <TextInput
             ref={x => this.destinationInput = x}
             placeholder="Where do you want to go?"
+            style={styles.inputField}
             type="text"
-            width={400}
           />
-          <div style={inlineDivStyle}>
+          <div style={styles.inlineDiv}>
             Visibility:
             <input
               type="radio"
@@ -85,8 +85,13 @@ CreateTripPage.propTypes = {
   onSetVisibility: PropTypes.func.isRequired
 };
 
-const inlineDivStyle = {
-  display: "inline"
+const styles = {
+  inlineDiv: {
+    display: "inline"
+  },
+  inputField: {
+    width: 400
+  }
 };
 
 export default CreateTripPage;
