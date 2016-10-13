@@ -30,7 +30,9 @@ import {
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
-  CLEAR_TRIP_ERROR
+  CLEAR_TRIP_ERROR,
+  SHOW_TRIP_SETTINGS_MODAL,
+  HIDE_TRIP_SETTINGS_MODAL
 } from 'app/actions/trips';
 import { initialTripState } from 'app/constants';
 
@@ -99,6 +101,16 @@ export default function tripState(state = initialTripState, action) {
       return _.omit(state, 'focusLngLat');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
+    case SHOW_TRIP_SETTINGS_MODAL:
+      return {
+        ...state,
+        showModal: true
+      };
+    case HIDE_TRIP_SETTINGS_MODAL:
+      return {
+        ...state,
+        showModal: false
+      };
     case API_GET_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error', 'trip'])),

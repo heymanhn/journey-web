@@ -72,6 +72,9 @@ export const CLEAR_FOCUS_LNGLAT = 'CLEAR_FOCUS_LNGLAT';
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 export const CLEAR_TRIP_ERROR = 'CLEAR_TRIP_ERROR';
 
+// Trip Settings Modal
+export const SHOW_TRIP_SETTINGS_MODAL = 'SHOW_TRIP_SETTINGS_MODAL';
+export const HIDE_TRIP_SETTINGS_MODAL = 'HIDE_TRIP_SETTINGS_MODAL';
 
 /*
  * Action Creators
@@ -375,6 +378,19 @@ export function clearTripsError() {
 export function clearTripError() {
   return {
     type: CLEAR_TRIP_ERROR
+  };
+}
+
+// Trip Settings Modal
+export function showTripSettingsModal() {
+  return {
+    type: SHOW_TRIP_SETTINGS_MODAL
+  };
+}
+
+export function hideTripSettingsModal() {
+  return {
+    type: HIDE_TRIP_SETTINGS_MODAL
   };
 }
 

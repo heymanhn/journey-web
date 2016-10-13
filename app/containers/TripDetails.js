@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 import { showDestinationOnMap } from 'app/actions/map';
-import { apiUpdateTrip } from 'app/actions/trips';
+import { apiUpdateTrip, showTripSettingsModal } from 'app/actions/trips';
 import TripDetailsView from 'app/components/TripDetailsView';
 
 const mapStateToProps = (state) => {
@@ -21,6 +21,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onSetTripVisibility(visibility) {
       dispatch(apiUpdateTrip({ visibility }, true));
+    },
+
+    onShowTripSettingsModal() {
+      dispatch(showTripSettingsModal());
     }
   };
 };

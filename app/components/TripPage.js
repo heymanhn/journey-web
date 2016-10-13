@@ -6,6 +6,7 @@ import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
+import TripSettingsModal from './TripSettingsModal';
 import { dimensions } from 'app/constants';
 
 class TripPage extends Component {
@@ -23,7 +24,12 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, trip } = this.props;
+    const {
+      error,
+      onHideTripSettingsModal,
+      showModal,
+      trip
+    } = this.props;
 
     if (error) {
       return (
@@ -53,6 +59,11 @@ class TripPage extends Component {
           <TripIdeas />
         </div>
         <TripMap />
+        <TripSettingsModal
+          onHide={onHideTripSettingsModal}
+          show={showModal}
+          trip={trip}
+        />
       </div>
     );
   }
@@ -61,6 +72,8 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
+  onHideTripSettingsModal: PropTypes.func.isRequired,
+  showModal: PropTypes.bool.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };

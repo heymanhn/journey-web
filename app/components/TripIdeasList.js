@@ -181,8 +181,8 @@ TripIdeasList.propTypes = {
 const styles = {
   commentBox: {
     display: "inline",
-    width: "100%",
-    marginBottom: 10
+    margin: "0px 0px 10px 0px",
+    width: "100%"
   },
   ideasSection: {
     padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
@@ -193,7 +193,7 @@ const styles = {
   searchBox: {
     display: "inline",
     width: "80%",
-    marginBottom: 10
+    margin: "0px 0px 10px 0px"
   },
   searchBoxButton: {
     backgroundColor: colors.primary,

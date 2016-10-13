@@ -147,7 +147,8 @@ export const initialTripsState = {
 
 export const initialTripState = {
   isFetching: false,
-  isFetchingVisibility: false
+  isFetchingVisibility: false,
+  showModal: false
 };
 
 

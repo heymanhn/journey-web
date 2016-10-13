@@ -6,7 +6,12 @@ import { dimensions } from 'app/constants';
 
 class TripDetailsView extends Component {
   render() {
-    const { isFetchingVisibility, onShowDestination, trip } = this.props;
+    const {
+      isFetchingVisibility,
+      onShowDestination,
+      onShowTripSettingsModal,
+      trip
+    } = this.props;
     const { destination, title, visibility: vis } = trip;
     const camelVis = vis[0].toUpperCase() + vis.substring(1);
 
@@ -26,7 +31,7 @@ class TripDetailsView extends Component {
             title={camelVis}
           />
           <TripSetting
-            onClick={() => alert("Coming soon")}
+            onClick={onShowTripSettingsModal}
             setting="edit"
             title="Edit"
           />
@@ -43,8 +48,9 @@ class TripDetailsView extends Component {
 
 TripDetailsView.propTypes = {
   isFetchingVisibility: PropTypes.bool.isRequired,
-  onShowDestination: PropTypes.func.isRequired,
   onSetTripVisibility: PropTypes.func.isRequired,
+  onShowDestination: PropTypes.func.isRequired,
+  onShowTripSettingsModal: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
 

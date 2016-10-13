@@ -19,7 +19,7 @@ class TextInput extends Component {
 
     let style = {
       display: "block",
-      color: "#333333",
+      color: "#666666",
       fontSize: "16px",
       margin: 5,
       width: 300
