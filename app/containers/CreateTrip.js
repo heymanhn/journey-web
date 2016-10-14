@@ -32,7 +32,8 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onQueryAutocomplete(event) {
-      dispatch(apiAutocompleteDest(event.target.value));
+      const { selectionEnd: offset, value: input } = event.target;
+      dispatch(apiAutocompleteDest(input, offset));
     },
 
     onSetVisibility(event) {

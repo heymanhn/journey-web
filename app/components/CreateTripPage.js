@@ -28,6 +28,7 @@ class CreateTripPage extends Component {
           />
           <TextInput
             onChange={onQueryAutocomplete}
+            onKeyUp={this.handleKeyPress.bind(this)}
             ref={x => this.destinationInput = x}
             placeholder="Where do you want to go?"
             style={styles.inputField}
@@ -59,6 +60,22 @@ class CreateTripPage extends Component {
         </div>
       </div>
     );
+  }
+
+  handleKeyPress(event) {
+    const { onQueryAutocomplete } = this.props;
+
+    if (event.shiftKey) {
+      return null;
+    }
+
+    switch(event.key) {
+      case 'ArrowLeft':
+      case 'ArrowRight':
+      case 'Home':
+      case 'End':
+        return onQueryAutocomplete(event);
+    }
   }
 }
 

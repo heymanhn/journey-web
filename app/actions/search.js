@@ -52,9 +52,10 @@ export function apiAutocompleteFailure(error) {
 /*
  * Action thunks
  */
-export function apiAutocompleteDest(input) {
+export function apiAutocompleteDest(input, offset) {
   return apiAutocomplete({
     input,
+    offset,
     types: ['(regions)']
   });
 }
