@@ -136,6 +136,10 @@ export const initialAuthState = {
   isFetching: false
 };
 
+export const initialSearchState = {
+  isFetching: false
+};
+
 export const initialMapState = {
   mapWidth: calcMapWidth()
 };

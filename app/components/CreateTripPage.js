@@ -7,15 +7,12 @@ import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 
 class CreateTripPage extends Component {
-  componentDidMount() {
-    this.loadGoogleAutocompleteAPI();
-  }
-
   render() {
     const {
       error,
       onCreateTripPress,
       onEnterTitle,
+      onQueryAutocomplete,
       onSetVisibility
     } = this.props;
 
@@ -30,6 +27,7 @@ class CreateTripPage extends Component {
             type="text"
           />
           <TextInput
+            onChange={onQueryAutocomplete}
             ref={x => this.destinationInput = x}
             placeholder="Where do you want to go?"
             style={styles.inputField}
@@ -62,19 +60,6 @@ class CreateTripPage extends Component {
       </div>
     );
   }
-
-  loadGoogleAutocompleteAPI() {
-    const { onEnterDestination } = this.props;
-
-    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
-    const options = { types: ['(regions)'] };
-    const input = findDOMNode(this.destinationInput);
-    const ac = new window.google.maps.places.Autocomplete(input, options);
-    ac.addListener(
-      'place_changed',
-      () => { onEnterDestination(ac.getPlace()); }
-    );
-  }
 }
 
 CreateTripPage.propTypes = {
@@ -82,6 +67,7 @@ CreateTripPage.propTypes = {
   onCreateTripPress: PropTypes.func.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
   onEnterDestination: PropTypes.func.isRequired,
+  onQueryAutocomplete: PropTypes.func.isRequired,
   onSetVisibility: PropTypes.func.isRequired
 };
 
