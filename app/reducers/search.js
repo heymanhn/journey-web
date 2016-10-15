@@ -6,8 +6,15 @@ import {
   CLEAR_AUTOCOMPLETE,
   API_AUTOCOMPLETE_REQUEST,
   API_AUTOCOMPLETE_SUCCESS,
-  API_AUTOCOMPLETE_FAILURE
+  API_AUTOCOMPLETE_FAILURE,
+  API_PLACE_DETAILS_REQUEST,
+  API_PLACE_DETAILS_SUCCESS,
+  API_PLACE_DETAILS_FAILURE
 } from 'app/actions/search';
+import {
+  API_CREATE_TRIP_SUCCESS,
+  API_UPDATE_TRIP_SUCCESS
+} from 'app/actions/trips';
 import { initialSearchState } from 'app/constants';
 
 export default function searchState(state = initialSearchState, action) {
@@ -23,6 +30,7 @@ export default function searchState(state = initialSearchState, action) {
         results: []
       };
     case API_AUTOCOMPLETE_REQUEST:
+    case API_PLACE_DETAILS_REQUEST:
       return {
         ...state,
         isFetching: true
@@ -33,12 +41,25 @@ export default function searchState(state = initialSearchState, action) {
         isFetching: false,
         results: action.results
       };
+    case API_PLACE_DETAILS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false
+      };
     case API_AUTOCOMPLETE_FAILURE:
+    case API_PLACE_DETAILS_FAILURE:
       return {
         ...state,
         error: action.error,
         input: '',
         isFetching: false,
+        results: []
+      };
+    case API_CREATE_TRIP_SUCCESS:
+    case API_UPDATE_TRIP_SUCCESS:
+      return {
+        ..._.omit(state, 'error'),
+        input: '',
         results: []
       };
   }

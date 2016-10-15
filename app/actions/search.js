@@ -5,6 +5,7 @@ import { googleAPI } from 'app/constants';
 
 // Store references to google APIs as module globals
 let acService;
+let placesService;
 
 /*
  * Action Types
@@ -15,6 +16,9 @@ export const CLEAR_AUTOCOMPLETE = 'CLEAR_AUTOCOMPLETE';
 export const API_AUTOCOMPLETE_REQUEST = 'API_AUTOCOMPLETE_REQUEST';
 export const API_AUTOCOMPLETE_SUCCESS = 'API_AUTOCOMPLETE_SUCCESS';
 export const API_AUTOCOMPLETE_FAILURE = 'API_AUTOCOMPLETE_FAILURE';
+export const API_PLACE_DETAILS_REQUEST = 'API_PLACE_DETAILS_REQUEST';
+export const API_PLACE_DETAILS_SUCCESS = 'API_PLACE_DETAILS_SUCCESS';
+export const API_PLACE_DETAILS_FAILURE = 'API_PLACE_DETAILS_FAILURE';
 
 
 /*
@@ -55,6 +59,26 @@ export function apiAutocompleteFailure(error) {
   };
 }
 
+export function apiPlaceDetailsRequest() {
+  return {
+    type: API_PLACE_DETAILS_REQUEST
+  };
+}
+
+export function apiPlaceDetailsSuccess(place) {
+  return {
+    type: API_PLACE_DETAILS_SUCCESS,
+    place
+  };
+}
+
+export function apiPlaceDetailsFailure(error) {
+  return {
+    type: API_PLACE_DETAILS_FAILURE,
+    error
+  };
+}
+
 
 /*
  * Action thunks
@@ -86,5 +110,24 @@ function apiAutocomplete(options) {
 
     acService = acService || new google.maps.places.AutocompleteService();
     return acService.getPlacePredictions(options, processResults);
+  };
+}
+
+export function apiPlaceDetails(placeId, cbAction) {
+  return (dispatch, getState) => {
+    dispatch(apiPlaceDetailsRequest());
+
+    function processResult(place, status) {
+      if (status != google.maps.places.PlacesServiceStatus.OK) {
+        return dispatch(apiPlaceDetailsFailure(status));
+      } else {
+        dispatch(apiPlaceDetailsSuccess());
+        return cbAction && dispatch(cbAction(place));
+      }
+    }
+
+    const elem = document.createElement('div');
+    placesService = placesService || new google.maps.places.PlacesService(elem);
+    return placesService.getDetails({ placeId }, processResult);
   };
 }

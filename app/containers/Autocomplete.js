@@ -6,6 +6,7 @@ import {
   apiAutocompleteDest,
   saveInput
 } from 'app/actions/search';
+import { apiCreateTripSaveDest } from 'app/actions/trips';
 import AutocompleteInput from 'app/components/AutocompleteInput';
 
 const mapStateToProps = (state) => {
@@ -21,6 +22,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onClearAutocomplete() {
       dispatch(clearAutocomplete());
+    },
+
+    onSaveDestination(event, { suggestion, suggestionValue }) {
+      dispatch(apiCreateTripSaveDest(suggestion.place_id));
     },
 
     onQueryAutocomplete({ value }) {

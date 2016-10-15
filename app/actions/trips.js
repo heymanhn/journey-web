@@ -4,7 +4,8 @@ import _ from 'underscore';
 import fetch from 'isomorphic-fetch';
 import ObjectID from 'bson-objectid';
 
-import { viewTripPage } from './navigation'
+import { viewTripPage } from './navigation';
+import { apiPlaceDetails } from './search';
 import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
 
 /*
@@ -462,6 +463,12 @@ export function apiCreateTrip() {
   };
 }
 
+export function apiCreateTripSaveDest(placeId) {
+  return (dispatch, getState) => {
+    dispatch(apiPlaceDetails(placeId, createTripSaveDest));
+  }
+}
+
 export function apiGetTrip(tripId) {
   return (dispatch, getState) => {
     dispatch(apiGetTripRequest());
@@ -630,7 +637,7 @@ function formatDestination(destination) {
   return {
     googlePlaceId: place_id,
     name,
-    formatted_address,
+    formattedAddress: formatted_address,
     loc: {
       type: 'Point',
       coordinates: [loc.lng(), loc.lat()]

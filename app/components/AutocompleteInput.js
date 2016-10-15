@@ -13,6 +13,7 @@ class AutocompleteInput extends Component {
       input,
       onClearAutocomplete,
       onQueryAutocomplete,
+      onSaveDestination,
       onSaveInput,
       placeholder,
       results
@@ -30,6 +31,7 @@ class AutocompleteInput extends Component {
         suggestions={results}
         onSuggestionsFetchRequested={onQueryAutocomplete}
         onSuggestionsClearRequested={onClearAutocomplete}
+        onSuggestionSelected={onSaveDestination}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
@@ -93,6 +95,7 @@ AutocompleteInput.propTypes = {
   error: PropTypes.string,
   results: PropTypes.array,
   onQueryAutocomplete: PropTypes.func.isRequired,
+  onSaveDestination: PropTypes.func.isRequired,
   onSaveInput: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   style: PropTypes.object
