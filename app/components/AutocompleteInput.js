@@ -83,10 +83,6 @@ function renderSuggestion(suggestion, { query }) {
 
   return (
     <div>
-      <img
-        src="../assets/setting-marker-icon.png"
-        style={styles.suggestionImage}
-      />
       <span style={styles.suggestionText}>{suggestionParts}</span>
     </div>
   );
@@ -114,11 +110,19 @@ const autocompleteStyles = {
   },
   suggestion: {
     alignItems: "center",
+    backgroundImage: "url('../assets/setting-marker-icon.png')",
+    backgroundPosition: "12px 12px",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "12px 16px",
     borderTop: "1px solid #cccccc",
     color: "#333333",
     cursor: "pointer",
     display: "flex",
     padding: "10px 5px"
+  },
+  suggestionFocused: {
+    backgroundColor: "#f4f4f4",
+    backgroundImage: "url('../assets/mini-marker-icon.png')"
   },
   suggestionsList: {
     listStyleType: "none",
@@ -140,17 +144,12 @@ const autocompleteStyles = {
 };
 
 const styles = {
-  suggestionImage: {
-    height: 16,
-    marginLeft: 10,
-    width: 12
-  },
   suggestionMatch: {
     color: colors.secondary,
     fontWeight: 500
   },
   suggestionText: {
-    marginLeft: 8
+    marginLeft: 30
   }
 }
 
