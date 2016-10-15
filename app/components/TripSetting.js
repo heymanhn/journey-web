@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import Spinner from './Spinner';
+import { colors } from 'app/constants';
 
 class TripSetting extends Component {
   render() {
@@ -97,8 +98,8 @@ const styles = {
     padding: "6px 12px 6px"
   },
   darkContainer: {
-    backgroundColor: "#1a76c8",
-    border: "1px solid #1a76c8",
+    backgroundColor: colors.secondary,
+    border: "1px solid " + colors.secondary,
     color: "#ffffff"
   },
   image: {

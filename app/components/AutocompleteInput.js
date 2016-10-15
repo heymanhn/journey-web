@@ -3,6 +3,9 @@
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import Autosuggest from 'react-autosuggest';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+import { colors } from 'app/constants';
 
 class AutocompleteInput extends Component {
   render() {
@@ -37,7 +40,7 @@ class AutocompleteInput extends Component {
 
   loadStyle() {
     const { results, style } = this.props;
-    const baseStyle = { ...styles };
+    const baseStyle = { ...autocompleteStyles };
 
     if (results.length > 0) {
       baseStyle.suggestionsContainer.display = "block";
@@ -62,10 +65,29 @@ function getSuggestionValue(suggestion) {
   return suggestion.description;
 }
 
-function renderSuggestion(suggestion) {
+function renderSuggestion(suggestion, { query }) {
+  const { description } = suggestion;
+  const matches = match(description, query);
+  const parts = parse(description, matches);
+
+  const suggestionParts = parts.map((part, index) => {
+    return (
+      <span
+        key={index}
+        style={part.highlight ? styles.suggestionMatch : {}}
+      >
+        {part.text}
+      </span>
+    );
+  });
+
   return (
     <div>
-      {suggestion.description}
+      <img
+        src="../assets/setting-marker-icon.png"
+        style={styles.suggestionImage}
+      />
+      <span style={styles.suggestionText}>{suggestionParts}</span>
     </div>
   );
 }
@@ -80,15 +102,28 @@ AutocompleteInput.propTypes = {
   style: PropTypes.object
 };
 
-const styles = {
+const autocompleteStyles = {
   input: {
     border: "1px solid #cccccc",
     borderRadius: "4px",
-    color: "#666",
+    color: "#333333",
     fontSize: 16,
     margin: 5,
     outline: "none",
     padding: "6px 12px"
+  },
+  suggestion: {
+    alignItems: "center",
+    color: "#333333",
+    cursor: "pointer",
+    display: "flex",
+    marginLeft: 10,
+    padding: "10px 5px"
+  },
+  suggestionsList: {
+    listStyleType: "none",
+    margin: 0,
+    padding: 0
   },
   suggestionsContainer: {
     backgroundColor: "#ffffff",
@@ -100,6 +135,20 @@ const styles = {
     marginTop: -6,
     position: "absolute",
     zIndex: 2
+  }
+};
+
+const styles = {
+  suggestionImage: {
+    height: 16,
+    width: 12
+  },
+  suggestionMatch: {
+    color: colors.secondary,
+    fontWeight: 500
+  },
+  suggestionText: {
+    marginLeft: 8
   }
 }
 
