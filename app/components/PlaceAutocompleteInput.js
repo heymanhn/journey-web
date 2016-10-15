@@ -7,7 +7,7 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { colors } from 'app/constants';
 
-class AutocompleteInput extends Component {
+class PlaceAutocompleteInput extends Component {
   render() {
     const {
       input,
@@ -90,7 +90,7 @@ function renderSuggestion(suggestion, { query }) {
   );
 }
 
-AutocompleteInput.propTypes = {
+PlaceAutocompleteInput.propTypes = {
   onClearAutocomplete: PropTypes.func.isRequired,
   error: PropTypes.string,
   results: PropTypes.array,
@@ -156,4 +156,4 @@ const styles = {
   }
 }
 
-export default AutocompleteInput;
+export default PlaceAutocompleteInput;

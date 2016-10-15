@@ -30,30 +30,38 @@ export default function searchState(state = initialSearchState, action) {
         results: []
       };
     case API_AUTOCOMPLETE_REQUEST:
+      return {
+        ...state,
+        isFetchingAC: true
+      };
     case API_PLACE_DETAILS_REQUEST:
       return {
         ...state,
-        isFetching: true
+        isFetchingPlace: true
       };
     case API_AUTOCOMPLETE_SUCCESS:
       return {
         ...state,
-        isFetching: false,
+        isFetchingAC: false,
         results: action.results
       };
     case API_PLACE_DETAILS_SUCCESS:
       return {
         ...state,
-        isFetching: false
+        isFetchingPlace: false
       };
     case API_AUTOCOMPLETE_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        isFetchingAC: false,
+        results: []
+      };
     case API_PLACE_DETAILS_FAILURE:
       return {
         ...state,
         error: action.error,
-        input: '',
-        isFetching: false,
-        results: []
+        isFetchingPlace: false
       };
     case API_CREATE_TRIP_SUCCESS:
     case API_UPDATE_TRIP_SUCCESS:

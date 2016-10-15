@@ -7,7 +7,7 @@ import {
   saveInput
 } from 'app/actions/search';
 import { apiCreateTripSaveDest } from 'app/actions/trips';
-import AutocompleteInput from 'app/components/AutocompleteInput';
+import PlaceAutocompleteInput from 'app/components/PlaceAutocompleteInput';
 
 const mapStateToProps = (state) => {
   const { error, input, results } = state.searchState;
@@ -41,4 +41,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AutocompleteInput);
+)(PlaceAutocompleteInput);

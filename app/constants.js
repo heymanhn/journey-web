@@ -143,7 +143,8 @@ export const initialMapState = {
 
 export const initialSearchState = {
   input: '',
-  isFetching: false,
+  isFetchingAC: false,
+  isFetchingPlace: false,
   results: []
 };
 

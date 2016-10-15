@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
-import Autocomplete from 'app/containers/Autocomplete';
+import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 
@@ -27,7 +27,7 @@ class CreateTripPage extends Component {
             style={styles.inputField}
             type="text"
           />
-          <Autocomplete
+          <PlaceAutocomplete
             placeholder="Where do you want to go?"
             style={styles.inputField}
           />
