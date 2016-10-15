@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
+import Autocomplete from 'app/containers/Autocomplete';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
 
@@ -26,13 +27,9 @@ class CreateTripPage extends Component {
             style={styles.inputField}
             type="text"
           />
-          <TextInput
-            onChange={onQueryAutocomplete}
-            onKeyUp={this.handleKeyPress.bind(this)}
-            ref={x => this.destinationInput = x}
+          <Autocomplete
             placeholder="Where do you want to go?"
             style={styles.inputField}
-            type="text"
           />
           <div style={styles.inlineDiv}>
             Visibility:
@@ -61,30 +58,12 @@ class CreateTripPage extends Component {
       </div>
     );
   }
-
-  handleKeyPress(event) {
-    const { onQueryAutocomplete } = this.props;
-
-    if (event.shiftKey) {
-      return null;
-    }
-
-    switch(event.key) {
-      case 'ArrowLeft':
-      case 'ArrowRight':
-      case 'Home':
-      case 'End':
-        return onQueryAutocomplete(event);
-    }
-  }
 }
 
 CreateTripPage.propTypes = {
   error: PropTypes.string,
   onCreateTripPress: PropTypes.func.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
-  onEnterDestination: PropTypes.func.isRequired,
-  onQueryAutocomplete: PropTypes.func.isRequired,
   onSetVisibility: PropTypes.func.isRequired
 };
 

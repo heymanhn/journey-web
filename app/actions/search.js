@@ -11,6 +11,7 @@ let acService;
  */
 
 export const SAVE_INPUT = 'SAVE_INPUT';
+export const CLEAR_AUTOCOMPLETE = 'CLEAR_AUTOCOMPLETE';
 export const API_AUTOCOMPLETE_REQUEST = 'API_AUTOCOMPLETE_REQUEST';
 export const API_AUTOCOMPLETE_SUCCESS = 'API_AUTOCOMPLETE_SUCCESS';
 export const API_AUTOCOMPLETE_FAILURE = 'API_AUTOCOMPLETE_FAILURE';
@@ -24,6 +25,12 @@ export function saveInput(input) {
   return {
     type: SAVE_INPUT,
     input
+  };
+}
+
+export function clearAutocomplete() {
+  return {
+    type: CLEAR_AUTOCOMPLETE
   };
 }
 
@@ -52,10 +59,9 @@ export function apiAutocompleteFailure(error) {
 /*
  * Action thunks
  */
-export function apiAutocompleteDest(input, offset) {
+export function apiAutocompleteDest(input) {
   return apiAutocomplete({
     input,
-    offset,
     types: ['(regions)']
   });
 }

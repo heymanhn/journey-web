@@ -3,6 +3,7 @@
 import _ from 'underscore';
 import {
   SAVE_INPUT,
+  CLEAR_AUTOCOMPLETE,
   API_AUTOCOMPLETE_REQUEST,
   API_AUTOCOMPLETE_SUCCESS,
   API_AUTOCOMPLETE_FAILURE
@@ -15,6 +16,11 @@ export default function searchState(state = initialSearchState, action) {
       return {
         ...state,
         input: action.input
+      };
+    case CLEAR_AUTOCOMPLETE:
+      return {
+        ...state,
+        results: []
       };
     case API_AUTOCOMPLETE_REQUEST:
       return {
@@ -29,9 +35,11 @@ export default function searchState(state = initialSearchState, action) {
       };
     case API_AUTOCOMPLETE_FAILURE:
       return {
-        ..._.omit(state, 'input', 'results'),
+        ...state,
+        error: action.error,
+        input: '',
         isFetching: false,
-        error: action.error
+        results: []
       };
   }
 
