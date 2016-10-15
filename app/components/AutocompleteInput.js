@@ -114,10 +114,10 @@ const autocompleteStyles = {
   },
   suggestion: {
     alignItems: "center",
+    borderTop: "1px solid #cccccc",
     color: "#333333",
     cursor: "pointer",
     display: "flex",
-    marginLeft: 10,
     padding: "10px 5px"
   },
   suggestionsList: {
@@ -128,6 +128,7 @@ const autocompleteStyles = {
   suggestionsContainer: {
     backgroundColor: "#ffffff",
     border: "1px solid #cccccc",
+    borderTop: 0,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
     display: "none",
@@ -141,6 +142,7 @@ const autocompleteStyles = {
 const styles = {
   suggestionImage: {
     height: 16,
+    marginLeft: 10,
     width: 12
   },
   suggestionMatch: {
