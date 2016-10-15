@@ -121,7 +121,7 @@ export function apiPlaceDetails(placeId, cbAction) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         return dispatch(apiPlaceDetailsFailure(status));
       } else {
-        dispatch(apiPlaceDetailsSuccess());
+        dispatch(apiPlaceDetailsSuccess(place));
         return cbAction && dispatch(cbAction(place));
       }
     }

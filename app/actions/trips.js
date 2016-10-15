@@ -21,6 +21,7 @@ export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
 export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
 export const CREATE_TRIP_SAVE_VISIBILITY = 'CREATE_TRIP_SAVE_VISIBILITY';
+export const CLEAR_SAVED_DEST = 'CLEAR_SAVED_DEST';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
@@ -123,6 +124,12 @@ export function createTripSaveVisibility(visibility) {
   return {
     type: CREATE_TRIP_SAVE_VISIBILITY,
     visibility
+  };
+}
+
+export function clearSavedDest() {
+  return {
+    type: CLEAR_SAVED_DEST
   };
 }
 

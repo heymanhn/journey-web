@@ -6,14 +6,15 @@ import {
   apiAutocompleteDest,
   saveInput
 } from 'app/actions/search';
-import { apiCreateTripSaveDest } from 'app/actions/trips';
+import { apiCreateTripSaveDest, clearSavedDest } from 'app/actions/trips';
 import PlaceAutocompleteInput from 'app/components/PlaceAutocompleteInput';
 
 const mapStateToProps = (state) => {
-  const { error, input, results } = state.searchState;
+  const { error, input, place, results } = state.searchState;
   return {
     error,
     input,
+    place,
     results
   };
 };
@@ -22,6 +23,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onClearAutocomplete() {
       dispatch(clearAutocomplete());
+    },
+
+    onClearSavedDest() {
+      dispatch(clearSavedDest());
     },
 
     onSaveDestination(event, { suggestion, suggestionValue }) {

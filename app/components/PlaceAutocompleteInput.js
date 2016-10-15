@@ -15,13 +15,15 @@ class PlaceAutocompleteInput extends Component {
       onQueryAutocomplete,
       onSaveDestination,
       onSaveInput,
+      place,
       placeholder,
       results
     } = this.props;
 
     let inputProps = {
-      placeholder,
       onChange: onSaveInput,
+      onKeyDown: this.handleKeyPress.bind(this),
+      placeholder,
       type: 'text',
       value: input
     };
@@ -41,25 +43,49 @@ class PlaceAutocompleteInput extends Component {
   }
 
   loadStyle() {
-    const { results, style } = this.props;
+    const { place, results, style } = this.props;
+    const { input, suggestionsContainer: sc } = styles;
     const baseStyle = { ...autocompleteStyles };
 
+    // Display the autocomplete container once there are results
     if (results.length > 0) {
-      baseStyle.suggestionsContainer.display = "block";
-      baseStyle.input.borderBottomLeftRadius = 0;
-      baseStyle.input.borderBottomRightRadius = 0;
+      _.extend(baseStyle.suggestionsContainer, sc.results);
+      _.extend(baseStyle.input, input.results);
     } else {
-      baseStyle.suggestionsContainer.display = "none";
-      baseStyle.input.borderBottomLeftRadius = 4;
-      baseStyle.input.borderBottomRightRadius = 4;
+      _.extend(baseStyle.suggestionsContainer, sc.noResults);
+      _.extend(baseStyle.input, input.noResults);
     }
 
+    // Incorporate additional styles from the user of this component
     if (style) {
       _.extend(baseStyle.input, style);
       _.extend(baseStyle.suggestionsContainer, style);
     }
 
+    // Show markers next to text when a place has been selected
+    if (place) {
+      _.extend(baseStyle.input, input.placeSelected);
+    } else {
+      _.extend(baseStyle.input, input.noPlace);
+    }
+
     return baseStyle;
+  }
+
+  handleKeyPress(event) {
+    const { onClearSavedDest, onSaveInput, place } = this.props;
+
+    switch(event.key) {
+      case 'Backspace':
+        if (place) {
+          onSaveInput(null, { newValue: '' });
+          return onClearSavedDest();
+        } else {
+          return null;
+        }
+      case 'Escape':
+        return place && onClearSavedDest();
+    }
   }
 }
 
@@ -91,13 +117,15 @@ function renderSuggestion(suggestion, { query }) {
 }
 
 PlaceAutocompleteInput.propTypes = {
-  onClearAutocomplete: PropTypes.func.isRequired,
   error: PropTypes.string,
-  results: PropTypes.array,
+  onClearAutocomplete: PropTypes.func.isRequired,
+  onClearSavedDest: PropTypes.func.isRequired,
   onQueryAutocomplete: PropTypes.func.isRequired,
   onSaveDestination: PropTypes.func.isRequired,
   onSaveInput: PropTypes.func.isRequired,
+  place: PropTypes.object,
   placeholder: PropTypes.string,
+  results: PropTypes.array,
   style: PropTypes.object
 };
 
@@ -136,9 +164,6 @@ const autocompleteStyles = {
     backgroundColor: "#ffffff",
     border: "1px solid #cccccc",
     borderTop: 0,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
-    display: "none",
     left: 5,
     marginTop: -6,
     position: "absolute",
@@ -147,9 +172,45 @@ const autocompleteStyles = {
 };
 
 const styles = {
+  input: {
+    noPlace: {
+      paddingLeft: 12,
+      backgroundImage: "none"
+    },
+    noResults: {
+      borderBottomLeftRadius: 4,
+      borderBottomRightRadius: 4
+    },
+    placeSelected: {
+      paddingLeft: 35,
+      backgroundImage: "url('../assets/mini-marker-icon.png')",
+      backgroundPosition: "12px 9px",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "12px 16px"
+    },
+    results: {
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0
+    }
+  },
+  inputIcon: {
+    height: 16,
+    marginLeft: 17,
+    marginTop: 13,
+    position: "absolute",
+    width: 12
+  },
   suggestionMatch: {
     color: colors.secondary,
     fontWeight: 500
+  },
+  suggestionsContainer: {
+    noResults: {
+      display: "none"
+    },
+    results: {
+      display: "block"
+    }
   },
   suggestionText: {
     marginLeft: 30
