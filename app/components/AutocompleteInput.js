@@ -10,6 +10,7 @@ import { colors } from 'app/constants';
 class AutocompleteInput extends Component {
   render() {
     const {
+      id,
       input,
       onClearAutocomplete,
       onQueryAutocomplete,
@@ -17,19 +18,22 @@ class AutocompleteInput extends Component {
       onSaveInput,
       placeSelected,
       placeholder,
-      results
+      results,
+      tabIndex
     } = this.props;
 
     let inputProps = {
       onChange: onSaveInput,
       onKeyDown: this.handleKeyPress.bind(this),
       placeholder,
+      tabIndex,
       type: 'text',
       value: input
     };
 
     return (
       <Autosuggest
+        id={id}
         suggestions={results}
         onSuggestionsFetchRequested={onQueryAutocomplete}
         onSuggestionsClearRequested={onClearAutocomplete}
@@ -111,13 +115,14 @@ function renderSuggestion(suggestion, { query }) {
 
   return (
     <div>
-      <span style={styles.suggestionText}>{suggestionParts}</span>
+      <div style={styles.suggestionText}>{suggestionParts}</div>
     </div>
   );
 }
 
 AutocompleteInput.propTypes = {
   error: PropTypes.string,
+  id: PropTypes.string.isRequired,
   onClearAutocomplete: PropTypes.func.isRequired,
   onClearSavedPlace: PropTypes.func.isRequired,
   onQueryAutocomplete: PropTypes.func.isRequired,
@@ -126,17 +131,20 @@ AutocompleteInput.propTypes = {
   placeSelected: PropTypes.bool,
   placeholder: PropTypes.string,
   results: PropTypes.array,
-  style: PropTypes.object
+  style: PropTypes.object,
+  tabIndex: PropTypes.number
 };
 
 const autocompleteStyles = {
+  container: {
+    margin: "5px 0px"
+  },
   input: {
     border: "1px solid #cccccc",
     borderRadius: "4px",
     boxShadow: "inset 0 1px 1px rgba(0,0,0,.075)",
     color: "#333333",
     fontSize: 16,
-    margin: 5,
     outline: "none",
     padding: "6px 12px"
   },
@@ -165,10 +173,8 @@ const autocompleteStyles = {
     backgroundColor: "#ffffff",
     border: "1px solid #cccccc",
     borderTop: 0,
-    left: 5,
-    marginTop: -6,
-    position: "absolute",
-    zIndex: 2
+    marginTop: -1,
+    position: "absolute"
   }
 };
 

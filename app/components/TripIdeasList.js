@@ -1,22 +1,17 @@
 'use strict';
 
-require('app/stylesheets/tripIdeasList.css');
-
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
-import { colors, dimensions } from 'app/constants';
+import { acComponents, colors, dimensions } from 'app/constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
+import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 
 class TripIdeasList extends Component {
-  componentDidMount() {
-    this.loadGoogleAutocompleteAPI();
-  }
-
   render() {
     const {
       ideas,
@@ -58,24 +53,25 @@ class TripIdeasList extends Component {
               </span>
             )}
           </div>
-          <TextInput
-            onBlur={this.unlockLeftColumnScroll}
-            onChange={this.handleSearchBoxChange.bind(this)}
-            onKeyDown={this.handleSearchBoxKeys.bind(this)}
-            ref={x => this.searchBox = x}
-            type="text"
-            placeholder="Enter a place or destination"
-            style={styles.searchBox}
-            tabIndex={1}
-          />
-          <Button
-            disabled={!newIdea}
-            onClick={this.clearSearchBoxAnd.bind(this, onAddIdeaPress)}
-            style={this.loadAddIdeaButtonStyle()}
-            tabIndex={3}
-          >
-            Add
-          </Button>
+          <div style={styles.searchSection}>
+            <PlaceAutocomplete
+              id={acComponents.tripIdeaAC}
+              // onBlur={this.unlockLeftColumnScroll}
+              // onChange={this.handleSearchBoxChange.bind(this)}
+              // onKeyDown={this.handleSearchBoxKeys.bind(this)}
+              placeholder="Enter a place or destination"
+              style={styles.searchBox}
+              tabIndex={1}
+            />
+            <Button
+              disabled={!newIdea}
+              onClick={this.clearSearchBoxAnd.bind(this, onAddIdeaPress)}
+              style={this.loadAddIdeaButtonStyle()}
+              tabIndex={3}
+            >
+              Add
+            </Button>
+          </div>
           {newIdea && commentBox}
         </div>
         <div>
@@ -181,7 +177,9 @@ TripIdeasList.propTypes = {
 const styles = {
   commentBox: {
     display: "inline",
+    fontSize: 14,
     margin: "0px 0px 10px 0px",
+    outline: "none",
     width: "100%"
   },
   ideasSection: {
@@ -191,9 +189,8 @@ const styles = {
     marginBottom: 10
   },
   searchBox: {
-    display: "inline",
-    width: "80%",
-    margin: "0px 0px 10px 0px"
+    fontSize: 14,
+    width: 280
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
@@ -207,14 +204,20 @@ const styles = {
     color: "#cccccc",
     cursor: "default"
   },
+  searchSection: {
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "space-between",
+    margin: "0px 0px 10px 0px"
+  },
   showAllLink: {
-    cursor: 'pointer',
-    textDecoration: 'underline'
+    cursor: "pointer",
+    textDecoration: "underline"
   },
   titleSection: {
-    display: 'flex',
-    alignItems: 'baseline',
-    justifyContent: 'space-between'
+    display: "flex",
+    alignItems: "baseline",
+    justifyContent: "space-between"
   }
 };
 

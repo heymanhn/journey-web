@@ -165,7 +165,8 @@ export const initialTripState = {
  * Autocomplete component IDs
  */
 export const acComponents = {
-  createTripAC: 'createTripAC'
+  createTripAC: 'createTripAC',
+  tripIdeaAC: 'tripIdeaAC'
 };
 
 

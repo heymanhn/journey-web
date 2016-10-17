@@ -28,11 +28,13 @@ class CreateTripPage extends Component {
             style={styles.inputField}
             type="text"
           />
-          <PlaceAutocomplete
-            id={acComponents.createTripAC}
-            placeholder="Where do you want to go?"
-            style={styles.inputField}
-          />
+          <div style={styles.destinationContainer}>
+            <PlaceAutocomplete
+              id={acComponents.createTripAC}
+              placeholder="Where do you want to go?"
+              style={styles.inputField}
+            />
+          </div>
           <div style={styles.inlineDiv}>
             Visibility:
             <input
@@ -70,6 +72,9 @@ CreateTripPage.propTypes = {
 };
 
 const styles = {
+  destinationContainer: {
+    marginLeft: 5
+  },
   inlineDiv: {
     display: "inline"
   },

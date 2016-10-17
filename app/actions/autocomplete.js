@@ -1,7 +1,12 @@
 'use strict';
 
 import _ from 'underscore';
-import { clearSavedDest, createTripSaveDest } from './trips';
+import {
+  clearNewTripIdea,
+  clearSavedDest,
+  createTripSaveDest,
+  saveNewTripIdea
+} from './trips';
 import { acComponents, googleAPI } from 'app/constants';
 
 // Store references to google APIs as module globals
@@ -141,6 +146,8 @@ export function apiFetchPlaceDetails(autocompleteId, placeId) {
         switch(autocompleteId) {
           case acComponents.createTripAC:
             return dispatch(createTripSaveDest(place));
+          case acComponents.tripIdeaAC:
+            return dispatch(saveNewTripIdea(place));
         }
       }
     }
@@ -158,6 +165,8 @@ export function clearSavedPlace(autocompleteId) {
     switch(autocompleteId) {
       case acComponents.createTripAC:
         return dispatch(clearSavedDest());
+      case acComponents.tripIdeaAC:
+        return dispatch(clearNewTripIdea());
     }
   }
 }
