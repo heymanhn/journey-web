@@ -15,7 +15,8 @@ import {
 } from 'app/actions/autocomplete';
 import {
   API_CREATE_TRIP_SUCCESS,
-  API_UPDATE_TRIP_SUCCESS
+  API_UPDATE_TRIP_SUCCESS,
+  API_ADD_TRIP_IDEA_SUCCESS
 } from 'app/actions/trips';
 import { acComponents, initialACState } from 'app/constants';
 
@@ -79,6 +80,7 @@ function createAutocompleteReducer(id) {
         };
       case API_CREATE_TRIP_SUCCESS:
       case API_UPDATE_TRIP_SUCCESS:
+      case API_ADD_TRIP_IDEA_SUCCESS:
         return {
           ..._.omit(state, 'error'),
           input: '',

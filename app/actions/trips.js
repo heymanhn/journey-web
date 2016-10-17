@@ -6,7 +6,12 @@ import ObjectID from 'bson-objectid';
 
 import { viewTripPage } from './navigation';
 import { apiPlaceDetails } from './autocomplete';
-import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
+import {
+  acComponents,
+  fetchOptsTemplate,
+  handleErrors,
+  journeyAPI
+} from 'app/constants';
 
 /*
  * Action Types
@@ -142,6 +147,7 @@ export function apiCreateTripRequest() {
 export function apiCreateTripSuccess(json) {
   return {
     type: API_CREATE_TRIP_SUCCESS,
+    autocompleteId: acComponents.createTripAC,
     trip: json.trip
   };
 }
@@ -297,6 +303,7 @@ export function apiAddTripIdeaRequest() {
 export function apiAddTripIdeaSuccess(json) {
   return {
     type: API_ADD_TRIP_IDEA_SUCCESS,
+    autocompleteId: acComponents.tripIdeaAC,
     ideas: json.ideas
   };
 }
