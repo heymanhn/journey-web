@@ -107,7 +107,7 @@ export function apiPlaceDetailsFailure(autocompleteId, error) {
  */
 
 export function apiAutocomplete(autocompleteId, input) {
-  return dispatch => {
+  return (dispatch, getState) => {
     if (!input) {
       return dispatch(apiAutocompleteFailure(autocompleteId, 'ZERO_RESULTS'));
     }
@@ -116,8 +116,29 @@ export function apiAutocomplete(autocompleteId, input) {
     dispatch(apiAutocompleteRequest(autocompleteId));
 
     let options = { input };
-    if (autocompleteId === acComponents.createTripAC) {
-      options.types = ['(regions)'];
+    const { createTripAC, tripIdeaAC } = acComponents;
+    switch(autocompleteId) {
+      case createTripAC:
+        options.types = ['(regions)'];
+        break;
+      case tripIdeaAC:
+        const {
+          northeast,
+          southwest
+        } = getState().tripState.trip.destination.viewport;
+
+        options.bounds = new google.maps.LatLngBounds(
+          new google.maps.LatLng(
+            southwest.coordinates[1],
+            southwest.coordinates[0]
+          ),
+          new google.maps.LatLng(
+            northeast.coordinates[1],
+            northeast.coordinates[0]
+          )
+        );
+        options.types = ['geocode', 'establishment'];
+        break;
     }
 
     function processResults(results, status) {

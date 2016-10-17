@@ -89,7 +89,6 @@ class TripIdeasList extends Component {
 }
 
 TripIdeasList.propTypes = {
-  destination: PropTypes.object,
   ideas: PropTypes.array,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
