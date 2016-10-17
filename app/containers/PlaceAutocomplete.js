@@ -5,16 +5,22 @@ import {
   clearAutocomplete,
   apiAutocompleteDest,
   saveInput
-} from 'app/actions/search';
+} from 'app/actions/autocomplete';
 import { apiCreateTripSaveDest, clearSavedDest } from 'app/actions/trips';
 import AutocompleteInput from 'app/components/AutocompleteInput';
 
 const mapStateToProps = (state) => {
-  const { error, input, place, results } = state.searchState;
+  const {
+    error,
+    input,
+    placeSelected,
+    results
+  } = state.componentsState.autocompleteState;
+
   return {
     error,
     input,
-    place,
+    placeSelected,
     results
   };
 };

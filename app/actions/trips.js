@@ -5,7 +5,7 @@ import fetch from 'isomorphic-fetch';
 import ObjectID from 'bson-objectid';
 
 import { viewTripPage } from './navigation';
-import { apiPlaceDetails } from './search';
+import { apiPlaceDetails } from './autocomplete';
 import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
 
 /*

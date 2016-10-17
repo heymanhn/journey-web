@@ -15,7 +15,7 @@ class AutocompleteInput extends Component {
       onQueryAutocomplete,
       onSaveDestination,
       onSaveInput,
-      place,
+      placeSelected,
       placeholder,
       results
     } = this.props;
@@ -43,7 +43,7 @@ class AutocompleteInput extends Component {
   }
 
   loadStyle() {
-    const { place, results, style } = this.props;
+    const { placeSelected, results, style } = this.props;
     const { input, suggestionsContainer: sc } = styles;
     const baseStyle = { ...autocompleteStyles };
 
@@ -63,7 +63,7 @@ class AutocompleteInput extends Component {
     }
 
     // Show markers next to text when a place has been selected
-    if (place) {
+    if (placeSelected) {
       _.extend(baseStyle.input, input.placeSelected);
     } else {
       _.extend(baseStyle.input, input.noPlace);
@@ -73,18 +73,18 @@ class AutocompleteInput extends Component {
   }
 
   handleKeyPress(event) {
-    const { onClearSavedDest, onSaveInput, place } = this.props;
+    const { onClearSavedDest, onSaveInput, placeSelected } = this.props;
 
     switch(event.key) {
       case 'Backspace':
-        if (place) {
+        if (placeSelected) {
           onSaveInput(null, { newValue: '' });
           return onClearSavedDest();
         } else {
           return null;
         }
       case 'Escape':
-        return place && onClearSavedDest();
+        return placeSelected && onClearSavedDest();
     }
   }
 }
@@ -123,7 +123,7 @@ AutocompleteInput.propTypes = {
   onQueryAutocomplete: PropTypes.func.isRequired,
   onSaveDestination: PropTypes.func.isRequired,
   onSaveInput: PropTypes.func.isRequired,
-  place: PropTypes.object,
+  placeSelected: PropTypes.object,
   placeholder: PropTypes.string,
   results: PropTypes.array,
   style: PropTypes.object

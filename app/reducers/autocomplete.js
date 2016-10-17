@@ -10,15 +10,15 @@ import {
   API_PLACE_DETAILS_REQUEST,
   API_PLACE_DETAILS_SUCCESS,
   API_PLACE_DETAILS_FAILURE
-} from 'app/actions/search';
+} from 'app/actions/autocomplete';
 import {
   API_CREATE_TRIP_SUCCESS,
   API_UPDATE_TRIP_SUCCESS,
   CLEAR_SAVED_DEST
 } from 'app/actions/trips';
-import { initialSearchState } from 'app/constants';
+import { initialACState } from 'app/constants';
 
-export default function searchState(state = initialSearchState, action) {
+export default function autocompleteState(state = initialACState, action) {
   switch (action.type) {
     case SAVE_INPUT:
       return {
@@ -50,7 +50,7 @@ export default function searchState(state = initialSearchState, action) {
       return {
         ...state,
         isFetchingPlace: false,
-        place: action.place
+        placeSelected: action.placeSelected
       };
     case API_AUTOCOMPLETE_FAILURE:
       return {
@@ -61,19 +61,24 @@ export default function searchState(state = initialSearchState, action) {
       };
     case API_PLACE_DETAILS_FAILURE:
       return {
-        ..._.omit(state, 'place'),
+        ...state,
         error: action.error,
-        isFetchingPlace: false
+        isFetchingPlace: false,
+        placeSelected: false
       };
     case API_CREATE_TRIP_SUCCESS:
     case API_UPDATE_TRIP_SUCCESS:
       return {
-        ..._.omit(state, ['error', 'place']),
+        ..._.omit(state, 'error'),
         input: '',
+        placeSelected: false,
         results: []
       };
     case CLEAR_SAVED_DEST:
-      return _.omit(state, 'place');
+      return {
+        ...state,
+        placeSelected: false
+      };
   }
 
   return state;

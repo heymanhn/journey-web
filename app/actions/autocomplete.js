@@ -65,10 +65,10 @@ export function apiPlaceDetailsRequest() {
   };
 }
 
-export function apiPlaceDetailsSuccess(place) {
+export function apiPlaceDetailsSuccess(placeSelected) {
   return {
     type: API_PLACE_DETAILS_SUCCESS,
-    place
+    placeSelected
   };
 }
 
@@ -91,7 +91,7 @@ export function apiAutocompleteDest(input) {
 }
 
 function apiAutocomplete(options) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     if (!options.input) {
       dispatch(apiAutocompleteFailure('ZERO_RESULTS'));
     } else {
@@ -114,14 +114,14 @@ function apiAutocomplete(options) {
 }
 
 export function apiPlaceDetails(placeId, cbAction) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(apiPlaceDetailsRequest());
 
     function processResult(place, status) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         return dispatch(apiPlaceDetailsFailure(status));
       } else {
-        dispatch(apiPlaceDetailsSuccess(place));
+        dispatch(apiPlaceDetailsSuccess(true));
         return cbAction && dispatch(cbAction(place));
       }
     }

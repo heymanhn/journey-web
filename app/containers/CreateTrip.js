@@ -8,7 +8,7 @@ import {
   createTripSaveVisibility
 } from 'app/actions/trips';
 import CreateTripPage from 'app/components/CreateTripPage';
-import { apiAutocompleteDest } from 'app/actions/search';
+import { apiAutocompleteDest } from 'app/actions/autocomplete';
 
 const mapStateToProps = (state) => {
   const { error } = state.tripsState;

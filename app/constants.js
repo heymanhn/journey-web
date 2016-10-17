@@ -141,10 +141,11 @@ export const initialMapState = {
   mapWidth: calcMapWidth()
 };
 
-export const initialSearchState = {
+export const initialACState = {
   input: '',
   isFetchingAC: false,
   isFetchingPlace: false,
+  placeSelected: false,
   results: []
 };
 
