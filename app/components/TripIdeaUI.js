@@ -88,8 +88,7 @@ class TripIdeaUI extends Component {
       hoverLngLat,
       onClearHoverLngLat,
       onFocusIdea,
-      onRemoveIdea,
-      onSetHoverLngLat
+      onRemoveIdea
     } = this.props;
 
     const ideaPanel = (
@@ -101,7 +100,7 @@ class TripIdeaUI extends Component {
          * slightly and display a marker pin above the idea's location on the map to
          * indicate that that location is selected
          */
-        onMouseOver={onSetHoverLngLat}
+        onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
       >
         <div
@@ -143,6 +142,13 @@ class TripIdeaUI extends Component {
     const id = this.props.idea._id;
     const height = document.getElementById(id).clientHeight;
     return _.extend(styles.emptySpace, { height });
+  }
+
+  setHoverLngLat() {
+    const { hoverLngLat, idea, onSetHoverLngLat } = this.props;
+    if (hoverLngLat !== idea.loc.coordinates) {
+      return onSetHoverLngLat();
+    }
   }
 }
 
