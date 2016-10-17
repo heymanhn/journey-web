@@ -29,7 +29,7 @@ class Root extends Component {
     const { store } = this.props;
     const config = {
       storage: localForage,
-      blacklist: ['mapState', 'searchState', 'tripState']
+      blacklist: ['componentsState', 'tripState']
     };
 
     persistStore(store, config, () => {

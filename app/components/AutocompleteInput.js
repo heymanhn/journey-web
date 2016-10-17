@@ -123,7 +123,7 @@ AutocompleteInput.propTypes = {
   onQueryAutocomplete: PropTypes.func.isRequired,
   onSaveDestination: PropTypes.func.isRequired,
   onSaveInput: PropTypes.func.isRequired,
-  placeSelected: PropTypes.object,
+  placeSelected: PropTypes.bool,
   placeholder: PropTypes.string,
   results: PropTypes.array,
   style: PropTypes.object
