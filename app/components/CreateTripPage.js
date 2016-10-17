@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
+import { acComponents } from 'app/constants';
 
 class CreateTripPage extends Component {
   render() {
@@ -28,6 +29,7 @@ class CreateTripPage extends Component {
             type="text"
           />
           <PlaceAutocomplete
+            id={acComponents.createTripAC}
             placeholder="Where do you want to go?"
             style={styles.inputField}
           />

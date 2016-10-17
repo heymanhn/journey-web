@@ -9,13 +9,13 @@ import {
 import { apiCreateTripSaveDest, clearSavedDest } from 'app/actions/trips';
 import AutocompleteInput from 'app/components/AutocompleteInput';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const {
     error,
     input,
     placeSelected,
     results
-  } = state.componentsState.autocompleteState;
+  } = state.componentsState.autocompleteState[ownProps.id];
 
   return {
     error,
@@ -25,26 +25,28 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const { id } = ownProps;
+
   return {
     onClearAutocomplete() {
-      dispatch(clearAutocomplete());
+      dispatch(clearAutocomplete(id));
     },
 
     onClearSavedDest() {
-      dispatch(clearSavedDest());
+      dispatch(clearSavedDest(id));
     },
 
     onSaveDestination(event, { suggestion, suggestionValue }) {
-      dispatch(apiCreateTripSaveDest(suggestion.place_id));
+      dispatch(apiCreateTripSaveDest(id, suggestion.place_id));
     },
 
     onQueryAutocomplete({ value }) {
-      dispatch(apiAutocompleteDest(value));
+      dispatch(apiAutocompleteDest(id, value));
     },
 
     onSaveInput(event, { newValue }) {
-      dispatch(saveInput(newValue));
+      dispatch(saveInput(id, newValue));
     }
   };
 };

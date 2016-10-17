@@ -25,56 +25,64 @@ export const API_PLACE_DETAILS_FAILURE = 'API_PLACE_DETAILS_FAILURE';
  * Action Creators
  */
 
-export function saveInput(input) {
+export function saveInput(autocompleteId, input) {
   return {
     type: SAVE_INPUT,
+    autocompleteId,
     input
   };
 }
 
-export function clearAutocomplete() {
+export function clearAutocomplete(autocompleteId) {
   return {
-    type: CLEAR_AUTOCOMPLETE
+    type: CLEAR_AUTOCOMPLETE,
+    autocompleteId
   };
 }
 
-export function apiAutocompleteRequest() {
+export function apiAutocompleteRequest(autocompleteId) {
   return {
-    type: API_AUTOCOMPLETE_REQUEST
+    type: API_AUTOCOMPLETE_REQUEST,
+    autocompleteId
   };
 }
 
-export function apiAutocompleteSuccess(results) {
+export function apiAutocompleteSuccess(autocompleteId, results) {
   const fields = ['description', 'matched_substrings', 'place_id'];
   return {
     type: API_AUTOCOMPLETE_SUCCESS,
+    autocompleteId,
     results: results.map(result => _.pick(result, fields))
   };
 }
 
-export function apiAutocompleteFailure(error) {
+export function apiAutocompleteFailure(autocompleteId, error) {
   return {
     type: API_AUTOCOMPLETE_FAILURE,
+    autocompleteId,
     error
   };
 }
 
-export function apiPlaceDetailsRequest() {
+export function apiPlaceDetailsRequest(autocompleteId) {
   return {
-    type: API_PLACE_DETAILS_REQUEST
+    type: API_PLACE_DETAILS_REQUEST,
+    autocompleteId
   };
 }
 
-export function apiPlaceDetailsSuccess(placeSelected) {
+export function apiPlaceDetailsSuccess(autocompleteId, placeSelected) {
   return {
     type: API_PLACE_DETAILS_SUCCESS,
+    autocompleteId,
     placeSelected
   };
 }
 
-export function apiPlaceDetailsFailure(error) {
+export function apiPlaceDetailsFailure(autocompleteId, error) {
   return {
     type: API_PLACE_DETAILS_FAILURE,
+    autocompleteId,
     error
   };
 }
@@ -83,28 +91,28 @@ export function apiPlaceDetailsFailure(error) {
 /*
  * Action thunks
  */
-export function apiAutocompleteDest(input) {
-  return apiAutocomplete({
+export function apiAutocompleteDest(autocompleteId, input) {
+  return apiAutocomplete(autocompleteId, {
     input,
     types: ['(regions)']
   });
 }
 
-function apiAutocomplete(options) {
+function apiAutocomplete(autocompleteId, options) {
   return (dispatch) => {
     if (!options.input) {
-      dispatch(apiAutocompleteFailure('ZERO_RESULTS'));
+      dispatch(apiAutocompleteFailure(autocompleteId, 'ZERO_RESULTS'));
     } else {
-      dispatch(saveInput(options.input));
+      dispatch(saveInput(autocompleteId, options.input));
     }
 
-    dispatch(apiAutocompleteRequest());
+    dispatch(apiAutocompleteRequest(autocompleteId));
 
     function processResults(results, status) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
-        return dispatch(apiAutocompleteFailure(status));
+        return dispatch(apiAutocompleteFailure(autocompleteId, status));
       } else {
-        return dispatch(apiAutocompleteSuccess(results));
+        return dispatch(apiAutocompleteSuccess(autocompleteId, results));
       }
     }
 
@@ -113,15 +121,15 @@ function apiAutocomplete(options) {
   };
 }
 
-export function apiPlaceDetails(placeId, cbAction) {
+export function apiPlaceDetails(autocompleteId, placeId, cbAction) {
   return (dispatch) => {
-    dispatch(apiPlaceDetailsRequest());
+    dispatch(apiPlaceDetailsRequest(autocompleteId));
 
     function processResult(place, status) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
-        return dispatch(apiPlaceDetailsFailure(status));
+        return dispatch(apiPlaceDetailsFailure(autocompleteId, status));
       } else {
-        dispatch(apiPlaceDetailsSuccess(true));
+        dispatch(apiPlaceDetailsSuccess(autocompleteId, true));
         return cbAction && dispatch(cbAction(place));
       }
     }

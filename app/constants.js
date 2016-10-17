@@ -162,6 +162,14 @@ export const initialTripState = {
 
 
 /*
+ * Autocomplete component IDs
+ */
+export const acComponents = {
+  createTripAC: 'createTripAC'
+};
+
+
+/*
  * Drag and drop functionality variables
  */
 export const dndTypes = {

@@ -127,9 +127,10 @@ export function createTripSaveVisibility(visibility) {
   };
 }
 
-export function clearSavedDest() {
+export function clearSavedDest(autocompleteId) {
   return {
-    type: CLEAR_SAVED_DEST
+    type: CLEAR_SAVED_DEST,
+    autocompleteId
   };
 }
 
@@ -470,9 +471,9 @@ export function apiCreateTrip() {
   };
 }
 
-export function apiCreateTripSaveDest(placeId) {
+export function apiCreateTripSaveDest(id, placeId) {
   return (dispatch, getState) => {
-    dispatch(apiPlaceDetails(placeId, createTripSaveDest));
+    dispatch(apiPlaceDetails(id, placeId, createTripSaveDest));
   }
 }
 
