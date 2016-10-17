@@ -133,6 +133,7 @@ const autocompleteStyles = {
   input: {
     border: "1px solid #cccccc",
     borderRadius: "4px",
+    boxShadow: "inset 0 1px 1px rgba(0,0,0,.075)",
     color: "#333333",
     fontSize: 16,
     margin: 5,
@@ -182,9 +183,9 @@ const styles = {
       borderBottomRightRadius: 4
     },
     placeSelected: {
-      paddingLeft: 35,
+      paddingLeft: 30,
       backgroundImage: "url('../assets/mini-marker-icon.png')",
-      backgroundPosition: "12px 9px",
+      backgroundPosition: "10px 50%",
       backgroundRepeat: "no-repeat",
       backgroundSize: "12px 16px"
     },
