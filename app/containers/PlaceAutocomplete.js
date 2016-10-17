@@ -2,11 +2,12 @@
 
 import { connect } from 'react-redux';
 import {
+  apiAutocomplete,
+  apiFetchPlaceDetails,
   clearAutocomplete,
-  apiAutocompleteDest,
+  clearSavedPlace,
   saveInput
 } from 'app/actions/autocomplete';
-import { apiCreateTripSaveDest, clearSavedDest } from 'app/actions/trips';
 import AutocompleteInput from 'app/components/AutocompleteInput';
 
 const mapStateToProps = (state, ownProps) => {
@@ -33,16 +34,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(clearAutocomplete(id));
     },
 
-    onClearSavedDest() {
-      dispatch(clearSavedDest(id));
+    onClearSavedPlace() {
+      dispatch(clearSavedPlace(id));
     },
 
-    onSaveDestination(event, { suggestion, suggestionValue }) {
-      dispatch(apiCreateTripSaveDest(id, suggestion.place_id));
+    onSavePlace(event, { suggestion, suggestionValue }) {
+      dispatch(apiFetchPlaceDetails(id, suggestion.place_id));
     },
 
     onQueryAutocomplete({ value }) {
-      dispatch(apiAutocompleteDest(id, value));
+      dispatch(apiAutocomplete(id, value));
     },
 
     onSaveInput(event, { newValue }) {

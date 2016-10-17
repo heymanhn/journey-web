@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import {
   SAVE_INPUT,
   CLEAR_AUTOCOMPLETE,
+  CLEAR_SAVED_PLACE,
   API_AUTOCOMPLETE_REQUEST,
   API_AUTOCOMPLETE_SUCCESS,
   API_AUTOCOMPLETE_FAILURE,
@@ -14,8 +15,7 @@ import {
 } from 'app/actions/autocomplete';
 import {
   API_CREATE_TRIP_SUCCESS,
-  API_UPDATE_TRIP_SUCCESS,
-  CLEAR_SAVED_DEST
+  API_UPDATE_TRIP_SUCCESS
 } from 'app/actions/trips';
 import { acComponents, initialACState } from 'app/constants';
 
@@ -35,6 +35,11 @@ function createAutocompleteReducer(id) {
         return {
           ...state,
           results: []
+        };
+      case CLEAR_SAVED_PLACE:
+        return {
+          ...state,
+          placeSelected: false
         };
       case API_AUTOCOMPLETE_REQUEST:
         return {
@@ -79,11 +84,6 @@ function createAutocompleteReducer(id) {
           input: '',
           placeSelected: false,
           results: []
-        };
-      case CLEAR_SAVED_DEST:
-        return {
-          ...state,
-          placeSelected: false
         };
     }
 

@@ -1,7 +1,8 @@
 'use strict';
 
 import _ from 'underscore';
-import { googleAPI } from 'app/constants';
+import { clearSavedDest, createTripSaveDest } from './trips';
+import { acComponents, googleAPI } from 'app/constants';
 
 // Store references to google APIs as module globals
 let acService;
@@ -13,6 +14,7 @@ let placesService;
 
 export const SAVE_INPUT = 'SAVE_INPUT';
 export const CLEAR_AUTOCOMPLETE = 'CLEAR_AUTOCOMPLETE';
+export const CLEAR_SAVED_PLACE = 'CLEAR_SAVED_PLACE';
 export const API_AUTOCOMPLETE_REQUEST = 'API_AUTOCOMPLETE_REQUEST';
 export const API_AUTOCOMPLETE_SUCCESS = 'API_AUTOCOMPLETE_SUCCESS';
 export const API_AUTOCOMPLETE_FAILURE = 'API_AUTOCOMPLETE_FAILURE';
@@ -36,6 +38,13 @@ export function saveInput(autocompleteId, input) {
 export function clearAutocomplete(autocompleteId) {
   return {
     type: CLEAR_AUTOCOMPLETE,
+    autocompleteId
+  };
+}
+
+export function clearSavedPlaceAC(autocompleteId) {
+  return {
+    type: CLEAR_SAVED_PLACE,
     autocompleteId
   };
 }
@@ -91,22 +100,20 @@ export function apiPlaceDetailsFailure(autocompleteId, error) {
 /*
  * Action thunks
  */
-export function apiAutocompleteDest(autocompleteId, input) {
-  return apiAutocomplete(autocompleteId, {
-    input,
-    types: ['(regions)']
-  });
-}
 
-function apiAutocomplete(autocompleteId, options) {
-  return (dispatch) => {
-    if (!options.input) {
-      dispatch(apiAutocompleteFailure(autocompleteId, 'ZERO_RESULTS'));
-    } else {
-      dispatch(saveInput(autocompleteId, options.input));
+export function apiAutocomplete(autocompleteId, input) {
+  return dispatch => {
+    if (!input) {
+      return dispatch(apiAutocompleteFailure(autocompleteId, 'ZERO_RESULTS'));
     }
 
+    dispatch(saveInput(autocompleteId, input));
     dispatch(apiAutocompleteRequest(autocompleteId));
+
+    let options = { input };
+    if (autocompleteId === acComponents.createTripAC) {
+      options.types = ['(regions)'];
+    }
 
     function processResults(results, status) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
@@ -121,8 +128,8 @@ function apiAutocomplete(autocompleteId, options) {
   };
 }
 
-export function apiPlaceDetails(autocompleteId, placeId, cbAction) {
-  return (dispatch) => {
+export function apiFetchPlaceDetails(autocompleteId, placeId) {
+  return dispatch => {
     dispatch(apiPlaceDetailsRequest(autocompleteId));
 
     function processResult(place, status) {
@@ -130,7 +137,11 @@ export function apiPlaceDetails(autocompleteId, placeId, cbAction) {
         return dispatch(apiPlaceDetailsFailure(autocompleteId, status));
       } else {
         dispatch(apiPlaceDetailsSuccess(autocompleteId, true));
-        return cbAction && dispatch(cbAction(place));
+
+        switch(autocompleteId) {
+          case acComponents.createTripAC:
+            return dispatch(createTripSaveDest(place));
+        }
       }
     }
 
@@ -138,4 +149,15 @@ export function apiPlaceDetails(autocompleteId, placeId, cbAction) {
     placesService = placesService || new google.maps.places.PlacesService(elem);
     return placesService.getDetails({ placeId }, processResult);
   };
+}
+
+export function clearSavedPlace(autocompleteId) {
+  return dispatch => {
+    dispatch(clearSavedPlaceAC(autocompleteId));
+
+    switch(autocompleteId) {
+      case acComponents.createTripAC:
+        return dispatch(clearSavedDest());
+    }
+  }
 }

@@ -13,7 +13,7 @@ class AutocompleteInput extends Component {
       input,
       onClearAutocomplete,
       onQueryAutocomplete,
-      onSaveDestination,
+      onSavePlace,
       onSaveInput,
       placeSelected,
       placeholder,
@@ -33,7 +33,7 @@ class AutocompleteInput extends Component {
         suggestions={results}
         onSuggestionsFetchRequested={onQueryAutocomplete}
         onSuggestionsClearRequested={onClearAutocomplete}
-        onSuggestionSelected={onSaveDestination}
+        onSuggestionSelected={onSavePlace}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
@@ -73,18 +73,18 @@ class AutocompleteInput extends Component {
   }
 
   handleKeyPress(event) {
-    const { onClearSavedDest, onSaveInput, placeSelected } = this.props;
+    const { onClearSavedPlace, onSaveInput, placeSelected } = this.props;
 
     switch(event.key) {
       case 'Backspace':
         if (placeSelected) {
           onSaveInput(null, { newValue: '' });
-          return onClearSavedDest();
+          return onClearSavedPlace();
         } else {
           return null;
         }
       case 'Escape':
-        return placeSelected && onClearSavedDest();
+        return placeSelected && onClearSavedPlace();
     }
   }
 }
@@ -119,9 +119,9 @@ function renderSuggestion(suggestion, { query }) {
 AutocompleteInput.propTypes = {
   error: PropTypes.string,
   onClearAutocomplete: PropTypes.func.isRequired,
-  onClearSavedDest: PropTypes.func.isRequired,
+  onClearSavedPlace: PropTypes.func.isRequired,
   onQueryAutocomplete: PropTypes.func.isRequired,
-  onSaveDestination: PropTypes.func.isRequired,
+  onSavePlace: PropTypes.func.isRequired,
   onSaveInput: PropTypes.func.isRequired,
   placeSelected: PropTypes.bool,
   placeholder: PropTypes.string,
