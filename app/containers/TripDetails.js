@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onSetTripVisibility(visibility) {
-      dispatch(apiUpdateTrip({ visibility }, true));
+      dispatch(apiUpdateTrip(visibility));
     },
 
     onShowTripSettingsModal() {

@@ -40,6 +40,7 @@ export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 export const UPDATE_TRIP_SAVE_DEST = 'UPDATE_TRIP_SAVE_DEST';
 export const UPDATE_TRIP_CLEAR_DEST = 'UPDATE_TRIP_CLEAR_DEST';
 export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
+export const UPDATE_TRIP_SAVE_VIS = 'UPDATE_TRIP_SAVE_VIS';
 export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
 export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
 export const API_UPDATE_TRIP_SUCCESS = 'API_UPDATE_TRIP_SUCCESS';
@@ -199,6 +200,13 @@ export function updateTripSaveTitle(title) {
   return {
     type: UPDATE_TRIP_SAVE_TITLE,
     title
+  };
+}
+
+export function updateTripSaveVis(visibility) {
+  return {
+    type: UPDATE_TRIP_SAVE_VIS,
+    visibility
   };
 }
 
@@ -505,15 +513,18 @@ export function apiGetTrip(tripId) {
   };
 }
 
-export function apiUpdateTrip(params, visibilityOnly) {
+export function apiUpdateTrip(visibility) {
   return (dispatch, getState) => {
-    if (visibilityOnly) {
+    const { trip: { _id: tripId }, updatedFields } = getState().tripState;
+    let params = {};
+    if (visibility) {
       dispatch(apiUpdateTripVisRequest());
+      params.visibility = visibility;
     } else {
       dispatch(apiUpdateTripRequest());
+      params = updatedFields;
     }
 
-    const { _id: tripId } = getState().tripState.trip;
     const updateTripAPI = journeyAPI.trip.update(tripId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
@@ -526,6 +537,7 @@ export function apiUpdateTrip(params, visibilityOnly) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiUpdateTripSuccess(json));
+        dispatch(hideTripSettingsModal());
       })
       .catch(error => { dispatch(apiUpdateTripFailure(error.message)); });
   };

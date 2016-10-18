@@ -10,6 +10,7 @@ import {
   UPDATE_TRIP_SAVE_DEST,
   UPDATE_TRIP_CLEAR_DEST,
   UPDATE_TRIP_SAVE_TITLE,
+  UPDATE_TRIP_SAVE_VIS,
   API_UPDATE_TRIP_VIS_REQUEST,
   API_UPDATE_TRIP_REQUEST,
   API_UPDATE_TRIP_SUCCESS,
@@ -139,6 +140,14 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         updatedFields: _.extend(state.updatedFields, { title: action.title })
       };
+    case UPDATE_TRIP_SAVE_VIS:
+      return {
+        ...state,
+        updatedFields: _.extend(
+          state.updatedFields,
+          { visibility: action.visibility }
+        )
+      };
     case API_UPDATE_TRIP_VIS_REQUEST:
       return {
         ...state,
@@ -146,7 +155,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case API_UPDATE_TRIP_SUCCESS:
       return {
-        ...state,
+        ..._.omit(state, 'updatedFields'),
         isFetching: false,
         isFetchingVisibility: false,
         trip: action.trip

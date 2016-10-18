@@ -2,16 +2,38 @@
 
 import { connect } from 'react-redux';
 import {
+  apiUpdateTrip,
   hideTripSettingsModal,
-  updateTripSaveTitle
+  updateTripSaveTitle,
+  updateTripSaveVis
 } from 'app/actions/trips';
 import TripSettingsModal from 'app/components/TripSettingsModal';
 
 const mapStateToProps = (state) => {
-  const { showModal, trip } = state.tripState;
-  return {
+  const {
+    isFetching,
     showModal,
-    trip
+    trip: { title, destination: { name: destinationName }, visibility },
+    updatedFields
+  } = state.tripState;
+  let newTitle, newDestinationName, newVisibility;
+  let isSaveDisabled = true;
+
+  if (updatedFields && Object.keys(updatedFields).length > 0) {
+    isSaveDisabled = false;
+    newTitle = updatedFields.title;
+    if (updatedFields.destination) {
+      newDestinationName = updatedFields.destination.name;
+    }
+    newVisibility = updatedFields.visibility;
+  }
+
+  return {
+    isSaveDisabled: isFetching || isSaveDisabled,
+    showModal,
+    title: newTitle || title,
+    destinationName: newDestinationName || destinationName,
+    visibility: newVisibility || visibility
   };
 };
 
@@ -23,6 +45,18 @@ const mapDispatchToProps = (dispatch) => {
 
     onHide() {
       dispatch(hideTripSettingsModal());
+    },
+
+    onSetPrivate() {
+      dispatch(updateTripSaveVis('private'));
+    },
+
+    onSetPublic() {
+      dispatch(updateTripSaveVis('public'));
+    },
+
+    onUpdateTrip() {
+      dispatch(apiUpdateTrip());
     }
   };
 };

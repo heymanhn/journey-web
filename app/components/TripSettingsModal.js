@@ -1,5 +1,7 @@
 'use strict';
 
+require('app/stylesheets/tripSettingsModal.css');
+
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup, Modal } from 'react-bootstrap';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
@@ -9,10 +11,16 @@ import { acComponents } from 'app/constants';
 class TripSettingsModal extends Component {
   render() {
     const {
+      destinationName,
+      isSaveDisabled,
       onEnterTitle,
       onHide,
+      onSetPrivate,
+      onSetPublic,
+      onUpdateTrip,
       showModal,
-      trip: { title, destination: { name: destinationName }, visibility }
+      title,
+      visibility
     } = this.props;
 
     return (
@@ -26,7 +34,7 @@ class TripSettingsModal extends Component {
             <TextInput
               onChange={onEnterTitle}
               style={styles.inputField}
-              defaultValue={title}
+              value={title}
             />
           </div>
 
@@ -43,14 +51,20 @@ class TripSettingsModal extends Component {
           <div style={styles.inputSection}>
             <h4>Visibility:</h4>
             <ButtonGroup>
-              <Button active={visibility === 'public'}>
+              <Button
+                active={visibility === 'public'}
+                onClick={onSetPublic}
+              >
                 <img
                   src="../assets/setting-public-icon.png"
                   style={styles.visibilityIcon}
                 />
                 <span>Public</span>
               </Button>
-              <Button active={visibility === 'private'}>
+              <Button
+                active={visibility === 'private'}
+                onClick={onSetPrivate}
+              >
                 <img
                   src="../assets/setting-private-icon.png"
                   style={styles.visibilityIcon}
@@ -62,7 +76,14 @@ class TripSettingsModal extends Component {
         </Modal.Body>
         <Modal.Footer style={styles.footer}>
           <Button onClick={onHide}>Cancel</Button>
-          <Button bsStyle="primary">Save changes</Button>
+          <Button
+            bsStyle="primary"
+            disabled={isSaveDisabled}
+            onClick={onUpdateTrip}
+            style={styles.saveChangesButton}
+          >
+            Save changes
+          </Button>
         </Modal.Footer>
       </Modal>
     );
@@ -70,10 +91,16 @@ class TripSettingsModal extends Component {
 }
 
 TripSettingsModal.propTypes = {
+  destinationName: PropTypes.string.isRequired,
+  isSaveDisabled: PropTypes.bool,
   onEnterTitle: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
+  onSetPrivate: PropTypes.func.isRequired,
+  onSetPublic: PropTypes.func.isRequired,
+  onUpdateTrip: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
-  trip: PropTypes.object.isRequired
+  title: PropTypes.string.isRequired,
+  visibility: PropTypes.string.isRequired
 };
 
 const styles = {
@@ -95,6 +122,9 @@ const styles = {
   },
   inputSection: {
     paddingBottom: 10
+  },
+  saveChangesButton: {
+    width: 120
   },
   title: {
     fontWeight: "normal"
