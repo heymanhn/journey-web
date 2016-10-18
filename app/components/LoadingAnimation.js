@@ -1,7 +1,5 @@
 'use strict';
 
-require('app/stylesheets/react-spinner.css');
-
 import React, { Component, PropTypes } from 'react';
 import Spinner from './Spinner';
 
