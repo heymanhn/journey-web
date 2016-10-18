@@ -166,7 +166,8 @@ export const initialTripState = {
  */
 export const acComponents = {
   createTripAC: 'createTripAC',
-  tripIdeaAC: 'tripIdeaAC'
+  tripIdeaAC: 'tripIdeaAC',
+  updateTripAC: 'updateTripAC'
 };
 
 

@@ -8,6 +8,7 @@ import {
   API_GET_TRIP_SUCCESS,
   API_GET_TRIP_FAILURE,
   UPDATE_TRIP_SAVE_DEST,
+  UPDATE_TRIP_CLEAR_DEST,
   UPDATE_TRIP_SAVE_TITLE,
   API_UPDATE_TRIP_VIS_REQUEST,
   API_UPDATE_TRIP_REQUEST,
@@ -127,6 +128,11 @@ export default function tripState(state = initialTripState, action) {
           state.updatedFields,
           { destination: action.destination }
         )
+      };
+    case UPDATE_TRIP_CLEAR_DEST:
+      return {
+        ...state,
+        updatedFields: _.omit(state.updatedFields, 'destination')
       };
     case UPDATE_TRIP_SAVE_TITLE:
       return {

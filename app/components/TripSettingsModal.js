@@ -2,8 +2,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup, Modal } from 'react-bootstrap';
-import { findDOMNode } from 'react-dom';
+import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 import TextInput from './TextInput';
+import { acComponents } from 'app/constants';
 
 class TripSettingsModal extends Component {
   render() {
@@ -31,13 +32,11 @@ class TripSettingsModal extends Component {
 
           <div style={styles.inputSection}>
             <h4>Where do you want to go?</h4>
-            <TextInput
-              ref={x => {
-                this.updateDestInput = x;
-                x && this.loadGoogleAutocompleteAPI();
-              }}
-              style={styles.inputField}
+            <PlaceAutocomplete
               defaultValue={destinationName}
+              id={acComponents.updateTripAC}
+              placeholder="Enter a destination"
+              style={styles.updateTripAC}
             />
           </div>
 
@@ -68,23 +67,9 @@ class TripSettingsModal extends Component {
       </Modal>
     );
   }
-
-  loadGoogleAutocompleteAPI() {
-    const { onEnterDestination } = this.props;
-
-    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
-    const options = { types: ['(regions)'] };
-    const input = findDOMNode(this.updateDestInput);
-    const ac = new window.google.maps.places.Autocomplete(input, options);
-    ac.addListener(
-      'place_changed',
-      () => { onEnterDestination(ac.getPlace()); }
-    );
-  }
 }
 
 TripSettingsModal.propTypes = {
-  onEnterDestination: PropTypes.func.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
@@ -112,6 +97,10 @@ const styles = {
   },
   title: {
     fontWeight: "normal"
+  },
+  updateTripAC: {
+    width: 350,
+    zIndex: 3
   },
   visibilityIcon: {
     paddingRight: 5

@@ -6,7 +6,8 @@ import {
   apiFetchPlaceDetails,
   clearAutocomplete,
   clearSavedPlace,
-  saveInput
+  saveInput,
+  setDefaultPlace
 } from 'app/actions/autocomplete';
 import AutocompleteInput from 'app/components/AutocompleteInput';
 
@@ -38,16 +39,20 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(clearSavedPlace(id));
     },
 
-    onSavePlace(event, { suggestion, suggestionValue }) {
-      dispatch(apiFetchPlaceDetails(id, suggestion.place_id));
-    },
-
     onQueryAutocomplete({ value }) {
       dispatch(apiAutocomplete(id, value));
     },
 
     onSaveInput(event, { newValue }) {
       dispatch(saveInput(id, newValue));
+    },
+
+    onSavePlace(event, { suggestion, suggestionValue }) {
+      dispatch(apiFetchPlaceDetails(id, suggestion.place_id));
+    },
+
+    onSetDefaultPlace(placeName) {
+      dispatch(setDefaultPlace(id, placeName));
     }
   };
 };

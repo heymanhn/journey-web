@@ -5,6 +5,8 @@ import {
   clearNewTripIdea,
   clearSavedDest,
   createTripSaveDest,
+  updateTripSaveDest,
+  updateTripClearDest,
   saveNewTripIdea
 } from './trips';
 import { acComponents, googleAPI } from 'app/constants';
@@ -85,11 +87,10 @@ export function apiPlaceDetailsRequest(autocompleteId) {
   };
 }
 
-export function apiPlaceDetailsSuccess(autocompleteId, placeSelected) {
+export function apiPlaceDetailsSuccess(autocompleteId) {
   return {
     type: API_PLACE_DETAILS_SUCCESS,
-    autocompleteId,
-    placeSelected
+    autocompleteId
   };
 }
 
@@ -116,9 +117,10 @@ export function apiAutocomplete(autocompleteId, input) {
     dispatch(apiAutocompleteRequest(autocompleteId));
 
     let options = { input };
-    const { createTripAC, tripIdeaAC } = acComponents;
+    const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
     switch(autocompleteId) {
       case createTripAC:
+      case updateTripAC:
         options.types = ['(regions)'];
         break;
       case tripIdeaAC:
@@ -162,13 +164,16 @@ export function apiFetchPlaceDetails(autocompleteId, placeId) {
       if (status != google.maps.places.PlacesServiceStatus.OK) {
         return dispatch(apiPlaceDetailsFailure(autocompleteId, status));
       } else {
-        dispatch(apiPlaceDetailsSuccess(autocompleteId, true));
+        dispatch(apiPlaceDetailsSuccess(autocompleteId));
 
+        const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
         switch(autocompleteId) {
-          case acComponents.createTripAC:
+          case createTripAC:
             return dispatch(createTripSaveDest(place));
-          case acComponents.tripIdeaAC:
+          case tripIdeaAC:
             return dispatch(saveNewTripIdea(place));
+          case updateTripAC:
+            return dispatch(updateTripSaveDest(place));
         }
       }
     }
@@ -183,11 +188,21 @@ export function clearSavedPlace(autocompleteId) {
   return dispatch => {
     dispatch(clearSavedPlaceAC(autocompleteId));
 
+    const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
     switch(autocompleteId) {
-      case acComponents.createTripAC:
+      case createTripAC:
         return dispatch(clearSavedDest());
-      case acComponents.tripIdeaAC:
+      case tripIdeaAC:
         return dispatch(clearNewTripIdea());
+      case updateTripAC:
+        return dispatch(updateTripClearDest());
     }
+  }
+}
+
+export function setDefaultPlace(autocompleteId, placeName) {
+  return dispatch => {
+    dispatch(saveInput(autocompleteId, placeName));
+    return dispatch(apiPlaceDetailsSuccess(autocompleteId));
   }
 }

@@ -62,7 +62,7 @@ function createAutocompleteReducer(id) {
         return {
           ...state,
           isFetchingPlace: false,
-          placeSelected: action.placeSelected
+          placeSelected: true
         };
       case API_AUTOCOMPLETE_FAILURE:
         return {
@@ -93,10 +93,11 @@ function createAutocompleteReducer(id) {
   }
 }
 
-const { createTripAC, tripIdeaAC } = acComponents;
+const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
 const autocompleteState = combineReducers({
   [createTripAC]: createAutocompleteReducer(createTripAC),
-  [tripIdeaAC]: createAutocompleteReducer(tripIdeaAC)
+  [tripIdeaAC]: createAutocompleteReducer(tripIdeaAC),
+  [updateTripAC]: createAutocompleteReducer(updateTripAC)
 });
 
 export default autocompleteState;

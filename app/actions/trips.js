@@ -38,6 +38,7 @@ export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
 // Update a trip
 export const UPDATE_TRIP_SAVE_DEST = 'UPDATE_TRIP_SAVE_DEST';
+export const UPDATE_TRIP_CLEAR_DEST = 'UPDATE_TRIP_CLEAR_DEST';
 export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
 export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
 export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
@@ -188,6 +189,12 @@ export function updateTripSaveDest(destination) {
   };
 }
 
+export function updateTripClearDest() {
+  return {
+    type: UPDATE_TRIP_CLEAR_DEST
+  };
+}
+
 export function updateTripSaveTitle(title) {
   return {
     type: UPDATE_TRIP_SAVE_TITLE,
@@ -210,6 +217,7 @@ export function apiUpdateTripRequest() {
 export function apiUpdateTripSuccess(json) {
   return {
     type: API_UPDATE_TRIP_SUCCESS,
+    autocompleteId: acComponents.updateTripAC,
     trip: json.trip
   };
 }

@@ -8,6 +8,14 @@ import parse from 'autosuggest-highlight/parse';
 import { colors } from 'app/constants';
 
 class AutocompleteInput extends Component {
+  componentDidMount() {
+    const { defaultValue, onSetDefaultPlace } = this.props;
+
+    if (defaultValue) {
+      onSetDefaultPlace(defaultValue);
+    }
+  }
+
   render() {
     const {
       id,
@@ -121,6 +129,7 @@ function renderSuggestion(suggestion, { query }) {
 }
 
 AutocompleteInput.propTypes = {
+  defaultValue: PropTypes.string,
   error: PropTypes.string,
   id: PropTypes.string.isRequired,
   onClearAutocomplete: PropTypes.func.isRequired,
@@ -128,6 +137,7 @@ AutocompleteInput.propTypes = {
   onQueryAutocomplete: PropTypes.func.isRequired,
   onSavePlace: PropTypes.func.isRequired,
   onSaveInput: PropTypes.func.isRequired,
+  onSetDefaultPlace: PropTypes.func.isRequired,
   placeSelected: PropTypes.bool,
   placeholder: PropTypes.string,
   results: PropTypes.array,
