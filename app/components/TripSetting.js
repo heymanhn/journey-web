@@ -109,7 +109,7 @@ const styles = {
   spinner: {
     float: "left",
     height: 20,
-    left: 5,
+    left: 7,
     marginRight: 2,
     position: "relative",
     top: 10,
