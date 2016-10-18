@@ -11,17 +11,19 @@ import { viewLandingPage, viewTripsPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
 class NavigationAvatar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      gravatarFocused: false,
-      tooltipVisible: false
-    };
-  }
-
   render() {
-    const { name, onLogoutPress, picture, viewLandingPage } = this.props;
-    const { gravatarFocused, tooltipVisible } = this.state;
+    const {
+      gravatarFocused,
+      name,
+      onLogoutPress,
+      onSetGravatarActive,
+      onSetGravatarInactive,
+      onSetTooltipVisible,
+      onSetTooltipInvisible,
+      picture,
+      tooltipVisible,
+      viewLandingPage
+    } = this.props;
 
     const accountPopover = (
       <div style={styles.popover}>
@@ -53,9 +55,9 @@ class NavigationAvatar extends Component {
           style={styles.gravatarBackground}
 
           // Attach to these mouse events to mimic active state for profile pic
-          onMouseUp={this.onGravatarInactive.bind(this)}
-          onDragEnd={this.onGravatarInactive.bind(this)}
-          onMouseDown={this.onGravatarActive.bind(this)}
+          onMouseUp={onSetGravatarInactive}
+          onDragEnd={onSetGravatarInactive}
+          onMouseDown={onSetGravatarActive}
 
           // Display the popover on click
           onClick={this.toggleTooltipVisible.bind(this)}
@@ -68,7 +70,7 @@ class NavigationAvatar extends Component {
 
         <Overlay
           animation={false}
-          onHide={this.hideTooltip.bind(this)}
+          onHide={onSetTooltipInvisible}
           placement="bottom"
           rootClose
           show={tooltipVisible}
@@ -81,25 +83,23 @@ class NavigationAvatar extends Component {
   }
 
   toggleTooltipVisible() {
-    this.setState({ tooltipVisible: !this.state.tooltipVisible });
-  }
+    const {
+      onSetTooltipVisible,
+      onSetTooltipInvisible,
+      tooltipVisible
+    } = this.props;
 
-  hideTooltip() {
-    this.setState({ tooltipVisible: false });
-  }
-
-  onGravatarInactive() {
-    this.setState({ gravatarFocused: false });
-  }
-
-  onGravatarActive() {
-    this.setState({ gravatarFocused: true });
+    return tooltipVisible ? onSetTooltipInvisible() : onSetTooltipVisible();
   }
 }
 
 NavigationAvatar.propTypes = {
   name: PropTypes.string.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
+  onSetGravatarActive: PropTypes.func.isRequired,
+  onSetGravatarInactive: PropTypes.func.isRequired,
+  onSetTooltipInvisible: PropTypes.func.isRequired,
+  onSetTooltipVisible: PropTypes.func.isRequired,
   picture: PropTypes.string.isRequired
 };
 

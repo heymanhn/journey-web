@@ -8,7 +8,16 @@ import NavigationAvatar from './NavigationAvatar';
 
 class NavigationBar extends Component {
   render() {
-    const { onLogoutPress, user } = this.props;
+    const {
+      gravatarFocused,
+      onLogoutPress,
+      onSetGravatarActive,
+      onSetGravatarInactive,
+      onSetTooltipInvisible,
+      onSetTooltipVisible,
+      tooltipVisible,
+      user
+    } = this.props;
 
     const loginButton = (
       <Button
@@ -22,8 +31,14 @@ class NavigationBar extends Component {
     function generateGravatar(user) {
       return (
         <NavigationAvatar
+          gravatarFocused={gravatarFocused}
           name={user.name}
           onLogoutPress={onLogoutPress}
+          onSetGravatarActive={onSetGravatarActive}
+          onSetGravatarInactive={onSetGravatarInactive}
+          onSetTooltipVisible={onSetTooltipVisible}
+          onSetTooltipInvisible={onSetTooltipInvisible}
+          tooltipVisible={tooltipVisible}
           viewLandingPage={viewLandingPage}
           picture={user.gravatar}
        />
@@ -42,7 +57,13 @@ class NavigationBar extends Component {
 }
 
 NavigationBar.propTypes = {
+  gravatarFocused: PropTypes.bool.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
+  onSetGravatarActive: PropTypes.func.isRequired,
+  onSetGravatarInactive: PropTypes.func.isRequired,
+  onSetTooltipInvisible: PropTypes.func.isRequired,
+  onSetTooltipVisible: PropTypes.func.isRequired,
+  tooltipVisible: PropTypes.bool.isRequired,
   user: PropTypes.object
 };
 

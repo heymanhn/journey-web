@@ -2,11 +2,21 @@
 
 import { connect } from 'react-redux';
 import { processLogout } from 'app/actions/auth';
+import {
+  setGravatarActive,
+  setGravatarInactive,
+  setTooltipInvisible,
+  setTooltipVisible
+} from 'app/actions/navBar';
 import NavigationBar from 'app/components/NavigationBar';
 
 const mapStateToProps = (state) => {
+  const { user } = state.authState;
+  const { gravatarFocused, tooltipVisible } = state.componentsState.navBarState;
   return {
-    user: state.authState.user
+    gravatarFocused,
+    tooltipVisible,
+    user
   };
 };
 
@@ -15,6 +25,22 @@ const mapDispatchToProps = (dispatch) => {
     onLogoutPress() {
       dispatch(processLogout());
     },
+
+    onSetGravatarActive() {
+      dispatch(setGravatarActive());
+    },
+
+    onSetGravatarInactive() {
+      dispatch(setGravatarInactive());
+    },
+
+    onSetTooltipInvisible() {
+      dispatch(setTooltipInvisible());
+    },
+
+    onSetTooltipVisible() {
+      dispatch(setTooltipVisible());
+    }
   };
 };
 

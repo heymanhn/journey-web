@@ -1,12 +1,14 @@
 'use strict';
 
 import { combineReducers } from 'redux';
-import mapState from './map';
 import autocompleteState from './autocomplete';
+import mapState from './map';
+import navBarState from './navBar';
 
 const componentsState = combineReducers({
+  autocompleteState,
   mapState,
-  autocompleteState
+  navBarState
 });
 
 export default componentsState;

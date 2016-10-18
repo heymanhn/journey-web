@@ -141,6 +141,11 @@ export const initialMapState = {
   mapWidth: calcMapWidth()
 };
 
+export const initialNavBarState = {
+  gravatarFocused: false,
+  tooltipVisible: false
+};
+
 export const initialACState = {
   input: '',
   isFetchingAC: false,
