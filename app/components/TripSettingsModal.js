@@ -43,7 +43,7 @@ class TripSettingsModal extends Component {
             <TextInput
               onChange={onEnterTitle}
               style={styles.inputField}
-              value={title}
+              defaultValue={title}
             />
           </div>
 

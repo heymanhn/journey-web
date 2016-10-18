@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   apiUpdateTrip,
   hideTripSettingsModal,
+  updateTripClearTitle,
   updateTripSaveTitle,
   updateTripSaveVis
 } from 'app/actions/trips';
@@ -16,12 +17,11 @@ const mapStateToProps = (state) => {
     trip: { title, destination: { name: destinationName }, visibility },
     updatedFields
   } = state.tripState;
-  let newTitle, newDestinationName, newVisibility;
+  let newDestinationName, newVisibility;
   let isSaveDisabled = true;
 
   if (updatedFields && Object.keys(updatedFields).length > 0) {
     isSaveDisabled = false;
-    newTitle = updatedFields.title;
     if (updatedFields.destination) {
       newDestinationName = updatedFields.destination.name;
     }
@@ -32,7 +32,7 @@ const mapStateToProps = (state) => {
     isFetching,
     isSaveDisabled: isFetching || isSaveDisabled,
     showModal,
-    title: newTitle || title,
+    title,
     destinationName: newDestinationName || destinationName,
     visibility: newVisibility || visibility
   };
@@ -41,7 +41,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onEnterTitle(event) {
-      dispatch(updateTripSaveTitle(event.target.value));
+      const newTitle = event.target.value;
+
+      if (newTitle) {
+        dispatch(updateTripSaveTitle(event.target.value));
+      } else {
+        dispatch(updateTripClearTitle());
+      }
     },
 
     onHide() {

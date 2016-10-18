@@ -40,6 +40,7 @@ export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 export const UPDATE_TRIP_SAVE_DEST = 'UPDATE_TRIP_SAVE_DEST';
 export const UPDATE_TRIP_CLEAR_DEST = 'UPDATE_TRIP_CLEAR_DEST';
 export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
+export const UPDATE_TRIP_CLEAR_TITLE = 'UPDATE_TRIP_CLEAR_TITLE';
 export const UPDATE_TRIP_SAVE_VIS = 'UPDATE_TRIP_SAVE_VIS';
 export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
 export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
@@ -200,6 +201,12 @@ export function updateTripSaveTitle(title) {
   return {
     type: UPDATE_TRIP_SAVE_TITLE,
     title
+  };
+}
+
+export function updateTripClearTitle() {
+  return {
+    type: UPDATE_TRIP_CLEAR_TITLE
   };
 }
 

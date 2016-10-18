@@ -10,6 +10,7 @@ import {
   UPDATE_TRIP_SAVE_DEST,
   UPDATE_TRIP_CLEAR_DEST,
   UPDATE_TRIP_SAVE_TITLE,
+  UPDATE_TRIP_CLEAR_TITLE,
   UPDATE_TRIP_SAVE_VIS,
   API_UPDATE_TRIP_VIS_REQUEST,
   API_UPDATE_TRIP_REQUEST,
@@ -139,6 +140,11 @@ export default function tripState(state = initialTripState, action) {
       return {
         ...state,
         updatedFields: _.extend(state.updatedFields, { title: action.title })
+      };
+    case UPDATE_TRIP_CLEAR_TITLE:
+      return {
+        ...state,
+        updatedFields: _.omit(state.updatedFields, 'title')
       };
     case UPDATE_TRIP_SAVE_VIS:
       return {
