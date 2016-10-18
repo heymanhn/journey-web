@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
   }
 
   return {
+    isFetching,
     isSaveDisabled: isFetching || isSaveDisabled,
     showModal,
     title: newTitle || title,

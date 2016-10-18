@@ -5,6 +5,7 @@ require('app/stylesheets/tripSettingsModal.css');
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup, Modal } from 'react-bootstrap';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
+import Spinner from './Spinner';
 import TextInput from './TextInput';
 import { acComponents } from 'app/constants';
 
@@ -12,6 +13,7 @@ class TripSettingsModal extends Component {
   render() {
     const {
       destinationName,
+      isFetching,
       isSaveDisabled,
       onEnterTitle,
       onHide,
@@ -22,6 +24,13 @@ class TripSettingsModal extends Component {
       title,
       visibility
     } = this.props;
+
+    const savingSpinner = (
+      <Spinner
+        customColor="white"
+        customStyle={styles.spinner}
+      />
+    );
 
     return (
       <Modal keyboard={false} onHide={onHide} show={showModal}>
@@ -82,7 +91,7 @@ class TripSettingsModal extends Component {
             onClick={onUpdateTrip}
             style={styles.saveChangesButton}
           >
-            Save changes
+            {isFetching ? savingSpinner : (<span>Save changes</span>)}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -92,6 +101,7 @@ class TripSettingsModal extends Component {
 
 TripSettingsModal.propTypes = {
   destinationName: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool,
   isSaveDisabled: PropTypes.bool,
   onEnterTitle: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
@@ -125,6 +135,15 @@ const styles = {
   },
   saveChangesButton: {
     width: 120
+  },
+  spinner: {
+    float: "left",
+    height: 20,
+    left: "50%",
+    marginRight: 2,
+    position: "relative",
+    top: 10,
+    width: 20
   },
   title: {
     fontWeight: "normal"
