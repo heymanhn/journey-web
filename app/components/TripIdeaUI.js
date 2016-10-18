@@ -88,8 +88,7 @@ class TripIdeaUI extends Component {
       hoverLngLat,
       onClearHoverLngLat,
       onFocusIdea,
-      onRemoveIdea,
-      onSetHoverLngLat
+      onRemoveIdea
     } = this.props;
 
     const ideaPanel = (
@@ -101,7 +100,7 @@ class TripIdeaUI extends Component {
          * slightly and display a marker pin above the idea's location on the map to
          * indicate that that location is selected
          */
-        onMouseOver={onSetHoverLngLat}
+        onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
       >
         <div
@@ -144,6 +143,13 @@ class TripIdeaUI extends Component {
     const height = document.getElementById(id).clientHeight;
     return _.extend(styles.emptySpace, { height });
   }
+
+  setHoverLngLat() {
+    const { hoverLngLat, idea, onSetHoverLngLat } = this.props;
+    if (hoverLngLat !== idea.loc.coordinates) {
+      return onSetHoverLngLat();
+    }
+  }
 }
 
 TripIdeaUI.propTypes = {
@@ -164,24 +170,24 @@ TripIdeaUI.propTypes = {
 
 const styles = {
   emptySpace: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: "#eeeeee",
     borderRadius: 4,
     height: 80,
     marginBottom: 20
   },
   mainDiv: {
-    backgroundColor: '#ffffff'
+    backgroundColor: "#ffffff"
   },
   removeButton: {
     div: {
-      backgroundColor: 'rgba(255,255,255,0.0)',
-      cursor: 'pointer'
+      backgroundColor: "rgba(255,255,255,0.0)",
+      cursor: "pointer"
     },
     glyph: {
       borderRadius: 22,
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
       fontSize: 22,
-      float: 'right',
+      float: "right",
       top: -8,
       left: 8
     }

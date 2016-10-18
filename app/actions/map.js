@@ -11,6 +11,7 @@ export const DELETE_FOCUS_MARKER = 'DELETE_FOCUS_MARKER';
 export const UPDATE_MAP_WIDTH = 'UPDATE_MAP_WIDTH';
 export const SHOW_ALL_TRIP_IDEAS = 'SHOW_ALL_TRIP_IDEAS;'
 export const SHOW_ALL_TRIP_IDEAS_COMPLETE = 'SHOW_ALL_TRIP_IDEAS_COMPLETE';
+export const SHOW_DESTINATION_ON_MAP = 'SHOW_DESTINATION_ON_MAP';
 
 
 /*
@@ -53,6 +54,12 @@ export function updateMapWidth(width) {
 export function showAllTripIdeasOnMap() {
   return {
     type: SHOW_ALL_TRIP_IDEAS
+  };
+}
+
+export function showDestinationOnMap() {
+  return {
+    type: SHOW_DESTINATION_ON_MAP
   };
 }
 

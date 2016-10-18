@@ -2,13 +2,13 @@
 
 import { combineReducers } from 'redux';
 import authState from './auth';
-import mapState from './map';
+import componentsState from './components';
 import tripsState from './trips';
 import tripState from './trip';
 
 const appReducers = combineReducers({
   authState,
-  mapState,
+  componentsState,
   tripsState,
   tripState
 });

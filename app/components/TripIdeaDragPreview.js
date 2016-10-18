@@ -59,12 +59,12 @@ function loadStyles(props) {
   const draggedElem = document.getElementById(draggedIdea.id)
 
   return {
-    position: 'fixed',
+    position: "fixed",
     zIndex: 100,
     left: 0,
     top: 0,
     width: draggedElem.clientWidth,
-    pointerEvents: 'none',
+    pointerEvents: "none",
     transform: transform,
     WebkitTransform: transform
   };

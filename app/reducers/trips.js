@@ -5,6 +5,7 @@ import {
   CREATE_TRIP_SAVE_TITLE,
   CREATE_TRIP_SAVE_DEST,
   CREATE_TRIP_SAVE_VISIBILITY,
+  CLEAR_SAVED_DEST,
   CLEAR_TRIPS_ERROR,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
@@ -37,6 +38,8 @@ export default function tripsState(state = initialTripsState, action) {
         ...state,
         newVisibility: action.visibility
       };
+    case CLEAR_SAVED_DEST:
+      return _.omit(state, 'newDestination');
     case API_GET_TRIPS_REQUEST:
     case API_CREATE_TRIP_REQUEST:
     case API_DELETE_TRIP_REQUEST:

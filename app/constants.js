@@ -34,6 +34,10 @@ export const journeyAPI = {
       method: 'GET',
       route: journeyAPIHost + '/trips/' + tripId
     }),
+    update: (tripId) => ({
+      method: 'PUT',
+      route: journeyAPIHost + '/trips/' + tripId
+    }),
     delete: (tripId) => ({
       method: 'DELETE',
       route: journeyAPIHost + '/trips/' + tripId
@@ -113,7 +117,8 @@ export const dimensions = {
 
 export const colors = {
   primary: "rgb(233, 30, 99)",
-  primaryDark: "rgb(143, 23, 64)"
+  primaryDark: "rgb(143, 23, 64)",
+  secondary: "rgb(26, 118, 200)"
 };
 
 
@@ -136,6 +141,19 @@ export const initialMapState = {
   mapWidth: calcMapWidth()
 };
 
+export const initialNavBarState = {
+  gravatarFocused: false,
+  tooltipVisible: false
+};
+
+export const initialACState = {
+  input: '',
+  isFetchingAC: false,
+  isFetchingPlace: false,
+  placeSelected: false,
+  results: []
+};
+
 export const initialTripsState = {
   isFetching: false,
   trips: []
@@ -143,7 +161,18 @@ export const initialTripsState = {
 
 export const initialTripState = {
   isFetching: false,
-  resetIdeaBox: false
+  isFetchingVisibility: false,
+  showModal: false
+};
+
+
+/*
+ * Autocomplete component IDs
+ */
+export const acComponents = {
+  createTripAC: 'createTripAC',
+  tripIdeaAC: 'tripIdeaAC',
+  updateTripAC: 'updateTripAC'
 };
 
 

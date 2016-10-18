@@ -5,6 +5,8 @@ import LoadingAnimation from './LoadingAnimation';
 import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
+import TripDetails from 'app/containers/TripDetails';
+import TripSettings from 'app/containers/TripSettings';
 import { dimensions } from 'app/constants';
 
 class TripPage extends Component {
@@ -22,7 +24,10 @@ class TripPage extends Component {
   }
 
   render() {
-    const { error, onViewTrips, trip } = this.props;
+    const {
+      error,
+      trip
+    } = this.props;
 
     if (error) {
       return (
@@ -41,33 +46,18 @@ class TripPage extends Component {
       );
     });
 
-    const titles = (
-      <div style={styles.titles}>
-        <h1 style={styles.h1}>{trip.title}</h1>
-        <p>Destination: {trip.destination && trip.destination.name}</p>
-        <p>Visibility: {trip.visibility}</p>
-      </div>
-    );
-
     return (
       <div>
         <div
           id="leftColumn"
           style={styles.leftColumn}
         >
-          <div style={styles.navigationBar}>
-            <Navigation />
-          </div>
-          <div style={styles.titleSection}>
-            {titles}
-          </div>
-          <div style={styles.ideasSection}>
-            <TripIdeas />
-          </div>
+          <Navigation />
+          <TripDetails />
+          <TripIdeas />
         </div>
-        <div>
-          <TripMap />
-        </div>
+        <TripMap />
+        <TripSettings />
       </div>
     );
   }
@@ -76,46 +66,20 @@ class TripPage extends Component {
 TripPage.propTypes = {
   error: PropTypes.string,
   onGetTrip: PropTypes.func.isRequired,
-  onViewTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };
 
 const styles = {
-  h1: {
-    fontSize: 36,
-    marginTop: 0,
-    paddingTop: 20
-  },
-  ideasSection: {
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
-  },
   leftColumn: {
     backgroundColor: "white",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
     float: "left",
     height: "100%",
     overflow: "scroll",
-    position: 'absolute',
+    position: "absolute",
     width: dimensions.leftColumn.width,
     zIndex: 2
-  },
-  loadingText: {
-    color: "#333333",
-    fontFamily: "Arial",
-    fontSize: 24,
-    textAlign: "center",
-    margin: 20
-  },
-  navigationBar: {
-    position: "fixed",
-    zIndex: 1
-  },
-  titles: {
-  },
-  titleSection: {
-    marginTop: dimensions.navigationBar.height,
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   }
 };
 

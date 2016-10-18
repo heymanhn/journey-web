@@ -2,16 +2,15 @@
 
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
-import { viewTripsPage } from 'app/actions/navigation';
 import { apiGetTrip } from 'app/actions/trips';
 import { analytics } from 'app/constants';
 import TripPage from 'app/components/TripPage';
 
 const mapStateToProps = (state) => {
-  const ts = state.tripState;
+  const { error, trip } = state.tripState;
   return {
-    error: ts.error ? ts.error : '',
-    trip: ts.trip
+    error,
+    trip
   };
 };
 
@@ -20,10 +19,6 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onGetTrip() {
       dispatch(apiGetTrip(tripId));
-    },
-
-    onViewTrips() {
-      dispatch(viewTripsPage());
     },
 
     trackPageView() {

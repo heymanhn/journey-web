@@ -13,8 +13,8 @@ ErrorMessage.propTypes = {
 };
 
 const styles = {
-  backgroundColor: 'orange',
-  color: 'black',
+  backgroundColor: "orange",
+  color: "black",
   margin: 5,
   width: 200
 };

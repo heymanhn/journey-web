@@ -1,22 +1,17 @@
 'use strict';
 
-require('app/stylesheets/tripIdeasList.css');
-
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
-import { colors } from 'app/constants';
+import { acComponents, colors, dimensions } from 'app/constants';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
+import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 
 class TripIdeasList extends Component {
-  componentDidMount() {
-    this.loadGoogleAutocompleteAPI();
-  }
-
   render() {
     const {
       ideas,
@@ -45,7 +40,7 @@ class TripIdeasList extends Component {
     );
 
     return (
-      <div>
+      <div style={styles.ideasSection}>
         <div style={styles.inputSection}>
           <div style={styles.titleSection}>
             <h3>Ideas</h3>
@@ -58,24 +53,22 @@ class TripIdeasList extends Component {
               </span>
             )}
           </div>
-          <TextInput
-            onBlur={this.unlockLeftColumnScroll}
-            onChange={this.handleSearchBoxChange.bind(this)}
-            onKeyDown={this.handleSearchBoxKeys.bind(this)}
-            ref={x => this.searchBox = x}
-            type="text"
-            placeholder="Enter a place or destination"
-            style={styles.searchBox}
-            tabIndex={1}
-          />
-          <Button
-            disabled={!newIdea}
-            onClick={this.clearSearchBoxAnd.bind(this, onAddIdeaPress)}
-            style={this.loadAddIdeaButtonStyle()}
-            tabIndex={3}
-          >
-            Add
-          </Button>
+          <div style={styles.searchSection}>
+            <PlaceAutocomplete
+              id={acComponents.tripIdeaAC}
+              placeholder="Enter a place or destination"
+              style={styles.searchBox}
+              tabIndex={1}
+            />
+            <Button
+              disabled={!newIdea}
+              onClick={onAddIdeaPress}
+              style={this.loadAddIdeaButtonStyle()}
+              tabIndex={3}
+            >
+              Add
+            </Button>
+          </div>
           {newIdea && commentBox}
         </div>
         <div>
@@ -86,39 +79,6 @@ class TripIdeasList extends Component {
     );
   }
 
-  // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
-  loadGoogleAutocompleteAPI() {
-    const { onEnterIdea, destination } = this.props;
-    const { northeast, southwest } = destination.viewport;
-    const google = window.google;
-
-    /*
-     * Initiate the Google Maps Javascript API with the bounds set to the trip's
-     * destination viewport.
-     */
-    const bounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(
-        southwest.coordinates[1],
-        southwest.coordinates[0]
-      ),
-      new google.maps.LatLng(
-        northeast.coordinates[1],
-        northeast.coordinates[0]
-      )
-    );
-
-    const options = {
-      bounds,
-      types: ['geocode', 'establishment']
-    };
-    const input = findDOMNode(this.searchBox);
-    const ac = new google.maps.places.Autocomplete(input, options);
-    ac.addListener('place_changed', () => {
-      const place = ac.getPlace();
-      return place.place_id && onEnterIdea(place);
-    });
-  }
-
   loadAddIdeaButtonStyle() {
     let style = styles.searchBoxButton;
     const disabledStyle = styles.searchBoxButtonDisabled;
@@ -126,49 +86,9 @@ class TripIdeasList extends Component {
 
     return newIdea ? style : { ...style, ...disabledStyle };
   }
-
-  handleSearchBoxChange() {
-    const { newIdea, onClearTripIdea } = this.props;
-    newIdea && onClearTripIdea();
-
-    if (findDOMNode(this.searchBox).value) {
-      this.lockLeftColumnScroll();
-    }
-  }
-
-  handleSearchBoxKeys(event) {
-    const { newIdea, onAddIdeaPress, onClearTripIdea } = this.props;
-
-    switch(event.key) {
-      case 'Enter':
-        newIdea && this.clearSearchBoxAnd(onAddIdeaPress);
-        return this.unlockLeftColumnScroll();
-      case 'Backspace':
-      case 'Escape':
-        newIdea && this.clearSearchBoxAnd(onClearTripIdea);
-        return this.unlockLeftColumnScroll();
-    }
-  }
-
-  clearSearchBoxAnd(next) {
-    findDOMNode(this.searchBox).value = '';
-    return next && next();
-  }
-
-  unlockLeftColumnScroll() {
-    document.getElementById('leftColumn').style.overflow = "scroll";
-  }
-
-  lockLeftColumnScroll() {
-    const style = document.getElementById('leftColumn').style;
-    if (style.overflow === 'scroll') {
-      style.overflow = 'hidden';
-    }
-  }
 }
 
 TripIdeasList.propTypes = {
-  destination: PropTypes.object,
   ideas: PropTypes.array,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
@@ -181,16 +101,20 @@ TripIdeasList.propTypes = {
 const styles = {
   commentBox: {
     display: "inline",
-    width: "100%",
-    marginBottom: 10
+    fontSize: 14,
+    margin: "0px 0px 10px 0px",
+    outline: "none",
+    width: "100%"
+  },
+  ideasSection: {
+    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
   },
   inputSection: {
     marginBottom: 10
   },
   searchBox: {
-    display: "inline",
-    width: "80%",
-    marginBottom: 10
+    fontSize: 14,
+    width: 280
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
@@ -204,14 +128,20 @@ const styles = {
     color: "#cccccc",
     cursor: "default"
   },
+  searchSection: {
+    alignItems: "baseline",
+    display: "flex",
+    justifyContent: "space-between",
+    margin: "0px 0px 10px 0px"
+  },
   showAllLink: {
-    cursor: 'pointer',
-    textDecoration: 'underline'
+    cursor: "pointer",
+    textDecoration: "underline"
   },
   titleSection: {
-    display: 'flex',
-    alignItems: 'baseline',
-    justifyContent: 'space-between'
+    display: "flex",
+    alignItems: "baseline",
+    justifyContent: "space-between"
   }
 };
 

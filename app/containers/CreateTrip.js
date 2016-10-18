@@ -8,25 +8,35 @@ import {
   createTripSaveVisibility
 } from 'app/actions/trips';
 import CreateTripPage from 'app/components/CreateTripPage';
+import { apiAutocompleteDest } from 'app/actions/autocomplete';
 
 const mapStateToProps = (state) => {
+  const { error } = state.tripsState;
   return {
-    error: state.tripsState.error ? state.tripsState.error : ''
+    error
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onCreateTripPress: () => {
+    onCreateTripPress() {
       dispatch(apiCreateTrip());
     },
-    onEnterTitle: (event) => {
+
+    onEnterTitle(event) {
       dispatch(createTripSaveTitle(event.target.value));
     },
-    onEnterDestination: (place) => {
+
+    onEnterDestination(place) {
       dispatch(createTripSaveDest(place));
     },
-    onSetVisibility: (event) => {
+
+    onQueryAutocomplete(event) {
+      const { selectionEnd: offset, value: input } = event.target;
+      dispatch(apiAutocompleteDest(input, offset));
+    },
+
+    onSetVisibility(event) {
       dispatch(createTripSaveVisibility(event.target.value));
     }
   };

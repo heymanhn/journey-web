@@ -3,19 +3,18 @@
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
+import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
+import { acComponents } from 'app/constants';
 
 class CreateTripPage extends Component {
-  componentDidMount() {
-    this.loadGoogleAutocompleteAPI();
-  }
-
   render() {
     const {
       error,
       onCreateTripPress,
       onEnterTitle,
+      onQueryAutocomplete,
       onSetVisibility
     } = this.props;
 
@@ -26,16 +25,17 @@ class CreateTripPage extends Component {
           <TextInput
             onChange={onEnterTitle}
             placeholder="Trip Title"
+            style={styles.inputField}
             type="text"
-            width={400}
           />
-          <TextInput
-            ref={x => this.destinationInput = x}
-            placeholder="Where do you want to go?"
-            type="text"
-            width={400}
-          />
-          <div style={inlineDivStyle}>
+          <div style={styles.destinationContainer}>
+            <PlaceAutocomplete
+              id={acComponents.createTripAC}
+              placeholder="Where do you want to go?"
+              style={styles.inputField}
+            />
+          </div>
+          <div style={styles.inlineDiv}>
             Visibility:
             <input
               type="radio"
@@ -62,31 +62,25 @@ class CreateTripPage extends Component {
       </div>
     );
   }
-
-  loadGoogleAutocompleteAPI() {
-    const { onEnterDestination } = this.props;
-
-    // API documentation: https://developers.google.com/maps/documentation/javascript/places-autocomplete#add_autocomplete
-    const options = { types: ['(regions)'] };
-    const input = findDOMNode(this.destinationInput);
-    const ac = new window.google.maps.places.Autocomplete(input, options);
-    ac.addListener(
-      'place_changed',
-      () => { onEnterDestination(ac.getPlace()); }
-    );
-  }
 }
 
 CreateTripPage.propTypes = {
   error: PropTypes.string,
   onCreateTripPress: PropTypes.func.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
-  onEnterDestination: PropTypes.func.isRequired,
   onSetVisibility: PropTypes.func.isRequired
 };
 
-const inlineDivStyle = {
-  display: 'inline'
+const styles = {
+  destinationContainer: {
+    marginLeft: 5
+  },
+  inlineDiv: {
+    display: "inline"
+  },
+  inputField: {
+    width: 400
+  }
 };
 
 export default CreateTripPage;

@@ -4,8 +4,14 @@ import _ from 'underscore';
 import fetch from 'isomorphic-fetch';
 import ObjectID from 'bson-objectid';
 
-import { viewTripPage } from './navigation'
-import { fetchOptsTemplate, handleErrors, journeyAPI } from 'app/constants';
+import { viewTripPage } from './navigation';
+import { apiPlaceDetails } from './autocomplete';
+import {
+  acComponents,
+  fetchOptsTemplate,
+  handleErrors,
+  journeyAPI
+} from 'app/constants';
 
 /*
  * Action Types
@@ -20,6 +26,7 @@ export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
 export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
 export const CREATE_TRIP_SAVE_VISIBILITY = 'CREATE_TRIP_SAVE_VISIBILITY';
+export const CLEAR_SAVED_DEST = 'CLEAR_SAVED_DEST';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
@@ -28,6 +35,17 @@ export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
+
+// Update a trip
+export const UPDATE_TRIP_SAVE_DEST = 'UPDATE_TRIP_SAVE_DEST';
+export const UPDATE_TRIP_CLEAR_DEST = 'UPDATE_TRIP_CLEAR_DEST';
+export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
+export const UPDATE_TRIP_CLEAR_TITLE = 'UPDATE_TRIP_CLEAR_TITLE';
+export const UPDATE_TRIP_SAVE_VIS = 'UPDATE_TRIP_SAVE_VIS';
+export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
+export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
+export const API_UPDATE_TRIP_SUCCESS = 'API_UPDATE_TRIP_SUCCESS';
+export const API_UPDATE_TRIP_FAILURE = 'API_UPDATE_TRIP_FAILURE';
 
 // Delete a trip
 export const DELETE_TRIP = 'DELETE_TRIP';
@@ -66,6 +84,9 @@ export const CLEAR_FOCUS_LNGLAT = 'CLEAR_FOCUS_LNGLAT';
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 export const CLEAR_TRIP_ERROR = 'CLEAR_TRIP_ERROR';
 
+// Trip Settings Modal
+export const SHOW_TRIP_SETTINGS_MODAL = 'SHOW_TRIP_SETTINGS_MODAL';
+export const HIDE_TRIP_SETTINGS_MODAL = 'HIDE_TRIP_SETTINGS_MODAL';
 
 /*
  * Action Creators
@@ -103,7 +124,7 @@ export function createTripSaveTitle(title) {
 export function createTripSaveDest(destination) {
   return {
     type: CREATE_TRIP_SAVE_DEST,
-    destination
+    destination: formatDestination(destination)
   };
 }
 
@@ -111,6 +132,12 @@ export function createTripSaveVisibility(visibility) {
   return {
     type: CREATE_TRIP_SAVE_VISIBILITY,
     visibility
+  };
+}
+
+export function clearSavedDest() {
+  return {
+    type: CLEAR_SAVED_DEST
   };
 }
 
@@ -123,6 +150,7 @@ export function apiCreateTripRequest() {
 export function apiCreateTripSuccess(json) {
   return {
     type: API_CREATE_TRIP_SUCCESS,
+    autocompleteId: acComponents.createTripAC,
     trip: json.trip
   };
 }
@@ -154,6 +182,68 @@ export function apiGetTripFailure(error) {
     error
   };
 }
+
+// Update a trip
+export function updateTripSaveDest(destination) {
+  return {
+    type: UPDATE_TRIP_SAVE_DEST,
+    destination: formatDestination(destination)
+  };
+}
+
+export function updateTripClearDest() {
+  return {
+    type: UPDATE_TRIP_CLEAR_DEST
+  };
+}
+
+export function updateTripSaveTitle(title) {
+  return {
+    type: UPDATE_TRIP_SAVE_TITLE,
+    title
+  };
+}
+
+export function updateTripClearTitle() {
+  return {
+    type: UPDATE_TRIP_CLEAR_TITLE
+  };
+}
+
+export function updateTripSaveVis(visibility) {
+  return {
+    type: UPDATE_TRIP_SAVE_VIS,
+    visibility
+  };
+}
+
+export function apiUpdateTripVisRequest() {
+  return {
+    type: API_UPDATE_TRIP_VIS_REQUEST
+  };
+}
+
+export function apiUpdateTripRequest() {
+  return {
+    type: API_UPDATE_TRIP_REQUEST
+  };
+}
+
+export function apiUpdateTripSuccess(json) {
+  return {
+    type: API_UPDATE_TRIP_SUCCESS,
+    autocompleteId: acComponents.updateTripAC,
+    trip: json.trip
+  };
+}
+
+export function apiUpdateTripFailure(error) {
+  return {
+    type: API_UPDATE_TRIP_FAILURE,
+    error
+  };
+}
+
 
 // Delete a Trip
 export function deleteTrip(tripId) {
@@ -236,6 +326,7 @@ export function apiAddTripIdeaRequest() {
 export function apiAddTripIdeaSuccess(json) {
   return {
     type: API_ADD_TRIP_IDEA_SUCCESS,
+    autocompleteId: acComponents.tripIdeaAC,
     ideas: json.ideas
   };
 }
@@ -344,6 +435,19 @@ export function clearTripError() {
   };
 }
 
+// Trip Settings Modal
+export function showTripSettingsModal() {
+  return {
+    type: SHOW_TRIP_SETTINGS_MODAL
+  };
+}
+
+export function hideTripSettingsModal() {
+  return {
+    type: HIDE_TRIP_SETTINGS_MODAL
+  };
+}
+
 
 /*
  * Action Creator thunks
@@ -374,41 +478,14 @@ export function apiCreateTrip() {
 
     // Format the destination object before saving
     const title = getState().tripsState.newTitle;
-    const dest = getState().tripsState.newDestination;
+    const destination = getState().tripsState.newDestination;
     const visibility = getState().tripsState.newVisibility || 'public';
-    const loc = dest.geometry.location;
-    const viewport = dest.geometry.viewport;
-
-    let destParams = {
-      googlePlaceId: dest.place_id,
-      name: dest.name,
-      formattedAddress: dest.formatted_address,
-      loc: {
-        type: 'Point',
-        coordinates: [loc.lng(), loc.lat()]
-      },
-      viewport: {
-        northeast: {
-          type: 'Point',
-          coordinates: [viewport.b.f, viewport.f.b]
-        },
-        southwest: {
-          type: 'Point',
-          coordinates: [viewport.b.b, viewport.f.f]
-        }
-      },
-      types: dest.types
-    };
 
     const createTrip = journeyAPI.trips.create();
     let opts = {
       ...fetchOptsTemplate(getState().authState),
       method: createTrip.method,
-      body: JSON.stringify({
-        title,
-        visibility,
-        destination: destParams
-      })
+      body: JSON.stringify({ title, destination, visibility })
     };
 
     return fetch(createTrip.route, opts)
@@ -440,6 +517,36 @@ export function apiGetTrip(tripId) {
         dispatch(apiGetTripSuccess(json));
       })
       .catch(error => { dispatch(apiGetTripFailure(error.message)); });
+  };
+}
+
+export function apiUpdateTrip(visibility) {
+  return (dispatch, getState) => {
+    const { trip: { _id: tripId }, updatedFields } = getState().tripState;
+    let params = {};
+    if (visibility) {
+      dispatch(apiUpdateTripVisRequest());
+      params.visibility = visibility;
+    } else {
+      dispatch(apiUpdateTripRequest());
+      params = updatedFields;
+    }
+
+    const updateTripAPI = journeyAPI.trip.update(tripId);
+    let opts = {
+      ...fetchOptsTemplate(getState().authState),
+      method: updateTripAPI.method,
+      body: JSON.stringify(params)
+    };
+
+    return fetch(updateTripAPI.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(apiUpdateTripSuccess(json));
+        dispatch(hideTripSettingsModal());
+      })
+      .catch(error => { dispatch(apiUpdateTripFailure(error.message)); });
   };
 }
 
@@ -545,5 +652,41 @@ export function apiRemoveTripIdea(ideaId) {
         dispatch(apiRemoveTripIdeaSuccess(json));
       })
       .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
+  };
+}
+
+
+// Helper functions
+function formatDestination(destination) {
+  const {
+    formatted_address,
+    geometry: {
+      location: loc,
+      viewport
+    },
+    name,
+    place_id,
+    types
+  } = destination;
+
+  return {
+    googlePlaceId: place_id,
+    name,
+    formattedAddress: formatted_address,
+    loc: {
+      type: 'Point',
+      coordinates: [loc.lng(), loc.lat()]
+    },
+    viewport: {
+      northeast: {
+        type: 'Point',
+        coordinates: [viewport.b.f, viewport.f.b]
+      },
+      southwest: {
+        type: 'Point',
+        coordinates: [viewport.b.b, viewport.f.f]
+      }
+    },
+    types
   };
 }

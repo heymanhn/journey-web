@@ -1,7 +1,5 @@
 'use strict';
 
-require('app/stylesheets/react-spinner.css');
-
 import React, { Component, PropTypes } from 'react';
 import Spinner from './Spinner';
 
@@ -26,10 +24,10 @@ LoadingAnimation.propTypes = {
 
 const styles = {
   loadingText: {
-    color: '#333333',
-    fontFamily: 'Arial',
+    color: "#333333",
+    fontFamily: "Arial",
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 20
   }
 };

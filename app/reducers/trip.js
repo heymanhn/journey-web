@@ -7,6 +7,15 @@ import {
   API_GET_TRIP_REQUEST,
   API_GET_TRIP_SUCCESS,
   API_GET_TRIP_FAILURE,
+  UPDATE_TRIP_SAVE_DEST,
+  UPDATE_TRIP_CLEAR_DEST,
+  UPDATE_TRIP_SAVE_TITLE,
+  UPDATE_TRIP_CLEAR_TITLE,
+  UPDATE_TRIP_SAVE_VIS,
+  API_UPDATE_TRIP_VIS_REQUEST,
+  API_UPDATE_TRIP_REQUEST,
+  API_UPDATE_TRIP_SUCCESS,
+  API_UPDATE_TRIP_FAILURE,
   API_ADD_TRIP_IDEA_REQUEST,
   API_ADD_TRIP_IDEA_SUCCESS,
   API_ADD_TRIP_IDEA_FAILURE,
@@ -26,7 +35,9 @@ import {
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
-  CLEAR_TRIP_ERROR
+  CLEAR_TRIP_ERROR,
+  SHOW_TRIP_SETTINGS_MODAL,
+  HIDE_TRIP_SETTINGS_MODAL
 } from 'app/actions/trips';
 import { initialTripState } from 'app/constants';
 
@@ -95,10 +106,72 @@ export default function tripState(state = initialTripState, action) {
       return _.omit(state, 'focusLngLat');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
+    case SHOW_TRIP_SETTINGS_MODAL:
+      const { destination, title, visibility } = state.trip;
+      return {
+        ...state,
+        updatedFields: {},
+        showModal: true
+      };
+    case HIDE_TRIP_SETTINGS_MODAL:
+      return {
+        ..._.omit(state, 'updatedFields'),
+        showModal: false
+      };
     case API_GET_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error', 'trip'])),
         isFetching: true
+      };
+    case UPDATE_TRIP_SAVE_DEST:
+      return {
+        ...state,
+        updatedFields: _.extend(
+          state.updatedFields,
+          { destination: action.destination }
+        )
+      };
+    case UPDATE_TRIP_CLEAR_DEST:
+      return {
+        ...state,
+        updatedFields: _.omit(state.updatedFields, 'destination')
+      };
+    case UPDATE_TRIP_SAVE_TITLE:
+      return {
+        ...state,
+        updatedFields: _.extend(state.updatedFields, { title: action.title })
+      };
+    case UPDATE_TRIP_CLEAR_TITLE:
+      return {
+        ...state,
+        updatedFields: _.omit(state.updatedFields, 'title')
+      };
+    case UPDATE_TRIP_SAVE_VIS:
+      return {
+        ...state,
+        updatedFields: _.extend(
+          state.updatedFields,
+          { visibility: action.visibility }
+        )
+      };
+    case API_UPDATE_TRIP_VIS_REQUEST:
+      return {
+        ...state,
+        isFetchingVisibility: true
+      };
+    case API_UPDATE_TRIP_SUCCESS:
+      return {
+        ..._.omit(state, 'updatedFields'),
+        isFetching: false,
+        isFetchingVisibility: false,
+        trip: action.trip
+      };
+    case API_UPDATE_TRIP_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        isFetching: false,
+        isFetchingVisibility: false
       };
     case API_GET_TRIP_SUCCESS:
       return {
@@ -132,6 +205,7 @@ export default function tripState(state = initialTripState, action) {
     case API_ADD_TRIP_IDEA_REQUEST:
     case API_UPDATE_TRIP_IDEA_REQUEST:
     case API_REMOVE_TRIP_IDEA_REQUEST:
+    case API_UPDATE_TRIP_REQUEST:
       return {
         ...(_.omit(state, 'error')),
         isFetching: true

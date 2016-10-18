@@ -1,6 +1,5 @@
 'use strict';
 
-import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { Image, Panel } from 'react-bootstrap';
 
@@ -40,9 +39,8 @@ class TripIdeaPanel extends Component {
   }
 
   loadIdeaStyle() {
-    const { hover } = this.props;
-    const style = _.clone(styles.idea);
-    return hover ? { ...style, backgroundColor: 'rgb(240, 240, 240)' } : style;
+    const { idea, ideaOnHover } = styles;
+    return this.props.hover ? { ...idea, ...ideaOnHover } : idea;
   }
 }
 
@@ -56,30 +54,33 @@ TripIdeaPanel.propTypes = {
 const styles = {
   address: {
     fontSize: 12,
-    color: '#999999'
+    color: "#999999"
   },
   comment: {
-    fontStyle: 'italic',
+    fontStyle: "italic",
     marginTop: 10
   },
   idea: {
-    backgroundColor: '#fdfdfd',
-    cursor: 'pointer'
+    backgroundColor: "#fdfdfd",
+    cursor: "pointer"
+  },
+  ideaOnHover: {
+    backgroundColor: "#f2f2f2"
   },
   info: {
     minHeight: 100
   },
   name: {
     fontSize: 14,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   photo: {
-    float: 'right',
+    float: "right",
     marginLeft: 10,
-    width: '33%',
+    width: "33%",
     height: 100,
-    objectFit: 'cover',
-    border: '1px solid #eeeeee'
+    objectFit: "cover",
+    border: "1px solid #eeeeee"
   }
 };
 

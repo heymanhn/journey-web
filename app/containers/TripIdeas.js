@@ -13,7 +13,6 @@ import TripIdeasList from 'app/components/TripIdeasList';
 const mapStateToProps = (state) => {
   const ts = state.tripState;
   return {
-    destination: ts.trip.destination,
     error: ts.error ? ts.error : '',
     ideas: ts.trip.ideas,
     newIdea: ts.newIdea

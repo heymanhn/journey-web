@@ -16,7 +16,7 @@ import { analytics, calcMapWidth } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const ts = state.tripState;
-  const ms = state.mapState;
+  const ms = state.componentsState.mapState;
   return {
     destination: ts.trip.destination,
     fitMapRequest: ms.fitMapRequest,

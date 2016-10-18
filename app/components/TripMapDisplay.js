@@ -42,7 +42,7 @@ class TripMapDisplay extends Component {
     }
 
     if (fitMapRequest) {
-      this.fitMapToData();
+      this.fitMapToData(fitMapRequest === 'destination');
       onMapFitComplete();
     }
   }
@@ -222,7 +222,7 @@ class TripMapDisplay extends Component {
 
     return {
       left: dimensions.leftColumn.width,
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       bottom: 0,
       width,
@@ -307,7 +307,7 @@ function easeInOutQuad(t) {
 
 TripMapDisplay.propTypes = {
   destination: PropTypes.object,
-  fitMapRequest: PropTypes.bool,
+  fitMapRequest: PropTypes.string,
   focusLngLat: PropTypes.array,
   focusMarker: PropTypes.object,
   hoverLngLat: PropTypes.array,

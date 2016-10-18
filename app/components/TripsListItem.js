@@ -36,8 +36,8 @@ TripsListItem.propTypes = {
 };
 
 const tripsListItemStyle = {
-  backgroundColor: '#eeeeee',
-  border: '1px solid #333333',
+  backgroundColor: "#eeeeee",
+  border: "1px solid #333333",
   margin: 5,
   padding: 5,
   width: 300
