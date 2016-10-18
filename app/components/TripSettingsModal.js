@@ -16,7 +16,7 @@ class TripSettingsModal extends Component {
     } = this.props;
 
     return (
-      <Modal onHide={onHide} show={showModal}>
+      <Modal keyboard={false} onHide={onHide} show={showModal}>
         <Modal.Header style={styles.header} closeButton>
           <Modal.Title style={styles.title}>Edit Trip</Modal.Title>
         </Modal.Header>
@@ -89,6 +89,7 @@ const styles = {
     color: "white"
   },
   inputField: {
+    fontSize: 14,
     margin: 0,
     width: 350
   },
