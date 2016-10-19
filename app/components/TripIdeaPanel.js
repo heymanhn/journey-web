@@ -31,12 +31,12 @@ class TripIdeaPanel extends Component {
       >
         {infoSection}
         {idea.comment && (
-          <div
+          <p
             onClick={onShowTripIdeaSettingsModal}
             style={styles.comment}
           >
             {idea.comment}
-          </div>
+          </p>
         )}
       </Panel>
     );
@@ -64,7 +64,8 @@ const styles = {
   comment: {
     fontSize: 13,
     fontStyle: "italic",
-    marginTop: 10
+    margin: "10px 0px 0px",
+    wordWrap: "break-word"
   },
   idea: {
     backgroundColor: "#fdfdfd",
