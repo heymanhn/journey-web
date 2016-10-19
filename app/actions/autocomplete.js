@@ -3,10 +3,8 @@
 import _ from 'underscore';
 import {
   clearNewTripIdea,
-  clearSavedDest,
-  createTripSaveDest,
-  updateTripSaveDest,
-  updateTripClearDest,
+  clearNewTripDestination,
+  saveNewTripDestination,
   saveNewTripIdea
 } from './trips';
 import { acComponents, googleAPI } from 'app/constants';
@@ -117,10 +115,9 @@ export function apiAutocomplete(autocompleteId, input) {
     dispatch(apiAutocompleteRequest(autocompleteId));
 
     let options = { input };
-    const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
+    const { tripAC, tripIdeaAC } = acComponents;
     switch(autocompleteId) {
-      case createTripAC:
-      case updateTripAC:
+      case tripAC:
         options.types = ['(regions)'];
         break;
       case tripIdeaAC:
@@ -166,14 +163,12 @@ export function apiFetchPlaceDetails(autocompleteId, placeId) {
       } else {
         dispatch(apiPlaceDetailsSuccess(autocompleteId));
 
-        const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
+        const { tripAC, tripIdeaAC } = acComponents;
         switch(autocompleteId) {
-          case createTripAC:
-            return dispatch(createTripSaveDest(place));
+          case tripAC:
+            return dispatch(saveNewTripDestination(place));
           case tripIdeaAC:
             return dispatch(saveNewTripIdea(place));
-          case updateTripAC:
-            return dispatch(updateTripSaveDest(place));
         }
       }
     }
@@ -188,14 +183,12 @@ export function clearSavedPlace(autocompleteId) {
   return dispatch => {
     dispatch(clearSavedPlaceAC(autocompleteId));
 
-    const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
+    const { tripAC, tripIdeaAC } = acComponents;
     switch(autocompleteId) {
-      case createTripAC:
-        return dispatch(clearSavedDest());
+      case tripAC:
+        return dispatch(clearNewTripDestination());
       case tripIdeaAC:
         return dispatch(clearNewTripIdea());
-      case updateTripAC:
-        return dispatch(updateTripClearDest());
     }
   }
 }

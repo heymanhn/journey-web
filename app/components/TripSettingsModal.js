@@ -46,9 +46,9 @@ class TripSettingsModal extends Component {
           <h4>Where do you want to go?</h4>
           <PlaceAutocomplete
             defaultValue={destinationName}
-            id={acComponents.updateTripAC}
+            id={acComponents.tripAC}
             placeholder="Enter a destination"
-            style={styles.updateTripAC}
+            style={styles.tripAC}
           />
         </div>
 
@@ -105,7 +105,7 @@ const styles = {
   inputSection: {
     paddingBottom: 10
   },
-  updateTripAC: {
+  tripAC: {
     width: 350,
     zIndex: 3
   },

@@ -4,28 +4,11 @@ import _ from 'underscore';
 import { LOGOUT } from 'app/actions/auth';
 import { SHOW_MODAL, HIDE_MODAL } from 'app/actions/modals';
 import {
-  API_CREATE_TRIP_SUCCESS,
-  API_GET_TRIP_REQUEST,
-  API_GET_TRIP_SUCCESS,
-  API_GET_TRIP_FAILURE,
-  UPDATE_TRIP_SAVE_DEST,
-  UPDATE_TRIP_CLEAR_DEST,
-  UPDATE_TRIP_SAVE_TITLE,
-  UPDATE_TRIP_CLEAR_TITLE,
-  UPDATE_TRIP_SAVE_VIS,
-  API_UPDATE_TRIP_VIS_REQUEST,
-  API_UPDATE_TRIP_REQUEST,
-  API_UPDATE_TRIP_SUCCESS,
-  API_UPDATE_TRIP_FAILURE,
-  API_ADD_TRIP_IDEA_REQUEST,
-  API_ADD_TRIP_IDEA_SUCCESS,
-  API_ADD_TRIP_IDEA_FAILURE,
-  API_UPDATE_TRIP_IDEA_REQUEST,
-  API_UPDATE_TRIP_IDEA_SUCCESS,
-  API_UPDATE_TRIP_IDEA_FAILURE,
-  API_REMOVE_TRIP_IDEA_REQUEST,
-  API_REMOVE_TRIP_IDEA_SUCCESS,
-  API_REMOVE_TRIP_IDEA_FAILURE,
+  SAVE_NEW_TRIP_TITLE,
+  SAVE_NEW_TRIP_DESTINATION,
+  SAVE_NEW_TRIP_VISIBILITY,
+  CLEAR_NEW_TRIP_TITLE,
+  CLEAR_NEW_TRIP_DESTINATION,
   SAVE_NEW_TRIP_IDEA,
   CLEAR_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
@@ -39,17 +22,63 @@ import {
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
-  CLEAR_TRIP_ERROR
+  CLEAR_TRIP_ERROR,
+  API_CREATE_TRIP_REQUEST,
+  API_CREATE_TRIP_SUCCESS,
+  API_CREATE_TRIP_FAILURE,
+  API_GET_TRIP_REQUEST,
+  API_GET_TRIP_SUCCESS,
+  API_GET_TRIP_FAILURE,
+  API_UPDATE_TRIP_VIS_REQUEST,
+  API_UPDATE_TRIP_REQUEST,
+  API_UPDATE_TRIP_SUCCESS,
+  API_UPDATE_TRIP_FAILURE,
+  API_ADD_TRIP_IDEA_REQUEST,
+  API_ADD_TRIP_IDEA_SUCCESS,
+  API_ADD_TRIP_IDEA_FAILURE,
+  API_UPDATE_TRIP_IDEA_REQUEST,
+  API_UPDATE_TRIP_IDEA_SUCCESS,
+  API_UPDATE_TRIP_IDEA_FAILURE,
+  API_REMOVE_TRIP_IDEA_REQUEST,
+  API_REMOVE_TRIP_IDEA_SUCCESS,
+  API_REMOVE_TRIP_IDEA_FAILURE
 } from 'app/actions/trips';
 import { initialTripState, modalComponents } from 'app/constants';
 const { tripIdeaSettings, tripSettings } = modalComponents;
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
-    case API_CREATE_TRIP_SUCCESS:
+    // UI actions
+    case SAVE_NEW_TRIP_TITLE:
       return {
         ...state,
-        trip: action.trip
+        newFields: _.extend(state.newFields, { title: action.title })
+      };
+    case CLEAR_NEW_TRIP_TITLE:
+      return {
+        ...state,
+        newFields: _.omit(state.newFields, 'title')
+      };
+    case SAVE_NEW_TRIP_DESTINATION:
+      return {
+        ...state,
+        newFields: _.extend(
+          state.newFields,
+          { destination: action.destination }
+        )
+      };
+    case CLEAR_NEW_TRIP_DESTINATION:
+      return {
+        ...state,
+        newFields: _.omit(state.newFields, 'destination')
+      };
+    case SAVE_NEW_TRIP_VISIBILITY:
+      return {
+        ...state,
+        newFields: _.extend(
+          state.newFields,
+          { visibility: action.visibility }
+        )
       };
     case SAVE_NEW_TRIP_IDEA:
       return {
@@ -125,79 +154,53 @@ export default function tripState(state = initialTripState, action) {
       if (action.modalId === tripSettings) {
         return {
           ...state,
-          updatedFields: {}
+          newFields: {}
         };
       } else {
         return state;
       }
     case HIDE_MODAL:
       if (action.modalId === tripSettings) {
-        return _.omit(state, 'updatedFields');
+        return _.omit(state, 'newFields');
       } else if (action.modalId === tripIdeaSettings) {
         return _.omit(state, ['ideaIndexToUpdate', 'updatedComment']);
       } else {
         return state;
       }
+
+    // API actions
     case API_GET_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error', 'trip'])),
         isFetching: true
       };
-    case UPDATE_TRIP_SAVE_DEST:
+    case API_CREATE_TRIP_REQUEST:
+    case API_ADD_TRIP_IDEA_REQUEST:
+    case API_UPDATE_TRIP_IDEA_REQUEST:
+    case API_REMOVE_TRIP_IDEA_REQUEST:
+    case API_UPDATE_TRIP_REQUEST:
       return {
-        ...state,
-        updatedFields: _.extend(
-          state.updatedFields,
-          { destination: action.destination }
-        )
-      };
-    case UPDATE_TRIP_CLEAR_DEST:
-      return {
-        ...state,
-        updatedFields: _.omit(state.updatedFields, 'destination')
-      };
-    case UPDATE_TRIP_SAVE_TITLE:
-      return {
-        ...state,
-        updatedFields: _.extend(state.updatedFields, { title: action.title })
-      };
-    case UPDATE_TRIP_CLEAR_TITLE:
-      return {
-        ...state,
-        updatedFields: _.omit(state.updatedFields, 'title')
-      };
-    case UPDATE_TRIP_SAVE_VIS:
-      return {
-        ...state,
-        updatedFields: _.extend(
-          state.updatedFields,
-          { visibility: action.visibility }
-        )
+        ...(_.omit(state, 'error')),
+        isFetching: true
       };
     case API_UPDATE_TRIP_VIS_REQUEST:
       return {
         ...state,
         isFetchingVisibility: true
       };
-    case API_UPDATE_TRIP_SUCCESS:
-      return {
-        ..._.omit(state, 'updatedFields'),
-        isFetching: false,
-        isFetchingVisibility: false,
-        trip: action.trip
-      };
-    case API_UPDATE_TRIP_FAILURE:
-      return {
-        ...state,
-        error: action.error,
-        isFetching: false,
-        isFetchingVisibility: false
-      };
     case API_GET_TRIP_SUCCESS:
       return {
         ...state,
         trip: action.trip,
         isFetching: false
+      };
+    case API_CREATE_TRIP_SUCCESS:
+    case API_UPDATE_TRIP_SUCCESS:
+      return {
+        ..._.omit(state, 'error', 'newFields'),
+        isFetching: false,
+        isFetchingVisibility: false,
+        trip: action.trip
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
       return {
@@ -213,22 +216,17 @@ export default function tripState(state = initialTripState, action) {
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false
       };
+    case API_CREATE_TRIP_FAILURE:
     case API_GET_TRIP_FAILURE:
+    case API_UPDATE_TRIP_FAILURE:
     case API_ADD_TRIP_IDEA_FAILURE:
     case API_UPDATE_TRIP_IDEA_FAILURE:
     case API_REMOVE_TRIP_IDEA_FAILURE:
       return {
         ...state,
+        error: action.error,
         isFetching: false,
-        error: action.error
-      };
-    case API_ADD_TRIP_IDEA_REQUEST:
-    case API_UPDATE_TRIP_IDEA_REQUEST:
-    case API_REMOVE_TRIP_IDEA_REQUEST:
-    case API_UPDATE_TRIP_REQUEST:
-      return {
-        ...(_.omit(state, 'error')),
-        isFetching: true
+        isFetchingVisibility: false
       };
     case LOGOUT:
       return initialTripState;

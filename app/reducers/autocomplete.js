@@ -93,11 +93,10 @@ function createAutocompleteReducer(id) {
   }
 }
 
-const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
+const { tripAC, tripIdeaAC } = acComponents;
 const autocompleteState = combineReducers({
-  [createTripAC]: createAutocompleteReducer(createTripAC),
-  [tripIdeaAC]: createAutocompleteReducer(tripIdeaAC),
-  [updateTripAC]: createAutocompleteReducer(updateTripAC)
+  [tripAC]: createAutocompleteReducer(tripAC),
+  [tripIdeaAC]: createAutocompleteReducer(tripIdeaAC)
 });
 
 export default autocompleteState;

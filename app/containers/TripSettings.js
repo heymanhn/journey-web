@@ -3,9 +3,9 @@
 import { connect } from 'react-redux';
 import {
   apiUpdateTrip,
-  updateTripClearTitle,
-  updateTripSaveTitle,
-  updateTripSaveVis
+  clearNewTripTitle,
+  saveNewTripTitle,
+  saveNewTripVisibility
 } from 'app/actions/trips';
 import { hideModal } from 'app/actions/modals';
 import TripSettingsModal from 'app/components/TripSettingsModal';
@@ -16,19 +16,19 @@ const mapStateToProps = (state) => {
   const {
     isFetching,
     trip: { title, destination: { name: destinationName }, visibility },
-    updatedFields
+    newFields
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.tripSettings;
 
   let newDestinationName, newVisibility;
   let isSaveDisabled = true;
 
-  if (updatedFields && Object.keys(updatedFields).length > 0) {
+  if (newFields && Object.keys(newFields).length > 0) {
     isSaveDisabled = false;
-    if (updatedFields.destination) {
-      newDestinationName = updatedFields.destination.name;
+    if (newFields.destination) {
+      newDestinationName = newFields.destination.name;
     }
-    newVisibility = updatedFields.visibility;
+    newVisibility = newFields.visibility;
   }
 
   return {
@@ -47,9 +47,9 @@ const mapDispatchToProps = (dispatch) => {
       const newTitle = event.target.value;
 
       if (newTitle) {
-        dispatch(updateTripSaveTitle(newTitle));
+        dispatch(saveNewTripTitle(newTitle));
       } else {
-        dispatch(updateTripClearTitle());
+        dispatch(clearNewTripTitle());
       }
     },
 
@@ -58,11 +58,11 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onSetPrivate() {
-      dispatch(updateTripSaveVis('private'));
+      dispatch(saveNewTripVisibility('private'));
     },
 
     onSetPublic() {
-      dispatch(updateTripSaveVis('public'));
+      dispatch(saveNewTripVisibility('public'));
     },
 
     onUpdateTrip() {
