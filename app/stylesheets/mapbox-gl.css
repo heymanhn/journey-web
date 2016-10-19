@@ -268,11 +268,6 @@
   color: rgb(153, 153, 153);
 }
 
-.mapboxgl-popup .popup-comment {
-  font-style: italic;
-  margin-top: 10px;
-}
-
 .mapboxgl-marker {
     position: absolute;
     top: 0;
