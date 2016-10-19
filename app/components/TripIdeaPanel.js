@@ -62,6 +62,7 @@ const styles = {
     color: "#999999"
   },
   comment: {
+    fontSize: 13,
     fontStyle: "italic",
     marginTop: 10
   },
