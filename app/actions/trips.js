@@ -65,7 +65,10 @@ export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
 
 // Update trip ideas
+export const SET_IDEA_INDEX_TO_UPDATE = 'SET_IDEA_INDEX_TO_UPDATE';
 export const REORDER_TRIP_IDEA = 'REORDER_TRIP_IDEA';
+export const SAVE_IDEA_UPDATED_COMMENT = 'SAVE_IDEA_UPDATED_COMMENT';
+export const CLEAR_IDEA_UPDATED_COMMENT = 'CLEAR_IDEA_UPDATED_COMMENT';
 export const API_UPDATE_TRIP_IDEA_REQUEST = 'API_UPDATE_TRIP_IDEA_REQUEST';
 export const API_UPDATE_TRIP_IDEA_SUCCESS = 'API_UPDATE_TRIP_IDEA_SUCCESS';
 export const API_UPDATE_TRIP_IDEA_FAILURE = 'API_UPDATE_TRIP_IDEA_FAILURE';
@@ -338,11 +341,31 @@ export function apiAddTripIdeaFailure(error) {
 }
 
 // Update a trip idea
+export function setIdeaIndexToUpdate(index) {
+  return {
+    type: SET_IDEA_INDEX_TO_UPDATE,
+    index
+  };
+}
+
 export function reorderTripIdea(index1, index2) {
   return {
     type: REORDER_TRIP_IDEA,
     index1,
     index2
+  };
+}
+
+export function saveIdeaUpdatedComment(comment) {
+  return {
+    type: SAVE_IDEA_UPDATED_COMMENT,
+    comment
+  };
+}
+
+export function clearIdeaUpdatedComment() {
+  return {
+    type: CLEAR_IDEA_UPDATED_COMMENT
   };
 }
 
@@ -593,20 +616,26 @@ export function apiAddTripIdea() {
   };
 }
 
-// Only supports reordering trip ideas for now
 export function apiUpdateTripIdea(index) {
   return (dispatch, getState) => {
     dispatch(apiUpdateTripIdeaRequest());
 
-    const ts = getState().tripState;
-    const tripId = ts.trip._id;
-    const ideaId = ts.trip.ideas[index]._id;
+    const { tripState: ts, componentsState: cs } = getState();
+    const { showModal } = cs.modalsState.tripIdeaSettings;
+    const { ideaIndexToUpdate, newComment, trip: { _id: tripId, ideas } } = ts;
+    index = index || ideaIndexToUpdate;
+    const ideaId = ideas[index]._id;
+    const params = { index };
+
+    if (newComment) {
+      params.comment = newComment;
+    }
 
     const updateTripIdeaAPI = journeyAPI.trip.ideas.update(tripId, ideaId);
     let opts ={
       ...fetchOptsTemplate(getState().authState),
       method: updateTripIdeaAPI.method,
-      body: JSON.stringify({ index })
+      body: JSON.stringify(params)
     };
 
     return fetch(updateTripIdeaAPI.route, opts)
@@ -614,6 +643,7 @@ export function apiUpdateTripIdea(index) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiUpdateTripIdeaSuccess(json));
+        showModal && dispatch(hideModal(modalComponents.tripIdeaSettings));
       })
       .catch(error => { dispatch(apiUpdateTripIdeaFailure(error.message)); });
   };

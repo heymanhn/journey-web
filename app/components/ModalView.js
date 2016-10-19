@@ -12,6 +12,7 @@ class ModalView extends Component {
       children,
       isFetching,
       isSaveDisabled,
+      keyboard,
       onHide,
       onSaveChanges,
       showModal,
@@ -26,7 +27,7 @@ class ModalView extends Component {
     );
 
     return (
-      <Modal keyboard={false} onHide={onHide} show={showModal}>
+      <Modal keyboard={keyboard} onHide={onHide} show={showModal}>
         <Modal.Header style={styles.header} closeButton>
           <Modal.Title style={styles.title}>{title}</Modal.Title>
         </Modal.Header>
@@ -52,6 +53,7 @@ class ModalView extends Component {
 ModalView.propTypes = {
   isFetching: PropTypes.bool,
   isSaveDisabled: PropTypes.bool,
+  keyboard: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
   onSaveChanges: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,

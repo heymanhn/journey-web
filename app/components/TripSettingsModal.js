@@ -27,6 +27,7 @@ class TripSettingsModal extends Component {
       <ModalView
         isFetching={isFetching}
         isSaveDisabled={isSaveDisabled}
+        keyboard={false}
         onHide={onHide}
         onSaveChanges={onUpdateTrip}
         showModal={showModal}

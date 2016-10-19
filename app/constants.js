@@ -183,7 +183,8 @@ export const acComponents = {
  * Modal component IDs
  */
 export const modalComponents = {
-  tripSettings: 'tripSettings'
+  tripSettings: 'tripSettings',
+  tripIdeaSettings: 'tripIdeaSettings'
 };
 
 

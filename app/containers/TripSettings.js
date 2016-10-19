@@ -47,7 +47,7 @@ const mapDispatchToProps = (dispatch) => {
       const newTitle = event.target.value;
 
       if (newTitle) {
-        dispatch(updateTripSaveTitle(event.target.value));
+        dispatch(updateTripSaveTitle(newTitle));
       } else {
         dispatch(updateTripClearTitle());
       }

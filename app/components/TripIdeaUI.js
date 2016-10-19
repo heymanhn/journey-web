@@ -115,7 +115,8 @@ class TripIdeaUI extends Component {
         <TripIdeaPanel
           {..._.pick(this.props, [
             'connectDropTarget',
-            'idea'
+            'idea',
+            'onShowTripIdeaSettingsModal'
           ])}
           hover={hoverLngLat === idea.loc.coordinates}
 
@@ -165,7 +166,8 @@ TripIdeaUI.propTypes = {
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
-  onUpdateIdea: PropTypes.func.isRequired
+  onUpdateIdea: PropTypes.func.isRequired,
+  onShowTripIdeaSettingsModal: PropTypes.func.isRequired
 };
 
 const styles = {

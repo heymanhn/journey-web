@@ -31,9 +31,10 @@ function createModalsReducer(id) {
   }
 }
 
-const { tripSettings } = modalComponents;
+const { tripSettings, tripIdeaSettings } = modalComponents;
 const modalsState = combineReducers({
-  [tripSettings]: createModalsReducer(tripSettings)
+  [tripSettings]: createModalsReducer(tripSettings),
+  [tripIdeaSettings]: createModalsReducer(tripIdeaSettings),
 });
 
 export default modalsState;

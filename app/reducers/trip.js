@@ -31,7 +31,10 @@ import {
   SAVE_IDEA_COMMENT,
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
+  SET_IDEA_INDEX_TO_UPDATE,
   REORDER_TRIP_IDEA,
+  SAVE_IDEA_UPDATED_COMMENT,
+  CLEAR_IDEA_UPDATED_COMMENT,
   SET_HOVER_LNGLAT,
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
@@ -39,7 +42,7 @@ import {
   CLEAR_TRIP_ERROR
 } from 'app/actions/trips';
 import { initialTripState, modalComponents } from 'app/constants';
-const { tripSettings } = modalComponents;
+const { tripIdeaSettings, tripSettings } = modalComponents;
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
@@ -70,6 +73,11 @@ export default function tripState(state = initialTripState, action) {
         isFetching: false,
         focusLngLat: action.idea.loc.coordinates
       };
+    case SET_IDEA_INDEX_TO_UPDATE:
+      return {
+        ...state,
+        ideaIndexToUpdate: action.index
+      };
     case REORDER_TRIP_IDEA:
       let ideas = state.trip.ideas.slice();
       let idea1 = ideas[action.index1];
@@ -81,6 +89,13 @@ export default function tripState(state = initialTripState, action) {
           ideas
         })
       };
+    case SAVE_IDEA_UPDATED_COMMENT:
+      return {
+        ...state,
+        newComment: action.comment
+      };
+    case CLEAR_IDEA_UPDATED_COMMENT:
+      return _.omit(state, 'newComment');
     case REMOVE_TRIP_IDEA:
       return {
         ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
@@ -118,6 +133,8 @@ export default function tripState(state = initialTripState, action) {
     case HIDE_MODAL:
       if (action.modalId === tripSettings) {
         return _.omit(state, 'updatedFields');
+      } else if (action.modalId === tripIdeaSettings) {
+        return _.omit(state, ['ideaIndexToUpdate', 'updatedComment']);
       } else {
         return state;
       }
@@ -192,7 +209,7 @@ export default function tripState(state = initialTripState, action) {
     case API_UPDATE_TRIP_IDEA_SUCCESS:
     case API_REMOVE_TRIP_IDEA_SUCCESS:
       return {
-        ...state,
+        ..._.omit(state, ['ideaIndexToUpdate', 'newComment']),
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false
       };
