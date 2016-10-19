@@ -6,6 +6,7 @@ import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
+import TripIdeaSettings from 'app/containers/TripIdeaSettings';
 import TripSettings from 'app/containers/TripSettings';
 import { dimensions } from 'app/constants';
 
@@ -58,6 +59,7 @@ class TripPage extends Component {
         </div>
         <TripMap />
         <TripSettings />
+        <TripIdeaSettings />
       </div>
     );
   }

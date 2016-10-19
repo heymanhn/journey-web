@@ -257,8 +257,8 @@ function createLayerJSON(name) {
 }
 
 function createSourceEntry(idea) {
-  const { _id, name, photo, address, comment, loc } = idea;
-  const properties = { _id, name, photo, address, comment };
+  const { _id, name, photo, address, loc } = idea;
+  const properties = { _id, name, photo, address };
   const geometry = loc;
 
   return {
@@ -273,8 +273,6 @@ function createPopupHTML(idea) {
   popupHTML += `
     <p class="popup-name">${idea.name}</p>
     <p class="popup-address">${idea.address}</p>`;
-  popupHTML += idea.comment ?
-    `<p class="popup-comment">${idea.comment}</p>` : '';
 
   return popupHTML;
 }

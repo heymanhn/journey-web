@@ -2,6 +2,7 @@
 
 import _ from 'underscore';
 import { LOGOUT } from 'app/actions/auth';
+import { SHOW_MODAL, HIDE_MODAL } from 'app/actions/modals';
 import {
   API_CREATE_TRIP_SUCCESS,
   API_GET_TRIP_REQUEST,
@@ -30,16 +31,18 @@ import {
   SAVE_IDEA_COMMENT,
   ADD_TRIP_IDEA,
   REMOVE_TRIP_IDEA,
+  SET_IDEA_INDEX_TO_UPDATE,
   REORDER_TRIP_IDEA,
+  SAVE_IDEA_UPDATED_COMMENT,
+  CLEAR_IDEA_UPDATED_COMMENT,
   SET_HOVER_LNGLAT,
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
-  CLEAR_TRIP_ERROR,
-  SHOW_TRIP_SETTINGS_MODAL,
-  HIDE_TRIP_SETTINGS_MODAL
+  CLEAR_TRIP_ERROR
 } from 'app/actions/trips';
-import { initialTripState } from 'app/constants';
+import { initialTripState, modalComponents } from 'app/constants';
+const { tripIdeaSettings, tripSettings } = modalComponents;
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
@@ -70,6 +73,11 @@ export default function tripState(state = initialTripState, action) {
         isFetching: false,
         focusLngLat: action.idea.loc.coordinates
       };
+    case SET_IDEA_INDEX_TO_UPDATE:
+      return {
+        ...state,
+        ideaIndexToUpdate: action.index
+      };
     case REORDER_TRIP_IDEA:
       let ideas = state.trip.ideas.slice();
       let idea1 = ideas[action.index1];
@@ -81,6 +89,13 @@ export default function tripState(state = initialTripState, action) {
           ideas
         })
       };
+    case SAVE_IDEA_UPDATED_COMMENT:
+      return {
+        ...state,
+        newComment: action.comment
+      };
+    case CLEAR_IDEA_UPDATED_COMMENT:
+      return _.omit(state, 'newComment');
     case REMOVE_TRIP_IDEA:
       return {
         ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
@@ -106,18 +121,23 @@ export default function tripState(state = initialTripState, action) {
       return _.omit(state, 'focusLngLat');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
-    case SHOW_TRIP_SETTINGS_MODAL:
-      const { destination, title, visibility } = state.trip;
-      return {
-        ...state,
-        updatedFields: {},
-        showModal: true
-      };
-    case HIDE_TRIP_SETTINGS_MODAL:
-      return {
-        ..._.omit(state, 'updatedFields'),
-        showModal: false
-      };
+    case SHOW_MODAL:
+      if (action.modalId === tripSettings) {
+        return {
+          ...state,
+          updatedFields: {}
+        };
+      } else {
+        return state;
+      }
+    case HIDE_MODAL:
+      if (action.modalId === tripSettings) {
+        return _.omit(state, 'updatedFields');
+      } else if (action.modalId === tripIdeaSettings) {
+        return _.omit(state, ['ideaIndexToUpdate', 'updatedComment']);
+      } else {
+        return state;
+      }
     case API_GET_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error', 'trip'])),
@@ -189,7 +209,7 @@ export default function tripState(state = initialTripState, action) {
     case API_UPDATE_TRIP_IDEA_SUCCESS:
     case API_REMOVE_TRIP_IDEA_SUCCESS:
       return {
-        ...state,
+        ..._.omit(state, ['ideaIndexToUpdate', 'newComment']),
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false
       };
