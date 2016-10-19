@@ -18,9 +18,13 @@ const mapStateToProps = (state) => {
     newComment
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.tripIdeaSettings;
+  let comment;
+  if (typeof index !== 'undefined') {
+    comment = trip.ideas[index].comment;
+  }
 
   return {
-    comment: index && trip.ideas[index].comment,
+    comment,
     isFetching,
     isSaveDisabled: isFetching || !newComment,
     showModal
