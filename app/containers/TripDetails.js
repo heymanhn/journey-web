@@ -2,8 +2,10 @@
 
 import { connect } from 'react-redux';
 import { showDestinationOnMap } from 'app/actions/map';
-import { apiUpdateTrip, showTripSettingsModal } from 'app/actions/trips';
+import { showModal } from 'app/actions/modals';
+import { apiUpdateTrip } from 'app/actions/trips';
 import TripDetailsView from 'app/components/TripDetailsView';
+import { modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { isFetchingVisibility, trip } = state.tripState;
@@ -24,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onShowTripSettingsModal() {
-      dispatch(showTripSettingsModal());
+      dispatch(showModal(modalComponents.tripSettings));
     }
   };
 };

@@ -154,6 +154,10 @@ export const initialACState = {
   results: []
 };
 
+export const initialModalState = {
+  showModal: false
+};
+
 export const initialTripsState = {
   isFetching: false,
   trips: []
@@ -161,8 +165,7 @@ export const initialTripsState = {
 
 export const initialTripState = {
   isFetching: false,
-  isFetchingVisibility: false,
-  showModal: false
+  isFetchingVisibility: false
 };
 
 
@@ -173,6 +176,14 @@ export const acComponents = {
   createTripAC: 'createTripAC',
   tripIdeaAC: 'tripIdeaAC',
   updateTripAC: 'updateTripAC'
+};
+
+
+/*
+ * Modal component IDs
+ */
+export const modalComponents = {
+  tripSettings: 'tripSettings'
 };
 
 

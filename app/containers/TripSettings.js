@@ -3,20 +3,23 @@
 import { connect } from 'react-redux';
 import {
   apiUpdateTrip,
-  hideTripSettingsModal,
   updateTripClearTitle,
   updateTripSaveTitle,
   updateTripSaveVis
 } from 'app/actions/trips';
+import { hideModal } from 'app/actions/modals';
 import TripSettingsModal from 'app/components/TripSettingsModal';
+import { modalComponents } from 'app/constants';
+const { tripSettings } = modalComponents;
 
 const mapStateToProps = (state) => {
   const {
     isFetching,
-    showModal,
     trip: { title, destination: { name: destinationName }, visibility },
     updatedFields
   } = state.tripState;
+  const { showModal } = state.componentsState.modalsState.tripSettings;
+
   let newDestinationName, newVisibility;
   let isSaveDisabled = true;
 
@@ -51,7 +54,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onHide() {
-      dispatch(hideTripSettingsModal());
+      dispatch(hideModal(tripSettings));
     },
 
     onSetPrivate() {

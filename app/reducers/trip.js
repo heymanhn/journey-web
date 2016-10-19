@@ -2,6 +2,7 @@
 
 import _ from 'underscore';
 import { LOGOUT } from 'app/actions/auth';
+import { SHOW_MODAL, HIDE_MODAL } from 'app/actions/modals';
 import {
   API_CREATE_TRIP_SUCCESS,
   API_GET_TRIP_REQUEST,
@@ -35,11 +36,10 @@ import {
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
-  CLEAR_TRIP_ERROR,
-  SHOW_TRIP_SETTINGS_MODAL,
-  HIDE_TRIP_SETTINGS_MODAL
+  CLEAR_TRIP_ERROR
 } from 'app/actions/trips';
-import { initialTripState } from 'app/constants';
+import { initialTripState, modalComponents } from 'app/constants';
+const { tripSettings } = modalComponents;
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
@@ -106,18 +106,21 @@ export default function tripState(state = initialTripState, action) {
       return _.omit(state, 'focusLngLat');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
-    case SHOW_TRIP_SETTINGS_MODAL:
-      const { destination, title, visibility } = state.trip;
-      return {
-        ...state,
-        updatedFields: {},
-        showModal: true
-      };
-    case HIDE_TRIP_SETTINGS_MODAL:
-      return {
-        ..._.omit(state, 'updatedFields'),
-        showModal: false
-      };
+    case SHOW_MODAL:
+      if (action.modalId === tripSettings) {
+        return {
+          ...state,
+          updatedFields: {}
+        };
+      } else {
+        return state;
+      }
+    case HIDE_MODAL:
+      if (action.modalId === tripSettings) {
+        return _.omit(state, 'updatedFields');
+      } else {
+        return state;
+      }
     case API_GET_TRIP_REQUEST:
       return {
         ...(_.omit(state, ['error', 'trip'])),

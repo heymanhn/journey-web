@@ -6,11 +6,13 @@ import ObjectID from 'bson-objectid';
 
 import { viewTripPage } from './navigation';
 import { apiPlaceDetails } from './autocomplete';
+import { hideModal } from './modals';
 import {
   acComponents,
   fetchOptsTemplate,
   handleErrors,
-  journeyAPI
+  journeyAPI,
+  modalComponents
 } from 'app/constants';
 
 /*
@@ -84,9 +86,6 @@ export const CLEAR_FOCUS_LNGLAT = 'CLEAR_FOCUS_LNGLAT';
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
 export const CLEAR_TRIP_ERROR = 'CLEAR_TRIP_ERROR';
 
-// Trip Settings Modal
-export const SHOW_TRIP_SETTINGS_MODAL = 'SHOW_TRIP_SETTINGS_MODAL';
-export const HIDE_TRIP_SETTINGS_MODAL = 'HIDE_TRIP_SETTINGS_MODAL';
 
 /*
  * Action Creators
@@ -435,19 +434,6 @@ export function clearTripError() {
   };
 }
 
-// Trip Settings Modal
-export function showTripSettingsModal() {
-  return {
-    type: SHOW_TRIP_SETTINGS_MODAL
-  };
-}
-
-export function hideTripSettingsModal() {
-  return {
-    type: HIDE_TRIP_SETTINGS_MODAL
-  };
-}
-
 
 /*
  * Action Creator thunks
@@ -544,7 +530,7 @@ export function apiUpdateTrip(visibility) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiUpdateTripSuccess(json));
-        dispatch(hideTripSettingsModal());
+        dispatch(hideModal(modalComponents.tripSettings));
       })
       .catch(error => { dispatch(apiUpdateTripFailure(error.message)); });
   };
