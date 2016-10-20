@@ -13,11 +13,13 @@ class TripSettingsModal extends Component {
       destinationName,
       isFetching,
       isSaveDisabled,
+      modalSaveTitle,
+      modalTitle,
       onEnterTitle,
       onHide,
+      onSaveTrip,
       onSetPrivate,
       onSetPublic,
-      onUpdateTrip,
       showModal,
       title,
       visibility
@@ -29,14 +31,17 @@ class TripSettingsModal extends Component {
         isSaveDisabled={isSaveDisabled}
         keyboard={false}
         onHide={onHide}
-        onSaveChanges={onUpdateTrip}
+        onSaveChanges={onSaveTrip}
+        saveTitle={modalSaveTitle}
         showModal={showModal}
-        title="Edit Trip"
+        title={modalTitle}
       >
+
         <div style={styles.inputSection}>
           <h4>Name your trip:</h4>
           <TextInput
             onChange={onEnterTitle}
+            placeholder="Trip Name"
             style={styles.inputField}
             defaultValue={title}
           />
@@ -83,17 +88,19 @@ class TripSettingsModal extends Component {
 }
 
 TripSettingsModal.propTypes = {
-  destinationName: PropTypes.string.isRequired,
+  destinationName: PropTypes.string,
   isFetching: PropTypes.bool,
   isSaveDisabled: PropTypes.bool,
+  modalSaveTitle: PropTypes.string.isRequired,
+  modalTitle: PropTypes.string.isRequired,
   onEnterTitle: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
+  onSaveTrip: PropTypes.func.isRequired,
   onSetPrivate: PropTypes.func.isRequired,
   onSetPublic: PropTypes.func.isRequired,
-  onUpdateTrip: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
-  visibility: PropTypes.string.isRequired
+  title: PropTypes.string,
+  visibility: PropTypes.string
 };
 
 const styles = {
@@ -106,6 +113,7 @@ const styles = {
     paddingBottom: 10
   },
   tripAC: {
+    fontSize: 14,
     width: 350,
     zIndex: 3
   },

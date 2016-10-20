@@ -16,10 +16,6 @@ export function viewTripsPage() {
   };
 }
 
-export function createTrip() {
-  return browserHistory.push('/createtrip');
-}
-
 export function viewTripPage(tripId) {
   return (dispatch) => {
     dispatch(apiGetTrip(tripId)).then(() => {

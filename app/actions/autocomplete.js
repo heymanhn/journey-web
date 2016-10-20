@@ -20,6 +20,7 @@ let placesService;
 export const SAVE_INPUT = 'SAVE_INPUT';
 export const CLEAR_AUTOCOMPLETE = 'CLEAR_AUTOCOMPLETE';
 export const CLEAR_SAVED_PLACE = 'CLEAR_SAVED_PLACE';
+export const RESET_AUTOCOMPLETE = 'RESET_AUTOCOMPLETE';
 export const API_AUTOCOMPLETE_REQUEST = 'API_AUTOCOMPLETE_REQUEST';
 export const API_AUTOCOMPLETE_SUCCESS = 'API_AUTOCOMPLETE_SUCCESS';
 export const API_AUTOCOMPLETE_FAILURE = 'API_AUTOCOMPLETE_FAILURE';
@@ -50,6 +51,13 @@ export function clearAutocomplete(autocompleteId) {
 export function clearSavedPlaceAC(autocompleteId) {
   return {
     type: CLEAR_SAVED_PLACE,
+    autocompleteId
+  };
+}
+
+export function resetAutocomplete(autocompleteId) {
+  return {
+    type: RESET_AUTOCOMPLETE,
     autocompleteId
   };
 }

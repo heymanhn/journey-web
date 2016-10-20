@@ -2,6 +2,7 @@
 
 import { connect } from 'react-redux';
 import {
+  apiCreateTrip,
   apiUpdateTrip,
   clearNewTripTitle,
   saveNewTripTitle,
@@ -12,36 +13,47 @@ import TripSettingsModal from 'app/components/TripSettingsModal';
 import { modalComponents } from 'app/constants';
 const { tripSettings } = modalComponents;
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  const { showModal } = state.componentsState.modalsState.tripSettings;
+  const { action } = ownProps;
   const {
     isFetching,
-    trip: { title, destination: { name: destinationName }, visibility },
+    trip,
     newFields
   } = state.tripState;
-  const { showModal } = state.componentsState.modalsState.tripSettings;
-
-  let newDestinationName, newVisibility;
+  let title, destinationName, visibility, newVisibility;
   let isSaveDisabled = true;
 
-  if (newFields && Object.keys(newFields).length > 0) {
-    isSaveDisabled = false;
-    if (newFields.destination) {
-      newDestinationName = newFields.destination.name;
+  if (action === 'update' && trip) {
+    title = trip.title;
+    destinationName = trip.destination.name;
+    visibility = trip.visibility;
+  }
+
+  if (newFields) {
+    if (
+      (action === 'create' && Object.keys(newFields).length === 3) ||
+      (action === 'update' && Object.keys(newFields).length > 0)
+    ) {
+      isSaveDisabled = false;
     }
+
     newVisibility = newFields.visibility;
   }
 
   return {
+    destinationName,
     isFetching,
     isSaveDisabled: isFetching || isSaveDisabled,
+    modalSaveTitle: action === 'create' ? 'Create Trip' : 'Save Changes',
+    modalTitle: action === 'create' ? 'Create Trip' : 'Edit Trip',
     showModal,
     title,
-    destinationName: newDestinationName || destinationName,
     visibility: newVisibility || visibility
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onEnterTitle(event) {
       const newTitle = event.target.value;
@@ -65,8 +77,14 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(saveNewTripVisibility('public'));
     },
 
-    onUpdateTrip() {
-      dispatch(apiUpdateTrip());
+    onSaveTrip() {
+      const { action } = ownProps;
+      switch (action) {
+        case 'create':
+          return dispatch(apiCreateTrip());
+        case 'update':
+          return dispatch(apiUpdateTrip());
+      }
     }
   };
 };

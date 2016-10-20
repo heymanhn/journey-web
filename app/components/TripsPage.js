@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import TripsList from './TripsList';
+import TripSettings from 'app/containers/TripSettings';
 import { viewLandingPage } from 'app/actions/navigation';
 
 class TripsPage extends Component {
@@ -53,6 +54,7 @@ class TripsPage extends Component {
         >
           Log Out
         </Button>
+        <TripSettings action="create" />
       </div>
     );
   }

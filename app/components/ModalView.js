@@ -15,6 +15,7 @@ class ModalView extends Component {
       keyboard,
       onHide,
       onSaveChanges,
+      saveTitle,
       showModal,
       title
     } = this.props;
@@ -42,7 +43,7 @@ class ModalView extends Component {
             onClick={onSaveChanges}
             style={styles.saveChangesButton}
           >
-            {isFetching ? savingSpinner : (<span>Save changes</span>)}
+            {isFetching ? savingSpinner : (<span>{saveTitle}</span>)}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -56,6 +57,7 @@ ModalView.propTypes = {
   keyboard: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
   onSaveChanges: PropTypes.func.isRequired,
+  saveTitle: PropTypes.string.isRequired,
   showModal: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired
 };

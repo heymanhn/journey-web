@@ -474,6 +474,8 @@ export function apiCreateTrip() {
         const tripId = json.trip._id;
         dispatch(apiCreateTripSuccess(json));
         dispatch(viewTripPage(tripId));
+        dispatch(hideModal(modalComponents.tripSettings));
+        dispatch(apiGetTrips());
       })
       .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
   };

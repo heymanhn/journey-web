@@ -2,11 +2,16 @@
 
 import { connect } from 'react-redux';
 import { apiPageEvent, apiTrackEvent } from 'app/actions/analytics';
-import { apiDeleteTrip, clearTripsError } from 'app/actions/trips';
+import { showModal } from 'app/actions/modals';
+import {
+  apiDeleteTrip,
+  clearTripsError,
+  saveNewTripVisibility
+} from 'app/actions/trips';
 import { processLogout } from 'app/actions/auth';
-import { createTrip, viewTripPage } from 'app/actions/navigation';
+import { viewTripPage } from 'app/actions/navigation';
 import TripsPage from 'app/components/TripsPage';
-import { analytics } from 'app/constants';
+import { analytics, modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   return {
@@ -19,7 +24,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onCreateTripPress() {
       dispatch(clearTripsError());
-      createTrip();
+      dispatch(showModal(modalComponents.tripSettings));
+
+      // Set default visibility if creating a new trip
+      dispatch(saveNewTripVisibility('public'));
     },
 
     onDeleteTripPress(tripId) {
