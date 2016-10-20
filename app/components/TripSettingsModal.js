@@ -11,6 +11,7 @@ class TripSettingsModal extends Component {
   render() {
     const {
       destinationName,
+      error,
       isFetching,
       isSaveDisabled,
       modalSaveTitle,
@@ -27,6 +28,7 @@ class TripSettingsModal extends Component {
 
     return (
       <ModalView
+        error={error}
         isFetching={isFetching}
         isSaveDisabled={isSaveDisabled}
         keyboard={false}
@@ -89,6 +91,7 @@ class TripSettingsModal extends Component {
 
 TripSettingsModal.propTypes = {
   destinationName: PropTypes.string,
+  error: PropTypes.string,
   isFetching: PropTypes.bool,
   isSaveDisabled: PropTypes.bool,
   modalSaveTitle: PropTypes.string.isRequired,

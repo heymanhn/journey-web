@@ -17,6 +17,7 @@ const mapStateToProps = (state, ownProps) => {
   const { showModal } = state.componentsState.modalsState.tripSettings;
   const { action } = ownProps;
   const {
+    error,
     isFetching,
     trip,
     newFields
@@ -43,6 +44,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     destinationName,
+    error,
     isFetching,
     isSaveDisabled: isFetching || isSaveDisabled,
     modalSaveTitle: action === 'create' ? 'Create Trip' : 'Save Changes',

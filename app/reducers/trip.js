@@ -161,9 +161,9 @@ export default function tripState(state = initialTripState, action) {
       }
     case HIDE_MODAL:
       if (action.modalId === tripSettings) {
-        return _.omit(state, 'newFields');
+        return _.omit(state, ['error', 'newFields']);
       } else if (action.modalId === tripIdeaSettings) {
-        return _.omit(state, ['ideaIndexToUpdate', 'updatedComment']);
+        return _.omit(state, ['error', 'ideaIndexToUpdate', 'updatedComment']);
       } else {
         return state;
       }
@@ -190,7 +190,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case API_GET_TRIP_SUCCESS:
       return {
-        ...state,
+        ..._.omit(state, 'error'),
         trip: action.trip,
         isFetching: false
       };
