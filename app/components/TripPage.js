@@ -58,7 +58,7 @@ class TripPage extends Component {
           <TripIdeas />
         </div>
         <TripMap />
-        <TripSettings />
+        <TripSettings action="update" />
         <TripIdeaSettings />
       </div>
     );

@@ -6,6 +6,7 @@ import {
   SAVE_INPUT,
   CLEAR_AUTOCOMPLETE,
   CLEAR_SAVED_PLACE,
+  RESET_AUTOCOMPLETE,
   API_AUTOCOMPLETE_REQUEST,
   API_AUTOCOMPLETE_SUCCESS,
   API_AUTOCOMPLETE_FAILURE,
@@ -13,12 +14,15 @@ import {
   API_PLACE_DETAILS_SUCCESS,
   API_PLACE_DETAILS_FAILURE
 } from 'app/actions/autocomplete';
+import { HIDE_MODAL } from 'app/actions/modals';
 import {
   API_CREATE_TRIP_SUCCESS,
   API_UPDATE_TRIP_SUCCESS,
   API_ADD_TRIP_IDEA_SUCCESS
 } from 'app/actions/trips';
-import { acComponents, initialACState } from 'app/constants';
+import { acComponents, initialACState, modalComponents } from 'app/constants';
+const { tripAC, tripIdeaAC } = acComponents;
+const { tripSettings, tripIdeaSettings } = modalComponents;
 
 function createAutocompleteReducer(id) {
   return function reducer(state = initialACState, action) {
@@ -87,17 +91,17 @@ function createAutocompleteReducer(id) {
           placeSelected: false,
           results: []
         };
+      case RESET_AUTOCOMPLETE:
+        return initialACState;
     }
 
     return state;
   }
 }
 
-const { createTripAC, tripIdeaAC, updateTripAC } = acComponents;
 const autocompleteState = combineReducers({
-  [createTripAC]: createAutocompleteReducer(createTripAC),
-  [tripIdeaAC]: createAutocompleteReducer(tripIdeaAC),
-  [updateTripAC]: createAutocompleteReducer(updateTripAC)
+  [tripAC]: createAutocompleteReducer(tripAC),
+  [tripIdeaAC]: createAutocompleteReducer(tripIdeaAC)
 });
 
 export default autocompleteState;

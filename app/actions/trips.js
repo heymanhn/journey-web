@@ -24,30 +24,24 @@ export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 
-// Create Trip
-export const CREATE_TRIP_SAVE_TITLE = 'CREATE_TRIP_SAVE_TITLE';
-export const CREATE_TRIP_SAVE_DEST = 'CREATE_TRIP_SAVE_DEST';
-export const CREATE_TRIP_SAVE_VISIBILITY = 'CREATE_TRIP_SAVE_VISIBILITY';
-export const CLEAR_SAVED_DEST = 'CLEAR_SAVED_DEST';
+// Create or Update Trip
+export const SAVE_NEW_TRIP_TITLE = 'SAVE_NEW_TRIP_TITLE';
+export const SAVE_NEW_TRIP_DESTINATION = 'SAVE_NEW_TRIP_DESTINATION';
+export const SAVE_NEW_TRIP_VISIBILITY = 'SAVE_NEW_TRIP_VISIBILITY';
+export const CLEAR_NEW_TRIP_TITLE = 'CLEAR_NEW_TRIP_TITLE';
+export const CLEAR_NEW_TRIP_DESTINATION = 'CLEAR_NEW_TRIP_DESTINATION';
 export const API_CREATE_TRIP_REQUEST = 'API_CREATE_TRIP_REQUEST';
 export const API_CREATE_TRIP_SUCCESS = 'API_CREATE_TRIP_SUCCESS';
 export const API_CREATE_TRIP_FAILURE = 'API_CREATE_TRIP_FAILURE';
+export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
+export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
+export const API_UPDATE_TRIP_SUCCESS = 'API_UPDATE_TRIP_SUCCESS';
+export const API_UPDATE_TRIP_FAILURE = 'API_UPDATE_TRIP_FAILURE';
 
 // Get a trip
 export const API_GET_TRIP_REQUEST = 'API_GET_TRIP_REQUEST';
 export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
-
-// Update a trip
-export const UPDATE_TRIP_SAVE_DEST = 'UPDATE_TRIP_SAVE_DEST';
-export const UPDATE_TRIP_CLEAR_DEST = 'UPDATE_TRIP_CLEAR_DEST';
-export const UPDATE_TRIP_SAVE_TITLE = 'UPDATE_TRIP_SAVE_TITLE';
-export const UPDATE_TRIP_CLEAR_TITLE = 'UPDATE_TRIP_CLEAR_TITLE';
-export const UPDATE_TRIP_SAVE_VIS = 'UPDATE_TRIP_SAVE_VIS';
-export const API_UPDATE_TRIP_VIS_REQUEST = 'API_UPDATE_TRIP_VIS_REQUEST';
-export const API_UPDATE_TRIP_REQUEST = 'API_UPDATE_TRIP_REQUEST';
-export const API_UPDATE_TRIP_SUCCESS = 'API_UPDATE_TRIP_SUCCESS';
-export const API_UPDATE_TRIP_FAILURE = 'API_UPDATE_TRIP_FAILURE';
 
 // Delete a trip
 export const DELETE_TRIP = 'DELETE_TRIP';
@@ -115,31 +109,37 @@ export function apiGetTripsFailure(error) {
   };
 }
 
-// Create Trip
-export function createTripSaveTitle(title) {
+// Create or Update a Trip
+export function saveNewTripTitle(title) {
   return {
-    type: CREATE_TRIP_SAVE_TITLE,
+    type: SAVE_NEW_TRIP_TITLE,
     title
   };
 }
 
-export function createTripSaveDest(destination) {
+export function saveNewTripDestination(destination) {
   return {
-    type: CREATE_TRIP_SAVE_DEST,
+    type: SAVE_NEW_TRIP_DESTINATION,
     destination: formatDestination(destination)
   };
 }
 
-export function createTripSaveVisibility(visibility) {
+export function saveNewTripVisibility(visibility) {
   return {
-    type: CREATE_TRIP_SAVE_VISIBILITY,
+    type: SAVE_NEW_TRIP_VISIBILITY,
     visibility
   };
 }
 
-export function clearSavedDest() {
+export function clearNewTripTitle() {
   return {
-    type: CLEAR_SAVED_DEST
+    type: CLEAR_NEW_TRIP_TITLE
+  };
+}
+
+export function clearNewTripDestination() {
+  return {
+    type: CLEAR_NEW_TRIP_DESTINATION
   };
 }
 
@@ -152,7 +152,7 @@ export function apiCreateTripRequest() {
 export function apiCreateTripSuccess(json) {
   return {
     type: API_CREATE_TRIP_SUCCESS,
-    autocompleteId: acComponents.createTripAC,
+    autocompleteId: acComponents.tripAC,
     trip: json.trip
   };
 }
@@ -161,61 +161,6 @@ export function apiCreateTripFailure(error) {
   return {
     type: API_CREATE_TRIP_FAILURE,
     error
-  };
-}
-
-// Get a Trip
-export function apiGetTripRequest() {
-  return {
-    type: API_GET_TRIP_REQUEST
-  };
-}
-
-export function apiGetTripSuccess(json) {
-  return {
-    type: API_GET_TRIP_SUCCESS,
-    trip: json.trip
-  };
-}
-
-export function apiGetTripFailure(error) {
-  return {
-    type: API_GET_TRIP_FAILURE,
-    error
-  };
-}
-
-// Update a trip
-export function updateTripSaveDest(destination) {
-  return {
-    type: UPDATE_TRIP_SAVE_DEST,
-    destination: formatDestination(destination)
-  };
-}
-
-export function updateTripClearDest() {
-  return {
-    type: UPDATE_TRIP_CLEAR_DEST
-  };
-}
-
-export function updateTripSaveTitle(title) {
-  return {
-    type: UPDATE_TRIP_SAVE_TITLE,
-    title
-  };
-}
-
-export function updateTripClearTitle() {
-  return {
-    type: UPDATE_TRIP_CLEAR_TITLE
-  };
-}
-
-export function updateTripSaveVis(visibility) {
-  return {
-    type: UPDATE_TRIP_SAVE_VIS,
-    visibility
   };
 }
 
@@ -234,7 +179,7 @@ export function apiUpdateTripRequest() {
 export function apiUpdateTripSuccess(json) {
   return {
     type: API_UPDATE_TRIP_SUCCESS,
-    autocompleteId: acComponents.updateTripAC,
+    autocompleteId: acComponents.tripAC,
     trip: json.trip
   };
 }
@@ -242,6 +187,28 @@ export function apiUpdateTripSuccess(json) {
 export function apiUpdateTripFailure(error) {
   return {
     type: API_UPDATE_TRIP_FAILURE,
+    error
+  };
+}
+
+
+// Get a Trip
+export function apiGetTripRequest() {
+  return {
+    type: API_GET_TRIP_REQUEST
+  };
+}
+
+export function apiGetTripSuccess(json) {
+  return {
+    type: API_GET_TRIP_SUCCESS,
+    trip: json.trip
+  };
+}
+
+export function apiGetTripFailure(error) {
+  return {
+    type: API_GET_TRIP_FAILURE,
     error
   };
 }
@@ -486,15 +453,18 @@ export function apiCreateTrip() {
     dispatch(apiCreateTripRequest());
 
     // Format the destination object before saving
-    const title = getState().tripsState.newTitle;
-    const destination = getState().tripsState.newDestination;
-    const visibility = getState().tripsState.newVisibility || 'public';
+    let { newFields } = getState().tripState;
 
+    if (!newFields) {
+      return;
+    }
+
+    newFields.visibility = newFields.visibility || 'public';
     const createTrip = journeyAPI.trips.create();
     let opts = {
       ...fetchOptsTemplate(getState().authState),
       method: createTrip.method,
-      body: JSON.stringify({ title, destination, visibility })
+      body: JSON.stringify(newFields)
     };
 
     return fetch(createTrip.route, opts)
@@ -504,6 +474,8 @@ export function apiCreateTrip() {
         const tripId = json.trip._id;
         dispatch(apiCreateTripSuccess(json));
         dispatch(viewTripPage(tripId));
+        dispatch(hideModal(modalComponents.tripSettings));
+        dispatch(apiGetTrips());
       })
       .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
   };
@@ -531,14 +503,19 @@ export function apiGetTrip(tripId) {
 
 export function apiUpdateTrip(visibility) {
   return (dispatch, getState) => {
-    const { trip: { _id: tripId }, updatedFields } = getState().tripState;
+    const { trip: { _id: tripId }, newFields } = getState().tripState;
+
     let params = {};
     if (visibility) {
       dispatch(apiUpdateTripVisRequest());
       params.visibility = visibility;
     } else {
-      dispatch(apiUpdateTripRequest());
-      params = updatedFields;
+      if (!newFields) {
+        return;
+      } else {
+        dispatch(apiUpdateTripRequest());
+        params = newFields;
+      }
     }
 
     const updateTripAPI = journeyAPI.trip.update(tripId);

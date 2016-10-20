@@ -118,6 +118,7 @@ export const dimensions = {
 export const colors = {
   primary: "rgb(233, 30, 99)",
   primaryDark: "rgb(143, 23, 64)",
+  primaryError: "rgba(233, 30, 99, 0.2)",
   secondary: "rgb(26, 118, 200)"
 };
 
@@ -173,9 +174,8 @@ export const initialTripState = {
  * Autocomplete component IDs
  */
 export const acComponents = {
-  createTripAC: 'createTripAC',
-  tripIdeaAC: 'tripIdeaAC',
-  updateTripAC: 'updateTripAC'
+  tripAC: 'tripAC',
+  tripIdeaAC: 'tripIdeaAC'
 };
 
 

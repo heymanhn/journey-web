@@ -24,6 +24,7 @@ class TripIdeaSettingsModal extends Component {
         keyboard={true}
         onHide={onHide}
         onSaveChanges={onUpdateTripIdea}
+        saveTitle="Save Changes"
         showModal={showModal}
         title="Edit Trip Idea"
       >
