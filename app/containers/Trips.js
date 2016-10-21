@@ -5,6 +5,7 @@ import { apiPageEvent, apiTrackEvent } from 'app/actions/analytics';
 import { showModal } from 'app/actions/modals';
 import {
   apiDeleteTrip,
+  apiGetTrips,
   clearTripsError,
   saveNewTripVisibility
 } from 'app/actions/trips';
@@ -30,6 +31,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onDeleteTripPress(tripId) {
       dispatch(apiDeleteTrip(tripId));
+    },
+
+    onGetTrips() {
+      dispatch(apiGetTrips());
     },
 
     trackPageView() {

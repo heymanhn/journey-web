@@ -11,8 +11,13 @@ import { dimensions } from 'app/constants';
 
 class TripsPage extends Component {
   componentWillMount() {
-    if (!this.props.user) {
+    const { onGetTrips, trips, user } = this.props;
+    if (!user) {
       viewLandingPage();
+    }
+
+    if (trips.length === 0) {
+      onGetTrips();
     }
   }
 
@@ -30,7 +35,7 @@ class TripsPage extends Component {
       trips
     } = this.props;
 
-    if (!user) {
+    if (!user || trips.length === 0) {
       return null;
     }
 
@@ -68,6 +73,7 @@ class TripsPage extends Component {
 TripsPage.propTypes = {
   onCreateTripPress: PropTypes.func.isRequired,
   onDeleteTripPress: PropTypes.func.isRequired,
+  onGetTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired,
   user: PropTypes.object

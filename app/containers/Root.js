@@ -29,7 +29,7 @@ class Root extends Component {
     const { store } = this.props;
     const config = {
       storage: localForage,
-      blacklist: ['componentsState', 'tripState']
+      whitelist: ['authState']
     };
 
     persistStore(store, config, () => {
