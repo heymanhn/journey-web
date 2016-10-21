@@ -37,27 +37,34 @@ class TripsPage extends Component {
     return (
       <div>
         <Navigation fullWidth />
-        <div style={styles.mainSection}>
-          <h1>Trips page</h1>
-          <p>Welcome, {user.name}!</p>
-          <Button
-            bsStyle="primary"
-            onClick={onCreateTripPress}
-          >
-            Create Trip
-          </Button>
-          <TripsList
-            trips={trips}
-            onDeleteTripPress={onDeleteTripPress}
-            onViewTrip={onViewTrip}
-          />
-          <Button
-            bsStyle="primary"
-            onClick={onLogoutPress}
-          >
-            Log Out
-          </Button>
-          <TripSettings action="create" />
+        <div style={styles.mainContainer}>
+          <div style={styles.mainSection}>
+            <div style={styles.headerSection}>
+              <h1 style={styles.h1}>My Trips</h1>
+              <Button
+                onClick={onCreateTripPress}
+                style={styles.newTripButton}
+              >
+                <img
+                  src="../assets/new-trip-icon.png"
+                  style={styles.newTripIcon}
+                />
+                <span style={styles.newTripTitle}>New Trip</span>
+              </Button>
+            </div>
+            <TripsList
+              trips={trips}
+              onDeleteTripPress={onDeleteTripPress}
+              onViewTrip={onViewTrip}
+            />
+            <Button
+              bsStyle="primary"
+              onClick={onLogoutPress}
+            >
+              Log Out
+            </Button>
+            <TripSettings action="create" />
+          </div>
         </div>
       </div>
     );
@@ -75,10 +82,37 @@ TripsPage.propTypes = {
 };
 
 const styles = {
+  h1: {
+    fontWeight: 400,
+    margin: 0
+  },
+  headerSection: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: 30
+  },
+  mainContainer: {
+    backgroundColor: "#f9f9f9",
+    width: "100%",
+  },
   mainSection: {
-    backgroundColor: "#eeeeee",
     margin: "60px auto 0px",
-    maxWidth: 700
+    maxWidth: 700,
+    padding: 30
+  },
+  newTripButton: {
+    backgroundColor: "1a76c8",
+    borderRadius: 25,
+    color: "white",
+    padding: "8px 15px"
+  },
+  newTripIcon: {
+    marginRight: 8
+  },
+  newTripTitle: {
+    position: "relative",
+    top: 1
   }
 };
 
