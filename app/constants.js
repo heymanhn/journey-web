@@ -114,6 +114,10 @@ export const dimensions = {
   },
   sidePadding: 30,
   tripsPage: {
+    listItem: {
+      height: 250,
+      width: 300
+    },
     width: 700
   }
 };
@@ -210,7 +214,14 @@ export const mapbox = {
     hover: 'hoverTargets',
     markers: 'ideaMarkers'
   },
-  streetsStyle: 'mapbox://styles/heymanhn/citkhed0r002r2iqh4v6b8k1l',
+  staticImage: {
+    height: dimensions.tripsPage.listItem.height - 70,
+    url: 'https://api.mapbox.com/styles/v1/heymanhn/',
+    width: dimensions.tripsPage.listItem.width - 2
+  },
+  styleURL: 'mapbox://styles/heymanhn/',
+  streetsStyleId: 'citkhed0r002r2iqh4v6b8k1l',
+  streetsNoLabelsStyleId: 'ciuizxxtn00492is1dvf2tbw0',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
 };
 
@@ -221,6 +232,17 @@ export const mapMarkers = {
     height: 40
   }
 };
+
+export function generateMapImage(lng, lat, zoom) {
+  const {
+    staticImage: { height, url, width },
+    streetsNoLabelsStyleId: styleId,
+    token
+  } = mapbox;
+
+  return `${url}${styleId}/static/${lng},${lat},${zoom}/${width}x${height}?` +
+    `access_token=${token}&attribution=false&logo=false`;
+}
 
 export function calcMapWidth() {
   return window.innerWidth - dimensions.leftColumn.width;

@@ -28,7 +28,6 @@ class TripsList extends Component {
 
 TripsList.propTypes = {
   onDeleteTripPress: PropTypes.func.isRequired,
-  onViewTrip: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired
 };
 

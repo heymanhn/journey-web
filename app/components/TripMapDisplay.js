@@ -64,7 +64,7 @@ class TripMapDisplay extends Component {
 
     let map = new mapboxgl.Map({
       container: this.container,
-      style: mapbox.streetsStyle,
+      style: mapbox.styleURL + mapbox.streetsStyleId,
       attributionControl: true,
       center: this.props.destination.loc.coordinates,
     });

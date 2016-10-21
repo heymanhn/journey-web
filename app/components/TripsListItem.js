@@ -1,46 +1,74 @@
 'use strict';
 
+require('app/stylesheets/mapbox-gl.css');
+
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
+import { dimensions, generateMapImage, mapbox } from 'app/constants';
 
 class TripsListItem extends Component {
   render() {
-    const { onDeleteTripPress, onViewTrip, trip } = this.props;
+    const { onDeleteTripPress, trip } = this.props;
 
     return (
-      <div style={tripsListItemStyle}>
-        <p>Name: {trip.title}</p>
-        <p>Destination: {trip.destination && trip.destination.name}</p>
-        <p>Visibility: {trip.visibility}</p>
-        <Button
-          bsStyle="default"
-          onClick={onViewTrip.bind(null, trip._id)}
+      <div style={styles.container}>
+        <Link
+          activeStyle={styles.vanillaLink}
+          style={styles.vanillaLink}
+          to={`/trips/${trip._id}`}
         >
-          View Trip
-        </Button>
-        <Button
-          bsStyle="warning"
-          onClick={onDeleteTripPress.bind(null, trip._id)}
-        >
-          Delete Trip
-        </Button>
+          <div
+            style={this.loadBackgroundMapStyle()}
+          ></div>
+          <div style={styles.tripTitle}>
+            {trip.title}
+          </div>
+        </Link>
       </div>
     );
+  }
+
+  loadBackgroundMapStyle() {
+    const { coordinates } = this.props.trip.destination.loc;
+    const { mapContainer } = styles;
+
+    let imageURL = generateMapImage(coordinates[0], coordinates[1], 10);
+    return { ...mapContainer, backgroundImage: "url('" + imageURL + "')" };
   }
 }
 
 TripsListItem.propTypes = {
   onDeleteTripPress: PropTypes.func.isRequired,
-  onViewTrip: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
 
-const tripsListItemStyle = {
-  backgroundColor: "#eeeeee",
-  border: "1px solid #333333",
-  margin: 5,
-  padding: 5,
-  width: 300
+const styles = {
+  container: {
+    backgroundColor: "#ffffff",
+    border: "1px solid #cccccc",
+    borderRadius: 5,
+    height: dimensions.tripsPage.listItem.height,
+    margin: "15px 0px",
+    width: dimensions.tripsPage.listItem.width
+  },
+  mapContainer: {
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    height: mapbox.staticImage.height,
+    width: mapbox.staticImage.width
+  },
+  tripTitle: {
+    color: "#333333",
+    fontSize: 18,
+    fontWeight: 300,
+    letterSpacing: 0.5,
+    padding: "25px 20px 20px",
+    textAlign: "center"
+  },
+  vanillaLink: {
+    textDecoration: "none"
+  }
 };
 
 export default TripsListItem;

@@ -27,7 +27,6 @@ class TripsPage extends Component {
       user,
       onCreateTripPress,
       onDeleteTripPress,
-      onViewTrip,
       trips
     } = this.props;
 
@@ -56,7 +55,6 @@ class TripsPage extends Component {
             <TripsList
               trips={trips}
               onDeleteTripPress={onDeleteTripPress}
-              onViewTrip={onViewTrip}
             />
             <TripSettings action="create" />
           </div>
@@ -70,7 +68,6 @@ class TripsPage extends Component {
 TripsPage.propTypes = {
   onCreateTripPress: PropTypes.func.isRequired,
   onDeleteTripPress: PropTypes.func.isRequired,
-  onViewTrip: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired,
   user: PropTypes.object
