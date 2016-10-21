@@ -112,7 +112,10 @@ export const dimensions = {
   navigationBar: {
     height: 60
   },
-  sidePadding: 30
+  sidePadding: 30,
+  tripsPage: {
+    width: 700
+  }
 };
 
 export const colors = {

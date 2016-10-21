@@ -2,10 +2,12 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import Footer from './Footer';
 import Navigation from 'app/containers/Navigation';
 import TripsList from './TripsList';
 import TripSettings from 'app/containers/TripSettings';
 import { viewLandingPage } from 'app/actions/navigation';
+import { dimensions } from 'app/constants';
 
 class TripsPage extends Component {
   componentWillMount() {
@@ -25,7 +27,6 @@ class TripsPage extends Component {
       user,
       onCreateTripPress,
       onDeleteTripPress,
-      onLogoutPress,
       onViewTrip,
       trips
     } = this.props;
@@ -57,15 +58,10 @@ class TripsPage extends Component {
               onDeleteTripPress={onDeleteTripPress}
               onViewTrip={onViewTrip}
             />
-            <Button
-              bsStyle="primary"
-              onClick={onLogoutPress}
-            >
-              Log Out
-            </Button>
             <TripSettings action="create" />
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -74,7 +70,6 @@ class TripsPage extends Component {
 TripsPage.propTypes = {
   onCreateTripPress: PropTypes.func.isRequired,
   onDeleteTripPress: PropTypes.func.isRequired,
-  onLogoutPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired,
@@ -94,12 +89,15 @@ const styles = {
   },
   mainContainer: {
     backgroundColor: "#f9f9f9",
-    width: "100%",
+    marginTop: 60,
+    paddingBottom: 30,
+    width: "100%"
   },
   mainSection: {
-    margin: "60px auto 0px",
-    maxWidth: 700,
-    padding: 30
+    margin: "0px auto",
+    maxWidth: dimensions.tripsPage.width,
+    padding: 30,
+    paddingBottom: 0
   },
   newTripButton: {
     backgroundColor: "1a76c8",

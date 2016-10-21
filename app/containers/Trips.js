@@ -8,7 +8,6 @@ import {
   clearTripsError,
   saveNewTripVisibility
 } from 'app/actions/trips';
-import { processLogout } from 'app/actions/auth';
 import { viewTripPage } from 'app/actions/navigation';
 import TripsPage from 'app/components/TripsPage';
 import { analytics, modalComponents } from 'app/constants';
@@ -32,10 +31,6 @@ const mapDispatchToProps = (dispatch) => {
 
     onDeleteTripPress(tripId) {
       dispatch(apiDeleteTrip(tripId));
-    },
-
-    onLogoutPress() {
-      dispatch(processLogout());
     },
 
     onViewTrip(tripId) {

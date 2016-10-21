@@ -95,7 +95,7 @@ const styles = {
     display: "flex",
     height: dimensions.navigationBar.height,
     justifyContent: "space-between",
-    width: 700,
+    width: dimensions.tripsPage.width,
     padding: "0 " + dimensions.sidePadding + " 0"
   },
   container: {
