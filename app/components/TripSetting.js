@@ -21,7 +21,7 @@ class TripSetting extends Component {
       <Button
         disabled={isLoading}
         onClick={onClick}
-        style={this.loadContainerStyle.bind(this)()}
+        style={this.loadContainerStyle()}
         title={this.loadTitle.bind(this)()}
       >
         {buttonImage}
@@ -51,8 +51,12 @@ class TripSetting extends Component {
   }
 
   loadContainerStyle() {
-    const { isLoading, setting } = this.props;
-    const { container: style, darkContainer: dark } = styles;
+    const { isLoading, last, setting } = this.props;
+    let { container: style, darkContainer: dark } = styles;
+
+    if (last) {
+      style.marginRight = 0;
+    }
 
     if (setting === 'edit') {
       return { ...style, ...dark };
@@ -82,6 +86,7 @@ class TripSetting extends Component {
 
 TripSetting.propTypes = {
   isLoading: PropTypes.bool,
+  last: PropTypes.bool,
   onClick: PropTypes.func,
   setting: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
