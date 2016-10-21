@@ -91,6 +91,18 @@ class TripIdeaUI extends Component {
       onRemoveIdea
     } = this.props;
 
+    const removeButton = (
+      <div
+        onClick={onRemoveIdea}
+        style={this.loadRemoveButtonStyle()}
+      >
+        <Glyphicon
+          glyph="remove-circle"
+          style={styles.removeButton.glyph}
+        />
+      </div>
+    );
+
     const ideaPanel = (
       <div
         style={styles.mainDiv}
@@ -103,22 +115,14 @@ class TripIdeaUI extends Component {
         onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
       >
-        <div
-          onClick={onRemoveIdea}
-          style={styles.removeButton.div}
-        >
-          <Glyphicon
-            glyph="remove-circle"
-            style={styles.removeButton.glyph}
-          />
-        </div>
+        {removeButton}
         <TripIdeaPanel
           {..._.pick(this.props, [
             'connectDropTarget',
             'idea',
             'onShowTripIdeaSettingsModal'
           ])}
-          hover={hoverLngLat === idea.loc.coordinates}
+          hover={this.isHovering()}
 
           // Upon clicking on an idea, zoom in on the idea in the map
           onFocusIdea={onFocusIdea}
@@ -143,6 +147,16 @@ class TripIdeaUI extends Component {
     const id = this.props.idea._id;
     const height = document.getElementById(id).clientHeight;
     return _.extend(styles.emptySpace, { height });
+  }
+
+  loadRemoveButtonStyle() {
+    const style = styles.removeButton.div;
+    return this.isHovering() ? {...style, display: "block" } : style;
+  }
+
+  isHovering() {
+    const { hoverLngLat, idea: { loc: { coordinates } } } = this.props;
+    return hoverLngLat === coordinates;
   }
 
   setHoverLngLat() {
@@ -183,15 +197,16 @@ const styles = {
   removeButton: {
     div: {
       backgroundColor: "rgba(255,255,255,0.0)",
-      cursor: "pointer"
+      cursor: "pointer",
+      display: "none",
+      position: "absolute",
+      left: 356
     },
     glyph: {
       borderRadius: 22,
       backgroundColor: "#ffffff",
       fontSize: 22,
-      float: "right",
-      top: -8,
-      left: 8
+      top: -8
     }
   }
 };
