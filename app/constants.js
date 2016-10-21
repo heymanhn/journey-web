@@ -207,7 +207,7 @@ export const mapbox = {
     hover: 'hoverTargets',
     markers: 'ideaMarkers'
   },
-  streetsStyle: 'mapbox://styles/mapbox/streets-v9',
+  streetsStyle: 'mapbox://styles/heymanhn/citkhed0r002r2iqh4v6b8k1l',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
 };
 
