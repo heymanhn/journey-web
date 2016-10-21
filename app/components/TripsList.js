@@ -19,7 +19,7 @@ class TripsList extends Component {
     });
 
     return (
-      <div>
+      <div style={styles.tripsList}>
         {tripsList}
       </div>
     );
@@ -30,6 +30,14 @@ TripsList.propTypes = {
   onDeleteTripPress: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired
+};
+
+const styles = {
+  tripsList: {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "space-between"
+  }
 };
 
 export default TripsList;

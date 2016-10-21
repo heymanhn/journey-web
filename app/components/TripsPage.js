@@ -85,7 +85,7 @@ const styles = {
     alignItems: "center",
     display: "flex",
     justifyContent: "space-between",
-    marginBottom: 30
+    margin: "10px 0px"
   },
   mainContainer: {
     backgroundColor: "#f9f9f9",
