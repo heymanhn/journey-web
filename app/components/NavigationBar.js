@@ -44,44 +44,69 @@ class NavigationBar extends Component {
     }
 
     return (
-      <div style={styles.container}>
-        <span style={styles.logo}>
-          <Link
-            activeStyle={styles.vanillaLink}
-            style={styles.vanillaLink}
-            to="/"
-          >
-            Journey
-          </Link>
-        </span>
-        {user ? generateGravatar(user) : loginButton}
+      <div style={this.loadContainerStyle()}>
+        <div style={styles.inlineBlock}>
+          <div style={this.loadNavStyle()}>
+            <span style={styles.logo}>
+              <Link
+                activeStyle={styles.vanillaLink}
+                style={styles.vanillaLink}
+                to="/"
+              >
+                Journey
+              </Link>
+            </span>
+            {user ? generateGravatar(user) : loginButton}
+          </div>
+        </div>
       </div>
     );
+  }
+
+  loadContainerStyle() {
+    const { fullWidth } = this.props;
+    const { container: containerStyle } = styles;
+    return fullWidth ? { ...containerStyle, width: "100%" } : containerStyle;
+  }
+
+  loadNavStyle() {
+    const { style } = this.props;
+    const navStyle = styles.navSection;
+    return style ? { ...navStyle, ...style } : navStyle;
   }
 }
 
 NavigationBar.propTypes = {
+  fullWidth: PropTypes.bool,
   gravatarFocused: PropTypes.bool.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
   onSetGravatarActive: PropTypes.func.isRequired,
   onSetGravatarInactive: PropTypes.func.isRequired,
   onSetTooltipInvisible: PropTypes.func.isRequired,
   onSetTooltipVisible: PropTypes.func.isRequired,
+  style: PropTypes.object,
   tooltipVisible: PropTypes.bool.isRequired,
   user: PropTypes.object
 };
 
 const styles = {
-  container: {
+  navSection: {
     alignItems: "center",
-    backgroundColor: colors.primary,
     display: "flex",
     height: dimensions.navigationBar.height,
     justifyContent: "space-between",
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0",
+    width: 700,
+    padding: "0 " + dimensions.sidePadding + " 0"
+  },
+  container: {
+    backgroundColor: colors.primary,
     position: "fixed",
-    width: dimensions.leftColumn.width,
+    textAlign: "center",
+    top: 0,
     zIndex: 1
+  },
+  inlineBlock: {
+    display: "inline-block"
   },
   loginButton: {
     background: "linear-gradient(#ffffff, #e1e1e1)",

@@ -107,12 +107,12 @@ export function handleErrors(response) {
  */
 export const dimensions = {
   leftColumn: {
-    sidePadding: 30,
     width: 400
   },
   navigationBar: {
     height: 60
-  }
+  },
+  sidePadding: 30
 };
 
 export const colors = {

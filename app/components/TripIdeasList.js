@@ -107,7 +107,7 @@ const styles = {
     width: "100%"
   },
   ideasSection: {
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
+    padding: "0 " + dimensions.sidePadding + " 0"
   },
   inputSection: {
     marginBottom: 10

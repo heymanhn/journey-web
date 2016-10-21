@@ -53,7 +53,7 @@ class TripPage extends Component {
           id="leftColumn"
           style={styles.leftColumn}
         >
-          <Navigation />
+          <Navigation style={styles.navigationBar} />
           <TripDetails />
           <TripIdeas />
         </div>
@@ -82,6 +82,9 @@ const styles = {
     position: "absolute",
     width: dimensions.leftColumn.width,
     zIndex: 2
+  },
+  navigationBar: {
+    width: dimensions.leftColumn.width
   }
 };
 

@@ -69,7 +69,7 @@ const styles = {
   },
   titleSection: {
     marginTop: dimensions.navigationBar.height,
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
+    padding: "0 " + dimensions.sidePadding + " 0"
   }
 };
 
