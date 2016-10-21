@@ -1,8 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
-import { viewLandingPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 import NavigationAvatar from './NavigationAvatar';
 
@@ -20,12 +20,11 @@ class NavigationBar extends Component {
     } = this.props;
 
     const loginButton = (
-      <Button
-        onClick={viewLandingPage}
-        style={styles.loginButton}
-      >
-        Log in
-      </Button>
+      <Link to="/">
+        <Button style={styles.loginButton}>
+          Log in
+        </Button>
+      </Link>
     );
 
     function generateGravatar(user) {
@@ -39,7 +38,6 @@ class NavigationBar extends Component {
           onSetTooltipVisible={onSetTooltipVisible}
           onSetTooltipInvisible={onSetTooltipInvisible}
           tooltipVisible={tooltipVisible}
-          viewLandingPage={viewLandingPage}
           picture={user.gravatar}
        />
      );
@@ -47,8 +45,14 @@ class NavigationBar extends Component {
 
     return (
       <div style={styles.container}>
-        <span onClick={viewLandingPage} style={styles.logo}>
-          Journey
+        <span style={styles.logo}>
+          <Link
+            activeStyle={styles.vanillaLink}
+            style={styles.vanillaLink}
+            to="/"
+          >
+            Journey
+          </Link>
         </span>
         {user ? generateGravatar(user) : loginButton}
       </div>
@@ -95,6 +99,10 @@ const styles = {
     MozUserSelect: "none",
     WebkitUserSelect: "none",
     msUserSelect: "none"
+  },
+  vanillaLink: {
+    color: "white",
+    textDecoration: "none"
   }
 };
 

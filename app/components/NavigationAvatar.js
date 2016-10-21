@@ -7,7 +7,7 @@ import {
   ListGroupItem,
   Overlay
 } from 'react-bootstrap';
-import { viewLandingPage, viewTripsPage } from 'app/actions/navigation';
+import { viewTripsPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
 class NavigationAvatar extends Component {
@@ -21,8 +21,7 @@ class NavigationAvatar extends Component {
       onSetTooltipVisible,
       onSetTooltipInvisible,
       picture,
-      tooltipVisible,
-      viewLandingPage
+      tooltipVisible
     } = this.props;
 
     const accountPopover = (
