@@ -233,6 +233,43 @@ export const mapMarkers = {
   }
 };
 
+/* Helper function for zoom level calculation
+ * Inspired with gratitude from:
+ * http://stackoverflow.com/questions/6048975/google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
+ */
+export function getZoomLevel(bounds) {
+  const WORLD_DIM = { height: 256, width: 256 };
+
+  // Mapbox zoom levels start at 1 instead of 0. So a max zoom level of 20
+  // should be stored as 19
+  const ZOOM_MAX = 19;
+
+  function latRad(lat) {
+    const sin = Math.sin(lat * Math.PI / 180);
+    const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+  }
+
+  function zoom(mapPx, worldPx, fraction) {
+    // Subtract 1 to line up to Mapbox zoom level format
+    return (Math.log(mapPx / worldPx / fraction) / Math.LN2) - 1;
+  }
+
+  const [neLng, neLat] = bounds.northeast.coordinates;
+  const [swLng, swLat] = bounds.southwest.coordinates;
+
+  const latFraction = (latRad(neLat) - latRad(swLat)) / Math.PI;
+
+  const lngDiff = neLng - swLng;
+  const lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+
+  const { height, width } = mapbox.staticImage;
+  const latZoom = zoom(height, WORLD_DIM.height, latFraction);
+  const lngZoom = zoom(width, WORLD_DIM.width, lngFraction);
+
+  return Math.min(latZoom, lngZoom, ZOOM_MAX);
+}
+
 export function generateMapImage(lng, lat, zoom) {
   const {
     staticImage: { height, url, width },

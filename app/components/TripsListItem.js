@@ -5,7 +5,12 @@ require('app/stylesheets/mapbox-gl.css');
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
-import { dimensions, generateMapImage, mapbox } from 'app/constants';
+import {
+  dimensions,
+  generateMapImage,
+  getZoomLevel,
+  mapbox
+} from 'app/constants';
 
 class TripsListItem extends Component {
   render() {
@@ -30,10 +35,10 @@ class TripsListItem extends Component {
   }
 
   loadBackgroundMapStyle() {
-    const { coordinates } = this.props.trip.destination.loc;
+    const { loc: { coordinates }, viewport } = this.props.trip.destination;
     const { mapContainer } = styles;
 
-    let imageURL = generateMapImage(coordinates[0], coordinates[1], 10);
+    let imageURL = generateMapImage(...coordinates, getZoomLevel(viewport));
     return { ...mapContainer, backgroundImage: "url('" + imageURL + "')" };
   }
 }
