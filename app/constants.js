@@ -167,8 +167,7 @@ export const initialModalState = {
 };
 
 export const initialTripsState = {
-  isFetching: false,
-  trips: []
+  isFetching: false
 };
 
 export const initialTripState = {

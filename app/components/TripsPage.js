@@ -16,7 +16,7 @@ class TripsPage extends Component {
       viewLandingPage();
     }
 
-    if (trips.length === 0) {
+    if (!trips) {
       onGetTrips();
     }
   }
@@ -35,9 +35,29 @@ class TripsPage extends Component {
       trips
     } = this.props;
 
-    if (!user || trips.length === 0) {
+    if (!user || !trips) {
       return null;
     }
+
+    const createTripPlaceholder = (
+      <div
+        onClick={onCreateTripPress}
+        style={styles.placeholderContainer}
+      >
+        <img
+          src="../assets/create-trip-placeholder-logo.png"
+          style={styles.placeholderImage}
+        />
+        <div style={styles.placeholderText}>Create your first trip</div>
+      </div>
+    );
+
+    const tripsList = (
+      <TripsList
+        trips={trips}
+        onDeleteTripPress={onDeleteTripPress}
+      />
+    );
 
     return (
       <div>
@@ -57,10 +77,7 @@ class TripsPage extends Component {
                 <span style={styles.newTripTitle}>New Trip</span>
               </Button>
             </div>
-            <TripsList
-              trips={trips}
-              onDeleteTripPress={onDeleteTripPress}
-            />
+            {trips.length === 0 ? createTripPlaceholder : tripsList}
             <TripSettings action="create" />
           </div>
         </div>
@@ -75,7 +92,7 @@ TripsPage.propTypes = {
   onDeleteTripPress: PropTypes.func.isRequired,
   onGetTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
-  trips: PropTypes.array.isRequired,
+  trips: PropTypes.array,
   user: PropTypes.object
 };
 
@@ -98,6 +115,7 @@ const styles = {
   },
   mainSection: {
     margin: "0px auto",
+    minHeight: 600,
     maxWidth: dimensions.tripsPage.width,
     padding: 30,
     paddingBottom: 0
@@ -114,6 +132,31 @@ const styles = {
   newTripTitle: {
     position: "relative",
     top: 1
+  },
+  placeholderContainer: {
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    border: "1px solid #cccccc",
+    borderRadius: 5,
+    color: "#333333",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    fontSize: 28,
+    fontWeight: 300,
+    height: dimensions.tripsPage.listItem.height,
+    justifyContent: "center",
+    margin: "15px 0px",
+    textAlign: "center",
+    width: dimensions.tripsPage.listItem.width
+  },
+  placeholderImage: {
+    position: "relative",
+    left: 5
+  },
+  placeholderText: {
+    letterSpacing: 0.5,
+    margin: "10px 60px 0px"
   }
 };
 
