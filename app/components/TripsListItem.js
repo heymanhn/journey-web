@@ -1,7 +1,5 @@
 'use strict';
 
-require('app/stylesheets/mapbox-gl.css');
-
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
@@ -17,20 +15,20 @@ class TripsListItem extends Component {
     const { onDeleteTripPress, trip } = this.props;
 
     return (
-      <div style={styles.container}>
-        <Link
-          activeStyle={styles.vanillaLink}
-          style={styles.vanillaLink}
-          to={`/trips/${trip._id}`}
-        >
+      <Link
+        activeStyle={styles.vanillaLink}
+        style={styles.vanillaLink}
+        to={`/trips/${trip._id}`}
+      >
+        <div style={styles.container}>
           <div
             style={this.loadBackgroundMapStyle()}
           ></div>
           <div style={styles.tripTitle}>
             {trip.title}
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     );
   }
 
@@ -53,6 +51,8 @@ const styles = {
     backgroundColor: "#ffffff",
     border: "1px solid #cccccc",
     borderRadius: 5,
+    display: "flex",
+    flexDirection: "column",
     height: dimensions.tripsPage.listItem.height,
     margin: "15px 0px",
     width: dimensions.tripsPage.listItem.width
@@ -68,7 +68,7 @@ const styles = {
     fontSize: 18,
     fontWeight: 300,
     letterSpacing: 0.5,
-    padding: "25px 20px 20px",
+    padding: "30px 20px 15px",
     textAlign: "center"
   },
   vanillaLink: {
