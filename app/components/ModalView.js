@@ -19,6 +19,7 @@ class ModalView extends Component {
       onSubmit,
       submitTitle,
       showModal,
+      small,
       title
     } = this.props;
 
@@ -37,7 +38,12 @@ class ModalView extends Component {
     );
 
     return (
-      <Modal keyboard={keyboard} onHide={onHide} show={showModal}>
+      <Modal
+        dialogClassName={small && "small-modal"}
+        keyboard={keyboard}
+        onHide={onHide}
+        show={showModal}
+      >
         <Modal.Header style={styles.header} closeButton>
           <Modal.Title style={styles.title}>{title}</Modal.Title>
         </Modal.Header>
@@ -68,8 +74,9 @@ ModalView.propTypes = {
   keyboard: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  submitTitle: PropTypes.string.isRequired,
+  small: PropTypes.bool,
   showModal: PropTypes.bool.isRequired,
+  submitTitle: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
 };
 

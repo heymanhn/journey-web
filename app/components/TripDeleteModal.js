@@ -27,6 +27,7 @@ class TripDeleteModal extends Component {
         onSubmit={onDeleteTrip}
         submitTitle="Delete"
         showModal={showModal}
+        small
         title="Delete Trip"
       >
         <div style={styles.confirmText}>
