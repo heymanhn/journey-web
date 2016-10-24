@@ -31,7 +31,7 @@ class TripsListItem extends Component {
                 type="destination"
               />
               <TripsListItemLabel
-                label={trip.ideas.length}
+                label={trip.ideas.length.toString()}
                 type="ideas"
               />
             </div>
