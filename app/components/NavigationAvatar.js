@@ -11,6 +11,10 @@ import { viewTripsPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
 class NavigationAvatar extends Component {
+  componentWillUnmount() {
+    this.props.onSetTooltipInvisible();
+  }
+
   render() {
     const {
       gravatarFocused,
