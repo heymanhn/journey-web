@@ -15,15 +15,15 @@ class TripsListItemUI extends Component {
   render() {
     const {
       onClearHoverOverTrip,
-      onDeleteTripPress,
       onHoverOverTrip,
+      onShowDeleteTripModal,
       onViewTrip,
       trip
     } = this.props;
 
     const removeButton = (
       <div
-        onClick={onDeleteTripPress}
+        onClick={onShowDeleteTripModal}
         style={this.loadRemoveButtonStyle()}
       >
         <Glyphicon
@@ -32,7 +32,6 @@ class TripsListItemUI extends Component {
         />
       </div>
     )
-
 
     return (
         <div
@@ -54,7 +53,6 @@ class TripsListItemUI extends Component {
               />
             </div>
           </div>
-
           <Link
             activeStyle={styles.vanillaLink}
             style={styles.vanillaLink}
@@ -93,8 +91,8 @@ class TripsListItemUI extends Component {
 TripsListItemUI.propTypes = {
   hoverTripId: PropTypes.string,
   onClearHoverOverTrip: PropTypes.func.isRequired,
-  onDeleteTripPress: PropTypes.func.isRequired,
   onHoverOverTrip: PropTypes.func.isRequired,
+  onShowDeleteTripModal: PropTypes.func.isRequired,
   onViewTrip: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };

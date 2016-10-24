@@ -48,7 +48,7 @@ export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
 // Delete a trip
-export const DELETE_TRIP = 'DELETE_TRIP';
+export const SET_TRIP_TO_DELETE = 'SET_TRIP_TO_DELETE';
 export const API_DELETE_TRIP_REQUEST = 'API_DELETE_TRIP_REQUEST';
 export const API_DELETE_TRIP_SUCCESS = 'API_DELETE_TRIP_SUCCESS';
 export const API_DELETE_TRIP_FAILURE = 'API_DELETE_TRIP_FAILURE';
@@ -235,9 +235,9 @@ export function apiGetTripFailure(error) {
 
 
 // Delete a Trip
-export function deleteTrip(tripId) {
+export function setTripToDelete(tripId) {
   return {
-    type: DELETE_TRIP,
+    type: SET_TRIP_TO_DELETE,
     tripId
   };
 }
@@ -556,11 +556,11 @@ export function apiUpdateTrip(visibility) {
   };
 }
 
-export function apiDeleteTrip(tripId) {
+export function apiDeleteTrip() {
   return (dispatch, getState) => {
-    dispatch(deleteTrip(tripId)); // Update UI state first
     dispatch(apiDeleteTripRequest());
 
+    const tripId = getState().tripsState.tripToDelete;
     const deleteTripAPI = journeyAPI.trip.delete(tripId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
@@ -572,7 +572,7 @@ export function apiDeleteTrip(tripId) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiDeleteTripSuccess(json));
-        dispatch(apiGetTrips());
+        dispatch(hideModal(modalComponents.deleteTrip))
       })
       .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
   };

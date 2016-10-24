@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import Footer from './Footer';
 import Navigation from 'app/containers/Navigation';
 import TripsList from './TripsList';
+import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
 import { viewLandingPage } from 'app/actions/navigation';
 import { dimensions } from 'app/constants';
@@ -27,7 +28,12 @@ class TripsPage extends Component {
 
   render() {
     const {
+      error,
+      isFetching,
       onCreateTripPress,
+      onDeleteTrip,
+      onHide,
+      showModal,
       trips,
       user
     } = this.props;
@@ -70,6 +76,13 @@ class TripsPage extends Component {
             </div>
             {trips.length === 0 ? createTripPlaceholder : tripsList}
             <TripSettings action="create" />
+            <TripDeleteModal
+              error={error}
+              isFetching={isFetching}
+              onHide={onHide}
+              onDeleteTrip={onDeleteTrip}
+              showModal={showModal}
+            />
           </div>
         </div>
         <Footer />
@@ -79,8 +92,13 @@ class TripsPage extends Component {
 }
 
 TripsPage.propTypes = {
+  error: PropTypes.string,
+  isFetching: PropTypes.bool.isRequired,
   onCreateTripPress: PropTypes.func.isRequired,
+  onDeleteTrip: PropTypes.func.isRequired,
   onGetTrips: PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
+  showModal: PropTypes.bool.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array,
   user: PropTypes.object

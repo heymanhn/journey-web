@@ -13,16 +13,16 @@ class ModalView extends Component {
       children,
       error,
       isFetching,
-      isSaveDisabled,
+      isSubmitDisabled,
       keyboard,
       onHide,
-      onSaveChanges,
-      saveTitle,
+      onSubmit,
+      submitTitle,
       showModal,
       title
     } = this.props;
 
-    const savingSpinner = (
+    const loadingSpinner = (
       <Spinner
         customColor="white"
         customStyle={styles.spinner}
@@ -49,11 +49,11 @@ class ModalView extends Component {
           <Button onClick={onHide}>Cancel</Button>
           <Button
             bsStyle="primary"
-            disabled={isSaveDisabled}
-            onClick={onSaveChanges}
-            style={styles.saveChangesButton}
+            disabled={isSubmitDisabled}
+            onClick={onSubmit}
+            style={styles.submitButton}
           >
-            {isFetching ? savingSpinner : (<span>{saveTitle}</span>)}
+            {isFetching ? loadingSpinner : (<span>{submitTitle}</span>)}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -64,11 +64,11 @@ class ModalView extends Component {
 ModalView.propTypes = {
   error: PropTypes.string,
   isFetching: PropTypes.bool,
-  isSaveDisabled: PropTypes.bool,
+  isSubmitDisabled: PropTypes.bool,
   keyboard: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  onSaveChanges: PropTypes.func.isRequired,
-  saveTitle: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  submitTitle: PropTypes.string.isRequired,
   showModal: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired
 };
@@ -93,7 +93,7 @@ const styles = {
     borderTopRightRadius: 5,
     color: "white"
   },
-  saveChangesButton: {
+  submitButton: {
     width: 120
   },
   spinner: {

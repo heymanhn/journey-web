@@ -189,6 +189,7 @@ export const acComponents = {
  * Modal component IDs
  */
 export const modalComponents = {
+  deleteTrip: 'deleteTrip',
   tripSettings: 'tripSettings',
   tripIdeaSettings: 'tripIdeaSettings'
 };

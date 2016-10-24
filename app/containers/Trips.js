@@ -2,18 +2,25 @@
 
 import { connect } from 'react-redux';
 import { apiPageEvent, apiTrackEvent } from 'app/actions/analytics';
-import { showModal } from 'app/actions/modals';
+import { showModal, hideModal } from 'app/actions/modals';
 import {
+  apiDeleteTrip,
   apiGetTrips,
   clearTripsError,
   saveNewTripVisibility
 } from 'app/actions/trips';
 import TripsPage from 'app/components/TripsPage';
 import { analytics, modalComponents } from 'app/constants';
+const { deleteTrip, tripSettings } = modalComponents;
 
 const mapStateToProps = (state) => {
+  const { error, isFetching, trips } = state.tripsState;
+  const { showModal } = state.componentsState.modalsState.deleteTrip;
   return {
-    trips: state.tripsState.trips,
+    error,
+    isFetching,
+    showModal,
+    trips,
     user: state.authState.user
   };
 };
@@ -22,14 +29,22 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onCreateTripPress() {
       dispatch(clearTripsError());
-      dispatch(showModal(modalComponents.tripSettings));
+      dispatch(showModal(tripSettings));
 
       // Set default visibility if creating a new trip
       dispatch(saveNewTripVisibility('public'));
     },
 
+    onDeleteTrip() {
+      dispatch(apiDeleteTrip());
+    },
+
     onGetTrips() {
       dispatch(apiGetTrips());
+    },
+
+    onHide() {
+      dispatch(hideModal(deleteTrip));
     },
 
     trackPageView() {
