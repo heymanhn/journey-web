@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import ModalView from './ModalView';
+import { colors } from 'app/constants';
 
 class TripDeleteModal extends Component {
   render() {
@@ -10,8 +11,11 @@ class TripDeleteModal extends Component {
       isFetching,
       onDeleteTrip,
       onHide,
-      showModal
+      showModal,
+      tripTitle
     } = this.props;
+
+    const tripTitleSpan = <span style={styles.tripTitle}>{tripTitle}</span>;
 
     return (
       <ModalView
@@ -26,7 +30,7 @@ class TripDeleteModal extends Component {
         title="Delete Trip"
       >
         <div style={styles.confirmText}>
-          Are you sure you want to delete this trip?
+          Are you sure you want to delete {tripTitleSpan}?
         </div>
       </ModalView>
     );
@@ -39,12 +43,17 @@ TripDeleteModal.propTypes = {
   onDeleteTrip: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  tripTitle: PropTypes.string
 };
 
 const styles = {
   confirmText: {
     margin: "10px 0"
+  },
+  tripTitle: {
+    color: colors.primary,
+    fontWeight: 500
   }
 };
 

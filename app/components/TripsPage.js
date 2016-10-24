@@ -82,12 +82,24 @@ class TripsPage extends Component {
               onHide={onHide}
               onDeleteTrip={onDeleteTrip}
               showModal={showModal}
+              tripTitle={this.getTripTitleToDelete()}
             />
           </div>
         </div>
         <Footer />
       </div>
     );
+  }
+
+  getTripTitleToDelete() {
+    const { trips, tripToDelete } = this.props;
+
+    if (!tripToDelete) {
+      return null;
+    }
+
+    const trip = trips.find(t => t._id === tripToDelete);
+    return trip ? trip.title : '';
   }
 }
 
@@ -101,6 +113,7 @@ TripsPage.propTypes = {
   showModal: PropTypes.bool.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array,
+  tripToDelete: PropTypes.string,
   user: PropTypes.object
 };
 

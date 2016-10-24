@@ -14,13 +14,14 @@ import { analytics, modalComponents } from 'app/constants';
 const { deleteTrip, tripSettings } = modalComponents;
 
 const mapStateToProps = (state) => {
-  const { error, isFetching, trips } = state.tripsState;
+  const { error, isFetching, trips, tripToDelete } = state.tripsState;
   const { showModal } = state.componentsState.modalsState.deleteTrip;
   return {
     error,
     isFetching,
     showModal,
     trips,
+    tripToDelete,
     user: state.authState.user
   };
 };
