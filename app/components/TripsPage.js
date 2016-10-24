@@ -16,9 +16,7 @@ class TripsPage extends Component {
       viewLandingPage();
     }
 
-    if (!trips) {
-      onGetTrips();
-    }
+    onGetTrips();
   }
 
   componentDidMount() {
