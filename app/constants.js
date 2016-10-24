@@ -215,7 +215,7 @@ export const mapbox = {
     markers: 'ideaMarkers'
   },
   staticImage: {
-    height: dimensions.tripsPage.listItem.height - 70,
+    height: dimensions.tripsPage.listItem.height - 62,
     url: 'https://api.mapbox.com/styles/v1/heymanhn/',
     width: dimensions.tripsPage.listItem.width - 2
   },

@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
+import TripsListItemLabel from './TripsListItemLabel';
 import {
   dimensions,
   generateMapImage,
@@ -23,7 +24,19 @@ class TripsListItem extends Component {
         <div style={styles.container}>
           <div
             style={this.loadBackgroundMapStyle()}
-          ></div>
+          >
+            <div style={styles.labelsSection}>
+              <TripsListItemLabel
+                label={trip.destination.name}
+                type="destination"
+              />
+              <TripsListItemLabel
+                label={trip.ideas.length}
+                type="ideas"
+              />
+            </div>
+          </div>
+
           <div style={styles.tripTitle}>
             {trip.title}
           </div>
@@ -57,10 +70,19 @@ const styles = {
     margin: "15px 0px",
     width: dimensions.tripsPage.listItem.width
   },
+  labelsSection: {
+    display: "flex",
+    justifyContent: "center",
+    position: "relative",
+    top: 10
+  },
   mapContainer: {
+    alignItems: "flex-end",
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
+    display: "flex",
     height: mapbox.staticImage.height,
+    justifyContent: "center",
     width: mapbox.staticImage.width
   },
   tripTitle: {
@@ -68,7 +90,7 @@ const styles = {
     fontSize: 18,
     fontWeight: 300,
     letterSpacing: 0.5,
-    padding: "30px 20px 15px",
+    padding: "20px 15px 0px",
     textAlign: "center"
   },
   vanillaLink: {
