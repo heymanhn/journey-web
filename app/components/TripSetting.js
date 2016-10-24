@@ -56,6 +56,8 @@ class TripSetting extends Component {
 
     if (last) {
       style.marginRight = 0;
+    } else {
+      style.marginRight = 5;
     }
 
     if (setting === 'edit') {
@@ -98,7 +100,7 @@ const styles = {
     border: "1px solid #dddddd",
     borderRadius: 20,
     fontSize: 13,
-    margin: "0px 5px 10px 0px",
+    margin: "0px 0px 10px 0px",
     outline: 0,
     padding: "6px 12px 6px"
   },
