@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { apiPageEvent, apiTrackEvent } from 'app/actions/analytics';
 import { showModal } from 'app/actions/modals';
 import {
-  apiDeleteTrip,
   apiGetTrips,
   clearTripsError,
   saveNewTripVisibility
@@ -27,10 +26,6 @@ const mapDispatchToProps = (dispatch) => {
 
       // Set default visibility if creating a new trip
       dispatch(saveNewTripVisibility('public'));
-    },
-
-    onDeleteTripPress(tripId) {
-      dispatch(apiDeleteTrip(tripId));
     },
 
     onGetTrips() {

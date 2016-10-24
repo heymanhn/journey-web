@@ -24,6 +24,10 @@ export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 
+// Hover over trips on Trips page
+export const HOVER_OVER_TRIP = 'HOVER_OVER_TRIP';
+export const CLEAR_HOVER_OVER_TRIP = 'CLEAR_HOVER_OVER_TRIP';
+
 // Create or Update Trip
 export const SAVE_NEW_TRIP_TITLE = 'SAVE_NEW_TRIP_TITLE';
 export const SAVE_NEW_TRIP_DESTINATION = 'SAVE_NEW_TRIP_DESTINATION';
@@ -108,6 +112,22 @@ export function apiGetTripsFailure(error) {
     error
   };
 }
+
+
+// Hover over trip on Trips page
+export function hoverOverTrip(tripId) {
+  return {
+    type: HOVER_OVER_TRIP,
+    tripId
+  };
+}
+
+export function clearHoverOverTrip() {
+  return {
+    type: CLEAR_HOVER_OVER_TRIP
+  };
+}
+
 
 // Create or Update a Trip
 export function saveNewTripTitle(title) {

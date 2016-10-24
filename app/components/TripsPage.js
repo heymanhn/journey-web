@@ -27,10 +27,9 @@ class TripsPage extends Component {
 
   render() {
     const {
-      user,
       onCreateTripPress,
-      onDeleteTripPress,
-      trips
+      trips,
+      user
     } = this.props;
 
     if (!user || !trips) {
@@ -49,13 +48,7 @@ class TripsPage extends Component {
         <div style={styles.placeholderText}>Create your first trip</div>
       </div>
     );
-
-    const tripsList = (
-      <TripsList
-        trips={trips}
-        onDeleteTripPress={onDeleteTripPress}
-      />
-    );
+    const tripsList = <TripsList trips={trips} />;
 
     return (
       <div>
@@ -87,7 +80,6 @@ class TripsPage extends Component {
 
 TripsPage.propTypes = {
   onCreateTripPress: PropTypes.func.isRequired,
-  onDeleteTripPress: PropTypes.func.isRequired,
   onGetTrips: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array,

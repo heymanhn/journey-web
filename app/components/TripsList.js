@@ -1,21 +1,14 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import TripsListItem from './TripsListItem';
+import TripsListItem from 'app/containers/TripsListItem';
 
 class TripsList extends Component {
   render() {
-    const { onDeleteTripPress, onViewTrip, trips } = this.props;
+    const { trips } = this.props;
 
     var tripsList = trips.map(trip => {
-      return (
-        <TripsListItem
-          key={trip._id}
-          trip={trip}
-          onDeleteTripPress={onDeleteTripPress}
-          onViewTrip={onViewTrip}
-        />
-      );
+      return <TripsListItem key={trip._id} trip={trip} />;
     });
 
     return (
@@ -27,7 +20,6 @@ class TripsList extends Component {
 }
 
 TripsList.propTypes = {
-  onDeleteTripPress: PropTypes.func.isRequired,
   trips: PropTypes.array.isRequired
 };
 

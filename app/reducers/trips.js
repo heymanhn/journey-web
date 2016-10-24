@@ -3,6 +3,8 @@
 import _ from 'underscore';
 import {
   CLEAR_TRIPS_ERROR,
+  HOVER_OVER_TRIP,
+  CLEAR_HOVER_OVER_TRIP,
   API_GET_TRIPS_REQUEST,
   API_GET_TRIPS_SUCCESS,
   API_GET_TRIPS_FAILURE,
@@ -16,6 +18,13 @@ import { initialTripsState } from 'app/constants';
 
 export default function tripsState(state = initialTripsState, action) {
   switch (action.type) {
+    case HOVER_OVER_TRIP:
+      return {
+        ...state,
+        hoverTripId: action.tripId
+      };
+    case CLEAR_HOVER_OVER_TRIP:
+      return _.omit(state, 'hoverTripId');
     case API_GET_TRIPS_REQUEST:
     case API_DELETE_TRIP_REQUEST:
       return {
