@@ -54,16 +54,23 @@ class ModalView extends Component {
         <Modal.Footer style={styles.footer}>
           <Button onClick={onHide}>Cancel</Button>
           <Button
-            bsStyle="primary"
             disabled={isSubmitDisabled}
             onClick={onSubmit}
-            style={styles.submitButton}
+            style={this.loadSubmitButtonStyle()}
           >
             {isFetching ? loadingSpinner : (<span>{submitTitle}</span>)}
           </Button>
         </Modal.Footer>
       </Modal>
     );
+  }
+
+  loadSubmitButtonStyle() {
+    const { submitTitle } = this.props;
+    const style = styles.submitButton;
+    const redBg = { backgroundColor: colors.primary };
+
+    return submitTitle === 'Delete' ? { ...style, ...redBg } : style;
   }
 }
 
@@ -101,7 +108,10 @@ const styles = {
     color: "white"
   },
   submitButton: {
-    width: 120
+    backgroundColor: colors.secondary,
+    border: "none",
+    color: "#ffffff",
+    padding: "6px 15px"
   },
   spinner: {
     float: "left",
