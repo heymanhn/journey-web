@@ -8,7 +8,7 @@ import TripsList from './TripsList';
 import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
 import { viewLandingPage } from 'app/actions/navigation';
-import { dimensions } from 'app/constants';
+import { colors, dimensions } from 'app/constants';
 
 class TripsPage extends Component {
   componentWillMount() {
@@ -129,7 +129,7 @@ const styles = {
     margin: "10px 0px"
   },
   mainContainer: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.background,
     marginTop: 60,
     paddingBottom: 30,
     width: "100%"
@@ -159,7 +159,7 @@ const styles = {
     backgroundColor: "#ffffff",
     border: "1px solid #cccccc",
     borderRadius: 5,
-    color: "#333333",
+    color: colors.textPrimary,
     cursor: "pointer",
     display: "flex",
     flexDirection: "column",

@@ -94,7 +94,7 @@ ModalView.propTypes = {
 const styles = {
   errorMessage: {
     backgroundColor: colors.primaryError,
-    color: "#333333",
+    color: colors.primaryText,
     padding: "10px 15px"
   },
   errorMessageLabel: {

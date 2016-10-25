@@ -153,7 +153,7 @@ const autocompleteStyles = {
     border: "1px solid #cccccc",
     borderRadius: "4px",
     boxShadow: "inset 0 1px 1px rgba(0,0,0,.075)",
-    color: "#333333",
+    color: colors.primaryText,
     fontSize: 16,
     outline: "none",
     padding: "6px 12px"
@@ -165,7 +165,7 @@ const autocompleteStyles = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "12px 16px",
     borderTop: "1px solid #cccccc",
-    color: "#333333",
+    color: colors.primaryText,
     cursor: "pointer",
     display: "flex",
     padding: "10px 5px"

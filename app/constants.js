@@ -123,10 +123,12 @@ export const dimensions = {
 };
 
 export const colors = {
+  background: "rgb(249, 249, 249)",
   primary: "rgb(233, 30, 99)",
   primaryDark: "rgb(143, 23, 64)",
   primaryError: "rgba(233, 30, 99, 0.2)",
-  secondary: "rgb(26, 118, 200)"
+  secondary: "rgb(26, 118, 200)",
+  textPrimary: "rgb(51, 51, 51)"
 };
 
 
