@@ -1,6 +1,6 @@
 'use strict';
 
-require('app/stylesheets/modalView.css');
+require('app/stylesheets/modal-view.css');
 
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup, Modal } from 'react-bootstrap';
