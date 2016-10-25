@@ -57,8 +57,9 @@ TripDetailsView.propTypes = {
 
 const styles = {
   h1: {
+    fontFamily: "'Raleway', sans-serif",
     fontSize: 36,
-    fontWeight: 400,
+    fontWeight: 300,
     marginTop: 0,
     paddingTop: 20,
     wordWrap: "break-word"

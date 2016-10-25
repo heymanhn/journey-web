@@ -119,7 +119,8 @@ TripsPage.propTypes = {
 
 const styles = {
   h1: {
-    fontWeight: 400,
+    fontFamily: "'Raleway', sans-serif",
+    fontWeight: 300,
     margin: 0
   },
   headerSection: {

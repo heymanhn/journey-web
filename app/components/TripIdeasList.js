@@ -105,6 +105,7 @@ const styles = {
     width: "100%"
   },
   h3: {
+    fontFamily: "'Raleway', sans-serif",
     fontWeight: 400
   },
   ideasSection: {
