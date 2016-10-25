@@ -68,7 +68,11 @@ class ModalView extends Component {
   loadSubmitButtonStyle() {
     const { submitTitle } = this.props;
     const style = styles.submitButton;
-    const redBg = { backgroundColor: colors.primary };
+
+    const redBg = {
+      backgroundColor: colors.primary,
+      width: 80
+    };
 
     return submitTitle === 'Delete' ? { ...style, ...redBg } : style;
   }
@@ -107,20 +111,20 @@ const styles = {
     borderTopRightRadius: 5,
     color: "white"
   },
-  submitButton: {
-    backgroundColor: colors.secondary,
-    border: "none",
-    color: "#ffffff",
-    padding: "6px 15px"
-  },
   spinner: {
-    float: "left",
     height: 20,
     left: "50%",
     marginRight: 2,
     position: "relative",
     top: 10,
     width: 20
+  },
+  submitButton: {
+    backgroundColor: colors.secondary,
+    border: "none",
+    color: "#ffffff",
+    padding: "6px 15px",
+    width: 120
   },
   title: {
     fontWeight: "normal"

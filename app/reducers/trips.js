@@ -60,7 +60,7 @@ export default function tripsState(state = initialTripsState, action) {
       return _.omit(state, ['error']);
     case HIDE_MODAL:
       if (action.modalId === modalComponents.deleteTrip) {
-        return _.omit(state, 'tripToDelete');
+        return _.omit(state, ['error', 'tripToDelete']);
       } else {
         return state;
       }
