@@ -5,20 +5,26 @@ import { Button } from 'react-bootstrap';
 import { viewSignupPage } from 'app/actions/navigation';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
+import Trips from 'app/containers/Trips';
 
 class IntroPage extends Component {
-  componentDidMount() {
-    this.props.onPageLoaded();
-  }
-
   render() {
     const {
       email,
       error,
       onEnterEmail,
       onEnterPassword,
-      onLoginPress
+      onLoginPress,
+      onPageLoaded,
+      token
     } = this.props;
+
+    if (token) {
+      return <Trips />;
+    }
+
+    // Analytics tracking for Landing page views
+    onPageLoaded();
 
     return (
       <div>
@@ -50,7 +56,8 @@ IntroPage.propTypes = {
   onEnterEmail: PropTypes.func.isRequired,
   onEnterPassword: PropTypes.func.isRequired,
   onLoginPress: PropTypes.func.isRequired,
-  onPageLoaded: PropTypes.func.isRequired
+  onPageLoaded: PropTypes.func.isRequired,
+  token: PropTypes.string
 };
 
 export default IntroPage;

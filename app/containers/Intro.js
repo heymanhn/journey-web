@@ -11,9 +11,12 @@ import { analytics } from 'app/constants';
 import IntroPage from 'app/components/IntroPage';
 
 const mapStateToProps = (state) => {
+  const { email, error, token } = state.authState;
+
   return {
-    email: state.authState.email,
-    error: state.authState.error ? state.authState.error : ''
+    email,
+    error,
+    token
   };
 };
 
