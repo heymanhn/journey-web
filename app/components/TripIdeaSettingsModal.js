@@ -3,7 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, FormControl, Modal } from 'react-bootstrap';
 import ModalView from './ModalView';
-import TextInput from './TextInput';
 
 class TripIdeaSettingsModal extends Component {
   render() {

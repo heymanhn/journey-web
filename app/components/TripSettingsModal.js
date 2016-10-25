@@ -108,7 +108,6 @@ TripSettingsModal.propTypes = {
 
 const styles = {
   inputField: {
-    fontSize: 14,
     margin: 0,
     width: 350
   },

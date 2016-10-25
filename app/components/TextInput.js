@@ -59,8 +59,8 @@ const styles = {
     borderRadius: 3,
     display: "block",
     color: "#666666",
-    fontSize: "16px",
-    height: 45,
+    fontSize: 14,
+    height: 36,
     padding: "6px 15px",
     width: 300
   }
