@@ -31,6 +31,7 @@ class TripDetailsView extends Component {
             title={camelVis}
           />
           <TripSetting
+            last
             onClick={onShowTripSettingsModal}
             setting="edit"
             title="Edit"
@@ -57,6 +58,7 @@ TripDetailsView.propTypes = {
 const styles = {
   h1: {
     fontSize: 36,
+    fontWeight: 400,
     marginTop: 0,
     paddingTop: 20,
     wordWrap: "break-word"
@@ -69,7 +71,7 @@ const styles = {
   },
   titleSection: {
     marginTop: dimensions.navigationBar.height,
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
+    padding: "0 " + dimensions.sidePadding + " 0"
   }
 };
 

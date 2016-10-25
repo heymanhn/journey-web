@@ -13,16 +13,17 @@ class ModalView extends Component {
       children,
       error,
       isFetching,
-      isSaveDisabled,
+      isSubmitDisabled,
       keyboard,
       onHide,
-      onSaveChanges,
-      saveTitle,
+      onSubmit,
+      submitTitle,
       showModal,
+      small,
       title
     } = this.props;
 
-    const savingSpinner = (
+    const loadingSpinner = (
       <Spinner
         customColor="white"
         customStyle={styles.spinner}
@@ -37,7 +38,12 @@ class ModalView extends Component {
     );
 
     return (
-      <Modal keyboard={keyboard} onHide={onHide} show={showModal}>
+      <Modal
+        dialogClassName={small && "small-modal"}
+        keyboard={keyboard}
+        onHide={onHide}
+        show={showModal}
+      >
         <Modal.Header style={styles.header} closeButton>
           <Modal.Title style={styles.title}>{title}</Modal.Title>
         </Modal.Header>
@@ -48,28 +54,40 @@ class ModalView extends Component {
         <Modal.Footer style={styles.footer}>
           <Button onClick={onHide}>Cancel</Button>
           <Button
-            bsStyle="primary"
-            disabled={isSaveDisabled}
-            onClick={onSaveChanges}
-            style={styles.saveChangesButton}
+            disabled={isSubmitDisabled}
+            onClick={onSubmit}
+            style={this.loadSubmitButtonStyle()}
           >
-            {isFetching ? savingSpinner : (<span>{saveTitle}</span>)}
+            {isFetching ? loadingSpinner : (<span>{submitTitle}</span>)}
           </Button>
         </Modal.Footer>
       </Modal>
     );
+  }
+
+  loadSubmitButtonStyle() {
+    const { submitTitle } = this.props;
+    const style = styles.submitButton;
+
+    const redBg = {
+      backgroundColor: colors.primary,
+      width: 80
+    };
+
+    return submitTitle === 'Delete' ? { ...style, ...redBg } : style;
   }
 }
 
 ModalView.propTypes = {
   error: PropTypes.string,
   isFetching: PropTypes.bool,
-  isSaveDisabled: PropTypes.bool,
+  isSubmitDisabled: PropTypes.bool,
   keyboard: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  onSaveChanges: PropTypes.func.isRequired,
-  saveTitle: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  small: PropTypes.bool,
   showModal: PropTypes.bool.isRequired,
+  submitTitle: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
 };
 
@@ -93,17 +111,20 @@ const styles = {
     borderTopRightRadius: 5,
     color: "white"
   },
-  saveChangesButton: {
-    width: 120
-  },
   spinner: {
-    float: "left",
     height: 20,
     left: "50%",
     marginRight: 2,
     position: "relative",
     top: 10,
     width: 20
+  },
+  submitButton: {
+    backgroundColor: colors.secondary,
+    border: "none",
+    color: "#ffffff",
+    padding: "6px 15px",
+    width: 120
   },
   title: {
     fontWeight: "normal"

@@ -41,6 +41,6 @@ export function hideModal(modalId) {
     }
 
     dispatch(hideModalAction(modalId));
-    dispatch(resetAutocomplete(autocompleteId));
+    autocompleteId && dispatch(resetAutocomplete(autocompleteId));
   };
 }

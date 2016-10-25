@@ -20,11 +20,11 @@ class TripIdeaSettingsModal extends Component {
     return (
       <ModalView
         isFetching={isFetching}
-        isSaveDisabled={isSaveDisabled}
+        isSubmitDisabled={isSaveDisabled}
         keyboard={true}
         onHide={onHide}
-        onSaveChanges={onUpdateTripIdea}
-        saveTitle="Save Changes"
+        onSubmit={onUpdateTripIdea}
+        submitTitle="Save Changes"
         showModal={showModal}
         title="Edit Trip Idea"
       >

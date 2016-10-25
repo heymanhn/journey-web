@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onShowTripSettingsModal() {
-      dispatch(showModal(modalComponents.tripSettings, 'update'));
+      dispatch(showModal(modalComponents.tripSettings));
     }
   };
 };

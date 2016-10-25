@@ -2,3 +2,7 @@
   outline: none !important;
   outline-style: none;
 }
+
+.small-modal {
+  width: 500px !important;
+}

@@ -16,10 +16,10 @@ class TripPage extends Component {
   }
 
   componentWillMount() {
-    const { onGetTrip, trip } = this.props;
+    const { onGetTrip, params, trip } = this.props;
 
-    // Fetch the trip from the server upon load
-    if (!trip) {
+    // Fetch the trip from the server upon load if needed
+    if (!trip || params.tripId !== trip._id) {
       onGetTrip();
     }
   }
@@ -27,6 +27,7 @@ class TripPage extends Component {
   render() {
     const {
       error,
+      params,
       trip
     } = this.props;
 
@@ -37,7 +38,7 @@ class TripPage extends Component {
     }
 
     // Loading UI
-    if (!trip) {
+    if (!trip || params.tripId !== trip._id) {
       return <LoadingAnimation element="Trip" />;
     }
 
@@ -53,7 +54,7 @@ class TripPage extends Component {
           id="leftColumn"
           style={styles.leftColumn}
         >
-          <Navigation />
+          <Navigation style={styles.navigationBar} />
           <TripDetails />
           <TripIdeas />
         </div>
@@ -82,6 +83,9 @@ const styles = {
     position: "absolute",
     width: dimensions.leftColumn.width,
     zIndex: 2
+  },
+  navigationBar: {
+    width: dimensions.leftColumn.width
   }
 };
 

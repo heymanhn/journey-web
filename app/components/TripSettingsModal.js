@@ -30,11 +30,11 @@ class TripSettingsModal extends Component {
       <ModalView
         error={error}
         isFetching={isFetching}
-        isSaveDisabled={isSaveDisabled}
+        isSubmitDisabled={isSaveDisabled}
         keyboard={false}
         onHide={onHide}
-        onSaveChanges={onSaveTrip}
-        saveTitle={modalSaveTitle}
+        onSubmit={onSaveTrip}
+        submitTitle={modalSaveTitle}
         showModal={showModal}
         title={modalTitle}
       >

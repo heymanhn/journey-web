@@ -24,6 +24,10 @@ export const API_GET_TRIPS_REQUEST = 'API_GET_TRIPS_REQUEST';
 export const API_GET_TRIPS_SUCCESS = 'API_GET_TRIPS_SUCCESS';
 export const API_GET_TRIPS_FAILURE = 'API_GET_TRIPS_FAILURE';
 
+// Hover over trips on Trips page
+export const HOVER_OVER_TRIP = 'HOVER_OVER_TRIP';
+export const CLEAR_HOVER_OVER_TRIP = 'CLEAR_HOVER_OVER_TRIP';
+
 // Create or Update Trip
 export const SAVE_NEW_TRIP_TITLE = 'SAVE_NEW_TRIP_TITLE';
 export const SAVE_NEW_TRIP_DESTINATION = 'SAVE_NEW_TRIP_DESTINATION';
@@ -44,7 +48,7 @@ export const API_GET_TRIP_SUCCESS = 'API_GET_TRIP_SUCCESS';
 export const API_GET_TRIP_FAILURE = 'API_GET_TRIP_FAILURE';
 
 // Delete a trip
-export const DELETE_TRIP = 'DELETE_TRIP';
+export const SET_TRIP_TO_DELETE = 'SET_TRIP_TO_DELETE';
 export const API_DELETE_TRIP_REQUEST = 'API_DELETE_TRIP_REQUEST';
 export const API_DELETE_TRIP_SUCCESS = 'API_DELETE_TRIP_SUCCESS';
 export const API_DELETE_TRIP_FAILURE = 'API_DELETE_TRIP_FAILURE';
@@ -108,6 +112,22 @@ export function apiGetTripsFailure(error) {
     error
   };
 }
+
+
+// Hover over trip on Trips page
+export function hoverOverTrip(tripId) {
+  return {
+    type: HOVER_OVER_TRIP,
+    tripId
+  };
+}
+
+export function clearHoverOverTrip() {
+  return {
+    type: CLEAR_HOVER_OVER_TRIP
+  };
+}
+
 
 // Create or Update a Trip
 export function saveNewTripTitle(title) {
@@ -215,9 +235,9 @@ export function apiGetTripFailure(error) {
 
 
 // Delete a Trip
-export function deleteTrip(tripId) {
+export function setTripToDelete(tripId) {
   return {
-    type: DELETE_TRIP,
+    type: SET_TRIP_TO_DELETE,
     tripId
   };
 }
@@ -536,11 +556,11 @@ export function apiUpdateTrip(visibility) {
   };
 }
 
-export function apiDeleteTrip(tripId) {
+export function apiDeleteTrip() {
   return (dispatch, getState) => {
-    dispatch(deleteTrip(tripId)); // Update UI state first
     dispatch(apiDeleteTripRequest());
 
+    const tripId = getState().tripsState.tripToDelete;
     const deleteTripAPI = journeyAPI.trip.delete(tripId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
@@ -552,7 +572,7 @@ export function apiDeleteTrip(tripId) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiDeleteTripSuccess(json));
-        dispatch(apiGetTrips());
+        dispatch(hideModal(modalComponents.deleteTrip))
       })
       .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
   };

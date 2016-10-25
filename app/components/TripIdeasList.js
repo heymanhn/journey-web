@@ -43,7 +43,7 @@ class TripIdeasList extends Component {
       <div style={styles.ideasSection}>
         <div style={styles.inputSection}>
           <div style={styles.titleSection}>
-            <h3>Ideas</h3>
+            <h3 style={styles.h3}>Ideas</h3>
             {ideas.length > 0 && (
               <span
                 onClick={onShowAllIdeas}
@@ -106,8 +106,11 @@ const styles = {
     outline: "none",
     width: "100%"
   },
+  h3: {
+    fontWeight: 400
+  },
   ideasSection: {
-    padding: "0 " + dimensions.leftColumn.sidePadding + " 0"
+    padding: "0 " + dimensions.sidePadding + " 0"
   },
   inputSection: {
     marginBottom: 10
