@@ -39,7 +39,7 @@ class TextInput extends Component {
       baseStyle.border = "1px solid #666666";
       baseStyle.outline = "none";
     } else {
-      baseStyle.border = "1px solid #dddddd";
+      baseStyle.border = "1px solid #cccccc";
     }
 
     return newStyle ? { ...baseStyle, ...newStyle} : baseStyle;
