@@ -20,12 +20,12 @@ class IntroPage extends Component {
   render() {
     const {
       error,
+      isFetching,
       onEnterEmailForSignup,
       onEnterNameForSignup,
       onEnterPasswordForSignup,
       onSignupPress,
-      onPageLoaded,
-      signupFields
+      onPageLoaded
     } = this.props;
 
     return (
@@ -72,7 +72,9 @@ class IntroPage extends Component {
 
               <div style={styles.mainSectionWithPadding}>
                 <SubmitButton
+                  isFetching={isFetching}
                   onSubmitPress={onSignupPress}
+                  style={styles.signupButton}
                   text="Create Account"
                 />
               </div>
@@ -98,13 +100,13 @@ class IntroPage extends Component {
 
 IntroPage.propTypes = {
   error: PropTypes.string,
+  isFetching: PropTypes.bool.isRequired,
   onClearAuthState: PropTypes.func.isRequired,
   onEnterEmailForSignup: PropTypes.func.isRequired,
   onEnterNameForSignup: PropTypes.func.isRequired,
   onEnterPasswordForSignup: PropTypes.func.isRequired,
   onSignupPress: PropTypes.func.isRequired,
-  onPageLoaded: PropTypes.func.isRequired,
-  signupFields: PropTypes.object.isRequired
+  onPageLoaded: PropTypes.func.isRequired
 };
 
 const styles = {
@@ -170,6 +172,10 @@ const styles = {
   redBgBanner: {
     backgroundColor: colors.primary,
     height: 200
+  },
+  signupButton: {
+    height: 45,
+    width: 170
   },
   tagline: {
     fontFamily: "'Raleway', sans-serif",

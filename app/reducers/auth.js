@@ -89,6 +89,7 @@ export default function authState(state = initialAuthState, action) {
     case CLEAR_AUTH_STATE:
       return {
         ..._.omit(state, 'error'),
+        isFetching: false,
         loginFields: {},
         signupFields: {}
       };

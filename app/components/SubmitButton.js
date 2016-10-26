@@ -1,17 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import Spinner from './Spinner';
 import { colors } from 'app/constants';
 
 class SubmitButton extends Component {
   render() {
-    const { onSubmitPress, text } = this.props;
+    const { isFetching, onSubmitPress, text } = this.props;
+
+    const loadingSpinner = (
+      <Spinner
+        customColor="white"
+        customStyle={styles.spinner}
+      />
+    );
 
     return (
       <Button
         onClick={onSubmitPress}
         style={this.loadStyles()}
       >
-        {text}
+        {isFetching ? loadingSpinner : text}
       </Button>
     );
   }
@@ -25,12 +33,20 @@ class SubmitButton extends Component {
 }
 
 SubmitButton.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
   onSubmitPress: PropTypes.func.isRequired,
   style: PropTypes.object,
   text: PropTypes.string.isRequired
 };
 
 const styles = {
+  spinner: {
+    height: 20,
+    left: "50%",
+    position: "relative",
+    top: 10,
+    width: 25
+  },
   submitButton: {
     backgroundColor: colors.primary,
     border: "none",
