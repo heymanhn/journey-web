@@ -3,6 +3,8 @@ import _ from 'underscore';
 import {
   LOGIN_SAVE_EMAIL,
   LOGIN_SAVE_PASSWORD,
+  SET_REDIRECT,
+  CLEAR_REDIRECT,
   SIGNUP_SAVE_NAME,
   SIGNUP_SAVE_EMAIL,
   SIGNUP_SAVE_PASSWORD,
@@ -33,6 +35,13 @@ export default function authState(state = initialAuthState, action) {
           { password: action.password }
         )
       };
+    case SET_REDIRECT:
+      return {
+        ...state,
+        redirect: action.redirect
+      };
+    case CLEAR_REDIRECT:
+      return _.omit(state, 'redirect');
     case SIGNUP_SAVE_NAME:
       return {
         ..._.omit(state, 'error'),

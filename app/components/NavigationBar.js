@@ -87,7 +87,6 @@ NavigationBar.propTypes = {
   onSetGravatarActive: PropTypes.func.isRequired,
   onSetGravatarInactive: PropTypes.func.isRequired,
   onSetOverrideFrameToLogin: PropTypes.func.isRequired,
-  onSetPageLoginState: PropTypes.func.isRequired,
   onSetTooltipInvisible: PropTypes.func.isRequired,
   onSetTooltipVisible: PropTypes.func.isRequired,
   style: PropTypes.object,

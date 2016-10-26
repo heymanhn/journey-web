@@ -19,6 +19,8 @@ export const LOGIN_SAVE_PASSWORD = 'LOGIN_SAVE_PASSWORD';
 export const SIGNUP_SAVE_NAME = 'SIGNUP_SAVE_NAME';
 export const SIGNUP_SAVE_EMAIL = 'SIGNUP_SAVE_EMAIL';
 export const SIGNUP_SAVE_PASSWORD = 'SIGNUP_SAVE_PASSWORD';
+export const SET_REDIRECT = 'SET_REDIRECT';
+export const CLEAR_REDIRECT = 'CLEAR_REDIRECT';
 export const API_LOGIN_REQUEST = 'API_LOGIN_REQUEST';
 export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS';
 export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
@@ -66,6 +68,19 @@ export function signupSavePassword(password) {
   return {
     type: SIGNUP_SAVE_PASSWORD,
     password
+  };
+}
+
+export function setRedirect(redirect) {
+  return {
+    type: SET_REDIRECT,
+    redirect
+  };
+}
+
+export function clearRedirect() {
+  return {
+    type: CLEAR_REDIRECT
   };
 }
 
@@ -140,7 +155,8 @@ export function apiLogin() {
     dispatch(apiLoginRequest());
 
     const { authState } = getState();
-    let { email, password } = authState.loginFields;
+    const { loginFields, redirect } = authState;
+    let { email, password } = loginFields;
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.login().method;
     opts.body = JSON.stringify({ email, password });
@@ -150,7 +166,13 @@ export function apiLogin() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiLoginSuccess(json));
-        dispatch(viewTripsPage());
+
+        if (redirect) {
+          dispatch(redirect());
+          dispatch(clearRedirect());
+        } else {
+          dispatch(viewTripsPage());
+        }
       })
       .catch(error => { dispatch(apiLoginFailure(error.message)) });
   };
@@ -161,7 +183,8 @@ export function apiSignup() {
     dispatch(apiSignupRequest());
 
     const { authState } = getState();
-    let { name, email, password } = authState.signupFields;
+    const { redirect, signupFields } = authState;
+    let { name, email, password } = signupFields;
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.signup().method;
     opts.body = JSON.stringify({ email, name, password });
@@ -171,7 +194,12 @@ export function apiSignup() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
-        dispatch(viewTripsPage());
+        if (redirect) {
+          dispatch(redirect());
+          dispatch(clearRedirect());
+        } else {
+          dispatch(viewTripsPage());
+        }
       })
       .catch(error => { dispatch(apiSignupFailure(error.message)); });
   };
