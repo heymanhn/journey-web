@@ -2,36 +2,46 @@
 
 import { connect } from 'react-redux';
 import {
-  apiLogin,
-  loginSaveEmail,
-  loginSavePassword
+  apiSignup,
+  clearAuthState,
+  signupSaveEmail,
+  signupSaveName,
+  signupSavePassword
 } from 'app/actions/auth';
 import { apiPageEvent } from 'app/actions/analytics';
 import { analytics } from 'app/constants';
 import IntroPage from 'app/components/IntroPage';
 
 const mapStateToProps = (state) => {
-  const { email, error, token } = state.authState;
+  const { error, loginFields, signupFields, token } = state.authState;
 
   return {
-    email,
     error,
+    signupFields,
     token
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onEnterEmail(event) {
-      dispatch(loginSaveEmail(event.target.value));
+    onClearAuthState() {
+      dispatch(clearAuthState());
     },
 
-    onEnterPassword(event) {
-      dispatch(loginSavePassword(event.target.value));
+    onEnterEmailForSignup(event) {
+      dispatch(signupSaveEmail(event.target.value));
     },
 
-    onLoginPress() {
-      dispatch(apiLogin());
+    onEnterNameForSignup(event) {
+      dispatch(signupSaveName(event.target.value));
+    },
+
+    onEnterPasswordForSignup(event) {
+      dispatch(signupSavePassword(event.target.value));
+    },
+
+    onSignupPress() {
+      dispatch(apiSignup());
     },
 
     onPageLoaded() {

@@ -144,7 +144,9 @@ export function generateGUID() {
 }
 
 export const initialAuthState = {
-  isFetching: false
+  isFetching: false,
+  loginFields: {},
+  signupFields: {}
 };
 
 export const initialMapState = {

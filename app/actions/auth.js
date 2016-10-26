@@ -26,6 +26,7 @@ export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
 export const CREATE_ANONYMOUS_ID = 'CREATE_ANONYMOUS_ID';
+export const CLEAR_AUTH_STATE = 'CLEAR_AUTH_STATE';
 export const LOGOUT = 'LOGOUT';
 
 
@@ -117,6 +118,12 @@ export function createAnonymousId(anonymousId) {
   };
 }
 
+export function clearAuthState() {
+  return {
+    type: CLEAR_AUTH_STATE
+  };
+}
+
 export function logout() {
   return {
     type: LOGOUT
@@ -133,7 +140,7 @@ export function apiLogin() {
     dispatch(apiLoginRequest());
 
     const { authState } = getState();
-    let { email, password } = authState;
+    let { email, password } = authState.loginFields;
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.login().method;
     opts.body = JSON.stringify({ email, password });
@@ -154,14 +161,10 @@ export function apiSignup() {
     dispatch(apiSignupRequest());
 
     const { authState } = getState();
-    let { newName, newEmail, newPassword } = authState;
+    let { name, email, password } = authState.signupFields;
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.signup().method;
-    opts.body = JSON.stringify({
-      name: newName,
-      email: newEmail,
-      password: newPassword
-    });
+    opts.body = JSON.stringify({ email, name, password });
 
     return fetch(journeyAPI.signup().route, opts)
       .then(handleErrors)
