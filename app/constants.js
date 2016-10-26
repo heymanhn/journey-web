@@ -150,7 +150,8 @@ export const initialAuthState = {
 };
 
 export const initialLPState = {
-  frame: 'signup'
+  frame: 'signup',
+  overrideFrame: ''
 };
 
 export const initialMapState = {

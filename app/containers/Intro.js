@@ -12,18 +12,23 @@ import {
   signupSavePassword
 } from 'app/actions/auth';
 import { apiPageEvent } from 'app/actions/analytics';
-import { resetPageState, setPageLoginState } from 'app/actions/landingPage';
+import {
+  clearOverrideFrame,
+  setPageLoginState,
+  setPageSignupState
+} from 'app/actions/landingPage';
 import { analytics } from 'app/constants';
 import IntroPage from 'app/components/IntroPage';
 
 const mapStateToProps = (state) => {
   const { error, isFetching } = state.authState;
-  const { frame } = state.componentsState.landingPageState;
+  const { frame, overrideFrame } = state.componentsState.landingPageState;
 
   return {
     error,
     frame,
-    isFetching
+    isFetching,
+    overrideFrame
   };
 };
 
@@ -31,6 +36,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onClearAuthState() {
       dispatch(clearAuthState());
+    },
+
+    onClearOverrideFrame() {
+      dispatch(clearOverrideFrame());
     },
 
     onEnterEmailForLogin(event) {
@@ -61,12 +70,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(apiLogin());
     },
 
-    onResetPageState() {
-      dispatch(resetPageState());
-    },
-
     onSetPageLoginState() {
       dispatch(setPageLoginState());
+    },
+
+    onSetPageSignupState() {
+      dispatch(setPageSignupState());
     },
 
     onSignupPress() {

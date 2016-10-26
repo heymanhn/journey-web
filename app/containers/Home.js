@@ -7,7 +7,8 @@ import Trips from './Trips';
 
 class Home extends Component {
   render() {
-    if (this.props.token) {
+    const { token } = this.props;
+    if (token) {
       return <Trips />;
     }
 

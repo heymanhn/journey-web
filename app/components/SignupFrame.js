@@ -19,7 +19,6 @@ class SignupFrame extends Component {
       onEnterEmailForSignup,
       onEnterNameForSignup,
       onEnterPasswordForSignup,
-      onSetPageLoginState,
       onSignupPress
     } = this.props;
 
@@ -71,7 +70,7 @@ class SignupFrame extends Component {
         <div style={styles.loginHint}>
           Already have an account?
           <span
-            onClick={onSetPageLoginState}
+            onClick={this.setPageToLogin.bind(this)}
             style={styles.loginButton}
           >
             Log in
@@ -80,11 +79,19 @@ class SignupFrame extends Component {
       </div>
     );
   }
+
+  setPageToLogin() {
+    const { onClearOverrideFrame, onSetPageLoginState} = this.props;
+
+    onClearOverrideFrame();
+    onSetPageLoginState();
+  }
 }
 
 SignupFrame.propTypes = {
   error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
+  onClearOverrideFrame: PropTypes.func.isRequired,
   onEnterEmailForSignup: PropTypes.func.isRequired,
   onEnterNameForSignup: PropTypes.func.isRequired,
   onEnterPasswordForSignup: PropTypes.func.isRequired,

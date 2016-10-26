@@ -2,6 +2,7 @@
 
 import { connect } from 'react-redux';
 import { processLogout } from 'app/actions/auth';
+import { setOverrideFrame } from 'app/actions/landingPage';
 import {
   setGravatarActive,
   setGravatarInactive,
@@ -32,6 +33,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onSetGravatarInactive() {
       dispatch(setGravatarInactive());
+    },
+
+    onSetOverrideFrameToLogin() {
+      dispatch(setOverrideFrame('login'));
     },
 
     onSetTooltipInvisible() {

@@ -7,18 +7,24 @@ import { colors } from 'app/constants';
 
 class IntroPage extends Component {
   componentWillMount() {
-    const { onClearAuthState, onResetPageState } = this.props;
+    const {
+      onClearAuthState,
+      onSetPageSignupState,
+      overrideFrame
+    } = this.props;
+
     onClearAuthState();
-    onResetPageState();
+    !overrideFrame && onSetPageSignupState();
   }
 
   render() {
-    const { frame } = this.props;
-
+    const { frame, overrideFrame } = this.props;
+    let finalFrame = overrideFrame || frame;
     let contentFrame;
-    if (frame === 'signup') {
+
+    if (finalFrame === 'signup') {
       contentFrame = <SignupFrame {...this.props} />
-    } else if (frame === 'login') {
+    } else if (finalFrame === 'login') {
       contentFrame = <LoginFrame {...this.props} />
     } else {
       return null;
@@ -54,8 +60,10 @@ IntroPage.propTypes = {
   onLoginPageLoaded: PropTypes.func.isRequired,
   onLoginPress: PropTypes.func.isRequired,
   onSetPageLoginState: PropTypes.func.isRequired,
+  onSetPageSignupState: PropTypes.func.isRequired,
   onSignupPageLoaded: PropTypes.func.isRequired,
-  onSignupPress: PropTypes.func.isRequired
+  onSignupPress: PropTypes.func.isRequired,
+  overrideFrame: PropTypes.string
 };
 
 const styles = {
