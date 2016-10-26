@@ -13,11 +13,11 @@ import { colors, dimensions } from 'app/constants';
 class TripsPage extends Component {
   componentWillMount() {
     const { onGetTrips, trips, user } = this.props;
-    if (!user) {
+    if (user) {
+      onGetTrips();
+    } else {
       viewLandingPage();
     }
-
-    onGetTrips();
   }
 
   componentDidMount() {
