@@ -4,6 +4,7 @@ require('app/stylesheets/modal-view.css');
 
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup, Modal } from 'react-bootstrap';
+import ErrorMessage from './ErrorMessage';
 import Spinner from './Spinner';
 import { colors } from 'app/constants';
 
@@ -31,10 +32,7 @@ class ModalView extends Component {
     );
 
     const errorMessage = error && (
-      <div style={styles.errorMessage}>
-        <span style={styles.errorMessageLabel}>Error: </span>
-        {error}
-      </div>
+      <ErrorMessage error={error} style={styles.errorMessage} />
     );
 
     return (
@@ -93,12 +91,8 @@ ModalView.propTypes = {
 
 const styles = {
   errorMessage: {
-    backgroundColor: colors.primaryError,
-    color: colors.primaryText,
-    padding: "10px 15px"
-  },
-  errorMessageLabel: {
-    fontWeight: "bold"
+    padding: "10px 15px",
+    width: "100%"
   },
   footer: {
     backgroundColor: "f7f7f7",
