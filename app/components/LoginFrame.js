@@ -11,6 +11,10 @@ import TextInput from './TextInput';
 import { colors, transitions } from 'app/constants';
 
 class LoginFrame extends Component {
+  componentWillMount() {
+    this.props.onClearAuthState();
+  }
+
   componentDidMount() {
     this.props.onLoginPageLoaded();
   }
@@ -111,6 +115,7 @@ class LoginFrame extends Component {
 LoginFrame.propTypes = {
   error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
+  onClearAuthState: PropTypes.func.isRequired,
   onClearOverrideFrame: PropTypes.func.isRequired,
   onEnterEmailForLogin: PropTypes.func.isRequired,
   onEnterPasswordForLogin: PropTypes.func.isRequired,

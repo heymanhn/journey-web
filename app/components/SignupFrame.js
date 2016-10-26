@@ -11,6 +11,10 @@ import TextInput from './TextInput';
 import { colors, transitions } from 'app/constants';
 
 class SignupFrame extends Component {
+  componentWillMount() {
+    this.props.onClearAuthState();
+  }
+
   componentDidMount() {
     this.props.onSignupPageLoaded();
   }
@@ -119,6 +123,7 @@ class SignupFrame extends Component {
 SignupFrame.propTypes = {
   error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
+  onClearAuthState: PropTypes.func.isRequired,
   onClearOverrideFrame: PropTypes.func.isRequired,
   onEnterEmailForSignup: PropTypes.func.isRequired,
   onEnterNameForSignup: PropTypes.func.isRequired,

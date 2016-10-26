@@ -8,12 +8,10 @@ import { colors } from 'app/constants';
 class IntroPage extends Component {
   componentWillMount() {
     const {
-      onClearAuthState,
       onSetPageSignupState,
       overrideFrame
     } = this.props;
 
-    onClearAuthState();
     !overrideFrame && onSetPageSignupState();
   }
 
