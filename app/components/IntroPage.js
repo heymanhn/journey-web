@@ -44,7 +44,6 @@ class IntroPage extends Component {
                 </h2>
                 <div>
                   <TextInput
-                    defaultValue={signupFields.email}
                     onChange={onEnterEmailForSignup}
                     placeholder="Email Address"
                     style={styles.textField}
@@ -52,7 +51,6 @@ class IntroPage extends Component {
                   />
 
                   <TextInput
-                    defaultValue={signupFields.name}
                     onChange={onEnterNameForSignup}
                     placeholder="Full Name"
                     style={styles.textField}
