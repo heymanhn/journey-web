@@ -149,6 +149,10 @@ export const initialAuthState = {
   signupFields: {}
 };
 
+export const initialLPState = {
+  frame: 'signup'
+};
+
 export const initialMapState = {
   mapWidth: calcMapWidth()
 };
@@ -298,8 +302,8 @@ export const analytics = {
     LOG_OUT: 'Log Out'
   },
   pages: {
-    LANDING_PAGE: 'Landing Page',
-    SIGNUP_PAGE: 'Signup Page',
+    SIGNUP_PAGE: 'Landing Page (Signup)',
+    LOGIN_PAGE: 'Landing Page (Login)',
     TRIP_PAGE: 'Trip Page',
     TRIP_IDEA: 'Trip Idea',
     TRIPS_PAGE: 'Trips Page'

@@ -6,10 +6,6 @@ export function viewLandingPage() {
   return browserHistory.push('/');
 }
 
-export function viewSignupPage() {
-  return browserHistory.push('/signup');
-}
-
 export function viewTripsPage() {
   return (dispatch) => {
     dispatch(apiGetTrips()).then(() => { browserHistory.push('/trips'); });
