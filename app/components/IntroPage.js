@@ -5,12 +5,15 @@ import { Button } from 'react-bootstrap';
 import { viewSignupPage } from 'app/actions/navigation';
 import ErrorMessage from './ErrorMessage';
 import TextInput from './TextInput';
-import Trips from 'app/containers/Trips';
 import { colors } from 'app/constants';
 
 class IntroPage extends Component {
   componentWillMount() {
     this.props.onClearAuthState();
+  }
+
+  componentDidMount() {
+    this.props.onPageLoaded();
   }
 
   render() {
@@ -21,16 +24,8 @@ class IntroPage extends Component {
       onEnterPasswordForSignup,
       onSignupPress,
       onPageLoaded,
-      signupFields,
-      token
+      signupFields
     } = this.props;
-
-    if (token) {
-      return <Trips />;
-    }
-
-    // Analytics tracking for Landing page views
-    onPageLoaded();
 
     return (
       <div style={styles.container}>
@@ -112,8 +107,7 @@ IntroPage.propTypes = {
   onEnterPasswordForSignup: PropTypes.func.isRequired,
   onSignupPress: PropTypes.func.isRequired,
   onPageLoaded: PropTypes.func.isRequired,
-  signupFields: PropTypes.object.isRequired,
-  token: PropTypes.string
+  signupFields: PropTypes.object.isRequired
 };
 
 const styles = {

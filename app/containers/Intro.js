@@ -13,12 +13,11 @@ import { analytics } from 'app/constants';
 import IntroPage from 'app/components/IntroPage';
 
 const mapStateToProps = (state) => {
-  const { error, loginFields, signupFields, token } = state.authState;
+  const { error, loginFields, signupFields } = state.authState;
 
   return {
     error,
-    signupFields,
-    token
+    signupFields
   };
 };
 
