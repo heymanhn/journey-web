@@ -20,7 +20,7 @@ export default function landingPageState(state = initialLPState, action) {
     case CLEAR_OVERRIDE_FRAME:
     case API_LOGIN_SUCCESS:
     case API_SIGNUP_SUCCESS:
-      return { ...state, overrideFrame: initialLPState.overrideFrame };
+      return initialLPState;
   }
 
   return state;
