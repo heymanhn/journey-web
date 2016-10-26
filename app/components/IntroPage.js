@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { viewSignupPage } from 'app/actions/navigation';
 import ErrorMessage from './ErrorMessage';
+import SubmitButton from './SubmitButton';
 import TextInput from './TextInput';
 import { colors } from 'app/constants';
 
@@ -72,12 +73,10 @@ class IntroPage extends Component {
               )}
 
               <div style={styles.mainSectionWithPadding}>
-                <Button
-                  onClick={onSignupPress}
-                  style={styles.signupButton}
-                >
-                  Create Account
-                </Button>
+                <SubmitButton
+                  onSubmitPress={onSignupPress}
+                  text="Create Account"
+                />
               </div>
             </div>
 
@@ -173,17 +172,6 @@ const styles = {
   redBgBanner: {
     backgroundColor: colors.primary,
     height: 200
-  },
-  signupButton: {
-    backgroundColor: colors.primary,
-    border: "none",
-    borderRadius: 25,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    color: "#ffffff",
-    fontWeight: 500,
-    margin: "10px 0px",
-    padding: "12px 25px"
   },
   tagline: {
     fontFamily: "'Raleway', sans-serif",
