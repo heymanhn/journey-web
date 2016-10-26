@@ -133,6 +133,13 @@ export const colors = {
 
 
 /*
+ * Animation durations
+ */
+export const transitions = {
+  landingPageFrame: 200
+};
+
+/*
  * Redux store default states
  */
 

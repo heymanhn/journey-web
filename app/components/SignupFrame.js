@@ -1,11 +1,14 @@
 'use strict';
 
+require('../stylesheets/landing-page.css');
+
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Button } from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import SubmitButton from './SubmitButton';
 import TextInput from './TextInput';
-import { colors } from 'app/constants';
+import { colors, transitions } from 'app/constants';
 
 class SignupFrame extends Component {
   componentDidMount() {
@@ -30,52 +33,77 @@ class SignupFrame extends Component {
             <h2 style={styles.tagline}>
               Start your dream trips here.
             </h2>
-            <div>
-              <TextInput
-                onChange={onEnterEmailForSignup}
-                placeholder="Email Address"
-                style={styles.textField}
-                type="text"
-              />
+            <ReactCSSTransitionGroup
+              transitionName="frame"
+              transitionAppear={true}
+              transitionAppearTimeout={transitions.landingPageFrame}
+              transitionEnterTimeout={0}
+              transitionLeaveTimeout={0}
+            >
+              <div>
+                <TextInput
+                  onChange={onEnterEmailForSignup}
+                  placeholder="Email Address"
+                  style={styles.textField}
+                  type="text"
+                />
 
-              <TextInput
-                onChange={onEnterNameForSignup}
-                placeholder="Full Name"
-                style={styles.textField}
-                type="text"
-              />
+                <TextInput
+                  onChange={onEnterNameForSignup}
+                  placeholder="Full Name"
+                  style={styles.textField}
+                  type="text"
+                />
 
-              <TextInput
-                onChange={onEnterPasswordForSignup}
-                placeholder="Password"
-                style={styles.textField}
-                type="password"
-              />
-            </div>
+                <TextInput
+                  onChange={onEnterPasswordForSignup}
+                  placeholder="Password"
+                  style={styles.textField}
+                  type="password"
+                />
+              </div>
+            </ReactCSSTransitionGroup>
           </div>
 
           {error && (
             <ErrorMessage error={error} style={styles.errorMessage}/>
           )}
 
-          <div style={styles.mainContent}>
-            <SubmitButton
-              isFetching={isFetching}
-              onSubmitPress={onSignupPress}
-              style={styles.signupButton}
-              text="Create Account"
-            />
-          </div>
-        </div>
-        <div style={styles.loginHint}>
-          Already have an account?
-          <span
-            onClick={this.setPageToLogin.bind(this)}
-            style={styles.loginButton}
+          <ReactCSSTransitionGroup
+            transitionName="frame"
+            transitionAppear={true}
+            transitionAppearTimeout={transitions.landingPageFrame}
+            transitionEnterTimeout={0}
+            transitionLeaveTimeout={0}
           >
-            Log in
-          </span>
+            <div style={styles.mainContent}>
+              <SubmitButton
+                isFetching={isFetching}
+                onSubmitPress={onSignupPress}
+                style={styles.signupButton}
+                text="Create Account"
+              />
+            </div>
+          </ReactCSSTransitionGroup>
         </div>
+
+        <ReactCSSTransitionGroup
+          transitionName="frame"
+          transitionAppear={true}
+          transitionAppearTimeout={transitions.landingPageFrame}
+          transitionEnterTimeout={0}
+          transitionLeaveTimeout={0}
+        >
+          <div style={styles.loginHint}>
+            Already have an account?
+            <span
+              onClick={this.setPageToLogin.bind(this)}
+              style={styles.loginButton}
+            >
+              Log in
+            </span>
+          </div>
+        </ReactCSSTransitionGroup>
       </div>
     );
   }

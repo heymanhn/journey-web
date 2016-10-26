@@ -1,11 +1,14 @@
 'use strict';
 
+require('../stylesheets/landing-page.css');
+
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Button } from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import SubmitButton from './SubmitButton';
 import TextInput from './TextInput';
-import { colors } from 'app/constants';
+import { colors, transitions } from 'app/constants';
 
 class LoginFrame extends Component {
   componentDidMount() {
@@ -29,45 +32,70 @@ class LoginFrame extends Component {
             <h2 style={styles.tagline}>
               Start your dream trips here.
             </h2>
-            <div>
-              <TextInput
-                onChange={onEnterEmailForLogin}
-                placeholder="Email Address"
-                style={styles.textField}
-                type="text"
-              />
+            <ReactCSSTransitionGroup
+              transitionName="frame"
+              transitionAppear={true}
+              transitionAppearTimeout={transitions.landingPageFrame}
+              transitionEnterTimeout={0}
+              transitionLeaveTimeout={0}
+            >
+              <div>
+                <TextInput
+                  onChange={onEnterEmailForLogin}
+                  placeholder="Email Address"
+                  style={styles.textField}
+                  type="text"
+                />
 
-              <TextInput
-                onChange={onEnterPasswordForLogin}
-                placeholder="Password"
-                style={styles.textField}
-                type="password"
-              />
-            </div>
+                <TextInput
+                  onChange={onEnterPasswordForLogin}
+                  placeholder="Password"
+                  style={styles.textField}
+                  type="password"
+                />
+              </div>
+            </ReactCSSTransitionGroup>
           </div>
 
           {error && (
             <ErrorMessage error={error} style={styles.errorMessage}/>
           )}
 
-          <div style={styles.mainContent}>
-            <SubmitButton
-              isFetching={isFetching}
-              onSubmitPress={onLoginPress}
-              style={styles.loginButton}
-              text="Log in"
-            />
-          </div>
-        </div>
-        <div style={styles.signupHint}>
-          Don't have an account?
-          <span
-            onClick={this.setPageToSignup.bind(this)}
-            style={styles.signupButton}
+          <ReactCSSTransitionGroup
+            transitionName="frame"
+            transitionAppear={true}
+            transitionAppearTimeout={transitions.landingPageFrame}
+            transitionEnterTimeout={0}
+            transitionLeaveTimeout={0}
           >
-            Sign Up
-          </span>
+            <div style={styles.mainContent}>
+              <SubmitButton
+                isFetching={isFetching}
+                onSubmitPress={onLoginPress}
+                style={styles.loginButton}
+                text="Log in"
+              />
+            </div>
+          </ReactCSSTransitionGroup>
         </div>
+
+        <ReactCSSTransitionGroup
+          transitionName="frame"
+          transitionAppear={true}
+          transitionAppearTimeout={transitions.landingPageFrame}
+          transitionEnterTimeout={0}
+          transitionLeaveTimeout={0}
+        >
+          <div style={styles.signupHint}>
+            Don't have an account?
+            <span
+              onClick={this.setPageToSignup.bind(this)}
+              style={styles.signupButton}
+            >
+              Sign Up
+            </span>
+          </div>
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
