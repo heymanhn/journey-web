@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import Footer from './Footer';
 import TripsList from './TripsList';
 import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
@@ -78,7 +77,6 @@ class TripsPage extends Component {
             />
           </div>
         </div>
-        <Footer />
       </div>
     );
   }

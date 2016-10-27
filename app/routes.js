@@ -3,6 +3,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from 'app/containers/App';
+import Footer from 'app/components/Footer';
 import Home from 'app/containers/Home';
 import Login from 'app/containers/Login';
 import Navigation from 'app/containers/Navigation';
@@ -20,11 +21,21 @@ export default function getRoutes(store) {
 
   return (
     <Route path='/' component={App}>
-      <IndexRoute components={{ content: Home, navigation: Navigation }} />
+      <IndexRoute
+        components={{
+          content: Home,
+          footer: Footer,
+          navigation: Navigation
+        }}
+      />
       <Route path='/login' components={{ content: Login }} />
       <Route
         path='/trips'
-        components={{ content: Trips, navigation: Navigation }}
+        components={{
+          content: Trips,
+          footer: Footer,
+          navigation: Navigation
+        }}
         onEnter={requireAuth}
       />
       <Route path='/trips/:tripId' components={{ content: Trip }} />

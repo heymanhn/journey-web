@@ -14,11 +14,12 @@ class App extends Component {
   }
 
   render() {
-    const { content, navigation, token } = this.props;
+    const { content, footer, navigation, token } = this.props;
     return (
       <div>
         {token && navigation}
         {content}
+        {token && footer}
       </div>
     );
   }
