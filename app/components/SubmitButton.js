@@ -7,7 +7,7 @@ import { colors } from 'app/constants';
 
 class SubmitButton extends Component {
   render() {
-    const { isFetching, onSubmitPress, text } = this.props;
+    const { isFetching, onSubmitPress, tabIndex, text } = this.props;
 
     const loadingSpinner = (
       <Spinner
@@ -20,6 +20,7 @@ class SubmitButton extends Component {
       <Button
         onClick={onSubmitPress}
         style={this.loadStyles()}
+        tabIndex={tabIndex}
       >
         {isFetching ? loadingSpinner : text}
       </Button>
@@ -38,6 +39,7 @@ SubmitButton.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   onSubmitPress: PropTypes.func.isRequired,
   style: PropTypes.object,
+  tabIndex: PropTypes.number,
   text: PropTypes.string.isRequired
 };
 

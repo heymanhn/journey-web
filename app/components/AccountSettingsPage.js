@@ -24,6 +24,7 @@ class AccountSettingsPage extends Component {
                 <TextInput
                   placeholder="Full Name"
                   style={styles.textField}
+                  tabIndex={1}
                   type="text"
                 />
               </div>
@@ -33,6 +34,7 @@ class AccountSettingsPage extends Component {
                 <TextInput
                   placeholder="New Password"
                   style={styles.textField}
+                  tabIndex={3}
                   type="password"
                 />
               </div>
@@ -42,6 +44,7 @@ class AccountSettingsPage extends Component {
                 <TextInput
                   placeholder="Email Address"
                   style={styles.textField}
+                  tabIndex={2}
                   type="text"
                 />
               </div>
@@ -51,6 +54,7 @@ class AccountSettingsPage extends Component {
                 <TextInput
                   placeholder="Confirm Password"
                   style={styles.textField}
+                  tabIndex={4}
                   type="password"
                 />
               </div>
@@ -61,6 +65,7 @@ class AccountSettingsPage extends Component {
               isFetching={false}
               onSubmitPress={() => { }}
               style={styles.saveChangesButton}
+              tabIndex={5}
               text="Save Changes"
             />
           </div>
