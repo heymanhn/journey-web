@@ -7,23 +7,18 @@ import Navigation from 'app/containers/Navigation';
 import TripsList from './TripsList';
 import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
-import { viewLandingPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
 class TripsPage extends Component {
   componentWillMount() {
-    const { onGetTrips, trips, user } = this.props;
-    if (user) {
+    const { onGetTrips, trips } = this.props;
+    if (!trips) {
       onGetTrips();
-    } else {
-      viewLandingPage();
     }
   }
 
   componentDidMount() {
-    if (this.props.user) {
-      this.props.trackPageView();
-    }
+    this.props.trackPageView();
   }
 
   render() {
@@ -34,11 +29,10 @@ class TripsPage extends Component {
       onDeleteTrip,
       onHide,
       showModal,
-      trips,
-      user
+      trips
     } = this.props;
 
-    if (!user || !trips) {
+    if (!trips) {
       return null;
     }
 
@@ -113,8 +107,7 @@ TripsPage.propTypes = {
   showModal: PropTypes.bool.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array,
-  tripToDelete: PropTypes.string,
-  user: PropTypes.object
+  tripToDelete: PropTypes.string
 };
 
 const styles = {

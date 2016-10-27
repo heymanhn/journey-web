@@ -7,9 +7,9 @@ export function viewLandingPage() {
 }
 
 export function viewTripsPage() {
-  return (dispatch) => {
-    dispatch(apiGetTrips()).then(() => { browserHistory.push('/trips'); });
-  };
+  return (dispatch) => dispatch(apiGetTrips()).then(() => (
+    browserHistory.push('/trips')
+  ));
 }
 
 export function viewTripPage(tripId) {

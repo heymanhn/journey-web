@@ -67,13 +67,6 @@ export default function authState(state = initialAuthState, action) {
         isFetching: true
       };
     case API_LOGIN_SUCCESS:
-      return {
-        ..._.omit(state, 'error'),
-        isFetching: false,
-        loginFields: {},
-        user: action.user,
-        token: action.token
-      };
     case API_SIGNUP_SUCCESS:
       return {
         ..._.omit(state, 'error'),
