@@ -106,6 +106,9 @@ export function handleErrors(response) {
  * Web app layout constants
  */
 export const dimensions = {
+  centeredPage: {
+    width: 700
+  },
   leftColumn: {
     width: 400
   },
@@ -117,8 +120,7 @@ export const dimensions = {
     listItem: {
       height: 250,
       width: 300
-    },
-    width: 700
+    }
   }
 };
 

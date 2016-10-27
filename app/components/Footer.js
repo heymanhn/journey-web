@@ -76,7 +76,7 @@ const styles = {
     height: 200,
     listStyleType: "none",
     margin: "0px auto",
-    maxWidth: dimensions.tripsPage.width,
+    maxWidth: dimensions.centeredPage.width,
     padding: "0px 30px"
   },
   vanillaLink: {

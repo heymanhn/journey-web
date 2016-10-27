@@ -126,7 +126,7 @@ const styles = {
   mainSection: {
     margin: "0px auto",
     minHeight: 600,
-    maxWidth: dimensions.tripsPage.width,
+    maxWidth: dimensions.centeredPage.width,
     padding: 30,
     paddingBottom: 0
   },

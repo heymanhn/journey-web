@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
+import AccountSettings from 'app/containers/AccountSettings';
 import App from 'app/containers/App';
 import Footer from 'app/components/Footer';
 import Home from 'app/containers/Home';
@@ -29,6 +30,15 @@ export default function getRoutes(store) {
         }}
       />
       <Route path='/login' components={{ content: Login }} />
+      <Route
+        path='/account'
+        components={{
+          content: AccountSettings,
+          footer: Footer,
+          navigation: Navigation
+        }}
+        onEnter={requireAuth}
+      />
       <Route
         path='/trips'
         components={{

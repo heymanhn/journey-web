@@ -34,7 +34,12 @@ class NavigationAvatar extends Component {
         <div style={styles.popoverArrow}/>
         <ListGroup style={styles.popoverList}>
           <ListGroupItem style={styles.popoverName}>{name}</ListGroupItem>
-          <ListGroupItem style={styles.popoverTBD}>View account</ListGroupItem>
+          <ListGroupItem
+            style={styles.popoverListItem}
+            href="/account"
+          >
+            Account settings
+          </ListGroupItem>
           <ListGroupItem
             style={styles.popoverListItem}
             href="/trips"
