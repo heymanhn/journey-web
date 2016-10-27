@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { processLogout, setRedirect } from 'app/actions/auth';
+import { apiRedirect, processLogout } from 'app/actions/auth';
 import { setOverrideFrame } from 'app/actions/landingPage';
 import { viewTripPage } from 'app/actions/navigation';
 import {
@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onSetOverrideFrameToLogin() {
       // Redirect to a page after login, if specified
       const { redirect } = ownProps;
-      redirect && dispatch(setRedirect(redirect));
+      redirect && dispatch(apiRedirect(redirect));
 
       dispatch(setOverrideFrame('login'));
     },

@@ -166,13 +166,7 @@ export function apiLogin() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiLoginSuccess(json));
-
-        if (redirect) {
-          dispatch(redirect());
-          dispatch(clearRedirect());
-        } else {
-          dispatch(viewTripsPage());
-        }
+        redirect && redirect();
       })
       .catch(error => { dispatch(apiLoginFailure(error.message)) });
   };
@@ -194,12 +188,7 @@ export function apiSignup() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
-        if (redirect) {
-          dispatch(redirect());
-          dispatch(clearRedirect());
-        } else {
-          dispatch(viewTripsPage());
-        }
+        redirect && redirect();
       })
       .catch(error => { dispatch(apiSignupFailure(error.message)); });
   };
@@ -212,4 +201,14 @@ export function processLogout() {
     viewLandingPage();
     dispatch(apiIdentifyGuest());
   };
+}
+
+export function apiRedirect(redirect) {
+  return (dispatch) => {
+    const redirectPromise = () => {
+      dispatch(redirect()).then(() => dispatch(clearRedirect()));
+    };
+
+    return dispatch(setRedirect(redirectPromise));
+  }
 }

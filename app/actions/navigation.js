@@ -13,9 +13,7 @@ export function viewTripsPage() {
 }
 
 export function viewTripPage(tripId) {
-  return (dispatch) => {
-    dispatch(apiGetTrip(tripId)).then(() => {
-      browserHistory.push('/trips/' + tripId);
-    });
-  };
+  return (dispatch) => dispatch(apiGetTrip(tripId)).then(() => (
+    browserHistory.push('/trips/' + tripId)
+  ));
 }
