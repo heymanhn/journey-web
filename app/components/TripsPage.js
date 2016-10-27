@@ -121,7 +121,6 @@ const styles = {
     margin: "10px 0px"
   },
   mainContainer: {
-    backgroundColor: colors.background,
     marginTop: 60,
     paddingBottom: 30,
     width: "100%"

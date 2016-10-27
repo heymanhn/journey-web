@@ -29,8 +29,8 @@ class IntroPage extends Component {
     }
 
     return (
-      <div style={styles.container}>
-        <div style={styles.redBgBanner}></div>
+      <div>
+        <div style={styles.redBgBanner} />
         <div style={styles.box}>
           <div style={styles.heroSection}>
             <img src="../assets/placeholder-hero.png"/>
@@ -73,9 +73,6 @@ const styles = {
     position: "relative",
     top: -100,
     width: 900
-  },
-  container: {
-    backgroundColor: colors.background
   },
   copyright: {
     color: colors.primaryText,
