@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import Spinner from './Spinner';
+import { colors } from 'app/constants';
 
 class LoadingAnimation extends Component {
   render() {
@@ -24,7 +25,7 @@ LoadingAnimation.propTypes = {
 
 const styles = {
   loadingText: {
-    color: "#333333",
+    color: colors.primaryText,
     fontFamily: "Arial",
     fontSize: 24,
     textAlign: "center",

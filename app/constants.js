@@ -123,12 +123,21 @@ export const dimensions = {
 };
 
 export const colors = {
+  background: "rgb(249, 249, 249)",
   primary: "rgb(233, 30, 99)",
   primaryDark: "rgb(143, 23, 64)",
   primaryError: "rgba(233, 30, 99, 0.2)",
+  primaryText: "rgb(51, 51, 51)",
   secondary: "rgb(26, 118, 200)"
 };
 
+
+/*
+ * Animation durations
+ */
+export const transitions = {
+  landingPageFrame: 200
+};
 
 /*
  * Redux store default states
@@ -142,7 +151,14 @@ export function generateGUID() {
 }
 
 export const initialAuthState = {
-  isFetching: false
+  isFetching: false,
+  loginFields: {},
+  signupFields: {}
+};
+
+export const initialLPState = {
+  frame: 'signup',
+  overrideFrame: ''
 };
 
 export const initialMapState = {
@@ -294,8 +310,8 @@ export const analytics = {
     LOG_OUT: 'Log Out'
   },
   pages: {
-    LANDING_PAGE: 'Landing Page',
-    SIGNUP_PAGE: 'Signup Page',
+    SIGNUP_PAGE: 'Landing Page (Signup)',
+    LOGIN_PAGE: 'Landing Page (Login)',
     TRIP_PAGE: 'Trip Page',
     TRIP_IDEA: 'Trip Idea',
     TRIPS_PAGE: 'Trips Page'

@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import { Button, Glyphicon } from 'react-bootstrap';
 import TripsListItemLabel from './TripsListItemLabel';
 import {
+  colors,
   dimensions,
   generateMapImage,
   getZoomLevel,
@@ -135,12 +136,12 @@ const styles = {
       top: -10
     },
     glyph: {
-      color: "#333333",
+      color: colors.primaryText,
       fontSize: 26,
     }
   },
   tripTitle: {
-    color: "#333333",
+    color: colors.primaryText,
     fontSize: 18,
     fontWeight: 300,
     letterSpacing: 0.5,

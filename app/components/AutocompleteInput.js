@@ -49,7 +49,7 @@ class AutocompleteInput extends Component {
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
-        theme={this.loadStyle.bind(this)()}
+        theme={this.loadStyle()}
       />
     );
   }
@@ -151,10 +151,10 @@ const autocompleteStyles = {
   },
   input: {
     border: "1px solid #cccccc",
-    borderRadius: "4px",
-    boxShadow: "inset 0 1px 1px rgba(0,0,0,.075)",
-    color: "#333333",
-    fontSize: 16,
+    borderRadius: "3px",
+    color: colors.primaryText,
+    fontSize: 14,
+    height: 36,
     outline: "none",
     padding: "6px 12px"
   },
@@ -165,7 +165,7 @@ const autocompleteStyles = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "12px 16px",
     borderTop: "1px solid #cccccc",
-    color: "#333333",
+    color: colors.primaryText,
     cursor: "pointer",
     display: "flex",
     padding: "10px 5px"

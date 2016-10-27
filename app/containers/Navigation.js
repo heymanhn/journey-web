@@ -1,7 +1,9 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { processLogout } from 'app/actions/auth';
+import { apiRedirect, processLogout } from 'app/actions/auth';
+import { setOverrideFrame } from 'app/actions/landingPage';
+import { viewTripPage } from 'app/actions/navigation';
 import {
   setGravatarActive,
   setGravatarInactive,
@@ -20,7 +22,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onLogoutPress() {
       dispatch(processLogout());
@@ -32,6 +34,14 @@ const mapDispatchToProps = (dispatch) => {
 
     onSetGravatarInactive() {
       dispatch(setGravatarInactive());
+    },
+
+    onSetOverrideFrameToLogin() {
+      // Redirect to a page after login, if specified
+      const { redirect } = ownProps;
+      redirect && dispatch(apiRedirect(redirect));
+
+      dispatch(setOverrideFrame('login'));
     },
 
     onSetTooltipInvisible() {

@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { colors } from 'app/constants';
 
 class TripsListItemLabel extends Component {
   render() {
@@ -47,7 +48,7 @@ TripsListItemLabel.propTypes = {
 
 const styles = {
   blackLabelText: {
-    color: "#333333"
+    color: colors.primaryText,
   },
   destinationLabel: {
     margin: "6px 12px"

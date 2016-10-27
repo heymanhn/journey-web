@@ -13,6 +13,7 @@ class NavigationBar extends Component {
       onLogoutPress,
       onSetGravatarActive,
       onSetGravatarInactive,
+      onSetOverrideFrameToLogin,
       onSetTooltipInvisible,
       onSetTooltipVisible,
       tooltipVisible,
@@ -20,7 +21,10 @@ class NavigationBar extends Component {
     } = this.props;
 
     const loginButton = (
-      <Link to="/">
+      <Link
+        onClick={onSetOverrideFrameToLogin}
+        to="/"
+      >
         <Button style={styles.loginButton}>
           Log in
         </Button>
@@ -82,6 +86,7 @@ NavigationBar.propTypes = {
   onLogoutPress: PropTypes.func.isRequired,
   onSetGravatarActive: PropTypes.func.isRequired,
   onSetGravatarInactive: PropTypes.func.isRequired,
+  onSetOverrideFrameToLogin: PropTypes.func.isRequired,
   onSetTooltipInvisible: PropTypes.func.isRequired,
   onSetTooltipVisible: PropTypes.func.isRequired,
   style: PropTypes.object,

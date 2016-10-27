@@ -19,6 +19,8 @@ export const LOGIN_SAVE_PASSWORD = 'LOGIN_SAVE_PASSWORD';
 export const SIGNUP_SAVE_NAME = 'SIGNUP_SAVE_NAME';
 export const SIGNUP_SAVE_EMAIL = 'SIGNUP_SAVE_EMAIL';
 export const SIGNUP_SAVE_PASSWORD = 'SIGNUP_SAVE_PASSWORD';
+export const SET_REDIRECT = 'SET_REDIRECT';
+export const CLEAR_REDIRECT = 'CLEAR_REDIRECT';
 export const API_LOGIN_REQUEST = 'API_LOGIN_REQUEST';
 export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS';
 export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
@@ -26,6 +28,7 @@ export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
 export const CREATE_ANONYMOUS_ID = 'CREATE_ANONYMOUS_ID';
+export const CLEAR_AUTH_STATE = 'CLEAR_AUTH_STATE';
 export const LOGOUT = 'LOGOUT';
 
 
@@ -65,6 +68,19 @@ export function signupSavePassword(password) {
   return {
     type: SIGNUP_SAVE_PASSWORD,
     password
+  };
+}
+
+export function setRedirect(redirect) {
+  return {
+    type: SET_REDIRECT,
+    redirect
+  };
+}
+
+export function clearRedirect() {
+  return {
+    type: CLEAR_REDIRECT
   };
 }
 
@@ -117,6 +133,12 @@ export function createAnonymousId(anonymousId) {
   };
 }
 
+export function clearAuthState() {
+  return {
+    type: CLEAR_AUTH_STATE
+  };
+}
+
 export function logout() {
   return {
     type: LOGOUT
@@ -133,7 +155,8 @@ export function apiLogin() {
     dispatch(apiLoginRequest());
 
     const { authState } = getState();
-    let { email, password } = authState;
+    const { loginFields, redirect } = authState;
+    let { email, password } = loginFields;
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.login().method;
     opts.body = JSON.stringify({ email, password });
@@ -143,7 +166,7 @@ export function apiLogin() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiLoginSuccess(json));
-        dispatch(viewTripsPage());
+        redirect && redirect();
       })
       .catch(error => { dispatch(apiLoginFailure(error.message)) });
   };
@@ -154,21 +177,18 @@ export function apiSignup() {
     dispatch(apiSignupRequest());
 
     const { authState } = getState();
-    let { newName, newEmail, newPassword } = authState;
+    const { redirect, signupFields } = authState;
+    let { name, email, password } = signupFields;
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = journeyAPI.signup().method;
-    opts.body = JSON.stringify({
-      name: newName,
-      email: newEmail,
-      password: newPassword
-    });
+    opts.body = JSON.stringify({ email, name, password });
 
     return fetch(journeyAPI.signup().route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
-        dispatch(viewTripsPage());
+        redirect && redirect();
       })
       .catch(error => { dispatch(apiSignupFailure(error.message)); });
   };
@@ -181,4 +201,14 @@ export function processLogout() {
     viewLandingPage();
     dispatch(apiIdentifyGuest());
   };
+}
+
+export function apiRedirect(redirect) {
+  return (dispatch) => {
+    const redirectPromise = () => {
+      dispatch(redirect()).then(() => dispatch(clearRedirect()));
+    };
+
+    return dispatch(setRedirect(redirectPromise));
+  }
 }

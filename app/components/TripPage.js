@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import LoadingAnimation from './LoadingAnimation';
+import { viewTripPage } from 'app/actions/navigation';
 import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
@@ -54,7 +55,10 @@ class TripPage extends Component {
           id="leftColumn"
           style={styles.leftColumn}
         >
-          <Navigation style={styles.navigationBar} />
+          <Navigation
+            redirect={viewTripPage.bind(null, trip._id)}
+            style={styles.navigationBar}
+          />
           <TripDetails />
           <TripIdeas />
         </div>

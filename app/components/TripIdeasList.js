@@ -101,12 +101,11 @@ TripIdeasList.propTypes = {
 const styles = {
   commentBox: {
     display: "inline",
-    fontSize: 14,
     margin: "0px 0px 10px 0px",
-    outline: "none",
     width: "100%"
   },
   h3: {
+    fontFamily: "'Raleway', sans-serif",
     fontWeight: 400
   },
   ideasSection: {
