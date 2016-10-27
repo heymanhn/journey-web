@@ -53,12 +53,13 @@ const styles = {
     backgroundColor: colors.primary,
     border: "none",
     borderRadius: 25,
-    fontSize: 16,
+    fontSize: 14,
+    height: 40,
     letterSpacing: 0.3,
     color: "#ffffff",
     fontWeight: 500,
     margin: "10px 0px",
-    padding: "12px 25px"
+    padding: "0px 25px"
   }
 };
 
