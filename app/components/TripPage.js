@@ -56,6 +56,7 @@ class TripPage extends Component {
           style={styles.leftColumn}
         >
           <Navigation
+            customWidth
             redirect={viewTripPage.bind(null, trip._id)}
             style={styles.navigationBar}
           />

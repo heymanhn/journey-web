@@ -2,11 +2,12 @@
 
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import App from './containers/App';
-import Home from './containers/Home';
-import Login from './containers/Login';
-import Trip from './containers/Trip';
-import Trips from './containers/Trips';
+import App from 'app/containers/App';
+import Home from 'app/containers/Home';
+import Login from 'app/containers/Login';
+import Navigation from 'app/containers/Navigation';
+import Trip from 'app/containers/Trip';
+import Trips from 'app/containers/Trips';
 
 export default function getRoutes(store) {
   const requireAuth = (nextState, replace) => {
@@ -19,10 +20,14 @@ export default function getRoutes(store) {
 
   return (
     <Route path='/' component={App}>
-      <IndexRoute component={Home} />
-      <Route path='/login' component={Login} />
-      <Route path='/trips' component={Trips} onEnter={requireAuth} />
-      <Route path='/trips/:tripId' component={Trip} />
+      <IndexRoute components={{ content: Home, navigation: Navigation }} />
+      <Route path='/login' components={{ content: Login }} />
+      <Route
+        path='/trips'
+        components={{ content: Trips, navigation: Navigation }}
+        onEnter={requireAuth}
+      />
+      <Route path='/trips/:tripId' components={{ content: Trip }} />
     </Route>
   );
 }

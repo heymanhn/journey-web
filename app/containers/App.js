@@ -5,18 +5,18 @@ import { connect } from 'react-redux';
 
 class App extends Component {
   render() {
-    const { children } = this.props;
+    const { content, navigation, token } = this.props;
     return (
       <div>
-        {children}
+        {token && navigation}
+        {content}
       </div>
     );
   }
 }
 
-App.propTypes = {};
-
 export default connect(
-  state => ({}),
-  dispatch => ({})
+  state => ({
+    token: state.authState.token
+  })
 )(App);

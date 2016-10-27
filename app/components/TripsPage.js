@@ -3,7 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import Footer from './Footer';
-import Navigation from 'app/containers/Navigation';
 import TripsList from './TripsList';
 import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
@@ -52,7 +51,6 @@ class TripsPage extends Component {
 
     return (
       <div>
-        <Navigation fullWidth />
         <div style={styles.mainContainer}>
           <div style={styles.mainSection}>
             <div style={styles.headerSection}>
