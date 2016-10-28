@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
-import { apiGetTrip } from 'app/actions/trips';
+import { apiGetTrip, clearTripError } from 'app/actions/trips';
 import { analytics } from 'app/constants';
 import TripPage from 'app/components/TripPage';
 
@@ -17,6 +17,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   const { tripId } = props.params;
   return {
+    onClearTripError() {
+      dispatch(clearTripError());
+    },
+
     onGetTrip() {
       dispatch(apiGetTrip(tripId));
     },

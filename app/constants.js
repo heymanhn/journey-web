@@ -134,7 +134,7 @@ export const colors = {
   background: "rgb(249, 249, 249)",
   primary: "rgb(233, 30, 99)",
   primaryDark: "rgb(143, 23, 64)",
-  primaryError: "rgba(233, 30, 99, 0.2)",
+  primaryError: "rgb(251, 210, 224)",
   primaryText: "rgb(51, 51, 51)",
   secondary: "rgb(26, 118, 200)"
 };
@@ -145,7 +145,11 @@ export const colors = {
  */
 export const transitions = {
   landingPageFrame: 200,
-  submitButtonSuccess: 2000
+  submitButtonSuccess: 2000,
+  tripPageError: {
+    enter: 500,
+    leave: 700
+  }
 };
 
 /*

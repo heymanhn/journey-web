@@ -1,15 +1,19 @@
 'use strict';
 
+require('../stylesheets/trip-page.css');
+
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import LoadingAnimation from './LoadingAnimation';
 import { viewTripPage } from 'app/actions/navigation';
+import ErrorMessage from './ErrorMessage';
 import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
 import TripIdeaSettings from 'app/containers/TripIdeaSettings';
 import TripSettings from 'app/containers/TripSettings';
-import { dimensions } from 'app/constants';
+import { dimensions, transitions } from 'app/constants';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -18,6 +22,7 @@ class TripPage extends Component {
 
   componentWillMount() {
     const { onGetTrip, params, trip } = this.props;
+    document.body.style.backgroundColor = "white";
 
     // Fetch the trip from the server upon load if needed
     if (!trip || params.tripId !== trip._id) {
@@ -25,19 +30,22 @@ class TripPage extends Component {
     }
   }
 
-  render() {
-    const {
-      error,
-      params,
-      trip
-    } = this.props;
-    const loadTrip = trip && params.tripId === trip._id;
+  componentWillUnmount() {
+    this.props.onClearTripError();
+    document.body.style.backgroundColor = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { error, onClearTripError } = nextProps;
 
     if (error) {
-      return (
-        <div>{error}</div>
-      );
+      setTimeout(onClearTripError, 5000);
     }
+  }
+
+  render() {
+    const { error, params, trip } = this.props;
+    const loadTrip = trip && params.tripId === trip._id;
 
     return (
       <div>
@@ -51,7 +59,18 @@ class TripPage extends Component {
             style={styles.navigationBar}
           />
           {loadTrip ? (
-            <div>
+            <div style={styles.mainContainer}>
+              <ReactCSSTransitionGroup
+                transitionName="error"
+                transitionAppear={true}
+                transitionAppearTimeout={transitions.landingPageFrame}
+                transitionEnterTimeout={transitions.tripPageError.enter}
+                transitionLeaveTimeout={transitions.tripPageError.leave}
+              >
+                {error && (
+                  <ErrorMessage error={error} style={styles.errorMessage} />
+                )}
+              </ReactCSSTransitionGroup>
               <TripDetails />
               <TripIdeas />
               <TripSettings action="update" />
@@ -71,12 +90,18 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
+  onClearTripError: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };
 
 const styles = {
+  errorMessage: {
+    position: "fixed",
+    padding: "8px " + dimensions.sidePadding + "px",
+    width: dimensions.leftColumn.width
+  },
   leftColumn: {
     backgroundColor: "white",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
@@ -89,6 +114,9 @@ const styles = {
   },
   loader: {
     marginTop: 100
+  },
+  mainContainer: {
+    marginTop: dimensions.navigationBar.height
   },
   navigationBar: {
     width: dimensions.leftColumn.width

@@ -1,0 +1,21 @@
+.error-enter {
+  opacity: 0.01;
+  margin-top: -40px;
+}
+
+.error-enter.error-enter-active {
+  opacity: 1;
+  margin-top: 0px;
+  transition: all 500ms ease;
+}
+
+.error-leave {
+  opacity: 1;
+  margin-top: 0px;
+}
+
+.error-leave.error-leave-active {
+  opacity: 0.01;
+  margin-top: -40px;
+  transition: all 700ms ease;
+}
