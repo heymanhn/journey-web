@@ -11,8 +11,20 @@ import {
 import AccountSettingsPage from 'app/components/AccountSettingsPage';
 
 const mapStateToProps = state => {
-  const { error, isFetching, user: { email, name } } = state.authState;
+  const {
+    error,
+    isFetching,
+    newUserFields,
+    user: { email, name }
+  } = state.authState;
+
+  let isSubmitDisabled = true;
+  if (Object.keys(newUserFields).length > 0) {
+    isSubmitDisabled = false;
+  }
+
   return {
+    isSubmitDisabled: isFetching || isSubmitDisabled,
     email,
     error,
     isFetching,

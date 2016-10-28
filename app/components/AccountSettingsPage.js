@@ -7,6 +7,10 @@ import TextInput from './TextInput';
 import { colors, dimensions } from 'app/constants';
 
 class AccountSettingsPage extends Component {
+  componentWillMount() {
+    this.props.onClearAuthState();
+  }
+
   componentWillUnmount() {
     this.props.onClearAuthState();
   }
@@ -16,6 +20,7 @@ class AccountSettingsPage extends Component {
       email,
       error,
       isFetching,
+      isSubmitDisabled,
       name,
       onEnterEmail,
       onEnterName,
@@ -87,6 +92,7 @@ class AccountSettingsPage extends Component {
           </div>
           <div style={styles.buttonsSection}>
             <SubmitButton
+              disabled={isSubmitDisabled}
               isFetching={isFetching}
               onSubmitPress={onSaveChanges}
               style={styles.saveChangesButton}
@@ -102,8 +108,9 @@ class AccountSettingsPage extends Component {
 
 AccountSettingsPage.propTypes = {
   email: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.string,
   isFetching: PropTypes.bool.isRequired,
+  isSubmitDisabled: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onClearAuthState: PropTypes.func.isRequired,
   onEnterEmail: PropTypes.func.isRequired,
