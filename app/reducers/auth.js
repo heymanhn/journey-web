@@ -68,17 +68,17 @@ export default function authState(state = initialAuthState, action) {
       };
     case UPDATE_USER_SAVE_EMAIL:
       return {
-        ...state,
+        ..._.omit(state, 'error'),
         newUserFields: _.extend(state.newUserFields, { email: action.email })
       };
     case UPDATE_USER_SAVE_NAME:
       return {
-        ...state,
+        ..._.omit(state, 'error'),
         newUserFields: _.extend(state.newUserFields, { name: action.name })
       };
     case UPDATE_USER_SAVE_PASSWORD:
       return {
-        ...state,
+        ..._.omit(state, 'error'),
         newUserFields: _.extend(
           state.newUserFields,
           { password: action.password }

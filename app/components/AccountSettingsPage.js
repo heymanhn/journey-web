@@ -14,6 +14,7 @@ class AccountSettingsPage extends Component {
   render() {
     const {
       email,
+      error,
       isFetching,
       name,
       onEnterEmail,
@@ -32,6 +33,11 @@ class AccountSettingsPage extends Component {
             <div style={styles.settingsHeader}>
               Profile Information
             </div>
+
+            {error && (
+              <ErrorMessage error={error} style={styles.errorMessage}/>
+            )}
+
             <div style={styles.settingsFields}>
               <div style={styles.setting}>
                 <span style={styles.settingLabel}>Name</span>
@@ -96,6 +102,7 @@ class AccountSettingsPage extends Component {
 
 AccountSettingsPage.propTypes = {
   email: PropTypes.string.isRequired,
+  error: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onClearAuthState: PropTypes.func.isRequired,
@@ -109,6 +116,10 @@ const styles = {
   buttonsSection: {
     marginTop: 20,
     padding: "0px 30px"
+  },
+  errorMessage: {
+    padding: "10px 30px",
+    width: "100%"
   },
   h1: {
     fontFamily: "'Raleway', sans-serif",
