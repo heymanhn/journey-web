@@ -155,7 +155,8 @@ export function generateGUID() {
 export const initialAuthState = {
   isFetching: false,
   loginFields: {},
-  signupFields: {}
+  signupFields: {},
+  newUserFields: {}
 };
 
 export const initialLPState = {

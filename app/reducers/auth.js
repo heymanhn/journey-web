@@ -8,6 +8,9 @@ import {
   SIGNUP_SAVE_NAME,
   SIGNUP_SAVE_EMAIL,
   SIGNUP_SAVE_PASSWORD,
+  UPDATE_USER_SAVE_EMAIL,
+  UPDATE_USER_SAVE_NAME,
+  UPDATE_USER_SAVE_PASSWORD,
   API_LOGIN_REQUEST,
   API_LOGIN_SUCCESS,
   API_LOGIN_FAILURE,
@@ -57,6 +60,24 @@ export default function authState(state = initialAuthState, action) {
         ..._.omit(state, 'error'),
         signupFields: _.extend(
           state.signupFields,
+          { password: action.password }
+        )
+      };
+    case UPDATE_USER_SAVE_EMAIL:
+      return {
+        ...state,
+        newUserFields: _.extend(state.newUserFields, { email: action.email })
+      };
+    case UPDATE_USER_SAVE_NAME:
+      return {
+        ...state,
+        newUserFields: _.extend(state.newUserFields, { name: action.name })
+      };
+    case UPDATE_USER_SAVE_PASSWORD:
+      return {
+        ...state,
+        newUserFields: _.extend(
+          state.newUserFields,
           { password: action.password }
         )
       };

@@ -8,6 +8,14 @@ import { colors, dimensions } from 'app/constants';
 
 class AccountSettingsPage extends Component {
   render() {
+    const {
+      email,
+      name,
+      onEnterEmail,
+      onEnterName,
+      onEnterNewPassword
+    } = this.props;
+
     return (
       <div style={styles.mainContainer}>
         <div style={styles.mainSection}>
@@ -22,6 +30,8 @@ class AccountSettingsPage extends Component {
               <div style={styles.setting}>
                 <span style={styles.settingLabel}>Name</span>
                 <TextInput
+                  defaultValue={name}
+                  onChange={onEnterName}
                   placeholder="Full Name"
                   style={styles.textField}
                   tabIndex={1}
@@ -32,6 +42,7 @@ class AccountSettingsPage extends Component {
               <div style={styles.setting}>
                 <span style={styles.settingLabel}>New Password</span>
                 <TextInput
+                  onChange={onEnterNewPassword}
                   placeholder="New Password"
                   style={styles.textField}
                   tabIndex={3}
@@ -42,6 +53,8 @@ class AccountSettingsPage extends Component {
               <div style={styles.setting}>
                 <span style={styles.settingLabel}>Email</span>
                 <TextInput
+                  defaultValue={email}
+                  onChange={onEnterEmail}
                   placeholder="Email Address"
                   style={styles.textField}
                   tabIndex={2}
@@ -76,7 +89,11 @@ class AccountSettingsPage extends Component {
 }
 
 AccountSettingsPage.propTypes = {
-
+  email: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onEnterEmail: PropTypes.func.isRequired,
+  onEnterName: PropTypes.func.isRequired,
+  onEnterNewPassword: PropTypes.func.isRequired
 };
 
 const styles = {

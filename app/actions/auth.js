@@ -21,6 +21,9 @@ export const SIGNUP_SAVE_EMAIL = 'SIGNUP_SAVE_EMAIL';
 export const SIGNUP_SAVE_PASSWORD = 'SIGNUP_SAVE_PASSWORD';
 export const SET_REDIRECT = 'SET_REDIRECT';
 export const CLEAR_REDIRECT = 'CLEAR_REDIRECT';
+export const UPDATE_USER_SAVE_EMAIL = 'UPDATE_USER_SAVE_EMAIL';
+export const UPDATE_USER_SAVE_NAME = 'UPDATE_USER_SAVE_NAME';
+export const UPDATE_USER_SAVE_PASSWORD = 'UPDATE_USER_SAVE_PASSWORD';
 export const API_LOGIN_REQUEST = 'API_LOGIN_REQUEST';
 export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS';
 export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
@@ -84,6 +87,27 @@ export function clearRedirect() {
   };
 }
 
+export function updateUserSaveEmail(email) {
+  return {
+    type: UPDATE_USER_SAVE_EMAIL,
+    email
+  };
+}
+
+export function updateUserSaveName(name) {
+  return {
+    type: UPDATE_USER_SAVE_NAME,
+    name
+  };
+}
+
+export function updateUserSavePassword(password) {
+  return {
+    type: UPDATE_USER_SAVE_PASSWORD,
+    password
+  };
+}
+
 export function apiLoginRequest() {
   return {
     type: API_LOGIN_REQUEST
@@ -114,8 +138,8 @@ export function apiSignupRequest() {
 export function apiSignupSuccess(json) {
   return {
     type: API_SIGNUP_SUCCESS,
-    user: json.user,
-    token: json.token
+    token: json.token,
+    user: json.user
   };
 }
 
