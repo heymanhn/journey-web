@@ -26,7 +26,7 @@ LoadingAnimation.propTypes = {
 const styles = {
   loadingText: {
     color: colors.primaryText,
-    fontFamily: "Arial",
+    fontFamily: "Helvetica",
     fontSize: 24,
     textAlign: "center",
     margin: 20

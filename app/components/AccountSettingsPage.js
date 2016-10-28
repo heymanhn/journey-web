@@ -7,13 +7,19 @@ import TextInput from './TextInput';
 import { colors, dimensions } from 'app/constants';
 
 class AccountSettingsPage extends Component {
+  componentWillUnmount() {
+    this.props.onClearAuthState();
+  }
+
   render() {
     const {
       email,
+      isFetching,
       name,
       onEnterEmail,
       onEnterName,
-      onEnterNewPassword
+      onEnterNewPassword,
+      onSaveChanges
     } = this.props;
 
     return (
@@ -75,8 +81,8 @@ class AccountSettingsPage extends Component {
           </div>
           <div style={styles.buttonsSection}>
             <SubmitButton
-              isFetching={false}
-              onSubmitPress={() => { }}
+              isFetching={isFetching}
+              onSubmitPress={onSaveChanges}
               style={styles.saveChangesButton}
               tabIndex={5}
               text="Save Changes"
@@ -90,10 +96,13 @@ class AccountSettingsPage extends Component {
 
 AccountSettingsPage.propTypes = {
   email: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
+  onClearAuthState: PropTypes.func.isRequired,
   onEnterEmail: PropTypes.func.isRequired,
   onEnterName: PropTypes.func.isRequired,
-  onEnterNewPassword: PropTypes.func.isRequired
+  onEnterNewPassword: PropTypes.func.isRequired,
+  onSaveChanges: PropTypes.func.isRequired
 };
 
 const styles = {

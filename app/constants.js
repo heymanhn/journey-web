@@ -8,14 +8,24 @@ import MobileDetect from 'mobile-detect';
 const journeyAPIHost = API_SERVER || 'http://localhost:3000/v1';
 
 export const journeyAPI = {
+  analytics: {
+    identify: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/identify'
+    }),
+    track: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/track'
+    }),
+    page: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/page'
+    })
+  },
+
   login: () => ({
     method: 'POST',
     route: journeyAPIHost + '/auth/login'
-  }),
-
-  signup: () => ({
-    method: 'POST',
-    route: journeyAPIHost + '/users'
   }),
 
   trips: {
@@ -58,18 +68,14 @@ export const journeyAPI = {
     }
   },
 
-  analytics: {
-    identify: () => ({
+  user: {
+    signup: () => ({
       method: 'POST',
-      route: journeyAPIHost + '/analytics/identify'
+      route: journeyAPIHost + '/users'
     }),
-    track: () => ({
-      method: 'POST',
-      route: journeyAPIHost + '/analytics/track'
-    }),
-    page: () => ({
-      method: 'POST',
-      route: journeyAPIHost + '/analytics/page'
+    update: (userId) => ({
+      method: 'PUT',
+      route: journeyAPIHost + '/users/' + userId
     })
   }
 };

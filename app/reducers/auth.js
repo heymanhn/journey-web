@@ -17,6 +17,9 @@ import {
   API_SIGNUP_REQUEST,
   API_SIGNUP_SUCCESS,
   API_SIGNUP_FAILURE,
+  API_UPDATE_USER_REQUEST,
+  API_UPDATE_USER_SUCCESS,
+  API_UPDATE_USER_FAILURE,
   CREATE_ANONYMOUS_ID,
   CLEAR_AUTH_STATE,
   LOGOUT
@@ -83,22 +86,26 @@ export default function authState(state = initialAuthState, action) {
       };
     case API_LOGIN_REQUEST:
     case API_SIGNUP_REQUEST:
+    case API_UPDATE_USER_REQUEST:
       return {
         ..._.omit(state, 'error'),
         isFetching: true
       };
     case API_LOGIN_SUCCESS:
     case API_SIGNUP_SUCCESS:
+    case API_UPDATE_USER_SUCCESS:
       return {
         ..._.omit(state, 'error'),
         isFetching: false,
         loginFields: {},
+        newUserFields: {},
         signupFields: {},
         token: action.token,
         user: action.user
       };
     case API_LOGIN_FAILURE:
     case API_SIGNUP_FAILURE:
+    case API_UPDATE_USER_FAILURE:
       return {
         ...state,
         isFetching: false,
@@ -114,6 +121,7 @@ export default function authState(state = initialAuthState, action) {
         ..._.omit(state, 'error'),
         isFetching: false,
         loginFields: {},
+        newUserFields: {},
         signupFields: {}
       };
     case LOGOUT:

@@ -30,6 +30,9 @@ export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
 export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
+export const API_UPDATE_USER_REQUEST = 'API_UPDATE_USER_REQUEST';
+export const API_UPDATE_USER_SUCCESS = 'API_UPDATE_USER_SUCCESS';
+export const API_UPDATE_USER_FAILURE = 'API_UPDATE_USER_FAILURE';
 export const CREATE_ANONYMOUS_ID = 'CREATE_ANONYMOUS_ID';
 export const CLEAR_AUTH_STATE = 'CLEAR_AUTH_STATE';
 export const LOGOUT = 'LOGOUT';
@@ -150,6 +153,27 @@ export function apiSignupFailure(error) {
   };
 }
 
+export function apiUpdateUserRequest() {
+  return {
+    type: API_UPDATE_USER_REQUEST
+  };
+}
+
+export function apiUpdateUserSuccess(json) {
+  return {
+    type: API_UPDATE_USER_SUCCESS,
+    token: json.token,
+    user: json.user
+  };
+}
+
+export function apiUpdateUserFailure(error) {
+  return {
+    type: API_UPDATE_USER_FAILURE,
+    error
+  };
+}
+
 export function createAnonymousId(anonymousId) {
   return {
     type: CREATE_ANONYMOUS_ID,
@@ -192,7 +216,7 @@ export function apiLogin() {
         dispatch(apiLoginSuccess(json));
         redirect && redirect();
       })
-      .catch(error => { dispatch(apiLoginFailure(error.message)) });
+      .catch(error => dispatch(apiLoginFailure(error.message)));
   };
 }
 
@@ -204,26 +228,17 @@ export function apiSignup() {
     const { redirect, signupFields } = authState;
     let { name, email, password } = signupFields;
     let opts = {...fetchOptsTemplate(authState)};
-    opts.method = journeyAPI.signup().method;
+    opts.method = journeyAPI.user.signup().method;
     opts.body = JSON.stringify({ email, name, password });
 
-    return fetch(journeyAPI.signup().route, opts)
+    return fetch(journeyAPI.user.signup().route, opts)
       .then(handleErrors)
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
         redirect && redirect();
       })
-      .catch(error => { dispatch(apiSignupFailure(error.message)); });
-  };
-}
-
-export function processLogout() {
-  return (dispatch) => {
-    dispatch(apiTrackEvent(analytics.events.LOG_OUT));
-    dispatch(logout());
-    viewLandingPage();
-    dispatch(apiIdentifyGuest());
+      .catch(error => dispatch(apiSignupFailure(error.message)));
   };
 }
 
@@ -235,4 +250,32 @@ export function apiRedirect(redirect) {
 
     return dispatch(setRedirect(redirectPromise));
   }
+}
+
+export function apiUpdateUser() {
+  return (dispatch, getState) => {
+    dispatch(apiUpdateUserRequest());
+
+    const { authState } = getState();
+    const { newUserFields, user: { _id } } = authState;
+    const updateUserAPI = journeyAPI.user.update(_id);
+    let opts = {...fetchOptsTemplate(authState)};
+    opts.method = updateUserAPI.method;
+    opts.body = JSON.stringify(newUserFields);
+
+    return fetch(updateUserAPI.route, opts)
+      .then(handleErrors)
+      .then(response => response.json())
+      .then(json => dispatch(apiUpdateUserSuccess(json)))
+      .catch(error => dispatch(apiUpdateUserFailure(error.message)));
+  }
+}
+
+export function processLogout() {
+  return (dispatch) => {
+    dispatch(apiTrackEvent(analytics.events.LOG_OUT));
+    dispatch(logout());
+    viewLandingPage();
+    dispatch(apiIdentifyGuest());
+  };
 }

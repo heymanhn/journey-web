@@ -2,6 +2,8 @@
 
 import { connect } from 'react-redux';
 import {
+  apiUpdateUser,
+  clearAuthState,
   updateUserSaveEmail,
   updateUserSaveName,
   updateUserSavePassword
@@ -9,15 +11,21 @@ import {
 import AccountSettingsPage from 'app/components/AccountSettingsPage';
 
 const mapStateToProps = state => {
-  const { name, email } = state.authState.user;
+  const { error, isFetching, user: { email, name } } = state.authState;
   return {
     email,
+    error,
+    isFetching,
     name
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    onClearAuthState() {
+      dispatch(clearAuthState());
+    },
+
     onEnterName(event) {
       dispatch(updateUserSaveName(event.target.value));
     },
@@ -28,6 +36,10 @@ const mapDispatchToProps = dispatch => {
 
     onEnterNewPassword(event) {
       dispatch(updateUserSavePassword(event.target.value));
+    },
+
+    onSaveChanges() {
+      dispatch(apiUpdateUser());
     }
   };
 };

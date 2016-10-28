@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import LoadingAnimation from './LoadingAnimation';
 import TripsList from './TripsList';
 import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
@@ -31,7 +32,13 @@ class TripsPage extends Component {
     } = this.props;
 
     if (!trips) {
-      return null;
+      return (
+        <div style={styles.mainContainer}>
+          <div style={styles.mainSection}>
+            <LoadingAnimation element="Trips" />
+          </div>
+        </div>
+      );
     }
 
     const createTripPlaceholder = (
