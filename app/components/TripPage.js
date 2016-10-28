@@ -31,23 +31,13 @@ class TripPage extends Component {
       params,
       trip
     } = this.props;
+    const loadTrip = trip && params.tripId === trip._id;
 
     if (error) {
       return (
         <div>{error}</div>
       );
     }
-
-    // Loading UI
-    if (!trip || params.tripId !== trip._id) {
-      return <LoadingAnimation element="Trip" />;
-    }
-
-    const tripPlan = trip.plan.map(day => {
-      return (
-        <p key={day._id}>Day</p>
-      );
-    });
 
     return (
       <div>
@@ -57,15 +47,23 @@ class TripPage extends Component {
         >
           <Navigation
             customWidth
-            redirect={viewTripPage.bind(null, trip._id)}
+            redirect={viewTripPage.bind(null, params.tripId)}
             style={styles.navigationBar}
           />
-          <TripDetails />
-          <TripIdeas />
+          {loadTrip ? (
+            <div>
+              <TripDetails />
+              <TripIdeas />
+              <TripSettings action="update" />
+              <TripIdeaSettings />
+            </div>
+          ) : (
+            <div style={styles.loader}>
+              <LoadingAnimation element="Trip" />
+            </div>
+          )}
         </div>
-        <TripMap />
-        <TripSettings action="update" />
-        <TripIdeaSettings />
+        {loadTrip && <TripMap />}
       </div>
     );
   }
@@ -88,6 +86,9 @@ const styles = {
     position: "absolute",
     width: dimensions.leftColumn.width,
     zIndex: 2
+  },
+  loader: {
+    marginTop: 100
   },
   navigationBar: {
     width: dimensions.leftColumn.width
