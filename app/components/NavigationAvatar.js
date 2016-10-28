@@ -7,6 +7,7 @@ import {
   ListGroupItem,
   Overlay
 } from 'react-bootstrap';
+import { Link } from 'react-router';
 import { viewTripsPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
@@ -34,18 +35,30 @@ class NavigationAvatar extends Component {
         <div style={styles.popoverArrow}/>
         <ListGroup style={styles.popoverList}>
           <ListGroupItem style={styles.popoverName}>{name}</ListGroupItem>
-          <ListGroupItem
-            style={styles.popoverListItem}
-            href="/account"
+          <Link
+            activeStyle={styles.vanillaLink}
+            style={styles.vanillaLink}
+            to="/account"
           >
-            Account settings
-          </ListGroupItem>
-          <ListGroupItem
-            style={styles.popoverListItem}
-            href="/trips"
+            <ListGroupItem
+              onClick={onSetTooltipInvisible}
+              style={styles.popoverListItem}
+            >
+              Account settings
+            </ListGroupItem>
+          </Link>
+          <Link
+            activeStyle={styles.vanillaLink}
+            style={styles.vanillaLink}
+            to="/trips"
           >
-            My trips
-          </ListGroupItem>
+            <ListGroupItem
+              onClick={onSetTooltipInvisible}
+              style={styles.popoverListItem}
+            >
+              My trips
+            </ListGroupItem>
+          </Link>
           <ListGroupItem
             style={styles.popoverListItem}
             onClick={onLogoutPress}
@@ -165,7 +178,8 @@ const styles = {
     zIndex: 1
   },
   popoverListItem: {
-    border: "none"
+    border: "none",
+    outline: "none"
   },
   popoverName: {
     backgroundColor: "#f3f3f3",
@@ -178,16 +192,9 @@ const styles = {
     WebkitUserSelect: "none",
     msUserSelect: "none"
   },
-  popoverTBD: {
-    border: "none",
-    borderTop: "1px solid #e3e3e3",
-    color: "#cccccc",
-    cursor: "default",
-
-    // Disable text selection
-    MozUserSelect: "none",
-    WebkitUserSelect: "none",
-    msUserSelect: "none"
+  vanillaLink: {
+    color: "#555555",
+    textDecoration: "none"
   }
 };
 
