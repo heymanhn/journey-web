@@ -18,9 +18,18 @@ const mapStateToProps = state => {
     user: { email, name }
   } = state.authState;
 
-  let isSubmitDisabled = true;
+  let isSubmitDisabled = false;;
   if (Object.keys(newUserFields).length > 0) {
-    isSubmitDisabled = false;
+    Object.keys(newUserFields).forEach(key => {
+      const value = newUserFields[key];
+
+      // Don't allow submission if there are any empty fields
+      if (!value && typeof value !== 'undefined') {
+        isSubmitDisabled = true;
+      }
+    });
+  } else {
+    isSubmitDisabled = true;
   }
 
   return {
@@ -39,11 +48,13 @@ const mapDispatchToProps = dispatch => {
     },
 
     onEnterName(event) {
-      dispatch(updateUserSaveName(event.target.value));
+      const name = event.target.value.trim();
+      dispatch(updateUserSaveName(name));
     },
 
     onEnterEmail(event) {
-      dispatch(updateUserSaveEmail(event.target.value));
+      const email = event.target.value.trim();
+      dispatch(updateUserSaveEmail(email));
     },
 
     onEnterNewPassword(event) {
