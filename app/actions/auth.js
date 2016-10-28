@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import fetch from 'isomorphic-fetch';
 import { apiIdentifyGuest, apiTrackEvent } from './analytics';
 import { viewLandingPage, viewTripsPage } from './navigation'
@@ -21,9 +22,12 @@ export const SIGNUP_SAVE_EMAIL = 'SIGNUP_SAVE_EMAIL';
 export const SIGNUP_SAVE_PASSWORD = 'SIGNUP_SAVE_PASSWORD';
 export const SET_REDIRECT = 'SET_REDIRECT';
 export const CLEAR_REDIRECT = 'CLEAR_REDIRECT';
+export const UPDATE_USER_SAVE_CONFIRM_PWD = 'UPDATE_USER_SAVE_CONFIRM_PWD';
 export const UPDATE_USER_SAVE_EMAIL = 'UPDATE_USER_SAVE_EMAIL';
 export const UPDATE_USER_SAVE_NAME = 'UPDATE_USER_SAVE_NAME';
 export const UPDATE_USER_SAVE_PASSWORD = 'UPDATE_USER_SAVE_PASSWORD';
+export const UPDATE_USER_CLEAR_CONFIRM_PWD = 'UPDATE_USER_CLEAR_CONFIRM_PWD';
+export const UPDATE_USER_CLEAR_PASSWORD = 'UPDATE_USER_CLEAR_PASSWORD';
 export const API_LOGIN_REQUEST = 'API_LOGIN_REQUEST';
 export const API_LOGIN_SUCCESS = 'API_LOGIN_SUCCESS';
 export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
@@ -90,6 +94,13 @@ export function clearRedirect() {
   };
 }
 
+export function updateUserSaveConfirmPwd(confirmPwd) {
+  return {
+    type: UPDATE_USER_SAVE_CONFIRM_PWD,
+    confirmPwd
+  };
+}
+
 export function updateUserSaveEmail(email) {
   return {
     type: UPDATE_USER_SAVE_EMAIL,
@@ -108,6 +119,18 @@ export function updateUserSavePassword(password) {
   return {
     type: UPDATE_USER_SAVE_PASSWORD,
     password
+  };
+}
+
+export function updateUserClearConfirmPwd() {
+  return {
+    type: UPDATE_USER_CLEAR_CONFIRM_PWD
+  };
+}
+
+export function updateUserClearPassword() {
+  return {
+    type: UPDATE_USER_CLEAR_PASSWORD
   };
 }
 
@@ -257,11 +280,11 @@ export function apiUpdateUser() {
     dispatch(apiUpdateUserRequest());
 
     const { authState } = getState();
-    const { newUserFields, user: { _id } } = authState;
+    const { newUserFields: fields, user: { _id } } = authState;
     const updateUserAPI = journeyAPI.user.update(_id);
     let opts = {...fetchOptsTemplate(authState)};
     opts.method = updateUserAPI.method;
-    opts.body = JSON.stringify(newUserFields);
+    opts.body = JSON.stringify(_.pick(fields, ['name', 'email', 'password']));
 
     return fetch(updateUserAPI.route, opts)
       .then(handleErrors)

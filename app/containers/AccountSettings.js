@@ -1,9 +1,13 @@
 'use strict';
 
+import _ from 'underscore';
 import { connect } from 'react-redux';
 import {
   apiUpdateUser,
   clearAuthState,
+  updateUserClearConfirmPwd,
+  updateUserClearPassword,
+  updateUserSaveConfirmPwd,
   updateUserSaveEmail,
   updateUserSaveName,
   updateUserSavePassword
@@ -18,10 +22,11 @@ const mapStateToProps = state => {
     user: { email, name }
   } = state.authState;
 
-  let isSubmitDisabled = false;;
-  if (Object.keys(newUserFields).length > 0) {
-    Object.keys(newUserFields).forEach(key => {
-      const value = newUserFields[key];
+  let isSubmitDisabled = false;
+  const fieldsToValidate = _.pick(newUserFields, ['name', 'email', 'password']);
+  if (Object.keys(fieldsToValidate).length > 0) {
+    Object.keys(fieldsToValidate).forEach(key => {
+      const value = fieldsToValidate[key];
 
       // Don't allow submission if there are any empty fields
       if (!value && typeof value !== 'undefined') {
@@ -32,12 +37,19 @@ const mapStateToProps = state => {
     isSubmitDisabled = true;
   }
 
+  // Password is ony invalid if the boolean is defined and value is false
+  const match = newUserFields.passwordsMatch;
+  const isPwdInvalid = typeof match !== 'undefined' && !match;
+
   return {
-    isSubmitDisabled: isFetching || isSubmitDisabled,
     email,
     error,
     isFetching,
-    name
+    isSubmitDisabled: isFetching || isPwdInvalid || isSubmitDisabled,
+    name,
+    newConfirmPwd: newUserFields.confirmPwd,
+    newPassword: newUserFields.password,
+    passwordsMatch: match
   };
 };
 
@@ -45,6 +57,16 @@ const mapDispatchToProps = dispatch => {
   return {
     onClearAuthState() {
       dispatch(clearAuthState());
+    },
+
+    onEnterConfirmPassword(event) {
+      const confirmPassword = event.target.value;
+
+      if (confirmPassword) {
+        dispatch(updateUserSaveConfirmPwd(confirmPassword));
+      } else {
+        dispatch(updateUserClearConfirmPwd());
+      }
     },
 
     onEnterName(event) {
@@ -58,7 +80,13 @@ const mapDispatchToProps = dispatch => {
     },
 
     onEnterNewPassword(event) {
-      dispatch(updateUserSavePassword(event.target.value));
+      const password = event.target.value;
+
+      if (password) {
+        dispatch(updateUserSavePassword(password));
+      } else {
+        dispatch(updateUserClearPassword());
+      }
     },
 
     onSaveChanges() {

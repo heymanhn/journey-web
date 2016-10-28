@@ -8,9 +8,12 @@ import {
   SIGNUP_SAVE_NAME,
   SIGNUP_SAVE_EMAIL,
   SIGNUP_SAVE_PASSWORD,
+  UPDATE_USER_SAVE_CONFIRM_PWD,
   UPDATE_USER_SAVE_EMAIL,
   UPDATE_USER_SAVE_NAME,
   UPDATE_USER_SAVE_PASSWORD,
+  UPDATE_USER_CLEAR_CONFIRM_PWD,
+  UPDATE_USER_CLEAR_PASSWORD,
   API_LOGIN_REQUEST,
   API_LOGIN_SUCCESS,
   API_LOGIN_FAILURE,
@@ -66,6 +69,17 @@ export default function authState(state = initialAuthState, action) {
           { password: action.password }
         )
       };
+    case UPDATE_USER_SAVE_CONFIRM_PWD:
+      return {
+        ..._.omit(state, 'error'),
+        newUserFields: _.extend(
+          state.newUserFields,
+          {
+            confirmPwd: action.confirmPwd,
+            passwordsMatch: state.newUserFields.password === action.confirmPwd
+          }
+        )
+      };
     case UPDATE_USER_SAVE_EMAIL:
       return {
         ..._.omit(state, 'error'),
@@ -81,8 +95,27 @@ export default function authState(state = initialAuthState, action) {
         ..._.omit(state, 'error'),
         newUserFields: _.extend(
           state.newUserFields,
-          { password: action.password }
+          {
+            password: action.password,
+            passwordsMatch: state.newUserFields.confirmPwd === action.password
+          }
         )
+      };
+    case UPDATE_USER_CLEAR_CONFIRM_PWD:
+      return {
+        ..._.omit(state, 'error'),
+        newUserFields: {
+          ..._.omit(state.newUserFields, 'confirmPwd'),
+          passwordsMatch: state.newUserFields.password ? false : undefined
+        }
+      };
+    case UPDATE_USER_CLEAR_PASSWORD:
+      return {
+        ..._.omit(state, 'error'),
+        newUserFields: {
+          ..._.omit(state.newUserFields, 'password'),
+          passwordsMatch: state.newUserFields.confirmPwd ? false : undefined
+        }
       };
     case API_LOGIN_REQUEST:
     case API_SIGNUP_REQUEST:

@@ -22,6 +22,9 @@ class AccountSettingsPage extends Component {
       isFetching,
       isSubmitDisabled,
       name,
+      newConfirmPwd,
+      newPassword,
+      onEnterConfirmPassword,
       onEnterEmail,
       onEnterName,
       onEnterNewPassword,
@@ -61,9 +64,10 @@ class AccountSettingsPage extends Component {
                 <TextInput
                   onChange={onEnterNewPassword}
                   placeholder="New Password"
-                  style={styles.textField}
+                  style={this.loadPasswordFieldStyle()}
                   tabIndex={3}
                   type="password"
+                  value={newPassword || ""}
                 />
               </div>
 
@@ -82,10 +86,12 @@ class AccountSettingsPage extends Component {
               <div style={styles.setting}>
                 <span style={styles.settingLabel}>Confirm Password</span>
                 <TextInput
+                  onChange={onEnterConfirmPassword}
                   placeholder="Confirm Password"
-                  style={styles.textField}
+                  style={this.loadPasswordFieldStyle()}
                   tabIndex={4}
                   type="password"
+                  value={newConfirmPwd || ""}
                 />
               </div>
             </div>
@@ -104,6 +110,22 @@ class AccountSettingsPage extends Component {
       </div>
     );
   }
+
+  loadPasswordFieldStyle() {
+    const { newConfirmPwd, newPassword, passwordsMatch } = this.props;
+    const style = styles.textField;
+
+    // Color code password input fields if either field is set
+    if (newPassword && newConfirmPwd) {
+      if (passwordsMatch) {
+        return { ...style, ...styles.textFieldGreen };
+      } else if (typeof passwordsMatch !== 'undefined') {
+        return { ...style, ...styles.textFieldRed };
+      }
+    }
+
+    return style;
+  }
 }
 
 AccountSettingsPage.propTypes = {
@@ -112,11 +134,15 @@ AccountSettingsPage.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   isSubmitDisabled: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
+  newConfirmPwd: PropTypes.string,
+  newPassword: PropTypes.string,
   onClearAuthState: PropTypes.func.isRequired,
+  onEnterConfirmPassword: PropTypes.func.isRequired,
   onEnterEmail: PropTypes.func.isRequired,
   onEnterName: PropTypes.func.isRequired,
   onEnterNewPassword: PropTypes.func.isRequired,
-  onSaveChanges: PropTypes.func.isRequired
+  onSaveChanges: PropTypes.func.isRequired,
+  passwordsMatch: PropTypes.bool
 };
 
 const styles = {
@@ -188,6 +214,12 @@ const styles = {
     height: 40,
     margin: "10px 0px 15px",
     width: 280
+  },
+  textFieldGreen: {
+    backgroundColor: "#d4ffbe"
+  },
+  textFieldRed: {
+    backgroundColor: "#ffcfcf"
   }
 }
 export default AccountSettingsPage;
