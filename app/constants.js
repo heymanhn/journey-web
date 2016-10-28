@@ -144,7 +144,8 @@ export const colors = {
  * Animation durations
  */
 export const transitions = {
-  landingPageFrame: 200
+  landingPageFrame: 200,
+  submitButtonSuccess: 2000
 };
 
 /*

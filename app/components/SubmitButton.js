@@ -1,13 +1,27 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import Spinner from './Spinner';
-import { colors } from 'app/constants';
+import { clearSuccessState } from 'app/actions/submitButton';
+import { colors, transitions } from 'app/constants';
 
 class SubmitButton extends Component {
+  componentWillReceiveProps(nextProps) {
+    const { onClearSuccessState, success } = nextProps;
+    success && onClearSuccessState();
+  }
+
   render() {
-    const { disabled, isFetching, onSubmitPress, tabIndex, text } = this.props;
+    const {
+      disabled,
+      isFetching,
+      onSubmitPress,
+      success,
+      tabIndex,
+      text
+    } = this.props;
 
     const loadingSpinner = (
       <Spinner
@@ -23,24 +37,34 @@ class SubmitButton extends Component {
         style={this.loadStyles()}
         tabIndex={tabIndex}
       >
-        {isFetching ? loadingSpinner : text}
+        {isFetching ? loadingSpinner : (success ? 'Saved!' : text) }
       </Button>
     );
   }
 
   loadStyles() {
-    const { style: newStyle } = this.props;
-    const { submitButton: baseStyle } = styles;
+    const { success, style: newStyle } = this.props;
+    let { submitButton: baseStyle } = styles;
 
-    return newStyle ? { ...baseStyle, ...newStyle } : baseStyle;
+    if (newStyle) {
+      baseStyle = { ...baseStyle, ...newStyle };
+    }
+
+    if (success) {
+      baseStyle.backgroundColor = "#28a918";
+    }
+
+    return baseStyle;
   }
 }
 
 SubmitButton.propTypes = {
   disabled: PropTypes.bool,
   isFetching: PropTypes.bool.isRequired,
+  onClearSuccessState: PropTypes.func.isRequired,
   onSubmitPress: PropTypes.func.isRequired,
   style: PropTypes.object,
+  success: PropTypes.bool,
   tabIndex: PropTypes.number,
   text: PropTypes.string.isRequired
 };
@@ -67,4 +91,20 @@ const styles = {
   }
 };
 
-export default SubmitButton;
+const mapStateToProps = state => ({
+  success: state.componentsState.submitButtonState.success
+});
+
+const mapDispatchToProps = dispatch => ({
+  onClearSuccessState() {
+    setTimeout(
+      () => dispatch(clearSuccessState()),
+      transitions.submitButtonSuccess
+    );
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SubmitButton);
