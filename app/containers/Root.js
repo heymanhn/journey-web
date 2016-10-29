@@ -1,5 +1,6 @@
 'use strict';
 
+import jwtDecode from 'jwt-decode';
 import localForage from 'localforage';
 import React, { Component, PropTypes } from 'react';
 import { DragDropContext } from 'react-dnd';
@@ -9,6 +10,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
+import { logout } from 'app/actions/auth';
 import { apiIdentifyGuest } from 'app/actions/analytics';
 import { isMobile } from 'app/constants';
 import getRoutes from 'app/routes';
@@ -43,6 +45,18 @@ class Root extends Component {
             this.setState({ rehydrated: true });
           });
       } else {
+
+        if (token) {
+          const decodedToken = jwtDecode(token);
+          const currentTime = Math.round(new Date().getTime()/1000);
+
+          // Log out if the JWT has expired
+          if (decodedToken.exp <= currentTime) {
+            store.dispatch(logout());
+            store.dispatch(apiIdentifyGuest());
+          }
+        }
+
         this.setState({ rehydrated: true });
       }
     });
