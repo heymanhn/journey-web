@@ -5,7 +5,7 @@ import MobileDetect from 'mobile-detect';
 /*
  * Network request constants
  */
-const journeyAPIHost = API_SERVER || 'http://localhost:3000/v1';
+const journeyAPIHost = API_SERVER || 'https://localhost:3000/v1';
 
 export const journeyAPI = {
   analytics: {
