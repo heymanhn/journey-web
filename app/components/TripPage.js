@@ -36,16 +36,17 @@ class TripPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { error, onClearTripError } = nextProps;
+    const { error, onClearTripError, params, trip } = nextProps;
 
     if (error) {
-      setTimeout(onClearTripError, 5000);
+      const tripLoaded = trip && params.tripId === trip._id;
+      tripLoaded && setTimeout(onClearTripError, 5000);
     }
   }
 
   render() {
     const { error, params, trip } = this.props;
-    const loadTrip = trip && params.tripId === trip._id;
+    const tripLoaded = trip && params.tripId === trip._id;
 
     return (
       <div>
@@ -58,31 +59,33 @@ class TripPage extends Component {
             redirect={viewTripPage.bind(null, params.tripId)}
             style={styles.navigationBar}
           />
-          {loadTrip ? (
-            <div style={styles.mainContainer}>
-              <ReactCSSTransitionGroup
-                transitionName="error"
-                transitionAppear={true}
-                transitionAppearTimeout={transitions.landingPageFrame}
-                transitionEnterTimeout={transitions.tripPageError.enter}
-                transitionLeaveTimeout={transitions.tripPageError.leave}
-              >
-                {error && (
-                  <ErrorMessage error={error} style={styles.errorMessage} />
-                )}
-              </ReactCSSTransitionGroup>
-              <TripDetails />
-              <TripIdeas />
-              <TripSettings action="update" />
-              <TripIdeaSettings />
-            </div>
-          ) : (
-            <div style={styles.loader}>
-              <LoadingAnimation element="Trip" />
-            </div>
-          )}
+          <div style={styles.mainContainer}>
+            <ReactCSSTransitionGroup
+              transitionName="error"
+              transitionAppear={true}
+              transitionAppearTimeout={transitions.landingPageFrame}
+              transitionEnterTimeout={transitions.tripPageError.enter}
+              transitionLeaveTimeout={transitions.tripPageError.leave}
+            >
+              {error && (
+                <ErrorMessage error={error} style={styles.errorMessage} />
+              )}
+            </ReactCSSTransitionGroup>
+            {tripLoaded ? (
+              <div>
+                <TripDetails />
+                <TripIdeas />
+                <TripSettings action="update" />
+                <TripIdeaSettings />
+              </div>
+            ) : (!error && (
+              <div style={styles.loader}>
+                <LoadingAnimation element="Trip" />
+              </div>
+            ))}
+          </div>
         </div>
-        {loadTrip && <TripMap />}
+        {tripLoaded && <TripMap />}
       </div>
     );
   }
