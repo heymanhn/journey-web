@@ -71,8 +71,7 @@ const styles = {
     margin: "10px 0px"
   },
   titleSection: {
-    marginTop: dimensions.navigationBar.height,
-    padding: "0 " + dimensions.sidePadding + " 0"
+    padding: "15 " + dimensions.sidePadding + " 0"
   }
 };
 

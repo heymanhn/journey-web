@@ -146,7 +146,7 @@ const styles = {
     marginLeft: 15
   },
   loginHint: {
-    fontSize: 18,
+    fontSize: 16,
     padding: "0px 30px 30px"
   },
   logo: {
@@ -170,8 +170,7 @@ const styles = {
     width: 450
   },
   signupButton: {
-    height: 45,
-    width: 170
+    width: 160
   },
   tagline: {
     fontFamily: "'Raleway', sans-serif",

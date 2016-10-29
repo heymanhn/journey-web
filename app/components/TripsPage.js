@@ -2,28 +2,22 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import Footer from './Footer';
-import Navigation from 'app/containers/Navigation';
+import LoadingAnimation from './LoadingAnimation';
 import TripsList from './TripsList';
 import TripDeleteModal from './TripDeleteModal';
 import TripSettings from 'app/containers/TripSettings';
-import { viewLandingPage } from 'app/actions/navigation';
 import { colors, dimensions } from 'app/constants';
 
 class TripsPage extends Component {
   componentWillMount() {
-    const { onGetTrips, trips, user } = this.props;
-    if (user) {
+    const { onGetTrips, trips } = this.props;
+    if (!trips) {
       onGetTrips();
-    } else {
-      viewLandingPage();
     }
   }
 
   componentDidMount() {
-    if (this.props.user) {
-      this.props.trackPageView();
-    }
+    this.props.trackPageView();
   }
 
   render() {
@@ -34,12 +28,17 @@ class TripsPage extends Component {
       onDeleteTrip,
       onHide,
       showModal,
-      trips,
-      user
+      trips
     } = this.props;
 
-    if (!user || !trips) {
-      return null;
+    if (!trips) {
+      return (
+        <div style={styles.mainContainer}>
+          <div style={styles.mainSection}>
+            <LoadingAnimation element="Trips" />
+          </div>
+        </div>
+      );
     }
 
     const createTripPlaceholder = (
@@ -58,7 +57,6 @@ class TripsPage extends Component {
 
     return (
       <div>
-        <Navigation fullWidth />
         <div style={styles.mainContainer}>
           <div style={styles.mainSection}>
             <div style={styles.headerSection}>
@@ -86,7 +84,6 @@ class TripsPage extends Component {
             />
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -113,8 +110,7 @@ TripsPage.propTypes = {
   showModal: PropTypes.bool.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trips: PropTypes.array,
-  tripToDelete: PropTypes.string,
-  user: PropTypes.object
+  tripToDelete: PropTypes.string
 };
 
 const styles = {
@@ -130,7 +126,6 @@ const styles = {
     margin: "10px 0px"
   },
   mainContainer: {
-    backgroundColor: colors.background,
     marginTop: 60,
     paddingBottom: 30,
     width: "100%"
@@ -138,7 +133,7 @@ const styles = {
   mainSection: {
     margin: "0px auto",
     minHeight: 600,
-    maxWidth: dimensions.tripsPage.width,
+    maxWidth: dimensions.centeredPage.width,
     padding: 30,
     paddingBottom: 0
   },

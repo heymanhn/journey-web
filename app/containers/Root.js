@@ -11,7 +11,7 @@ import { persistStore } from 'redux-persist';
 
 import { apiIdentifyGuest } from 'app/actions/analytics';
 import { isMobile } from 'app/constants';
-import routes from 'app/routes';
+import getRoutes from 'app/routes';
 
 class Root extends Component {
   constructor() {
@@ -57,7 +57,9 @@ class Root extends Component {
     return (
       <Provider store={store}>
         <div>
-          <Router history={history} routes={routes} />
+          <Router history={history}>
+            {getRoutes(store)}
+          </Router>
         </div>
       </Provider>
     );

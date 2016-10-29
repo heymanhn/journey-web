@@ -68,9 +68,9 @@ class NavigationBar extends Component {
   }
 
   loadContainerStyle() {
-    const { fullWidth } = this.props;
+    const { customWidth } = this.props;
     const { container: containerStyle } = styles;
-    return fullWidth ? { ...containerStyle, width: "100%" } : containerStyle;
+    return customWidth ? containerStyle : { ...containerStyle, width: "100%" };
   }
 
   loadNavStyle() {
@@ -81,7 +81,7 @@ class NavigationBar extends Component {
 }
 
 NavigationBar.propTypes = {
-  fullWidth: PropTypes.bool,
+  customWidth: PropTypes.bool,
   gravatarFocused: PropTypes.bool.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
   onSetGravatarActive: PropTypes.func.isRequired,
@@ -100,7 +100,7 @@ const styles = {
     display: "flex",
     height: dimensions.navigationBar.height,
     justifyContent: "space-between",
-    width: dimensions.tripsPage.width,
+    width: dimensions.centeredPage.width,
     padding: "0 " + dimensions.sidePadding + " 0"
   },
   container: {

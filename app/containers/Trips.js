@@ -21,8 +21,7 @@ const mapStateToProps = (state) => {
     isFetching,
     showModal,
     trips,
-    tripToDelete,
-    user: state.authState.user
+    tripToDelete
   };
 };
 

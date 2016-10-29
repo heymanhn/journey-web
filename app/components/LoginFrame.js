@@ -131,8 +131,7 @@ const styles = {
     width: "100%"
   },
   loginButton: {
-    height: 45,
-    width: 100
+    width: 90
   },
   logo: {
     cursor: "default",
@@ -161,7 +160,7 @@ const styles = {
     marginLeft: 15
   },
   signupHint: {
-    fontSize: 18,
+    fontSize: 16,
     padding: "0px 30px 30px"
   },
   tagline: {

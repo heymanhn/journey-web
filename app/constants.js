@@ -8,14 +8,24 @@ import MobileDetect from 'mobile-detect';
 const journeyAPIHost = API_SERVER || 'http://localhost:3000/v1';
 
 export const journeyAPI = {
+  analytics: {
+    identify: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/identify'
+    }),
+    track: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/track'
+    }),
+    page: () => ({
+      method: 'POST',
+      route: journeyAPIHost + '/analytics/page'
+    })
+  },
+
   login: () => ({
     method: 'POST',
     route: journeyAPIHost + '/auth/login'
-  }),
-
-  signup: () => ({
-    method: 'POST',
-    route: journeyAPIHost + '/users'
   }),
 
   trips: {
@@ -58,18 +68,14 @@ export const journeyAPI = {
     }
   },
 
-  analytics: {
-    identify: () => ({
+  user: {
+    signup: () => ({
       method: 'POST',
-      route: journeyAPIHost + '/analytics/identify'
+      route: journeyAPIHost + '/users'
     }),
-    track: () => ({
-      method: 'POST',
-      route: journeyAPIHost + '/analytics/track'
-    }),
-    page: () => ({
-      method: 'POST',
-      route: journeyAPIHost + '/analytics/page'
+    update: (userId) => ({
+      method: 'PUT',
+      route: journeyAPIHost + '/users/' + userId
     })
   }
 };
@@ -106,6 +112,9 @@ export function handleErrors(response) {
  * Web app layout constants
  */
 export const dimensions = {
+  centeredPage: {
+    width: 700
+  },
   leftColumn: {
     width: 400
   },
@@ -117,8 +126,7 @@ export const dimensions = {
     listItem: {
       height: 250,
       width: 300
-    },
-    width: 700
+    }
   }
 };
 
@@ -126,7 +134,7 @@ export const colors = {
   background: "rgb(249, 249, 249)",
   primary: "rgb(233, 30, 99)",
   primaryDark: "rgb(143, 23, 64)",
-  primaryError: "rgba(233, 30, 99, 0.2)",
+  primaryError: "rgb(251, 210, 224)",
   primaryText: "rgb(51, 51, 51)",
   secondary: "rgb(26, 118, 200)"
 };
@@ -136,7 +144,12 @@ export const colors = {
  * Animation durations
  */
 export const transitions = {
-  landingPageFrame: 200
+  landingPageFrame: 200,
+  submitButtonSuccess: 2000,
+  tripPageError: {
+    enter: 500,
+    leave: 700
+  }
 };
 
 /*
@@ -153,7 +166,8 @@ export function generateGUID() {
 export const initialAuthState = {
   isFetching: false,
   loginFields: {},
-  signupFields: {}
+  signupFields: {},
+  newUserFields: {}
 };
 
 export const initialLPState = {

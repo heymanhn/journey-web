@@ -1,15 +1,19 @@
 'use strict';
 
+require('../stylesheets/trip-page.css');
+
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import LoadingAnimation from './LoadingAnimation';
 import { viewTripPage } from 'app/actions/navigation';
+import ErrorMessage from './ErrorMessage';
 import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
 import TripIdeaSettings from 'app/containers/TripIdeaSettings';
 import TripSettings from 'app/containers/TripSettings';
-import { dimensions } from 'app/constants';
+import { dimensions, transitions } from 'app/constants';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -18,6 +22,7 @@ class TripPage extends Component {
 
   componentWillMount() {
     const { onGetTrip, params, trip } = this.props;
+    document.body.style.backgroundColor = "white";
 
     // Fetch the trip from the server upon load if needed
     if (!trip || params.tripId !== trip._id) {
@@ -25,29 +30,23 @@ class TripPage extends Component {
     }
   }
 
-  render() {
-    const {
-      error,
-      params,
-      trip
-    } = this.props;
+  componentWillUnmount() {
+    this.props.onClearTripError();
+    document.body.style.backgroundColor = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { error, onClearTripError, params, trip } = nextProps;
 
     if (error) {
-      return (
-        <div>{error}</div>
-      );
+      const tripLoaded = trip && params.tripId === trip._id;
+      tripLoaded && setTimeout(onClearTripError, 5000);
     }
+  }
 
-    // Loading UI
-    if (!trip || params.tripId !== trip._id) {
-      return <LoadingAnimation element="Trip" />;
-    }
-
-    const tripPlan = trip.plan.map(day => {
-      return (
-        <p key={day._id}>Day</p>
-      );
-    });
+  render() {
+    const { error, params, trip } = this.props;
+    const tripLoaded = trip && params.tripId === trip._id;
 
     return (
       <div>
@@ -56,15 +55,37 @@ class TripPage extends Component {
           style={styles.leftColumn}
         >
           <Navigation
-            redirect={viewTripPage.bind(null, trip._id)}
+            customWidth
+            redirect={viewTripPage.bind(null, params.tripId)}
             style={styles.navigationBar}
           />
-          <TripDetails />
-          <TripIdeas />
+          <div style={styles.mainContainer}>
+            <ReactCSSTransitionGroup
+              transitionName="error"
+              transitionAppear={true}
+              transitionAppearTimeout={transitions.landingPageFrame}
+              transitionEnterTimeout={transitions.tripPageError.enter}
+              transitionLeaveTimeout={transitions.tripPageError.leave}
+            >
+              {error && (
+                <ErrorMessage error={error} style={styles.errorMessage} />
+              )}
+            </ReactCSSTransitionGroup>
+            {tripLoaded ? (
+              <div>
+                <TripDetails />
+                <TripIdeas />
+                <TripSettings action="update" />
+                <TripIdeaSettings />
+              </div>
+            ) : (!error && (
+              <div style={styles.loader}>
+                <LoadingAnimation element="Trip" />
+              </div>
+            ))}
+          </div>
         </div>
-        <TripMap />
-        <TripSettings action="update" />
-        <TripIdeaSettings />
+        {tripLoaded && <TripMap />}
       </div>
     );
   }
@@ -72,12 +93,18 @@ class TripPage extends Component {
 
 TripPage.propTypes = {
   error: PropTypes.string,
+  onClearTripError: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };
 
 const styles = {
+  errorMessage: {
+    position: "fixed",
+    padding: "8px " + dimensions.sidePadding + "px",
+    width: dimensions.leftColumn.width
+  },
   leftColumn: {
     backgroundColor: "white",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
@@ -87,6 +114,12 @@ const styles = {
     position: "absolute",
     width: dimensions.leftColumn.width,
     zIndex: 2
+  },
+  loader: {
+    marginTop: 100
+  },
+  mainContainer: {
+    marginTop: dimensions.navigationBar.height
   },
   navigationBar: {
     width: dimensions.leftColumn.width
