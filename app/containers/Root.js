@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
-import { logout } from 'app/actions/auth';
+import { processExpiryLogout } from 'app/actions/auth';
 import { apiIdentifyGuest } from 'app/actions/analytics';
 import { isMobile } from 'app/constants';
 import getRoutes from 'app/routes';
@@ -52,8 +52,7 @@ class Root extends Component {
 
           // Log out if the JWT has expired
           if (decodedToken.exp <= currentTime) {
-            store.dispatch(logout());
-            store.dispatch(apiIdentifyGuest());
+            store.dispatch(processExpiryLogout());
           }
         }
 

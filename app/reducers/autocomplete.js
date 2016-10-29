@@ -2,6 +2,7 @@
 
 import _ from 'underscore';
 import { combineReducers } from 'redux';
+import { LOGOUT } from 'app/actions/auth';
 import {
   SAVE_INPUT,
   CLEAR_AUTOCOMPLETE,
@@ -92,6 +93,7 @@ function createAutocompleteReducer(id) {
           results: []
         };
       case RESET_AUTOCOMPLETE:
+      case LOGOUT:
         return initialACState;
     }
 
