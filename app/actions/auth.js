@@ -34,6 +34,9 @@ export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
 export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
+export const API_GET_USER_REQUEST = 'API_GET_USER_REQUEST';
+export const API_GET_USER_SUCCESS = 'API_GET_USER_SUCCESS';
+export const API_GET_USER_FAILURE = 'API_GET_USER_FAILURE';
 export const API_UPDATE_USER_REQUEST = 'API_UPDATE_USER_REQUEST';
 export const API_UPDATE_USER_SUCCESS = 'API_UPDATE_USER_SUCCESS';
 export const API_UPDATE_USER_FAILURE = 'API_UPDATE_USER_FAILURE';
@@ -176,6 +179,27 @@ export function apiSignupFailure(error) {
   };
 }
 
+export function apiGetUserRequest() {
+  return {
+    type: API_GET_USER_REQUEST
+  };
+}
+
+export function apiGetUserSuccess(json) {
+  return {
+    type: API_GET_USER_SUCCESS,
+    user: json.user
+  };
+}
+
+export function apiGetUserFailure(error) {
+  return {
+    type: API_GET_USER_FAILURE,
+    error
+  };
+}
+
+
 export function apiUpdateUserRequest() {
   return {
     type: API_UPDATE_USER_REQUEST
@@ -266,13 +290,31 @@ export function apiSignup() {
 }
 
 export function apiRedirect(redirect) {
-  return (dispatch) => {
+  return dispatch => {
     const redirectPromise = () => {
       dispatch(redirect()).then(() => dispatch(clearRedirect()));
     };
 
     return dispatch(setRedirect(redirectPromise));
   }
+}
+
+export function apiGetUser() {
+  return (dispatch, getState) => {
+    dispatch(apiGetUserRequest());
+
+    const { authState } = getState();
+    const { user: { _id } } = authState;
+    const getUserAPI = journeyAPI.user.get(_id);
+    let opts = {...fetchOptsTemplate(authState)};
+    opts.method = getUserAPI.method;
+
+    return fetch(getUserAPI.route, opts)
+      .then(handleErrors.bind(null, dispatch))
+      .then(response => response.json())
+      .then(json => dispatch(apiGetUserSuccess(json)))
+      .catch(error => error && dispatch(apiGetUserFailure(error.message)));
+  };
 }
 
 export function apiUpdateUser() {

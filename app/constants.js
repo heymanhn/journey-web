@@ -75,6 +75,10 @@ export const journeyAPI = {
       method: 'POST',
       route: journeyAPIHost + '/users'
     }),
+    get: (userId) => ({
+      method: 'GET',
+      route: journeyAPIHost + '/users/' + userId
+    }),
     update: (userId) => ({
       method: 'PUT',
       route: journeyAPIHost + '/users/' + userId

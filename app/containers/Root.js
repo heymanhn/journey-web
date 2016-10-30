@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { persistStore } from 'redux-persist';
 
-import { processExpiryLogout } from 'app/actions/auth';
+import { apiGetUser, processExpiryLogout } from 'app/actions/auth';
 import { apiIdentifyGuest } from 'app/actions/analytics';
 import { isMobile } from 'app/constants';
 import getRoutes from 'app/routes';
@@ -54,6 +54,9 @@ class Root extends Component {
           if (decodedToken.exp <= currentTime) {
             store.dispatch(processExpiryLogout());
           }
+
+          // Fetch any updates to the user object
+          store.dispatch(apiGetUser());
         }
 
         this.setState({ rehydrated: true });
