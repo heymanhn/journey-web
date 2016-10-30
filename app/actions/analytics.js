@@ -26,9 +26,11 @@ export function apiIdentifyGuest() {
     };
 
     return fetch(identifyUser.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(() => { console.log(`User identified: ${anonymousId}`); })
-      .catch(error => console.log(`Identify User error: ${error.message}`));
+      .catch(error => {
+        return error && console.log(`Identify User error: ${error.message}`);
+      });
   };
 }
 
@@ -42,9 +44,11 @@ export function apiTrackEvent(event, properties) {
     };
 
     return fetch(trackEvent.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(() => { console.log(`Event tracked: ${event}`); })
-      .catch(error => console.log(`Track event error: ${error.message}`));
+      .catch(error => {
+        return error && console.log(`Track event error: ${error.message}`);
+      });
   };
 }
 
@@ -58,9 +62,11 @@ export function apiPageEvent(name, properties, category) {
     };
 
     return fetch(pageEvent.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(() => { console.log(`Page tracked: ${name}`); })
-      .catch(error => console.log(`Page event error: ${error.message}`));
+      .catch(error => {
+        return error && console.log(`Page event error: ${error.message}`);
+      });
   };
 }
 

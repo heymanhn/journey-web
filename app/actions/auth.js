@@ -34,6 +34,9 @@ export const API_LOGIN_FAILURE = 'API_LOGIN_FAILURE';
 export const API_SIGNUP_REQUEST = 'API_SIGNUP_REQUEST';
 export const API_SIGNUP_SUCCESS = 'API_SIGNUP_SUCCESS';
 export const API_SIGNUP_FAILURE = 'API_SIGNUP_FAILURE';
+export const API_GET_USER_REQUEST = 'API_GET_USER_REQUEST';
+export const API_GET_USER_SUCCESS = 'API_GET_USER_SUCCESS';
+export const API_GET_USER_FAILURE = 'API_GET_USER_FAILURE';
 export const API_UPDATE_USER_REQUEST = 'API_UPDATE_USER_REQUEST';
 export const API_UPDATE_USER_SUCCESS = 'API_UPDATE_USER_SUCCESS';
 export const API_UPDATE_USER_FAILURE = 'API_UPDATE_USER_FAILURE';
@@ -176,6 +179,27 @@ export function apiSignupFailure(error) {
   };
 }
 
+export function apiGetUserRequest() {
+  return {
+    type: API_GET_USER_REQUEST
+  };
+}
+
+export function apiGetUserSuccess(json) {
+  return {
+    type: API_GET_USER_SUCCESS,
+    user: json.user
+  };
+}
+
+export function apiGetUserFailure(error) {
+  return {
+    type: API_GET_USER_FAILURE,
+    error
+  };
+}
+
+
 export function apiUpdateUserRequest() {
   return {
     type: API_UPDATE_USER_REQUEST
@@ -233,13 +257,13 @@ export function apiLogin() {
     opts.body = JSON.stringify({ email, password });
 
     return fetch(journeyAPI.login().route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiLoginSuccess(json));
         redirect && redirect();
       })
-      .catch(error => dispatch(apiLoginFailure(error.message)));
+      .catch(error => error && dispatch(apiLoginFailure(error.message)));
   };
 }
 
@@ -255,24 +279,42 @@ export function apiSignup() {
     opts.body = JSON.stringify({ email, name, password });
 
     return fetch(journeyAPI.user.signup().route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiSignupSuccess(json));
         redirect && redirect();
       })
-      .catch(error => dispatch(apiSignupFailure(error.message)));
+      .catch(error => error && dispatch(apiSignupFailure(error.message)));
   };
 }
 
 export function apiRedirect(redirect) {
-  return (dispatch) => {
+  return dispatch => {
     const redirectPromise = () => {
       dispatch(redirect()).then(() => dispatch(clearRedirect()));
     };
 
     return dispatch(setRedirect(redirectPromise));
   }
+}
+
+export function apiGetUser() {
+  return (dispatch, getState) => {
+    dispatch(apiGetUserRequest());
+
+    const { authState } = getState();
+    const { user: { _id } } = authState;
+    const getUserAPI = journeyAPI.user.get(_id);
+    let opts = {...fetchOptsTemplate(authState)};
+    opts.method = getUserAPI.method;
+
+    return fetch(getUserAPI.route, opts)
+      .then(handleErrors.bind(null, dispatch))
+      .then(response => response.json())
+      .then(json => dispatch(apiGetUserSuccess(json)))
+      .catch(error => error && dispatch(apiGetUserFailure(error.message)));
+  };
 }
 
 export function apiUpdateUser() {
@@ -287,18 +329,31 @@ export function apiUpdateUser() {
     opts.body = JSON.stringify(_.pick(fields, ['name', 'email', 'password']));
 
     return fetch(updateUserAPI.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => dispatch(apiUpdateUserSuccess(json)))
-      .catch(error => dispatch(apiUpdateUserFailure(error.message)));
+      .catch(error => error && dispatch(apiUpdateUserFailure(error.message)));
+  }
+}
+
+function apiLogout() {
+  return dispatch => {
+    dispatch(logout());
+    dispatch(apiIdentifyGuest());
+    viewLandingPage();
   }
 }
 
 export function processLogout() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(apiTrackEvent(analytics.events.LOG_OUT));
-    dispatch(logout());
-    viewLandingPage();
-    dispatch(apiIdentifyGuest());
+    dispatch(apiLogout());
   };
+}
+
+export function processExpiryLogout() {
+  return dispatch => {
+    dispatch(apiTrackEvent(analytics.events.JWT_EXPIRED));
+    dispatch(apiLogout());
+  }
 }

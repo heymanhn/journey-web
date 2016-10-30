@@ -461,10 +461,10 @@ export function apiGetTrips() {
     };
 
     return fetch(userTrips.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => dispatch(apiGetTripsSuccess(json)))
-      .catch(error => { dispatch(apiGetTripsFailure(error.message)); });
+      .catch(error => error && dispatch(apiGetTripsFailure(error.message)));
   };
 }
 
@@ -488,7 +488,7 @@ export function apiCreateTrip() {
     };
 
     return fetch(createTrip.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         const tripId = json.trip._id;
@@ -497,7 +497,7 @@ export function apiCreateTrip() {
         dispatch(hideModal(modalComponents.tripSettings));
         dispatch(apiGetTrips());
       })
-      .catch(error => { dispatch(apiCreateTripFailure(error.message)); });
+      .catch(error => error && dispatch(apiCreateTripFailure(error.message)));
   };
 }
 
@@ -512,12 +512,12 @@ export function apiGetTrip(tripId) {
     };
 
     return fetch(userTrip.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiGetTripSuccess(json));
       })
-      .catch(error => { dispatch(apiGetTripFailure(error.message)); });
+      .catch(error => error && dispatch(apiGetTripFailure(error.message)));
   };
 }
 
@@ -546,13 +546,13 @@ export function apiUpdateTrip(visibility) {
     };
 
     return fetch(updateTripAPI.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiUpdateTripSuccess(json));
         dispatch(hideModal(modalComponents.tripSettings));
       })
-      .catch(error => { dispatch(apiUpdateTripFailure(error.message)); });
+      .catch(error => error && dispatch(apiUpdateTripFailure(error.message)));
   };
 }
 
@@ -568,13 +568,13 @@ export function apiDeleteTrip() {
     };
 
     return fetch(deleteTripAPI.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiDeleteTripSuccess(json));
         dispatch(hideModal(modalComponents.deleteTrip))
       })
-      .catch(error => { dispatch(apiDeleteTripFailure(error.message)); });
+      .catch(error => error && dispatch(apiDeleteTripFailure(error.message)));
   };
 }
 
@@ -604,12 +604,12 @@ export function apiAddTripIdea() {
     };
 
     return fetch(addTripIdeaAPI.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiAddTripIdeaSuccess(json));
       })
-      .catch(error => { dispatch(apiAddTripIdeaFailure(error.message)); });
+      .catch(error => error && dispatch(apiAddTripIdeaFailure(error.message)));
   };
 }
 
@@ -636,13 +636,15 @@ export function apiUpdateTripIdea(index) {
     };
 
     return fetch(updateTripIdeaAPI.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiUpdateTripIdeaSuccess(json));
         showModal && dispatch(hideModal(modalComponents.tripIdeaSettings));
       })
-      .catch(error => { dispatch(apiUpdateTripIdeaFailure(error.message)); });
+      .catch(error => {
+        return error && dispatch(apiUpdateTripIdeaFailure(error.message));
+      });
   };
 }
 
@@ -659,12 +661,14 @@ export function apiRemoveTripIdea(ideaId) {
     };
 
     return fetch(removeTripIdeaAPI.route, opts)
-      .then(handleErrors)
+      .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
         dispatch(apiRemoveTripIdeaSuccess(json));
       })
-      .catch(error => { dispatch(apiRemoveTripIdeaFailure(error.message)); });
+      .catch(error => {
+        return error && dispatch(apiRemoveTripIdeaFailure(error.message));
+      });
   };
 }
 

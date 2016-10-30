@@ -1,6 +1,8 @@
 'use strict';
 
 import MobileDetect from 'mobile-detect';
+import { apiIdentifyGuest } from 'app/actions/analytics';
+import { processExpiryLogout } from 'app/actions/auth';
 
 /*
  * Network request constants
@@ -73,6 +75,10 @@ export const journeyAPI = {
       method: 'POST',
       route: journeyAPIHost + '/users'
     }),
+    get: (userId) => ({
+      method: 'GET',
+      route: journeyAPIHost + '/users/' + userId
+    }),
     update: (userId) => ({
       method: 'PUT',
       route: journeyAPIHost + '/users/' + userId
@@ -99,11 +105,21 @@ export function fetchOptsTemplate(authState) {
   return opts;
 }
 
-export function handleErrors(response) {
+export function handleErrors(dispatch, response) {
   if (response.ok) {
     return response;
   } else {
-    return response.json().then(json => Promise.reject(json));
+    return response
+      .json()
+      .then(json => {
+        // If JWT is no longer valid, log out
+        if (json.message === 'Invalid JWT Token') {
+          dispatch(processExpiryLogout());
+          return Promise.reject();
+        }
+
+        return Promise.reject(json);
+      });
   }
 }
 
@@ -321,6 +337,7 @@ export function calcMapWidth() {
  */
 export const analytics = {
   events: {
+    JWT_EXPIRED: 'Authentication Expired',
     LOG_OUT: 'Log Out'
   },
   pages: {

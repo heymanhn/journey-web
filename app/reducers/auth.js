@@ -20,6 +20,9 @@ import {
   API_SIGNUP_REQUEST,
   API_SIGNUP_SUCCESS,
   API_SIGNUP_FAILURE,
+  API_GET_USER_REQUEST,
+  API_GET_USER_SUCCESS,
+  API_GET_USER_FAILURE,
   API_UPDATE_USER_REQUEST,
   API_UPDATE_USER_SUCCESS,
   API_UPDATE_USER_FAILURE,
@@ -119,6 +122,7 @@ export default function authState(state = initialAuthState, action) {
       };
     case API_LOGIN_REQUEST:
     case API_SIGNUP_REQUEST:
+    case API_GET_USER_REQUEST:
     case API_UPDATE_USER_REQUEST:
       return {
         ..._.omit(state, 'error'),
@@ -126,6 +130,7 @@ export default function authState(state = initialAuthState, action) {
       };
     case API_LOGIN_SUCCESS:
     case API_SIGNUP_SUCCESS:
+    case API_GET_USER_SUCCESS:
     case API_UPDATE_USER_SUCCESS:
       return {
         ..._.omit(state, 'error'),
@@ -133,11 +138,12 @@ export default function authState(state = initialAuthState, action) {
         loginFields: {},
         newUserFields: {},
         signupFields: {},
-        token: action.token,
+        token: action.token || state.token,
         user: action.user
       };
     case API_LOGIN_FAILURE:
     case API_SIGNUP_FAILURE:
+    case API_GET_USER_FAILURE:
     case API_UPDATE_USER_FAILURE:
       return {
         ...state,
