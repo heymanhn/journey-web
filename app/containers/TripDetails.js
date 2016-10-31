@@ -9,8 +9,11 @@ import { modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { isFetchingVisibility, trip } = state.tripState;
+  const { user } = state.authState;
+
   return {
     isFetchingVisibility,
+    isTripOwner: user && user._id === trip.creator,
     trip
   };
 };

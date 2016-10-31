@@ -1,13 +1,15 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import TripSetting from './TripSetting';
-import { dimensions } from 'app/constants';
+import { colors, dimensions } from 'app/constants';
 
 class TripDetailsView extends Component {
   render() {
     const {
       isFetchingVisibility,
+      isTripOwner,
       onShowDestination,
       onShowTripSettingsModal,
       onToggleTripVisibility,
@@ -28,6 +30,34 @@ class TripDetailsView extends Component {
         break;
     }
 
+    const visibilitySetting = (
+      <TripSetting
+        isDisabled={!isTripOwner}
+        last={!isTripOwner}
+        isLoading={isFetchingVisibility}
+        onClick={onToggleTripVisibility.bind(null, vis)}
+        setting="visibility"
+        title={visibilityTitle}
+      />
+    );
+
+    const unauthorizedTooltip = (
+      <Tooltip id="unauthorized-tooltip" style={styles.tooltip}>
+        Only trip owners can change this setting.
+      </Tooltip>
+    );
+
+    const visibilitySettingWithTooltip = (
+      <OverlayTrigger
+        overlay={unauthorizedTooltip}
+        placement="bottom"
+        rootClose
+        trigger="click"
+      >
+        <div>{visibilitySetting}</div>
+      </OverlayTrigger>
+    );
+
     return (
       <div>
         <h1 style={styles.h1}>{title}</h1>
@@ -37,18 +67,17 @@ class TripDetailsView extends Component {
             setting="destination"
             title={destination.name}
           />
-          <TripSetting
-            isLoading={isFetchingVisibility}
-            onClick={onToggleTripVisibility.bind(null, vis)}
-            setting="visibility"
-            title={visibilityTitle}
-          />
-          <TripSetting
-            last
-            onClick={onShowTripSettingsModal}
-            setting="edit"
-            title="Edit"
-          />
+
+          {isTripOwner ? visibilitySetting : visibilitySettingWithTooltip}
+
+          {isTripOwner && (
+            <TripSetting
+              last={isTripOwner}
+              onClick={onShowTripSettingsModal}
+              setting="edit"
+              title="Edit"
+            />
+          )}
         </div>
       </div>
     );
@@ -57,6 +86,7 @@ class TripDetailsView extends Component {
 
 TripDetailsView.propTypes = {
   isFetchingVisibility: PropTypes.bool.isRequired,
+  isTripOwner: PropTypes.bool,
   onSetTripVisibility: PropTypes.func.isRequired,
   onShowDestination: PropTypes.func.isRequired,
   onShowTripSettingsModal: PropTypes.func.isRequired,
@@ -78,6 +108,10 @@ const styles = {
     display: "flex",
     flexWrap: "wrap",
     margin: "10px 20px"
+  },
+  tooltip: {
+    marginTop: -7,
+    width: 150
   }
 };
 

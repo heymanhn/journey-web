@@ -7,7 +7,7 @@ import { colors } from 'app/constants';
 
 class TripSetting extends Component {
   render() {
-    const { isLoading, onClick, title } = this.props;
+    const { isDisabled, isLoading, onClick, title } = this.props;
     const imageURL = this.pickImage();
 
     let buttonImage;
@@ -20,7 +20,7 @@ class TripSetting extends Component {
     return (
       <Button
         disabled={isLoading}
-        onClick={onClick}
+        onClick={!isDisabled && onClick}
         style={this.loadContainerStyle()}
         title={this.loadTitle.bind(this)()}
       >
@@ -56,7 +56,7 @@ class TripSetting extends Component {
   }
 
   loadContainerStyle() {
-    const { isLoading, last, setting } = this.props;
+    const { isDisabled, isLoading, last, setting } = this.props;
     let { container: style, darkContainer: dark } = styles;
 
     if (last) {
@@ -68,7 +68,7 @@ class TripSetting extends Component {
     if (setting === 'edit') {
       return { ...style, ...dark };
     } else {
-      if (isLoading) {
+      if (isLoading || isDisabled) {
         return { ...style, cursor: "default" };
       } else {
         return style;
@@ -92,6 +92,7 @@ class TripSetting extends Component {
 }
 
 TripSetting.propTypes = {
+  isDisabled: PropTypes.bool,
   isLoading: PropTypes.bool,
   last: PropTypes.bool,
   onClick: PropTypes.func,
