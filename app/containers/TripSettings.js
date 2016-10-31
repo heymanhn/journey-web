@@ -79,6 +79,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(saveNewTripVisibility('public'));
     },
 
+    onSetViewOnly() {
+      dispatch(saveNewTripVisibility('viewOnly'));
+    },
+
     onSaveTrip() {
       const { action } = ownProps;
       switch (action) {

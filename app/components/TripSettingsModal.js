@@ -21,6 +21,7 @@ class TripSettingsModal extends Component {
       onSaveTrip,
       onSetPrivate,
       onSetPublic,
+      onSetViewOnly,
       showModal,
       title,
       visibility
@@ -65,6 +66,7 @@ class TripSettingsModal extends Component {
             <Button
               active={visibility === 'public'}
               onClick={onSetPublic}
+              style={styles.visibilityButton}
             >
               <img
                 src="../assets/setting-public-icon.png"
@@ -73,8 +75,20 @@ class TripSettingsModal extends Component {
               <span>Public</span>
             </Button>
             <Button
+              active={visibility === 'viewOnly'}
+              onClick={onSetViewOnly}
+              style={styles.visibilityButton}
+            >
+              <img
+                src="../assets/setting-viewonly-icon.png"
+                style={styles.visibilityIcon}
+              />
+              <span>View Only</span>
+            </Button>
+            <Button
               active={visibility === 'private'}
               onClick={onSetPrivate}
+              style={styles.visibilityButton}
             >
               <img
                 src="../assets/setting-private-icon.png"
@@ -101,12 +115,16 @@ TripSettingsModal.propTypes = {
   onSaveTrip: PropTypes.func.isRequired,
   onSetPrivate: PropTypes.func.isRequired,
   onSetPublic: PropTypes.func.isRequired,
+  onSetViewOnly: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
   title: PropTypes.string,
   visibility: PropTypes.string
 };
 
 const styles = {
+  visibilityButton: {
+    height: 35
+  },
   inputField: {
     margin: 0,
     width: 350

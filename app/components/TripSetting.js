@@ -38,10 +38,15 @@ class TripSetting extends Component {
       case 'destination':
         return '../assets/setting-marker-icon.png';
       case 'visibility':
-        if (title === 'Public') {
-          return '../assets/setting-public-icon.png';
-        } else {
-          return '../assets/setting-private-icon.png';
+        switch(title) {
+          case 'Public':
+            return '../assets/setting-public-icon.png';
+          case 'View Only':
+            return '../assets/setting-viewonly-icon.png';
+          case 'Private':
+            return '../assets/setting-private-icon.png';
+          default:
+            return null;
         }
       case 'edit':
         return '../assets/setting-edit-icon.png';
