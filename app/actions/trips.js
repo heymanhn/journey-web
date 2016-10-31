@@ -227,6 +227,10 @@ export function apiGetTripSuccess(json) {
 }
 
 export function apiGetTripFailure(error) {
+  if (error === 'Not Authorized') {
+    error = 'Trip Not Found';
+  }
+
   return {
     type: API_GET_TRIP_FAILURE,
     error
