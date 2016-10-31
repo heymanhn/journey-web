@@ -25,6 +25,17 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(apiUpdateTrip(visibility));
     },
 
+    onToggleTripVisibility(visibility) {
+      switch(visibility) {
+        case 'public':
+          return dispatch(apiUpdateTrip('viewOnly'));
+        case 'viewOnly':
+          return dispatch(apiUpdateTrip('private'));
+        case 'private':
+          return dispatch(apiUpdateTrip('public'));
+      }
+    },
+
     onShowTripSettingsModal() {
       dispatch(showModal(modalComponents.tripSettings));
     }

@@ -10,6 +10,7 @@ class TripDetailsView extends Component {
       isFetchingVisibility,
       onShowDestination,
       onShowTripSettingsModal,
+      onToggleTripVisibility,
       trip
     } = this.props;
     const { destination, title, visibility: vis } = trip;
@@ -28,7 +29,7 @@ class TripDetailsView extends Component {
     }
 
     return (
-      <div style={styles.titleSection}>
+      <div>
         <h1 style={styles.h1}>{title}</h1>
         <div style={styles.settingsSection}>
           <TripSetting
@@ -38,7 +39,7 @@ class TripDetailsView extends Component {
           />
           <TripSetting
             isLoading={isFetchingVisibility}
-            onClick={this.toggleVisibility.bind(this)}
+            onClick={onToggleTripVisibility.bind(null, vis)}
             setting="visibility"
             title={visibilityTitle}
           />
@@ -52,11 +53,6 @@ class TripDetailsView extends Component {
       </div>
     );
   }
-
-  toggleVisibility() {
-    const { onSetTripVisibility, trip: { visibility } } = this.props;
-    onSetTripVisibility(visibility === 'private' ? 'public' : 'private');
-  }
 }
 
 TripDetailsView.propTypes = {
@@ -64,6 +60,7 @@ TripDetailsView.propTypes = {
   onSetTripVisibility: PropTypes.func.isRequired,
   onShowDestination: PropTypes.func.isRequired,
   onShowTripSettingsModal: PropTypes.func.isRequired,
+  onToggleTripVisibility: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
 
@@ -72,18 +69,15 @@ const styles = {
     fontFamily: "'Raleway', sans-serif",
     fontSize: 36,
     fontWeight: 300,
-    marginTop: 0,
-    paddingTop: 20,
+    margin: "0px " + dimensions.sidePadding + "px",
+    paddingTop: 35,
     wordWrap: "break-word"
   },
   settingsSection: {
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    margin: "15px 0px"
-  },
-  titleSection: {
-    padding: "15 " + dimensions.sidePadding + " 0"
+    margin: "10px 20px"
   }
 };
 
