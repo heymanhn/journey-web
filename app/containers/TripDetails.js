@@ -9,8 +9,11 @@ import { modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { isFetchingVisibility, trip } = state.tripState;
+  const { user } = state.authState;
+
   return {
     isFetchingVisibility,
+    isTripOwner: user && user._id === trip.creator,
     trip
   };
 };
@@ -23,6 +26,17 @@ const mapDispatchToProps = (dispatch) => {
 
     onSetTripVisibility(visibility) {
       dispatch(apiUpdateTrip(visibility));
+    },
+
+    onToggleTripVisibility(visibility) {
+      switch(visibility) {
+        case 'public':
+          return dispatch(apiUpdateTrip('viewOnly'));
+        case 'viewOnly':
+          return dispatch(apiUpdateTrip('private'));
+        case 'private':
+          return dispatch(apiUpdateTrip('public'));
+      }
     },
 
     onShowTripSettingsModal() {

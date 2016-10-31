@@ -8,6 +8,7 @@ class TripIdeaPanel extends Component {
     const {
       connectDropTarget,
       idea,
+      isViewOnly,
       onFocusIdea,
       onShowTripIdeaSettingsModal
     } = this.props;
@@ -32,7 +33,7 @@ class TripIdeaPanel extends Component {
         {infoSection}
         {idea.comment && (
           <p
-            onClick={onShowTripIdeaSettingsModal}
+            onClick={!isViewOnly ? onShowTripIdeaSettingsModal : null}
             style={styles.comment}
           >
             {idea.comment}
@@ -43,8 +44,18 @@ class TripIdeaPanel extends Component {
   }
 
   loadIdeaStyle() {
-    const { idea, ideaOnHover } = styles;
-    return this.props.hover ? { ...idea, ...ideaOnHover } : idea;
+    const { hover, isViewOnly } = this.props;
+    const { idea, ideaIfDraggable, ideaOnHover } = styles;
+
+    if (hover) {
+      if (!isViewOnly) {
+        return { ...idea, ...ideaOnHover, ...ideaIfDraggable };
+      }
+
+      return { ...idea, ...ideaOnHover };
+    }
+
+    return idea;
   }
 }
 
@@ -52,6 +63,7 @@ TripIdeaPanel.propTypes = {
   connectDropTarget: PropTypes.func,
   hover: PropTypes.bool,
   idea: PropTypes.object,
+  isViewOnly: PropTypes.bool.isRequired,
   onFocusIdea: PropTypes.func,
   onShowTripIdeaSettingsModal: PropTypes.func
 };
@@ -62,17 +74,21 @@ const styles = {
     color: "#999999"
   },
   comment: {
+    cursor: "pointer",
     fontSize: 13,
     fontStyle: "italic",
     margin: "10px 0px 0px",
     wordWrap: "break-word"
   },
   idea: {
-    backgroundColor: "#fdfdfd",
-    cursor: "pointer"
+    backgroundColor: "#fdfdfd"
+  },
+  ideaIfDraggable: {
+    cursor: "-webkit-grab"
   },
   ideaOnHover: {
-    backgroundColor: "#f2f2f2"
+    backgroundColor: "#f2f2f2",
+    cursor: "pointer"
   },
   info: {
     minHeight: 100

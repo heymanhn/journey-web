@@ -7,7 +7,7 @@ import { colors } from 'app/constants';
 
 class TripSetting extends Component {
   render() {
-    const { isLoading, onClick, title } = this.props;
+    const { isDisabled, isLoading, onClick, title } = this.props;
     const imageURL = this.pickImage();
 
     let buttonImage;
@@ -20,7 +20,7 @@ class TripSetting extends Component {
     return (
       <Button
         disabled={isLoading}
-        onClick={onClick}
+        onClick={!isDisabled ? onClick : null}
         style={this.loadContainerStyle()}
         title={this.loadTitle.bind(this)()}
       >
@@ -38,10 +38,15 @@ class TripSetting extends Component {
       case 'destination':
         return '../assets/setting-marker-icon.png';
       case 'visibility':
-        if (title === 'Public') {
-          return '../assets/setting-public-icon.png';
-        } else {
-          return '../assets/setting-private-icon.png';
+        switch(title) {
+          case 'Public':
+            return '../assets/setting-public-icon.png';
+          case 'View Only':
+            return '../assets/setting-viewonly-icon.png';
+          case 'Private':
+            return '../assets/setting-private-icon.png';
+          default:
+            return null;
         }
       case 'edit':
         return '../assets/setting-edit-icon.png';
@@ -51,7 +56,7 @@ class TripSetting extends Component {
   }
 
   loadContainerStyle() {
-    const { isLoading, last, setting } = this.props;
+    const { isDisabled, isLoading, last, setting } = this.props;
     let { container: style, darkContainer: dark } = styles;
 
     if (last) {
@@ -63,7 +68,7 @@ class TripSetting extends Component {
     if (setting === 'edit') {
       return { ...style, ...dark };
     } else {
-      if (isLoading) {
+      if (isLoading || isDisabled) {
         return { ...style, cursor: "default" };
       } else {
         return style;
@@ -87,6 +92,7 @@ class TripSetting extends Component {
 }
 
 TripSetting.propTypes = {
+  isDisabled: PropTypes.bool,
   isLoading: PropTypes.bool,
   last: PropTypes.bool,
   onClick: PropTypes.func,
@@ -100,9 +106,9 @@ const styles = {
     border: "1px solid #dddddd",
     borderRadius: 20,
     fontSize: 13,
+    height: 32,
     margin: "0px 0px 10px 0px",
-    outline: 0,
-    padding: "6px 12px 6px"
+    outline: 0
   },
   darkContainer: {
     backgroundColor: colors.secondary,
@@ -124,7 +130,7 @@ const styles = {
   },
   title: {
     position: "relative",
-    top: 2
+    top: 1
   }
 };
 

@@ -1,22 +1,65 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import TripSetting from './TripSetting';
-import { dimensions } from 'app/constants';
+import { colors, dimensions } from 'app/constants';
 
 class TripDetailsView extends Component {
   render() {
     const {
       isFetchingVisibility,
+      isTripOwner,
       onShowDestination,
       onShowTripSettingsModal,
+      onToggleTripVisibility,
       trip
     } = this.props;
     const { destination, title, visibility: vis } = trip;
-    const camelVis = vis[0].toUpperCase() + vis.substring(1);
+
+    let visibilityTitle;
+    switch (vis) {
+      case 'public':
+        visibilityTitle = 'Public';
+        break;
+      case 'viewOnly':
+        visibilityTitle = 'View Only';
+        break;
+      case 'private':
+        visibilityTitle = 'Private';
+        break;
+    }
+
+    const visibilitySetting = (
+      <TripSetting
+        isDisabled={!isTripOwner}
+        last={!isTripOwner}
+        isLoading={isFetchingVisibility}
+        onClick={onToggleTripVisibility.bind(null, vis)}
+        setting="visibility"
+        title={visibilityTitle}
+      />
+    );
+
+    const unauthorizedTooltip = (
+      <Tooltip id="unauthorized-tooltip" style={styles.tooltip}>
+        Only trip owners can change this setting.
+      </Tooltip>
+    );
+
+    const visibilitySettingWithTooltip = (
+      <OverlayTrigger
+        overlay={unauthorizedTooltip}
+        placement="bottom"
+        rootClose
+        trigger="click"
+      >
+        <div>{visibilitySetting}</div>
+      </OverlayTrigger>
+    );
 
     return (
-      <div style={styles.titleSection}>
+      <div>
         <h1 style={styles.h1}>{title}</h1>
         <div style={styles.settingsSection}>
           <TripSetting
@@ -24,34 +67,30 @@ class TripDetailsView extends Component {
             setting="destination"
             title={destination.name}
           />
-          <TripSetting
-            isLoading={isFetchingVisibility}
-            onClick={this.toggleVisibility.bind(this)}
-            setting="visibility"
-            title={camelVis}
-          />
-          <TripSetting
-            last
-            onClick={onShowTripSettingsModal}
-            setting="edit"
-            title="Edit"
-          />
+
+          {isTripOwner ? visibilitySetting : visibilitySettingWithTooltip}
+
+          {isTripOwner && (
+            <TripSetting
+              last={isTripOwner}
+              onClick={onShowTripSettingsModal}
+              setting="edit"
+              title="Edit"
+            />
+          )}
         </div>
       </div>
     );
-  }
-
-  toggleVisibility() {
-    const { onSetTripVisibility, trip: { visibility } } = this.props;
-    onSetTripVisibility(visibility === 'private' ? 'public' : 'private');
   }
 }
 
 TripDetailsView.propTypes = {
   isFetchingVisibility: PropTypes.bool.isRequired,
+  isTripOwner: PropTypes.bool,
   onSetTripVisibility: PropTypes.func.isRequired,
   onShowDestination: PropTypes.func.isRequired,
   onShowTripSettingsModal: PropTypes.func.isRequired,
+  onToggleTripVisibility: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired
 };
 
@@ -60,18 +99,19 @@ const styles = {
     fontFamily: "'Raleway', sans-serif",
     fontSize: 36,
     fontWeight: 300,
-    marginTop: 0,
-    paddingTop: 20,
+    margin: "0px " + dimensions.sidePadding + "px",
+    paddingTop: 35,
     wordWrap: "break-word"
   },
   settingsSection: {
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    margin: "10px 0px"
+    margin: "10px 20px"
   },
-  titleSection: {
-    padding: "15 " + dimensions.sidePadding + " 0"
+  tooltip: {
+    marginTop: -7,
+    width: 150
   }
 };
 

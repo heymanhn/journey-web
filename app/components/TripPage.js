@@ -102,7 +102,7 @@ TripPage.propTypes = {
 const styles = {
   errorMessage: {
     position: "fixed",
-    padding: "8px " + dimensions.sidePadding + "px",
+    padding: "7px " + dimensions.sidePadding + "px",
     width: dimensions.leftColumn.width
   },
   leftColumn: {
@@ -113,7 +113,7 @@ const styles = {
     overflow: "scroll",
     position: "absolute",
     width: dimensions.leftColumn.width,
-    zIndex: 2
+    zIndex: 1
   },
   loader: {
     marginTop: 100
