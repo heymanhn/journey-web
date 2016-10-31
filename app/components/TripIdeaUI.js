@@ -85,6 +85,7 @@ class TripIdeaUI extends Component {
       connectDropTarget,
       idea,
       isDragging,
+      isViewOnly,
       hoverLngLat,
       onClearHoverLngLat,
       onFocusIdea,
@@ -115,11 +116,12 @@ class TripIdeaUI extends Component {
         onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
       >
-        {removeButton}
+        {!isViewOnly && removeButton}
         <TripIdeaPanel
           {..._.pick(this.props, [
             'connectDropTarget',
             'idea',
+            'isViewOnly',
             'onShowTripIdeaSettingsModal'
           ])}
           hover={this.isHovering()}
@@ -130,17 +132,18 @@ class TripIdeaUI extends Component {
       </div>
     );
 
-    let fullSection;
-    if (isDragging) {
-      // Displays the grey placeholder box
-      fullSection = compose(connectDragSource, connectDropTarget)(
-        <div id={idea._id} style={this.loadEmptyStyle()}/>
-      );
-    } else {
-      fullSection = connectDragSource(ideaPanel);
+    if (isViewOnly) {
+      return ideaPanel;
     }
 
-    return fullSection;
+    if (isDragging) {
+      // Displays the grey placeholder box
+      return compose(connectDragSource, connectDropTarget)(
+        <div id={idea._id} style={this.loadEmptyStyle()}/>
+      );
+    }
+
+    return connectDragSource(ideaPanel);
   }
 
   loadEmptyStyle() {
@@ -174,6 +177,7 @@ TripIdeaUI.propTypes = {
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  isViewOnly: PropTypes.bool.isRequired,
   hoverLngLat: PropTypes.array,
   onClearHoverLngLat: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,

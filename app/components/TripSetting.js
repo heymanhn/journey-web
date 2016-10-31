@@ -20,7 +20,7 @@ class TripSetting extends Component {
     return (
       <Button
         disabled={isLoading}
-        onClick={!isDisabled && onClick}
+        onClick={!isDisabled ? onClick : null}
         style={this.loadContainerStyle()}
         title={this.loadTitle.bind(this)()}
       >

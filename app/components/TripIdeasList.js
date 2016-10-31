@@ -15,6 +15,7 @@ class TripIdeasList extends Component {
   render() {
     const {
       ideas,
+      isViewOnly,
       newIdea,
       onAddIdeaPress,
       onEnterIdeaComment,
@@ -22,7 +23,14 @@ class TripIdeasList extends Component {
     } = this.props;
 
     const tripIdeas = ideas.map((idea, index) => {
-      return <TripIdea key={idea._id} idea={idea} index={index} />;
+      return (
+        <TripIdea
+          idea={idea}
+          index={index}
+          isViewOnly={isViewOnly}
+          key={idea._id}
+        />
+      );
     });
 
     const commentBox = (
@@ -39,6 +47,28 @@ class TripIdeasList extends Component {
       <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
 
+    const addIdeaSection = (
+      <div>
+        <div style={styles.searchSection}>
+          <PlaceAutocomplete
+            id={acComponents.tripIdeaAC}
+            placeholder="Enter a place or destination"
+            style={styles.searchBox}
+            tabIndex={1}
+          />
+          <Button
+            disabled={!newIdea}
+            onClick={onAddIdeaPress}
+            style={this.loadAddIdeaButtonStyle()}
+            tabIndex={3}
+          >
+            Add
+          </Button>
+        </div>
+        {newIdea && commentBox}
+      </div>
+    );
+
     return (
       <div style={styles.ideasSection}>
         <div style={styles.inputSection}>
@@ -53,27 +83,11 @@ class TripIdeasList extends Component {
               </span>
             )}
           </div>
-          <div style={styles.searchSection}>
-            <PlaceAutocomplete
-              id={acComponents.tripIdeaAC}
-              placeholder="Enter a place or destination"
-              style={styles.searchBox}
-              tabIndex={1}
-            />
-            <Button
-              disabled={!newIdea}
-              onClick={onAddIdeaPress}
-              style={this.loadAddIdeaButtonStyle()}
-              tabIndex={3}
-            >
-              Add
-            </Button>
-          </div>
-          {newIdea && commentBox}
+          {!isViewOnly && addIdeaSection}
         </div>
         <div>
           {tripIdeas}
-          {dragPreview}
+          {!isViewOnly && dragPreview}
         </div>
       </div>
     );
@@ -90,6 +104,7 @@ class TripIdeasList extends Component {
 
 TripIdeasList.propTypes = {
   ideas: PropTypes.array,
+  isViewOnly: PropTypes.bool.isRequired,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
   onClearTripIdea: PropTypes.func.isRequired,

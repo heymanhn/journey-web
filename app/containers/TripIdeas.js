@@ -11,11 +11,14 @@ import {
 import TripIdeasList from 'app/components/TripIdeasList';
 
 const mapStateToProps = (state) => {
-  const ts = state.tripState;
+  const { user } = state.authState;
+  const { error, trip, newIdea } = state.tripState;
+  const { creator, ideas, visibility } = trip;
   return {
-    error: ts.error ? ts.error : '',
-    ideas: ts.trip.ideas,
-    newIdea: ts.newIdea
+    error,
+    ideas,
+    isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
+    newIdea
   };
 };
 
