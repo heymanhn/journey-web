@@ -13,7 +13,19 @@ class TripDetailsView extends Component {
       trip
     } = this.props;
     const { destination, title, visibility: vis } = trip;
-    const camelVis = vis[0].toUpperCase() + vis.substring(1);
+
+    let visibilityTitle;
+    switch (vis) {
+      case 'public':
+        visibilityTitle = 'Public';
+        break;
+      case 'viewOnly':
+        visibilityTitle = 'View Only';
+        break;
+      case 'private':
+        visibilityTitle = 'Private';
+        break;
+    }
 
     return (
       <div style={styles.titleSection}>
@@ -28,7 +40,7 @@ class TripDetailsView extends Component {
             isLoading={isFetchingVisibility}
             onClick={this.toggleVisibility.bind(this)}
             setting="visibility"
-            title={camelVis}
+            title={visibilityTitle}
           />
           <TripSetting
             last
@@ -68,7 +80,7 @@ const styles = {
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    margin: "10px 0px"
+    margin: "15px 0px"
   },
   titleSection: {
     padding: "15 " + dimensions.sidePadding + " 0"

@@ -100,9 +100,9 @@ const styles = {
     border: "1px solid #dddddd",
     borderRadius: 20,
     fontSize: 13,
+    height: 32,
     margin: "0px 0px 10px 0px",
-    outline: 0,
-    padding: "6px 12px 6px"
+    outline: 0
   },
   darkContainer: {
     backgroundColor: colors.secondary,
@@ -124,7 +124,7 @@ const styles = {
   },
   title: {
     position: "relative",
-    top: 2
+    top: 1
   }
 };
 
