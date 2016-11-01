@@ -153,11 +153,11 @@ export default function tripState(state = initialTripState, action) {
     case SHOW_MODAL:
       if (action.modalId === tripSettings) {
         return {
-          ...state,
+          ..._.omit(state, 'error'),
           newFields: {}
         };
       } else {
-        return state;
+        return _.omit(state, 'error');
       }
     case HIDE_MODAL:
       if (action.modalId === tripSettings) {

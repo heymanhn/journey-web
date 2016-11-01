@@ -50,15 +50,15 @@ class TripPage extends Component {
 
     return (
       <div>
+        <Navigation
+          customWidth
+          redirect={viewTripPage.bind(null, params.tripId)}
+          style={styles.navigationBar}
+        />
         <div
           id="leftColumn"
           style={styles.leftColumn}
         >
-          <Navigation
-            customWidth
-            redirect={viewTripPage.bind(null, params.tripId)}
-            style={styles.navigationBar}
-          />
           <div style={styles.mainContainer}>
             <ReactCSSTransitionGroup
               transitionName="error"
