@@ -1,6 +1,6 @@
 .error-enter {
   opacity: 0.01;
-  margin-top: -40px;
+  margin-top: -30px;
 }
 
 .error-enter.error-enter-active {
@@ -16,6 +16,6 @@
 
 .error-leave.error-leave-active {
   opacity: 0.01;
-  margin-top: -40px;
+  margin-top: -30px;
   transition: all 700ms ease;
 }
