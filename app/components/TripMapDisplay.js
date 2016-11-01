@@ -78,7 +78,7 @@ class TripMapDisplay extends Component {
     const { ideas, trackIdeaView } = this.props;
     const { map } = this;
     const { hover, markers } = mapbox.ids;
-    const flyToLocation = this.flyToLocation.bind(this);
+    const moveMapToLocation = this.moveMapToLocation.bind(this);
 
     // Load the marker data into the map
     map.addSource(markers, {
@@ -101,7 +101,7 @@ class TripMapDisplay extends Component {
       const feature = showOrHidePopup(popup, e.point, map);
       if (feature) {
         trackIdeaView(feature.properties._id);
-        flyToLocation(feature.geometry.coordinates);
+        moveMapToLocation(feature.geometry.coordinates);
       }
     });
   }
@@ -203,18 +203,24 @@ class TripMapDisplay extends Component {
     if (focusLngLat) {
       hoverMarker && onDeleteHoverMarker(hoverMarker);
       this.createFocusMarker(focusLngLat);
-      this.flyToLocation(focusLngLat);
+      this.moveMapToLocation(focusLngLat);
     }
   }
 
-  flyToLocation(lngLat) {
-    this.map.flyTo({
+  moveMapToLocation(lngLat) {
+    const opts = {
       center: lngLat,
-      zoom: 15,
-      curve: 0.5,
-      easing: easeInOutQuad,
-      speed: 2,
-    });
+      zoom: 15
+    };
+
+    if (this.map.getZoom() >= 15) {
+      opts.duration = 300;
+      this.map.easeTo(opts);
+    } else {
+      opts.speed = 2;
+      opts.easing = easeInOutQuad;
+      this.map.flyTo(opts);
+    }
   }
 
   loadMapContainerStyle() {
