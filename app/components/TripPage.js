@@ -113,7 +113,7 @@ const styles = {
     overflow: "scroll",
     position: "absolute",
     width: dimensions.leftColumn.width,
-    zIndex: 1
+    zIndex: 2
   },
   loader: {
     marginTop: 100
