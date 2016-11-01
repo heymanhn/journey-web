@@ -144,7 +144,7 @@ const styles = {
     boxShadow: "0 5px 10px rgba(0,0,0,.2)",
     paddingTop: 3,
     position: "absolute",
-    zIndex: 2
+    zIndex: 3
   },
   popoverList: {
     backgroundColor: "white",
@@ -163,7 +163,7 @@ const styles = {
     borderLeft: "10px solid transparent",
     borderBottom: "10px solid #ffffff",
     transform: "translate(-50%)",
-    zIndex: 1
+    zIndex: 2
   },
   popoverArrowBorder: {
     position: "absolute",

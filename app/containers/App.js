@@ -16,17 +16,38 @@ class App extends Component {
   render() {
     const { content, footer, navigation, token } = this.props;
     return (
-      <div>
+      <div style={this.loadAppContainerStyle()}>
         {token && navigation}
         {content}
         {token && footer}
       </div>
     );
   }
+
+  loadAppContainerStyle() {
+    const { tooltipVisible } = this.props;
+    const { container, fixedScroll } = styles;
+
+    return tooltipVisible ? { ...container, ...fixedScroll } : container;
+  }
 }
 
+const styles = {
+  container: {
+    height: "100%",
+    overflow: "auto"
+  },
+  fixedScroll: {
+    overflow: "hidden"
+  }
+};
+
 export default connect(
-  state => ({
-    token: state.authState.token
-  })
+  state => {
+    const { authState, componentsState } = state;
+    return {
+      token: authState.token,
+      tooltipVisible: componentsState.navBarState.tooltipVisible
+    };
+  }
 )(App);
