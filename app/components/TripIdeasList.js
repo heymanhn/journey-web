@@ -43,6 +43,15 @@ class TripIdeasList extends Component {
       />
     );
 
+    const showAllIdeasLink = (
+      <div
+        onClick={onShowAllIdeas}
+        style={styles.showAllLink}
+      >
+        Show all ideas on map
+      </div>
+    );
+
     const dragPreview = (
       <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
@@ -74,19 +83,12 @@ class TripIdeasList extends Component {
         <div style={styles.inputSection}>
           <div style={styles.titleSection}>
             <h3 style={styles.h3}>Ideas</h3>
-            {ideas.length > 0 && (
-              <span
-                onClick={onShowAllIdeas}
-                style={styles.showAllLink}
-              >
-                Show all
-              </span>
-            )}
           </div>
           {!isViewOnly && addIdeaSection}
         </div>
         <div>
           {tripIdeas}
+          {ideas.length > 0 && showAllIdeasLink}
           {!isViewOnly && dragPreview}
         </div>
       </div>
@@ -153,7 +155,12 @@ const styles = {
   },
   showAllLink: {
     cursor: "pointer",
-    textDecoration: "underline"
+    backgroundColor: "#f4f4f4",
+    border: "1px solid #dddddd",
+    borderRadius: 3,
+    margin: "10px auto 20px",
+    textAlign: "center",
+    padding: 10
   },
   titleSection: {
     display: "flex",
