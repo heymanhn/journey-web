@@ -27,10 +27,7 @@ class TripIdeaPanel extends Component {
     return (
       <Panel
         id={connectDropTarget ? idea._id : '__preview'}
-        onClick={() => {
-          onFocusIdea();
-          !isViewOnly && onShowTripIdeaSettingsModal();
-        }}
+        onClick={onFocusIdea}
         style={this.loadIdeaStyle()}
       >
         {infoSection}

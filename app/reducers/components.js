@@ -7,6 +7,7 @@ import mapState from './map';
 import modalsState from './modals';
 import navBarState from './navBar';
 import submitButtonState from './submitButton';
+import tripPageState from './tripPage';
 
 const componentsState = combineReducers({
   autocompleteState,
@@ -14,7 +15,8 @@ const componentsState = combineReducers({
   mapState,
   modalsState,
   navBarState,
-  submitButtonState
+  submitButtonState,
+  tripPageState
 });
 
 export default componentsState;

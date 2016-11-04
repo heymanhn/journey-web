@@ -8,7 +8,6 @@ import { dimensions, mapbox, mapMarkers } from 'app/constants';
 
 class TripMapDisplay extends Component {
   componentDidMount() {
-    window.addEventListener('resize', this.props.onUpdateMapWidth);
     this.map = this.loadMap();
     this.map.on('load', () => this.loadSourceData());
     this.fitMapToData(true);
@@ -53,7 +52,7 @@ class TripMapDisplay extends Component {
     return (
       <div
         ref={x => this.container = x}
-        style={this.loadMapContainerStyle()}
+        style={styles.mapContainer}
       ></div>
     );
   }
@@ -132,6 +131,7 @@ class TripMapDisplay extends Component {
         linear: boundToDestination,
         padding: 100,
         duration: 1000,
+        offset: [dimensions.leftColumn.width / 2, 0],
         curve: 1,
         speed: 2,
         easing: easeInOutQuad
@@ -210,6 +210,7 @@ class TripMapDisplay extends Component {
   moveMapToLocation(lngLat) {
     const opts = {
       center: lngLat,
+      offset: [dimensions.leftColumn.width / 2, 0],
       zoom: 15
     };
 
@@ -221,19 +222,6 @@ class TripMapDisplay extends Component {
       opts.easing = easeInOutQuad;
       this.map.flyTo(opts);
     }
-  }
-
-  loadMapContainerStyle() {
-    const { mapWidth: width } = this.props;
-
-    return {
-      left: dimensions.leftColumn.width,
-      position: "absolute",
-      top: 0,
-      bottom: 0,
-      width,
-      zIndex: 1
-    };
   }
 }
 
@@ -317,14 +305,22 @@ TripMapDisplay.propTypes = {
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
   ideas: PropTypes.array,
-  mapWidth: PropTypes.number.isRequired,
   onClearFocusLngLat: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
-  onUpdateMapWidth: PropTypes.func.isRequired,
   trackIdeaView: PropTypes.func.isRequired
+};
+
+const styles = {
+  mapContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: "100%",
+    zIndex: 1
+  }
 };
 
 export default TripMapDisplay;

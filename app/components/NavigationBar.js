@@ -68,20 +68,21 @@ class NavigationBar extends Component {
   }
 
   loadContainerStyle() {
-    const { customWidth } = this.props;
+    const { customContainerStyle: customStyle } = this.props;
     const { container: containerStyle } = styles;
-    return customWidth ? containerStyle : { ...containerStyle, width: "100%" };
+    return customStyle ? { ...containerStyle, ...customStyle } : containerStyle;
   }
 
   loadNavStyle() {
-    const { style } = this.props;
+    const { customNavStyle } = this.props;
     const navStyle = styles.navSection;
-    return style ? { ...navStyle, ...style } : navStyle;
+    return customNavStyle ? { ...navStyle, ...customNavStyle } : navStyle;
   }
 }
 
 NavigationBar.propTypes = {
-  customWidth: PropTypes.bool,
+  customContainerStyle: PropTypes.object,
+  customNavStyle: PropTypes.object,
   gravatarFocused: PropTypes.bool.isRequired,
   onLogoutPress: PropTypes.func.isRequired,
   onSetGravatarActive: PropTypes.func.isRequired,
@@ -89,7 +90,6 @@ NavigationBar.propTypes = {
   onSetOverrideFrameToLogin: PropTypes.func.isRequired,
   onSetTooltipInvisible: PropTypes.func.isRequired,
   onSetTooltipVisible: PropTypes.func.isRequired,
-  style: PropTypes.object,
   tooltipVisible: PropTypes.bool.isRequired,
   user: PropTypes.object
 };
@@ -108,6 +108,7 @@ const styles = {
     position: "fixed",
     textAlign: "center",
     top: 0,
+    width: "100%",
     zIndex: 3
   },
   inlineBlock: {

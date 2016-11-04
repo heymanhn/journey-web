@@ -191,10 +191,6 @@ export const initialLPState = {
   overrideFrame: ''
 };
 
-export const initialMapState = {
-  mapWidth: calcMapWidth()
-};
-
 export const initialNavBarState = {
   gravatarFocused: false,
   tooltipVisible: false
@@ -219,6 +215,10 @@ export const initialTripsState = {
 export const initialTripState = {
   isFetching: false,
   isFetchingVisibility: false
+};
+
+export const initialTripPageState = {
+  pageHeight: window.innerHeight
 };
 
 
@@ -325,10 +325,6 @@ export function generateMapImage(lng, lat, zoom) {
 
   return `${url}${styleId}/static/${lng},${lat},${zoom}/${width}x${height}?` +
     `access_token=${token}&attribution=false&logo=false`;
-}
-
-export function calcMapWidth() {
-  return window.innerWidth - dimensions.leftColumn.width;
 }
 
 
