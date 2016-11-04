@@ -109,7 +109,7 @@ const styles = {
     textAlign: "center",
     top: 0,
     width: "100%",
-    zIndex: 3
+    zIndex: 2
   },
   inlineBlock: {
     display: "inline-block"

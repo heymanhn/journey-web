@@ -100,7 +100,10 @@ class TripPage extends Component {
     const { mainContainer } = styles;
 
     // Set the height of the container, minus the existing padding
-    return { ...mainContainer, height: pageHeight - 40 };
+    return {
+      ...mainContainer,
+      height: pageHeight - (40 + dimensions.navigationBar.height)
+    };
   }
 
   loadMainContentStyle() {
@@ -108,7 +111,10 @@ class TripPage extends Component {
     const { mainContent } = styles;
 
     // Set the height of the container, minus the existing padding
-    return { ...mainContent, height: pageHeight - 55 };
+    return {
+      ...mainContent,
+      height: pageHeight - (55 + dimensions.navigationBar.height)
+    };
   }
 }
 
@@ -148,12 +154,15 @@ const styles = {
   },
   mainContainer: {
     backgroundColor: "white",
-    borderRadius: 5,
-    boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    boxShadow: "rgba(0, 0, 0, 0.1) 3px 3px 8px," +
+      "rgba(0, 0, 0, 0.1) -3px 3px 8px",
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    paddingTop: dimensions.navigationBar.height
+    position: "relative",
+    top: dimensions.navigationBar.height
   },
   mainContent: {
     overflow: "scroll"
@@ -161,6 +170,10 @@ const styles = {
   navContainerStyle: {
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
+    boxShadow: "rgba(0, 0, 0, 0.1) 3px -3px 8px," +
+      "rgba(0, 0, 0, 0.1) -3px -3px 8px," +
+      "rgba(0, 0, 0, 0.1) 3px 3px 8px," +
+      "rgba(0, 0, 0, 0.1) -3px 3px 8px",
     left: 20,
     top: 20,
     width: dimensions.leftColumn.width
