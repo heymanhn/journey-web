@@ -41,14 +41,12 @@ class TripPage extends Component {
     const { error, onClearTripError, params, trip } = nextProps;
 
     if (error) {
-      const tripLoaded = trip && params.tripId === trip._id;
-      tripLoaded && setTimeout(onClearTripError, 5000);
+      this.isTripLoaded() && setTimeout(onClearTripError, 5000);
     }
   }
 
   render() {
     const { error, params, trip } = this.props;
-    const tripLoaded = trip && params.tripId === trip._id;
 
     return (
       <div>
@@ -73,7 +71,7 @@ class TripPage extends Component {
                   <ErrorMessage error={error} style={styles.errorMessage} />
                 )}
               </ReactCSSTransitionGroup>
-              {tripLoaded ? (
+              {this.isTripLoaded() ? (
                 <div>
                   <TripDetails />
                   <TripIdeas />
@@ -90,31 +88,43 @@ class TripPage extends Component {
             <div style={styles.whitespaceFooter}/>
           </div>
         </div>
-        {tripLoaded && <TripMap />}
+        {this.isTripLoaded() && <TripMap />}
       </div>
     );
+  }
+
+  isTripLoaded() {
+    const { params, trip } = this.props;
+    return trip && params.tripId === trip._id;
   }
 
   loadMainContainerStyle() {
     const { pageHeight } = this.props;
     const { mainContainer } = styles;
+    let height;
 
+    if (this.isTripLoaded()) {
+      height = pageHeight - (40 + dimensions.navigationBar.height);
+    } else {
+      height = 200;
+    }
     // Set the height of the container, minus the existing padding
-    return {
-      ...mainContainer,
-      height: pageHeight - (40 + dimensions.navigationBar.height)
-    };
+    return { ...mainContainer, height };
   }
 
   loadMainContentStyle() {
     const { pageHeight } = this.props;
     const { mainContent } = styles;
+    let height;
+
+    if (this.isTripLoaded()) {
+      height = pageHeight - (55 + dimensions.navigationBar.height);
+    } else {
+      height = 200;
+    }
 
     // Set the height of the container, minus the existing padding
-    return {
-      ...mainContent,
-      height: pageHeight - (55 + dimensions.navigationBar.height)
-    };
+    return { ...mainContent, height };
   }
 }
 
@@ -132,6 +142,7 @@ const styles = {
   errorMessage: {
     position: "fixed",
     padding: "7px " + dimensions.sidePadding + "px",
+    top: 80,
     width: dimensions.leftColumn.width
   },
   gradientShadow: {
@@ -150,7 +161,7 @@ const styles = {
     zIndex: 2
   },
   loader: {
-    marginTop: 100
+    marginTop: 70
   },
   mainContainer: {
     backgroundColor: "white",
