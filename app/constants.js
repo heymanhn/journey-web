@@ -132,6 +132,7 @@ export const dimensions = {
     width: 700
   },
   leftColumn: {
+    margin: 20,
     width: 400
   },
   navigationBar: {

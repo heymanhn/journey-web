@@ -56,37 +56,34 @@ class TripPage extends Component {
           redirect={viewTripPage.bind(null, params.tripId)}
           style={styles.navigationBar}
         />
-        <div style={styles.leftColumn}>
-          <div style={styles.transparentHeader}/>
-          <div style={this.loadMainContainerStyle()}>
-            <div style={this.loadMainContentStyle()}>
-              <ReactCSSTransitionGroup
-                transitionName="error"
-                transitionAppear={true}
-                transitionAppearTimeout={transitions.landingPageFrame}
-                transitionEnterTimeout={transitions.tripPageError.enter}
-                transitionLeaveTimeout={transitions.tripPageError.leave}
-              >
-                {error && (
-                  <ErrorMessage error={error} style={styles.errorMessage} />
-                )}
-              </ReactCSSTransitionGroup>
-              {this.isTripLoaded() ? (
-                <div>
-                  <TripDetails />
-                  <TripIdeas />
-                  <TripSettings action="update" />
-                  <TripIdeaSettings />
-                </div>
-              ) : (!error && (
-                <div style={styles.loader}>
-                  <LoadingAnimation element="Trip" />
-                </div>
-              ))}
-            </div>
-            <div style={styles.gradientShadow} />
-            <div style={styles.whitespaceFooter}/>
+        <div style={this.loadMainContainerStyle()}>
+          <div style={this.loadMainContentStyle()}>
+            <ReactCSSTransitionGroup
+              transitionName="error"
+              transitionAppear={true}
+              transitionAppearTimeout={transitions.landingPageFrame}
+              transitionEnterTimeout={transitions.tripPageError.enter}
+              transitionLeaveTimeout={transitions.tripPageError.leave}
+            >
+              {error && (
+                <ErrorMessage error={error} style={styles.errorMessage} />
+              )}
+            </ReactCSSTransitionGroup>
+            {this.isTripLoaded() ? (
+              <div>
+                <TripDetails />
+                <TripIdeas />
+                <TripSettings action="update" />
+                <TripIdeaSettings />
+              </div>
+            ) : (!error && (
+              <div style={styles.loader}>
+                <LoadingAnimation element="Trip" />
+              </div>
+            ))}
           </div>
+          <div style={styles.gradientShadow}></div>
+          <div style={styles.whitespaceFooter}></div>
         </div>
         {this.isTripLoaded() && <TripMap />}
       </div>
@@ -101,10 +98,11 @@ class TripPage extends Component {
   loadMainContainerStyle() {
     const { pageHeight } = this.props;
     const { mainContainer } = styles;
+    const margin = dimensions.leftColumn.margin * 2;
     let height;
 
     if (this.isTripLoaded()) {
-      height = pageHeight - (40 + dimensions.navigationBar.height);
+      height = pageHeight - (margin + dimensions.navigationBar.height);
     } else {
       height = 200;
     }
@@ -115,10 +113,11 @@ class TripPage extends Component {
   loadMainContentStyle() {
     const { pageHeight } = this.props;
     const { mainContent } = styles;
+    const margin = dimensions.leftColumn.margin * 2;
     let height;
 
     if (this.isTripLoaded()) {
-      height = pageHeight - (55 + dimensions.navigationBar.height);
+      height = pageHeight - (margin + dimensions.navigationBar.height + 15);
     } else {
       height = 200;
     }
@@ -151,15 +150,6 @@ const styles = {
     position: "relative",
     top: -4
   },
-  leftColumn: {
-    backgroundColor: "rgba(0,0,0,0)",
-    float: "left",
-    height: "100%",
-    left: 20,
-    position: "absolute",
-    width: dimensions.leftColumn.width,
-    zIndex: 2
-  },
   loader: {
     marginTop: 70
   },
@@ -171,9 +161,11 @@ const styles = {
       "rgba(0, 0, 0, 0.1) -3px 3px 8px",
     display: "flex",
     flexDirection: "column",
-    overflow: "hidden",
+    left: dimensions.leftColumn.margin,
     position: "relative",
-    top: dimensions.navigationBar.height
+    top: dimensions.leftColumn.margin,
+    width: dimensions.leftColumn.width,
+    zIndex: 2
   },
   mainContent: {
     overflow: "scroll",
@@ -186,15 +178,16 @@ const styles = {
       "rgba(0, 0, 0, 0.1) -3px -3px 8px," +
       "rgba(0, 0, 0, 0.1) 3px 3px 8px," +
       "rgba(0, 0, 0, 0.1) -3px 3px 8px",
-    left: 20,
-    top: 20,
+    left: dimensions.leftColumn.margin,
+    position: "relative",
+    top: dimensions.leftColumn.margin,
     width: dimensions.leftColumn.width
   },
   navStyle: {
     width: dimensions.leftColumn.width
   },
   transparentHeader: {
-    height: 20
+    height: dimensions.leftColumn.margin
   },
   whitespaceFooter: {
     height: 10
