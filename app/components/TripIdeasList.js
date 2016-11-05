@@ -123,7 +123,8 @@ const styles = {
   },
   h3: {
     fontFamily: "'Raleway', sans-serif",
-    fontWeight: 400
+    fontWeight: 400,
+    marginTop: 10
   },
   ideasSection: {
     padding: "0 " + dimensions.sidePadding + " 0"

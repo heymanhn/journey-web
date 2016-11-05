@@ -140,7 +140,7 @@ TripPage.propTypes = {
 const styles = {
   errorMessage: {
     position: "fixed",
-    padding: "7px " + dimensions.sidePadding + "px",
+    padding: "5px " + dimensions.sidePadding + "px",
     top: 80,
     width: dimensions.leftColumn.width
   },
