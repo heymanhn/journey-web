@@ -165,7 +165,8 @@ const styles = {
     top: dimensions.navigationBar.height
   },
   mainContent: {
-    overflow: "scroll"
+    overflow: "scroll",
+    position: "relative"
   },
   navContainerStyle: {
     borderTopLeftRadius: 5,
