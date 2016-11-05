@@ -144,7 +144,7 @@ const styles = {
     boxShadow: "0 5px 10px rgba(0,0,0,.2)",
     paddingTop: 3,
     position: "absolute",
-    zIndex: 3
+    zIndex: 2
   },
   popoverList: {
     backgroundColor: "white",

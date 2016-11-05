@@ -17,7 +17,7 @@ class TripIdeaPanel extends Component {
     const wrapperFn = connectDropTarget || ((x) => { return x; });
     const imageSection = <Image src={idea.photo} style={styles.photo} />;
     const infoSection = wrapperFn(
-      <div style={styles.info}>
+      <div>
         {idea.photo && imageSection}
         <p style={styles.name}>{idea.name}</p>
         <p style={styles.address}>{idea.address}</p>
@@ -31,14 +31,6 @@ class TripIdeaPanel extends Component {
         style={this.loadIdeaStyle()}
       >
         {infoSection}
-        {idea.comment && (
-          <p
-            onClick={!isViewOnly ? onShowTripIdeaSettingsModal : null}
-            style={styles.comment}
-          >
-            {idea.comment}
-          </p>
-        )}
       </Panel>
     );
   }
@@ -73,15 +65,9 @@ const styles = {
     fontSize: 12,
     color: "#999999"
   },
-  comment: {
-    cursor: "pointer",
-    fontSize: 13,
-    fontStyle: "italic",
-    margin: "10px 0px 0px",
-    wordWrap: "break-word"
-  },
   idea: {
-    backgroundColor: "#fdfdfd"
+    backgroundColor: "#fdfdfd",
+    marginBottom: 15
   },
   ideaIfDraggable: {
     cursor: "-webkit-grab"
@@ -90,9 +76,6 @@ const styles = {
     backgroundColor: "#f2f2f2",
     cursor: "pointer"
   },
-  info: {
-    minHeight: 100
-  },
   name: {
     fontSize: 14,
     fontWeight: "bold"
@@ -100,8 +83,8 @@ const styles = {
   photo: {
     float: "right",
     marginLeft: 10,
-    width: "33%",
-    height: 100,
+    width: 75,
+    height: 75,
     objectFit: "cover",
     border: "1px solid #eeeeee"
   }

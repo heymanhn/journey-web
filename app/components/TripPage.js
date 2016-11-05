@@ -17,7 +17,9 @@ import { dimensions, transitions } from 'app/constants';
 
 class TripPage extends Component {
   componentDidMount() {
-    this.props.trackPageView();
+    const { onUpdatePageHeight, trackPageView } = this.props;
+    window.addEventListener('resize', onUpdatePageHeight);
+    trackPageView();
   }
 
   componentWillMount() {
@@ -39,27 +41,23 @@ class TripPage extends Component {
     const { error, onClearTripError, params, trip } = nextProps;
 
     if (error) {
-      const tripLoaded = trip && params.tripId === trip._id;
-      tripLoaded && setTimeout(onClearTripError, 5000);
+      this.isTripLoaded() && setTimeout(onClearTripError, 5000);
     }
   }
 
   render() {
     const { error, params, trip } = this.props;
-    const tripLoaded = trip && params.tripId === trip._id;
 
     return (
       <div>
         <Navigation
-          customWidth
+          customContainerStyle={styles.navContainerStyle}
+          customNavStyle={styles.navStyle}
           redirect={viewTripPage.bind(null, params.tripId)}
           style={styles.navigationBar}
         />
-        <div
-          id="leftColumn"
-          style={styles.leftColumn}
-        >
-          <div style={styles.mainContainer}>
+        <div style={this.loadMainContainerStyle()}>
+          <div style={this.loadMainContentStyle()}>
             <ReactCSSTransitionGroup
               transitionName="error"
               transitionAppear={true}
@@ -71,7 +69,7 @@ class TripPage extends Component {
                 <ErrorMessage error={error} style={styles.errorMessage} />
               )}
             </ReactCSSTransitionGroup>
-            {tripLoaded ? (
+            {this.isTripLoaded() ? (
               <div>
                 <TripDetails />
                 <TripIdeas />
@@ -84,10 +82,48 @@ class TripPage extends Component {
               </div>
             ))}
           </div>
+          <div style={styles.gradientShadow}></div>
+          <div style={styles.whitespaceFooter}></div>
         </div>
-        {tripLoaded && <TripMap />}
+        {this.isTripLoaded() && <TripMap />}
       </div>
     );
+  }
+
+  isTripLoaded() {
+    const { params, trip } = this.props;
+    return trip && params.tripId === trip._id;
+  }
+
+  loadMainContainerStyle() {
+    const { pageHeight } = this.props;
+    const { mainContainer } = styles;
+    const margin = dimensions.leftColumn.margin * 2;
+    let height;
+
+    if (this.isTripLoaded()) {
+      height = pageHeight - (margin + dimensions.navigationBar.height);
+    } else {
+      height = 200;
+    }
+    // Set the height of the container, minus the existing padding
+    return { ...mainContainer, height };
+  }
+
+  loadMainContentStyle() {
+    const { pageHeight } = this.props;
+    const { mainContent } = styles;
+    const margin = dimensions.leftColumn.margin * 2;
+    let height;
+
+    if (this.isTripLoaded()) {
+      height = pageHeight - (margin + dimensions.navigationBar.height + 15);
+    } else {
+      height = 200;
+    }
+
+    // Set the height of the container, minus the existing padding
+    return { ...mainContent, height };
   }
 }
 
@@ -95,6 +131,8 @@ TripPage.propTypes = {
   error: PropTypes.string,
   onClearTripError: PropTypes.func.isRequired,
   onGetTrip: PropTypes.func.isRequired,
+  onUpdatePageHeight: PropTypes.func.isRequired,
+  pageHeight: PropTypes.number,
   trackPageView: PropTypes.func.isRequired,
   trip: PropTypes.object
 };
@@ -103,26 +141,56 @@ const styles = {
   errorMessage: {
     position: "fixed",
     padding: "7px " + dimensions.sidePadding + "px",
+    top: 80,
     width: dimensions.leftColumn.width
   },
-  leftColumn: {
+  gradientShadow: {
+    background: "linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))",
+    height: 5,
+    position: "relative",
+    top: -4
+  },
+  loader: {
+    marginTop: 70
+  },
+  mainContainer: {
     backgroundColor: "white",
-    boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 20px",
-    float: "left",
-    height: "100%",
-    overflow: "scroll",
-    position: "absolute",
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    boxShadow: "rgba(0, 0, 0, 0.1) 3px 3px 8px," +
+      "rgba(0, 0, 0, 0.1) -3px 3px 8px",
+    display: "flex",
+    flexDirection: "column",
+    left: dimensions.leftColumn.margin,
+    position: "relative",
+    top: dimensions.leftColumn.margin,
     width: dimensions.leftColumn.width,
     zIndex: 2
   },
-  loader: {
-    marginTop: 100
+  mainContent: {
+    overflow: "scroll",
+    position: "relative"
   },
-  mainContainer: {
-    marginTop: dimensions.navigationBar.height
-  },
-  navigationBar: {
+  navContainerStyle: {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    boxShadow: "rgba(0, 0, 0, 0.1) 3px -3px 8px," +
+      "rgba(0, 0, 0, 0.1) -3px -3px 8px," +
+      "rgba(0, 0, 0, 0.1) 3px 3px 8px," +
+      "rgba(0, 0, 0, 0.1) -3px 3px 8px",
+    left: dimensions.leftColumn.margin,
+    position: "relative",
+    top: dimensions.leftColumn.margin,
     width: dimensions.leftColumn.width
+  },
+  navStyle: {
+    width: dimensions.leftColumn.width
+  },
+  transparentHeader: {
+    height: dimensions.leftColumn.margin
+  },
+  whitespaceFooter: {
+    height: 10
   }
 };
 

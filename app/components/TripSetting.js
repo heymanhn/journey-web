@@ -104,9 +104,9 @@ const styles = {
   container: {
     backgroundColor: "#f2f2f2",
     border: "1px solid #dddddd",
-    borderRadius: 20,
-    fontSize: 13,
-    height: 32,
+    borderRadius: 25,
+    fontSize: 12,
+    height: 28,
     margin: "0px 0px 10px 0px",
     outline: 0
   },
@@ -117,7 +117,10 @@ const styles = {
   },
   image: {
     display: "inline",
-    paddingRight: 6
+    maxHeight: 16,
+    paddingRight: 5,
+    position: "relative",
+    top: -2
   },
   spinner: {
     float: "left",
@@ -130,7 +133,7 @@ const styles = {
   },
   title: {
     position: "relative",
-    top: 1
+    top: -1
   }
 };
 
