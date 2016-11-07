@@ -624,7 +624,7 @@ export function apiUpdateTripIdea(index) {
     const { tripState: ts, componentsState: cs } = getState();
     const { showModal } = cs.modalsState.tripIdeaSettings;
     const { ideaIndexToUpdate, newComment, trip: { _id: tripId, ideas } } = ts;
-    index = index || ideaIndexToUpdate;
+    index = typeof index === 'number' ? index : ideaIndexToUpdate;
     const ideaId = ideas[index]._id;
     const params = { index };
 
