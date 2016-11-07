@@ -7,7 +7,7 @@ import { Glyphicon } from 'react-bootstrap';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
-import TripIdeaPanel from './TripIdeaPanel';
+import TripIdeaRow from './TripIdeaRow';
 import { dndTypes } from 'app/constants';
 
 /*
@@ -92,18 +92,6 @@ class TripIdeaUI extends Component {
       onRemoveIdea
     } = this.props;
 
-    const removeButton = (
-      <div
-        onClick={onRemoveIdea}
-        style={this.loadRemoveButtonStyle()}
-      >
-        <Glyphicon
-          glyph="remove-circle"
-          style={styles.removeButton.glyph}
-        />
-      </div>
-    );
-
     const ideaPanel = (
       <div
         style={styles.mainDiv}
@@ -116,8 +104,7 @@ class TripIdeaUI extends Component {
         onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
       >
-        {!isViewOnly && removeButton}
-        <TripIdeaPanel
+        <TripIdeaRow
           {..._.pick(this.props, [
             'connectDropTarget',
             'idea',
@@ -190,13 +177,10 @@ TripIdeaUI.propTypes = {
 
 const styles = {
   emptySpace: {
-    backgroundColor: "#eeeeee",
-    borderRadius: 4,
-    height: 80,
-    marginBottom: 20
+    backgroundColor: "#eeeeee"
   },
   mainDiv: {
-    backgroundColor: "#ffffff"
+    backgroundColor: "#f7f7f7"
   },
   removeButton: {
     div: {

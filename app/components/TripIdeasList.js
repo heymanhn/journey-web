@@ -79,15 +79,14 @@ class TripIdeasList extends Component {
     );
 
     return (
-      <div style={styles.ideasSection}>
-        <div style={styles.inputSection}>
-          <div style={styles.titleSection}>
-            <h3 style={styles.h3}>Ideas</h3>
-          </div>
-          {!isViewOnly && addIdeaSection}
+      <div>
+        <div style={styles.titleSection}>
+          <h3 style={styles.h3}>Ideas</h3>
         </div>
         <div>
-          {tripIdeas}
+          <div style={styles.ideasSection}>
+            {tripIdeas}
+          </div>
           {ideas.length > 0 && showAllIdeasLink}
           {!isViewOnly && dragPreview}
         </div>
@@ -123,14 +122,16 @@ const styles = {
   },
   h3: {
     fontFamily: "'Raleway', sans-serif",
+    fontSize: 22,
     fontWeight: 400,
-    marginTop: 10
+    marginTop: 10,
+    marginBottom: 0
   },
   ideasSection: {
-    padding: "0 " + dimensions.sidePadding + " 0"
+    backgroundColor: "#f7f7f7",
+    borderTop: "1px solid #dddddd",
   },
   inputSection: {
-    marginBottom: 10
   },
   searchBox: {
     fontSize: 14,
@@ -160,13 +161,16 @@ const styles = {
     border: "1px solid #dddddd",
     borderRadius: 3,
     margin: "10px auto",
+    padding: 10,
     textAlign: "center",
-    padding: 10
+    width: 300
   },
   titleSection: {
     display: "flex",
     alignItems: "baseline",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginBottom: 0,
+    padding: "0 " + dimensions.sidePadding + " 10"
   }
 };
 
