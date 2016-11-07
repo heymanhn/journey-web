@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
+import { colors } from 'app/constants';
 
 class TripIdeaRow extends Component {
   render() {
@@ -90,7 +91,7 @@ const styles = {
     justifyContent: "space-between"
   },
   idea: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.background,
     borderBottom: "1px solid #ddd",
     margin: "0px 0px 0px 30px"
   },

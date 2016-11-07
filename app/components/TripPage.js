@@ -13,7 +13,7 @@ import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
 import TripIdeaSettings from 'app/containers/TripIdeaSettings';
 import TripSettings from 'app/containers/TripSettings';
-import { dimensions, transitions } from 'app/constants';
+import { colors, dimensions, transitions } from 'app/constants';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -82,8 +82,9 @@ class TripPage extends Component {
               </div>
             ))}
           </div>
-          <div style={styles.gradientShadow}></div>
-          <div style={styles.whitespaceFooter}></div>
+          <div style={styles.whitespaceFooter}>
+            <div style={styles.gradientShadow}></div>
+          </div>
         </div>
         {this.isTripLoaded() && <TripMap />}
       </div>
@@ -145,7 +146,7 @@ const styles = {
     width: dimensions.leftColumn.width
   },
   gradientShadow: {
-    background: "linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))",
+    background: "linear-gradient(rgba(0,0,0,0), " + colors.background + ")",
     height: 5,
     position: "relative",
     top: -4
@@ -186,11 +187,11 @@ const styles = {
   navStyle: {
     width: dimensions.leftColumn.width
   },
-  transparentHeader: {
-    height: dimensions.leftColumn.margin
-  },
   whitespaceFooter: {
-    height: 10
+    backgroundColor: colors.background,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    height: 20
   }
 };
 

@@ -44,11 +44,13 @@ class TripIdeasList extends Component {
     );
 
     const showAllIdeasLink = (
-      <div
-        onClick={onShowAllIdeas}
-        style={styles.showAllLink}
-      >
-        Show all ideas on map
+      <div style={styles.footerSection}>
+        <div
+          onClick={onShowAllIdeas}
+          style={styles.showAllLink}
+        >
+          Show all ideas on map
+        </div>
       </div>
     );
 
@@ -120,6 +122,10 @@ const styles = {
     margin: "0px 0px 10px 0px",
     width: "100%"
   },
+  footerSection: {
+    backgroundColor: colors.background,
+    padding: "20px 0px 10px"
+  },
   h3: {
     fontFamily: "'Raleway', sans-serif",
     fontSize: 22,
@@ -128,8 +134,8 @@ const styles = {
     marginBottom: 0
   },
   ideasSection: {
-    backgroundColor: "#f7f7f7",
-    borderTop: "1px solid #dddddd",
+    backgroundColor: colors.background,
+    borderTop: "1px solid #dddddd"
   },
   inputSection: {
   },
@@ -156,14 +162,15 @@ const styles = {
     margin: "0px 0px 10px 0px"
   },
   showAllLink: {
+    color: "white",
     cursor: "pointer",
-    backgroundColor: "#f4f4f4",
-    border: "1px solid #dddddd",
-    borderRadius: 3,
-    margin: "10px auto",
-    padding: 10,
+    backgroundColor: colors.secondary,
+    borderRadius: 25,
+    fontSize: 13,
+    margin: "0px auto",
+    padding: 8,
     textAlign: "center",
-    width: 300
+    width: 180
   },
   titleSection: {
     display: "flex",
