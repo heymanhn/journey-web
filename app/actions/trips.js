@@ -66,7 +66,6 @@ export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
 export const SET_IDEA_INDEX_TO_UPDATE = 'SET_IDEA_INDEX_TO_UPDATE';
 export const REORDER_TRIP_IDEA = 'REORDER_TRIP_IDEA';
 export const SAVE_IDEA_UPDATED_COMMENT = 'SAVE_IDEA_UPDATED_COMMENT';
-export const CLEAR_IDEA_UPDATED_COMMENT = 'CLEAR_IDEA_UPDATED_COMMENT';
 export const API_UPDATE_TRIP_IDEA_REQUEST = 'API_UPDATE_TRIP_IDEA_REQUEST';
 export const API_UPDATE_TRIP_IDEA_SUCCESS = 'API_UPDATE_TRIP_IDEA_SUCCESS';
 export const API_UPDATE_TRIP_IDEA_FAILURE = 'API_UPDATE_TRIP_IDEA_FAILURE';
@@ -83,6 +82,10 @@ export const SET_HOVER_LNGLAT = 'SET_HOVER_LNGLAT';
 export const CLEAR_HOVER_LNGLAT = 'CLEAR_HOVER_LNGLAT';
 export const SET_FOCUS_LNGLAT = 'SET_FOCUS_LNGLAT';
 export const CLEAR_FOCUS_LNGLAT = 'CLEAR_FOCUS_LNGLAT';
+
+// Trip idea editing states
+export const SET_EDITING_IDEA = 'SET_EDITING_IDEA';
+export const CLEAR_EDITING_IDEA = 'CLEAR_EDITING_IDEA';
 
 // Trip Errors
 export const CLEAR_TRIPS_ERROR = 'CLEAR_TRIPS_ERROR';
@@ -355,12 +358,6 @@ export function saveIdeaUpdatedComment(comment) {
   };
 }
 
-export function clearIdeaUpdatedComment() {
-  return {
-    type: CLEAR_IDEA_UPDATED_COMMENT
-  };
-}
-
 export function apiUpdateTripIdeaRequest() {
   return {
     type: API_UPDATE_TRIP_IDEA_REQUEST
@@ -433,6 +430,20 @@ export function setFocusLngLat(lngLat) {
 export function clearFocusLngLat() {
   return {
     type: CLEAR_FOCUS_LNGLAT
+  };
+}
+
+// Trip idea editing states
+export function setEditingIdea(ideaId) {
+  return {
+    type: SET_EDITING_IDEA,
+    ideaId
+  };
+}
+
+export function clearEditingIdea() {
+  return {
+    type: CLEAR_EDITING_IDEA
   };
 }
 
@@ -624,7 +635,12 @@ export function apiUpdateTripIdea(index) {
 
     const { tripState: ts, componentsState: cs } = getState();
     const { showModal } = cs.modalsState.tripIdeaSettings;
-    const { ideaIndexToUpdate, newComment, trip: { _id: tripId, ideas } } = ts;
+    const {
+      editingIdea,
+      ideaIndexToUpdate,
+      newComment,
+      trip: { _id: tripId, ideas }
+    } = ts;
     index = typeof index === 'number' ? index : ideaIndexToUpdate;
     const ideaId = ideas[index]._id;
     const params = { index };
@@ -645,6 +661,7 @@ export function apiUpdateTripIdea(index) {
       .then(response => response.json())
       .then(json => {
         dispatch(apiUpdateTripIdeaSuccess(json));
+        editingIdea && dispatch(clearEditingIdea());
         showModal && dispatch(hideModal(modalComponents.tripIdeaSettings));
       })
       .catch(error => {

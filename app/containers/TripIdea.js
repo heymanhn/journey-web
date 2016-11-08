@@ -5,8 +5,11 @@ import { apiTripPageEvent } from 'app/actions/analytics';
 import { showModal } from 'app/actions/modals';
 import {
   apiUpdateTripIdea,
+  clearEditingIdea,
   clearHoverLngLat,
   reorderTripIdea,
+  saveIdeaUpdatedComment,
+  setEditingIdea,
   setFocusLngLat,
   setHoverLngLat,
   setIdeaIndexToUpdate,
@@ -15,10 +18,11 @@ import {
 import TripIdeaUI from 'app/components/TripIdeaUI';
 import { analytics, modalComponents } from 'app/constants';
 
-const mapStateToProps = (state) => {
-  const ts = state.tripState;
+const mapStateToProps = (state, ownProps) => {
+  const { editingIdea, hoverLngLat } = state.tripState;
   return {
-    hoverLngLat: ts.hoverLngLat
+    hoverLngLat,
+    isEditing: editingIdea === ownProps.idea._id
   };
 };
 
@@ -32,7 +36,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     onEditIdea() {
+      dispatch(setEditingIdea(ideaId));
+    },
 
+    onEnterComment(event) {
+      dispatch(saveIdeaUpdatedComment(event.target.value));
+    },
+
+    onExitEditMode() {
+      dispatch(clearEditingIdea());
     },
 
     onFocusIdea() {

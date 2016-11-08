@@ -1,25 +1,31 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { colors } from 'app/constants';
+import { Button } from 'react-bootstrap';
+import { colors, dimensions } from 'app/constants';
 
 class TripIdeaRow extends Component {
   render() {
     const {
       connectDropTarget,
       idea,
+      isEditing,
       isViewOnly,
+      onEnterComment,
+      onExitEditMode,
       onFocusIdea,
-      onShowTripIdeaSettingsModal
+      onShowTripIdeaSettingsModal,
+      onUpdateIdea
     } = this.props;
 
     // Insert a dummy function if connectDropTarget is not specified
-    const wrapperFn = connectDropTarget || ((x) => { return x; });
+    const wrapperFn = connectDropTarget || (x => x);
     const imageSection = (
       <div style={styles.photoSection}>
         <img src={idea.photo} style={styles.photo} />
       </div>
     );
+
     const infoSection = wrapperFn(
       <div style={styles.contentSection}>
         <div>
@@ -30,22 +36,54 @@ class TripIdeaRow extends Component {
       </div>
     );
 
+    const settingsSection = (
+      <div>
+        <textarea
+          defaultValue={idea.comment}
+          onChange={onEnterComment}
+          style={styles.textAreaField}
+        />
+        <div style={styles.settingsButtons}>
+          <Button
+            onClick={onUpdateIdea}
+            style={{marginRight: 10}}
+            tabIndex={1}
+          >
+            <span>Done</span>
+          </Button>
+          <Button
+            onClick={onExitEditMode}
+            tabIndex={2}
+          >
+            <span>Cancel</span>
+          </Button>
+        </div>
+      </div>
+    );
+
     return (
       <div
         id={connectDropTarget ? idea._id : '__preview'}
-        onClick={onFocusIdea}
+        onClick={!isEditing && onFocusIdea}
         style={this.loadIdeaStyle()}
       >
         <div style={this.loadIdeaInfoStyle()}>
           {infoSection}
+          {isEditing && settingsSection}
         </div>
       </div>
     );
   }
 
   loadIdeaStyle() {
-    const { dragPreview, hover, isViewOnly } = this.props;
-    const { idea, ideaIfDraggable, ideaOnDrag, ideaOnHover } = styles;
+    const { dragPreview, hover, isEditing, isViewOnly } = this.props;
+    const {
+      idea,
+      ideaEditMode,
+      ideaIfDraggable,
+      ideaOnDrag,
+      ideaOnHover
+    } = styles;
 
     if (dragPreview) {
       return { ...idea, ...ideaOnDrag };
@@ -57,6 +95,10 @@ class TripIdeaRow extends Component {
       }
 
       return { ...idea, ...ideaOnHover };
+    }
+
+    if (isEditing) {
+      return { ...idea, ...ideaEditMode };
     }
 
     return idea;
@@ -75,9 +117,13 @@ TripIdeaRow.propTypes = {
   dragPreview: PropTypes.bool,
   hover: PropTypes.bool,
   idea: PropTypes.object,
-  isViewOnly: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool,
+  isViewOnly: PropTypes.bool,
+  onEnterComment: PropTypes.func,
+  onExitEditMode: PropTypes.func,
   onFocusIdea: PropTypes.func,
-  onShowTripIdeaSettingsModal: PropTypes.func
+  onShowTripIdeaSettingsModal: PropTypes.func,
+  onUpdateIdea: PropTypes.func
 };
 
 const styles = {
@@ -94,6 +140,9 @@ const styles = {
     backgroundColor: colors.background,
     borderBottom: "1px solid #ddd",
     margin: "0px 0px 0px 30px"
+  },
+  ideaEditMode: {
+    backgroundColor: "white"
   },
   ideaIfDraggable: {
     cursor: "-webkit-grab"
@@ -133,6 +182,17 @@ const styles = {
     height: 60,
     marginLeft: 10,
     width: 60
+  },
+  settingsButtons: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "0px auto"
+  },
+  textAreaField: {
+    color: "#333333",
+    fontSize: 13,
+    height: 60,
+    width: 340
   }
 };
 

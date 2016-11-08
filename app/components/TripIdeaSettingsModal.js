@@ -29,12 +29,6 @@ class TripIdeaSettingsModal extends Component {
       >
         <div style={styles.inputSection}>
           <h4>Comment:</h4>
-          <FormControl
-            componentClass="textarea"
-            defaultValue={comment}
-            onChange={onEnterComment}
-            style={styles.textAreaField}
-          />
         </div>
       </ModalView>
     );

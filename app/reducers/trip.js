@@ -17,11 +17,12 @@ import {
   SET_TRIP_IDEA_TO_DELETE,
   REORDER_TRIP_IDEA,
   SAVE_IDEA_UPDATED_COMMENT,
-  CLEAR_IDEA_UPDATED_COMMENT,
   SET_HOVER_LNGLAT,
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
+  SET_EDITING_IDEA,
+  CLEAR_EDITING_IDEA,
   CLEAR_TRIP_ERROR,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
@@ -128,8 +129,6 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         newComment: action.comment
       };
-    case CLEAR_IDEA_UPDATED_COMMENT:
-      return _.omit(state, 'newComment');
     case SET_HOVER_LNGLAT:
       return {
         ...state,
@@ -144,6 +143,13 @@ export default function tripState(state = initialTripState, action) {
       };
     case CLEAR_FOCUS_LNGLAT:
       return _.omit(state, 'focusLngLat');
+    case SET_EDITING_IDEA:
+      return {
+        ...state,
+        editingIdea: action.ideaId
+      };
+    case CLEAR_EDITING_IDEA:
+      return _.omit(state, 'editingIdea');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
     case SHOW_MODAL:

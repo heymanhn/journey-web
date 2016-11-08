@@ -84,12 +84,16 @@ class TripIdeaUI extends Component {
       connectDropTarget,
       idea,
       isDragging,
+      isEditing,
       isViewOnly,
       hoverLngLat,
       onClearHoverLngLat,
       onEditIdea,
+      onEnterComment,
+      onExitEditMode,
       onFocusIdea,
-      onShowDeleteTripIdeaModal
+      onShowDeleteTripIdeaModal,
+      onUpdateIdea
     } = this.props;
 
     const hoverButtons = (
@@ -119,18 +123,22 @@ class TripIdeaUI extends Component {
             'connectDropTarget',
             'idea',
             'isViewOnly',
-            'onShowTripIdeaSettingsModal'
+            'onEnterComment',
+            'onExitEditMode',
+            'onShowTripIdeaSettingsModal',
+            'onUpdateIdea'
           ])}
           hover={this.isHovering()}
+          isEditing={isEditing}
 
           // Upon clicking on an idea, zoom in on the idea in the map
           onFocusIdea={onFocusIdea}
         />
-        {!isViewOnly && hoverButtons}
+        {!isViewOnly && !isEditing && hoverButtons}
       </div>
     );
 
-    if (isViewOnly) {
+    if (isViewOnly || isEditing) {
       return ideaPanel;
     }
 
@@ -175,16 +183,19 @@ TripIdeaUI.propTypes = {
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
   hoverLngLat: PropTypes.array,
   onClearHoverLngLat: PropTypes.func.isRequired,
   onEditIdea: PropTypes.func.isRequired,
+  onEnterComment: PropTypes.func.isRequired,
+  onExitEditMode: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
   onShowDeleteTripIdeaModal: PropTypes.func.isRequired,
-  onUpdateIdea: PropTypes.func.isRequired,
-  onShowTripIdeaSettingsModal: PropTypes.func.isRequired
+  onShowTripIdeaSettingsModal: PropTypes.func.isRequired,
+  onUpdateIdea: PropTypes.func.isRequired
 };
 
 const styles = {
