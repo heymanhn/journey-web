@@ -11,7 +11,6 @@ import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
-import TripIdeaSettings from 'app/containers/TripIdeaSettings';
 import TripSettings from 'app/containers/TripSettings';
 import { colors, dimensions, transitions } from 'app/constants';
 
@@ -74,7 +73,6 @@ class TripPage extends Component {
                 <TripDetails />
                 <TripIdeas />
                 <TripSettings action="update" />
-                <TripIdeaSettings />
               </div>
             ) : (!error && (
               <div style={styles.loader}>

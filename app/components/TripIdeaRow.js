@@ -14,7 +14,6 @@ class TripIdeaRow extends Component {
       onEnterComment,
       onExitEditMode,
       onFocusIdea,
-      onShowTripIdeaSettingsModal,
       onUpdateIdea
     } = this.props;
 
@@ -122,7 +121,6 @@ TripIdeaRow.propTypes = {
   onEnterComment: PropTypes.func,
   onExitEditMode: PropTypes.func,
   onFocusIdea: PropTypes.func,
-  onShowTripIdeaSettingsModal: PropTypes.func,
   onUpdateIdea: PropTypes.func
 };
 

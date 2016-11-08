@@ -633,14 +633,12 @@ export function apiUpdateTripIdea(index) {
   return (dispatch, getState) => {
     dispatch(apiUpdateTripIdeaRequest());
 
-    const { tripState: ts, componentsState: cs } = getState();
-    const { showModal } = cs.modalsState.tripIdeaSettings;
     const {
       editingIdea,
       ideaIndexToUpdate,
       newComment,
       trip: { _id: tripId, ideas }
-    } = ts;
+    } = getState().tripState;
     index = typeof index === 'number' ? index : ideaIndexToUpdate;
     const ideaId = ideas[index]._id;
     const params = { index };
@@ -662,7 +660,6 @@ export function apiUpdateTripIdea(index) {
       .then(json => {
         dispatch(apiUpdateTripIdeaSuccess(json));
         editingIdea && dispatch(clearEditingIdea());
-        showModal && dispatch(hideModal(modalComponents.tripIdeaSettings));
       })
       .catch(error => {
         return error && dispatch(apiUpdateTripIdeaFailure(error.message));

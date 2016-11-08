@@ -125,7 +125,6 @@ class TripIdeaUI extends Component {
             'isViewOnly',
             'onEnterComment',
             'onExitEditMode',
-            'onShowTripIdeaSettingsModal',
             'onUpdateIdea'
           ])}
           hover={this.isHovering()}
@@ -194,7 +193,6 @@ TripIdeaUI.propTypes = {
   onReorderIdea: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
   onShowDeleteTripIdeaModal: PropTypes.func.isRequired,
-  onShowTripIdeaSettingsModal: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired
 };
 

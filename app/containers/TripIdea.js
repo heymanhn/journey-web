@@ -28,7 +28,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { idea: { _id: ideaId, loc: { coordinates } }, index } = ownProps;
-  const { deleteTripIdea, tripIdeaSettings } = modalComponents;
+  const { deleteTripIdea } = modalComponents;
 
   return {
     onClearHoverLngLat() {
@@ -63,12 +63,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onShowDeleteTripIdeaModal() {
       dispatch(showModal(deleteTripIdea));
       dispatch(setTripIdeaToDelete(ideaId));
-    },
-
-    onShowTripIdeaSettingsModal(event) {
-      event.stopPropagation();
-      dispatch(setIdeaIndexToUpdate(index));
-      dispatch(showModal(tripIdeaSettings));
     },
 
     onUpdateIdea() {
