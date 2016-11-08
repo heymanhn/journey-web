@@ -3,7 +3,6 @@
 import _ from 'underscore';
 import flow from 'lodash/flow';
 import React, { Component, PropTypes } from 'react';
-import { Glyphicon } from 'react-bootstrap';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
@@ -88,9 +87,17 @@ class TripIdeaUI extends Component {
       isViewOnly,
       hoverLngLat,
       onClearHoverLngLat,
+      onEditIdea,
       onFocusIdea,
       onRemoveIdea
     } = this.props;
+
+    const hoverButtons = (
+      <div style={this.loadHoverButtonsStyle()}>
+        <div onClick={onEditIdea} style={styles.editButton}></div>
+        <div onClick={onRemoveIdea} style={styles.removeButton}></div>
+      </div>
+    );
 
     const ideaPanel = (
       <div
@@ -116,6 +123,7 @@ class TripIdeaUI extends Component {
           // Upon clicking on an idea, zoom in on the idea in the map
           onFocusIdea={onFocusIdea}
         />
+        {!isViewOnly && hoverButtons}
       </div>
     );
 
@@ -139,9 +147,9 @@ class TripIdeaUI extends Component {
     return _.extend(styles.emptySpace, { height });
   }
 
-  loadRemoveButtonStyle() {
-    const style = styles.removeButton.div;
-    return this.isHovering() ? {...style, display: "block" } : style;
+  loadHoverButtonsStyle() {
+    const style = styles.hoverButtons;
+    return this.isHovering() ? { ...style, display: "flex" } : style;
   }
 
   isHovering() {
@@ -167,6 +175,7 @@ TripIdeaUI.propTypes = {
   isViewOnly: PropTypes.bool.isRequired,
   hoverLngLat: PropTypes.array,
   onClearHoverLngLat: PropTypes.func.isRequired,
+  onEditIdea: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,
   onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
@@ -176,26 +185,39 @@ TripIdeaUI.propTypes = {
 };
 
 const styles = {
+  editButton: {
+    backgroundImage: "url('../assets/edit-idea-icon.png')",
+    backgroundPosition: "9px 3px",
+    backgroundRepeat: "no-repeat",
+    borderRight: "1px solid #dddddd",
+    cursor: "pointer",
+    width: 30
+  },
   emptySpace: {
     backgroundColor: "#eeeeee"
   },
+  hoverButtons: {
+    backgroundColor: "white",
+    border: "1px solid #dddddd",
+    borderRadius: 100,
+    display: "none",
+    height: 24,
+    left: 170,
+    marginTop: -15,
+    position: "absolute",
+    width: 60,
+    zIndex: 1
+  },
   mainDiv: {
-    backgroundColor: "#f7f7f7"
+    backgroundColor: "#f7f7f7",
+    position: "relative"
   },
   removeButton: {
-    div: {
-      backgroundColor: "rgba(255,255,255,0.0)",
-      cursor: "pointer",
-      display: "none",
-      position: "absolute",
-      left: 356
-    },
-    glyph: {
-      borderRadius: 22,
-      backgroundColor: "#ffffff",
-      fontSize: 22,
-      top: -8
-    }
+    backgroundImage: "url('../assets/delete-idea-icon.png')",
+    backgroundPosition: "8px 6px",
+    backgroundRepeat: "no-repeat",
+    cursor: "pointer",
+    width: 30
   }
 };
 

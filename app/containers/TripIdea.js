@@ -30,6 +30,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(clearHoverLngLat());
     },
 
+    onEditIdea() {
+
+    },
+
     onFocusIdea() {
       dispatch(apiTripPageEvent(analytics.pages.TRIP_IDEA, { ideaId } ));
       dispatch(setFocusLngLat(coordinates));
