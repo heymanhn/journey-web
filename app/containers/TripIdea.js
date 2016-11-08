@@ -66,6 +66,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     onUpdateIdea() {
+      dispatch(apiUpdateTripIdea(index)).then(() => {
+        return dispatch(clearEditingIdea());
+      });
+    },
+
+    onUpdateIdeaAfterDrag() {
       dispatch(apiUpdateTripIdea(index));
     }
   };

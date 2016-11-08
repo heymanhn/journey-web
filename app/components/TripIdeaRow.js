@@ -40,7 +40,8 @@ class TripIdeaRow extends Component {
         <textarea
           defaultValue={idea.comment}
           onChange={onEnterComment}
-          style={styles.textAreaField}
+          placeholder="Add a note"
+          style={styles.commentField}
         />
         <div style={styles.settingsButtons}>
           <Button
@@ -130,17 +131,23 @@ const styles = {
     color: "#999999",
     marginBottom: 0
   },
+  commentField: {
+    color: "#333333",
+    fontSize: 13,
+    height: 60,
+    margin: "10px 0px",
+    padding: 10,
+    width: 340
+  },
   contentSection: {
     display: "flex",
     justifyContent: "space-between"
   },
   idea: {
-    backgroundColor: colors.background,
     borderBottom: "1px solid #ddd",
     margin: "0px 0px 0px 30px"
   },
   ideaEditMode: {
-    backgroundColor: "white"
   },
   ideaIfDraggable: {
     cursor: "-webkit-grab"
@@ -185,12 +192,6 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     margin: "0px auto"
-  },
-  textAreaField: {
-    color: "#333333",
-    fontSize: 13,
-    height: 60,
-    width: 340
   }
 };
 

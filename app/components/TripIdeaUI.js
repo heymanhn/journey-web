@@ -7,7 +7,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
 import TripIdeaRow from './TripIdeaRow';
-import { dndTypes } from 'app/constants';
+import { colors, dndTypes } from 'app/constants';
 
 /*
  * React-dnd drag source
@@ -36,14 +36,14 @@ function ideaSourceCollect(connect, monitor) {
 const ideaTarget = {
   drop(props, monitor) {
 
-    const { index, onUpdateIdea } = props;
+    const { index, onUpdateIdeaAfterDrag } = props;
     const draggedIdea = monitor.getItem();
 
     if (draggedIdea.initialIndex === index) {
       return;
     }
 
-    onUpdateIdea();
+    onUpdateIdeaAfterDrag();
     draggedIdea.initialIndex = index;
   },
 
@@ -108,7 +108,7 @@ class TripIdeaUI extends Component {
 
     const ideaPanel = (
       <div
-        style={styles.mainDiv}
+        style={this.loadMainDivStyle()}
 
         /*
          * When the mouse hovers over an idea, dim the idea's background color
@@ -162,6 +162,12 @@ class TripIdeaUI extends Component {
     return this.isHovering() ? { ...style, display: "flex" } : style;
   }
 
+  loadMainDivStyle() {
+    const style = styles.mainDiv;
+    const { isEditing } = this.props;
+    return isEditing ? { ...style, backgroundColor: "white" } : style;
+  }
+
   isHovering() {
     const { hoverLngLat, idea: { loc: { coordinates } } } = this.props;
     return hoverLngLat === coordinates;
@@ -193,7 +199,8 @@ TripIdeaUI.propTypes = {
   onReorderIdea: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
   onShowDeleteTripIdeaModal: PropTypes.func.isRequired,
-  onUpdateIdea: PropTypes.func.isRequired
+  onUpdateIdea: PropTypes.func.isRequired,
+  onUpdateIdeaAfterDrag: PropTypes.func.isRequired
 };
 
 const styles = {
@@ -221,7 +228,7 @@ const styles = {
     zIndex: 1
   },
   mainDiv: {
-    backgroundColor: "#f7f7f7",
+    backgroundColor: colors.background,
     position: "relative"
   },
   removeButton: {

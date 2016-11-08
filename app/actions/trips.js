@@ -634,7 +634,6 @@ export function apiUpdateTripIdea(index) {
     dispatch(apiUpdateTripIdeaRequest());
 
     const {
-      editingIdea,
       ideaIndexToUpdate,
       newComment,
       trip: { _id: tripId, ideas }
@@ -657,10 +656,7 @@ export function apiUpdateTripIdea(index) {
     return fetch(updateTripIdeaAPI.route, opts)
       .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
-      .then(json => {
-        dispatch(apiUpdateTripIdeaSuccess(json));
-        editingIdea && dispatch(clearEditingIdea());
-      })
+      .then(json => dispatch(apiUpdateTripIdeaSuccess(json)))
       .catch(error => {
         return error && dispatch(apiUpdateTripIdeaFailure(error.message));
       });
