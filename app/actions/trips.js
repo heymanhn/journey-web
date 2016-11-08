@@ -71,11 +71,12 @@ export const API_UPDATE_TRIP_IDEA_REQUEST = 'API_UPDATE_TRIP_IDEA_REQUEST';
 export const API_UPDATE_TRIP_IDEA_SUCCESS = 'API_UPDATE_TRIP_IDEA_SUCCESS';
 export const API_UPDATE_TRIP_IDEA_FAILURE = 'API_UPDATE_TRIP_IDEA_FAILURE';
 
-// Remove a trip idea
-export const REMOVE_TRIP_IDEA = 'REMOVE_TRIP_IDEA';
-export const API_REMOVE_TRIP_IDEA_REQUEST = 'API_REMOVE_TRIP_IDEA_REQUEST';
-export const API_REMOVE_TRIP_IDEA_SUCCESS = 'API_REMOVE_TRIP_IDEA_SUCCESS';
-export const API_REMOVE_TRIP_IDEA_FAILURE = 'API_REMOVE_TRIP_IDEA_FAILURE';
+// Delete a trip idea
+export const SET_TRIP_IDEA_TO_DELETE = 'SET_TRIP_IDEA_TO_DELETE';
+export const DELETE_TRIP_IDEA = 'DELETE_TRIP_IDEA';
+export const API_DELETE_TRIP_IDEA_REQUEST = 'API_DELETE_TRIP_IDEA_REQUEST';
+export const API_DELETE_TRIP_IDEA_SUCCESS = 'API_DELETE_TRIP_IDEA_SUCCESS';
+export const API_DELETE_TRIP_IDEA_FAILURE = 'API_DELETE_TRIP_IDEA_FAILURE';
 
 // Trip idea hover and focus states
 export const SET_HOVER_LNGLAT = 'SET_HOVER_LNGLAT';
@@ -380,30 +381,30 @@ export function apiUpdateTripIdeaFailure(error) {
   };
 }
 
-// Remove a trip idea
-export function removeTripIdea(ideaId) {
+// Delete a trip idea
+export function setTripIdeaToDelete(ideaId) {
   return {
-    type: REMOVE_TRIP_IDEA,
+    type: SET_TRIP_IDEA_TO_DELETE,
     ideaId
   };
 }
 
-export function apiRemoveTripIdeaRequest() {
+export function apiDeleteTripIdeaRequest() {
   return {
-    type: API_REMOVE_TRIP_IDEA_REQUEST
+    type: API_DELETE_TRIP_IDEA_REQUEST
   };
 }
 
-export function apiRemoveTripIdeaSuccess(json) {
+export function apiDeleteTripIdeaSuccess(json) {
   return {
-    type: API_REMOVE_TRIP_IDEA_SUCCESS,
+    type: API_DELETE_TRIP_IDEA_SUCCESS,
     ideas: json.ideas
   };
 }
 
-export function apiRemoveTripIdeaFailure(error) {
+export function apiDeleteTripIdeaFailure(error) {
   return {
-    type: API_REMOVE_TRIP_IDEA_FAILURE,
+    type: API_DELETE_TRIP_IDEA_FAILURE,
     error
   };
 }
@@ -576,7 +577,7 @@ export function apiDeleteTrip() {
       .then(response => response.json())
       .then(json => {
         dispatch(apiDeleteTripSuccess(json));
-        dispatch(hideModal(modalComponents.deleteTrip))
+        dispatch(hideModal(modalComponents.deleteTrip));
       })
       .catch(error => error && dispatch(apiDeleteTripFailure(error.message)));
   };
@@ -652,26 +653,27 @@ export function apiUpdateTripIdea(index) {
   };
 }
 
-export function apiRemoveTripIdea(ideaId) {
+export function apiDeleteTripIdea() {
   return (dispatch, getState) => {
-    dispatch(removeTripIdea(ideaId)); // Update UI state first
-    dispatch(apiRemoveTripIdeaRequest());
+    const { tripIdeaToDelete: ideaId } = getState().tripState;
+    dispatch(apiDeleteTripIdeaRequest());
 
     const tripId = getState().tripState.trip._id;
-    const removeTripIdeaAPI = journeyAPI.trip.ideas.delete(tripId, ideaId);
+    const deleteTripIdeaAPI = journeyAPI.trip.ideas.delete(tripId, ideaId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
-      method: removeTripIdeaAPI.method
+      method: deleteTripIdeaAPI.method
     };
 
-    return fetch(removeTripIdeaAPI.route, opts)
+    return fetch(deleteTripIdeaAPI.route, opts)
       .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
-        dispatch(apiRemoveTripIdeaSuccess(json));
+        dispatch(apiDeleteTripIdeaSuccess(json));
+        dispatch(hideModal(modalComponents.deleteTripIdea))
       })
       .catch(error => {
-        return error && dispatch(apiRemoveTripIdeaFailure(error.message));
+        return error && dispatch(apiDeleteTripIdeaFailure(error.message));
       });
   };
 }

@@ -237,6 +237,7 @@ export const acComponents = {
  */
 export const modalComponents = {
   deleteTrip: 'deleteTrip',
+  deleteTripIdea: 'deleteTripIdea',
   tripSettings: 'tripSettings',
   tripIdeaSettings: 'tripIdeaSettings'
 };

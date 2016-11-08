@@ -89,13 +89,16 @@ class TripIdeaUI extends Component {
       onClearHoverLngLat,
       onEditIdea,
       onFocusIdea,
-      onRemoveIdea
+      onShowDeleteTripIdeaModal
     } = this.props;
 
     const hoverButtons = (
       <div style={this.loadHoverButtonsStyle()}>
         <div onClick={onEditIdea} style={styles.editButton}></div>
-        <div onClick={onRemoveIdea} style={styles.removeButton}></div>
+        <div
+          onClick={onShowDeleteTripIdeaModal}
+          style={styles.removeButton}
+        ></div>
       </div>
     );
 
@@ -177,9 +180,9 @@ TripIdeaUI.propTypes = {
   onClearHoverLngLat: PropTypes.func.isRequired,
   onEditIdea: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,
-  onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
+  onShowDeleteTripIdeaModal: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired,
   onShowTripIdeaSettingsModal: PropTypes.func.isRequired
 };
@@ -203,7 +206,7 @@ const styles = {
     display: "none",
     height: 24,
     left: 170,
-    marginTop: -15,
+    marginTop: -18,
     position: "absolute",
     width: 60,
     zIndex: 1

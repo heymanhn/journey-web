@@ -2,27 +2,43 @@
 
 import { connect } from 'react-redux';
 import { showAllTripIdeasOnMap } from 'app/actions/map';
+import { hideModal } from 'app/actions/modals';
 import {
   apiAddTripIdea,
+  apiDeleteTripIdea,
   clearNewTripIdea,
   saveIdeaComment,
   saveNewTripIdea
 } from 'app/actions/trips';
 import TripIdeasList from 'app/components/TripIdeasList';
+import { modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { user } = state.authState;
-  const { error, trip, newIdea } = state.tripState;
+  const {
+    error,
+    isFetching,
+    trip,
+    tripIdeaToDelete,
+    newIdea
+  } = state.tripState;
+  const { showModal } = state.componentsState.modalsState.deleteTripIdea;
+
   const { creator, ideas, visibility } = trip;
   return {
     error,
     ideas,
+    isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
-    newIdea
+    newIdea,
+    showModal,
+    tripIdeaToDelete
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const { deleteTripIdea } = modalComponents;
+
   return {
     onAddIdeaPress() {
       dispatch(apiAddTripIdea());
@@ -32,12 +48,20 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(clearNewTripIdea());
     },
 
+    onDeleteTripIdea() {
+      dispatch(apiDeleteTripIdea());
+    },
+
     onEnterIdea(idea) {
       dispatch(saveNewTripIdea(idea));
     },
 
     onEnterIdeaComment(event) {
       dispatch(saveIdeaComment(event.target.value));
+    },
+
+    onHide() {
+      dispatch(hideModal(deleteTripIdea));
     },
 
     onShowAllIdeas() {

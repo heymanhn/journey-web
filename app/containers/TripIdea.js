@@ -2,16 +2,16 @@
 
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
+import { showModal } from 'app/actions/modals';
 import {
-  apiRemoveTripIdea,
   apiUpdateTripIdea,
   clearHoverLngLat,
   reorderTripIdea,
   setFocusLngLat,
   setHoverLngLat,
-  setIdeaIndexToUpdate
+  setIdeaIndexToUpdate,
+  setTripIdeaToDelete
 } from 'app/actions/trips';
-import { showModal } from 'app/actions/modals';
 import TripIdeaUI from 'app/components/TripIdeaUI';
 import { analytics, modalComponents } from 'app/constants';
 
@@ -24,6 +24,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { idea: { _id: ideaId, loc: { coordinates } }, index } = ownProps;
+  const { deleteTripIdea, tripIdeaSettings } = modalComponents;
 
   return {
     onClearHoverLngLat() {
@@ -39,10 +40,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(setFocusLngLat(coordinates));
     },
 
-    onRemoveIdea() {
-      dispatch(apiRemoveTripIdea(ideaId));
-    },
-
     onReorderIdea: (index1, index2) => {
       dispatch(reorderTripIdea(index1, index2));
     },
@@ -51,10 +48,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(setHoverLngLat(coordinates));
     },
 
+    onShowDeleteTripIdeaModal() {
+      dispatch(showModal(deleteTripIdea));
+      dispatch(setTripIdeaToDelete(ideaId));
+    },
+
     onShowTripIdeaSettingsModal(event) {
       event.stopPropagation();
       dispatch(setIdeaIndexToUpdate(index));
-      dispatch(showModal(modalComponents.tripIdeaSettings));
+      dispatch(showModal(tripIdeaSettings));
     },
 
     onUpdateIdea() {

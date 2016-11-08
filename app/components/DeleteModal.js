@@ -4,18 +4,21 @@ import React, { Component, PropTypes } from 'react';
 import ModalView from './ModalView';
 import { colors } from 'app/constants';
 
-class TripDeleteModal extends Component {
+class DeleteModal extends Component {
   render() {
     const {
+      contentTitle,
       error,
       isFetching,
-      onDeleteTrip,
+      modalTitle,
+      onDelete,
       onHide,
-      showModal,
-      tripTitle
+      showModal
     } = this.props;
 
-    const tripTitleSpan = <span style={styles.tripTitle}>{tripTitle}</span>;
+    const titleSpan = (
+      <span style={styles.contentTitle}>{contentTitle}</span>
+    );
 
     return (
       <ModalView
@@ -24,38 +27,38 @@ class TripDeleteModal extends Component {
         isSubmitDisabled={isFetching}
         keyboard={true}
         onHide={onHide}
-        onSubmit={onDeleteTrip}
+        onSubmit={onDelete}
         submitTitle="Delete"
         showModal={showModal}
         small
-        title="Delete Trip"
+        title={modalTitle}
       >
         <div style={styles.confirmText}>
-          Are you sure you want to delete {tripTitleSpan}?
+          Are you sure you want to delete {titleSpan}?
         </div>
       </ModalView>
     );
   }
 }
 
-TripDeleteModal.propTypes = {
+DeleteModal.propTypes = {
+  contentTitle: PropTypes.string,
   error: PropTypes.string,
   isFetching: PropTypes.bool,
-  onDeleteTrip: PropTypes.func.isRequired,
+  modalTitle: PropTypes.string,
+  onDelete: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
-  showModal: PropTypes.bool.isRequired,
-  title: PropTypes.string,
-  tripTitle: PropTypes.string
+  showModal: PropTypes.bool.isRequired
 };
 
 const styles = {
   confirmText: {
     margin: "10px 0"
   },
-  tripTitle: {
+  contentTitle: {
     color: colors.primary,
     fontWeight: 500
   }
 };
 
-export default TripDeleteModal;
+export default DeleteModal;

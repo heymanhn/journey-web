@@ -6,20 +6,26 @@ import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 
 import { acComponents, colors, dimensions } from 'app/constants';
-import TripIdeaDragPreview from './TripIdeaDragPreview';
+import DeleteModal from './DeleteModal';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
+import TripIdeaDragPreview from './TripIdeaDragPreview';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 
 class TripIdeasList extends Component {
   render() {
     const {
+      error,
       ideas,
+      isFetching,
       isViewOnly,
       newIdea,
       onAddIdeaPress,
+      onDeleteTripIdea,
       onEnterIdeaComment,
-      onShowAllIdeas
+      onHide,
+      onShowAllIdeas,
+      showModal
     } = this.props;
 
     const tripIdeas = ideas.map((idea, index) => {
@@ -88,6 +94,15 @@ class TripIdeasList extends Component {
         <div>
           <div style={styles.ideasSection}>
             {tripIdeas}
+            <DeleteModal
+              contentTitle={this.getTripIdeaNameToDelete()}
+              error={error}
+              isFetching={isFetching}
+              modalTitle="Delete Trip Idea"
+              onHide={onHide}
+              onDelete={onDeleteTripIdea}
+              showModal={showModal}
+            />
           </div>
           {ideas.length > 0 && showAllIdeasLink}
           {!isViewOnly && dragPreview}
@@ -103,17 +118,34 @@ class TripIdeasList extends Component {
 
     return newIdea ? style : { ...style, ...disabledStyle };
   }
+
+  getTripIdeaNameToDelete() {
+    const { ideas, tripIdeaToDelete } = this.props;
+
+    if (!tripIdeaToDelete) {
+      return null;
+    }
+
+    const idea = ideas.find(i => i._id === tripIdeaToDelete);
+    return idea ? idea.name : '';
+  }
 }
 
 TripIdeasList.propTypes = {
+  error: PropTypes.string,
   ideas: PropTypes.array,
+  isFetching: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
   onClearTripIdea: PropTypes.func.isRequired,
+  onDeleteTripIdea: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
   onEnterIdeaComment: PropTypes.func.isRequired,
-  onShowAllIdeas: PropTypes.func.isRequired
+  onHide: PropTypes.func.isRequired,
+  onShowAllIdeas: PropTypes.func.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  tripIdeaToDelete: PropTypes.string
 };
 
 const styles = {
