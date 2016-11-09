@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import Textarea from 'react-textarea-autosize';
 import { colors, dimensions } from 'app/constants';
 
 class TripIdeaRow extends Component {
@@ -43,7 +44,7 @@ class TripIdeaRow extends Component {
 
     const settingsSection = (
       <div>
-        <textarea
+        <Textarea
           defaultValue={idea.comment}
           onBlur={this.clearFocus.bind(this)}
           onChange={onEnterComment}
@@ -119,7 +120,7 @@ class TripIdeaRow extends Component {
     const { focused } = this.state;
 
     if (focused) {
-      style.border = "1px solid #666666";
+      style.border = "1px solid #999999";
       style.outline = "none";
     } else {
       style.border = "1px solid #dddddd";
@@ -173,6 +174,7 @@ const styles = {
     width: 70
   },
   commentField: {
+    backgroundColor: colors.background,
     color: colors.primaryText,
     fontSize: 13,
     margin: "12px 0px",
