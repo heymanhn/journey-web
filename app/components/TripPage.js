@@ -153,7 +153,7 @@ const styles = {
     marginTop: 70
   },
   mainContainer: {
-    backgroundColor: "white",
+    backgroundColor: colors.background,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     boxShadow: "rgba(0, 0, 0, 0.1) 3px 3px 8px," +

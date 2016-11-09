@@ -59,7 +59,7 @@ class TripDetailsView extends Component {
     );
 
     return (
-      <div>
+      <div style={styles.headerSection}>
         <h1 style={styles.h1}>{title}</h1>
         <div style={styles.settingsSection}>
           <TripSetting
@@ -103,11 +103,14 @@ const styles = {
     paddingTop: 26,
     wordWrap: "break-word"
   },
+  headerSection: {
+    backgroundColor: "white"
+  },
   settingsSection: {
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    margin: "8px 20px"
+    margin: "8px 20px 0px"
   },
   tooltip: {
     marginTop: -7,

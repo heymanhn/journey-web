@@ -205,11 +205,12 @@ const styles = {
     width: 180
   },
   titleSection: {
+    backgroundColor: "white",
     display: "flex",
     alignItems: "baseline",
     justifyContent: "space-between",
     marginBottom: 0,
-    padding: "0 " + dimensions.sidePadding + " 10"
+    padding: "8px " + dimensions.sidePadding + "px 10px"
   }
 };
 
