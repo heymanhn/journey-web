@@ -180,7 +180,7 @@ const styles = {
     marginTop: 15
   },
   settingLabel: {
-    color: "#333333",
+    color: colors.primaryText,
     fontSize: 14,
     fontWeight: 500,
     letterSpacing: 0.2
