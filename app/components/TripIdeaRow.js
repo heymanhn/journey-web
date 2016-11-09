@@ -120,9 +120,11 @@ class TripIdeaRow extends Component {
     const { focused } = this.state;
 
     if (focused) {
+      style.backgroundColor = "white";
       style.border = "1px solid #999999";
       style.outline = "none";
     } else {
+      style.backgroundColor = colors.background;
       style.border = "1px solid #dddddd";
     }
 
@@ -174,7 +176,6 @@ const styles = {
     width: 70
   },
   commentField: {
-    backgroundColor: colors.background,
     color: colors.primaryText,
     fontSize: 13,
     margin: "12px 0px",

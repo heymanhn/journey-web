@@ -37,6 +37,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
     onEditIdea() {
       dispatch(setEditingIdea(ideaId));
+      dispatch(setFocusLngLat(coordinates));
     },
 
     onEnterComment(event) {
