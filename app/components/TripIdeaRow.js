@@ -238,12 +238,12 @@ const styles = {
     fontWeight: "bold"
   },
   photo: {
+    border: "1px solid #eeeeee",
     height: 60,
     objectFit: "cover",
     width: 60
   },
   photoSection: {
-    border: "1px solid #eeeeee",
     height: 60,
     marginLeft: 10,
     width: 60

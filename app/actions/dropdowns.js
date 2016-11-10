@@ -1,6 +1,7 @@
 'use strict';
 
 import { resetAutocomplete } from './autocomplete';
+import { clearFocusLngLat } from 'app/actions/trips';
 import { acComponents, dropdownComponents } from 'app/constants';
 
 /*
@@ -39,6 +40,7 @@ export function toggleDropdown(dropdownId) {
       let autocompleteId;
       if (dropdownId === dropdownComponents.addTripIdeas) {
         autocompleteId = acComponents.tripIdeaAC;
+        dispatch(clearFocusLngLat());
       }
 
       dispatch(hideDropdown(dropdownId));

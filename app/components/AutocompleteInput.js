@@ -181,7 +181,8 @@ const autocompleteStyles = {
     border: "1px solid #cccccc",
     borderTop: 0,
     marginTop: -1,
-    position: "absolute"
+    position: "absolute",
+    zIndex: 2
   }
 };
 
