@@ -2,6 +2,7 @@
 
 import { combineReducers } from 'redux';
 import autocompleteState from './autocomplete';
+import dropdownsState from './dropdowns';
 import landingPageState from './landingPage';
 import mapState from './map';
 import modalsState from './modals';
@@ -11,6 +12,7 @@ import tripPageState from './tripPage';
 
 const componentsState = combineReducers({
   autocompleteState,
+  dropdownsState,
   landingPageState,
   mapState,
   modalsState,

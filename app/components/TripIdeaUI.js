@@ -3,12 +3,11 @@
 import _ from 'underscore';
 import flow from 'lodash/flow';
 import React, { Component, PropTypes } from 'react';
-import { Glyphicon } from 'react-bootstrap';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
-import TripIdeaPanel from './TripIdeaPanel';
-import { dndTypes } from 'app/constants';
+import TripIdeaRow from './TripIdeaRow';
+import { colors, dndTypes } from 'app/constants';
 
 /*
  * React-dnd drag source
@@ -37,14 +36,14 @@ function ideaSourceCollect(connect, monitor) {
 const ideaTarget = {
   drop(props, monitor) {
 
-    const { index, onUpdateIdea } = props;
+    const { index, onUpdateIdeaAfterDrag } = props;
     const draggedIdea = monitor.getItem();
 
     if (draggedIdea.initialIndex === index) {
       return;
     }
 
-    onUpdateIdea();
+    onUpdateIdeaAfterDrag();
     draggedIdea.initialIndex = index;
   },
 
@@ -85,28 +84,31 @@ class TripIdeaUI extends Component {
       connectDropTarget,
       idea,
       isDragging,
+      isEditing,
       isViewOnly,
       hoverLngLat,
       onClearHoverLngLat,
+      onEditIdea,
+      onEnterComment,
+      onExitEditMode,
       onFocusIdea,
-      onRemoveIdea
+      onShowDeleteTripIdeaModal,
+      onUpdateIdea
     } = this.props;
 
-    const removeButton = (
-      <div
-        onClick={onRemoveIdea}
-        style={this.loadRemoveButtonStyle()}
-      >
-        <Glyphicon
-          glyph="remove-circle"
-          style={styles.removeButton.glyph}
-        />
+    const hoverButtons = (
+      <div style={this.loadHoverButtonsStyle()}>
+        <div onClick={onEditIdea} style={styles.editButton}></div>
+        <div
+          onClick={onShowDeleteTripIdeaModal}
+          style={styles.removeButton}
+        ></div>
       </div>
     );
 
     const ideaPanel = (
       <div
-        style={styles.mainDiv}
+        style={this.loadMainDivStyle()}
 
         /*
          * When the mouse hovers over an idea, dim the idea's background color
@@ -116,23 +118,26 @@ class TripIdeaUI extends Component {
         onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
       >
-        {!isViewOnly && removeButton}
-        <TripIdeaPanel
+        <TripIdeaRow
           {..._.pick(this.props, [
             'connectDropTarget',
             'idea',
             'isViewOnly',
-            'onShowTripIdeaSettingsModal'
+            'onEnterComment',
+            'onExitEditMode',
+            'onUpdateIdea'
           ])}
           hover={this.isHovering()}
+          isEditing={isEditing}
 
           // Upon clicking on an idea, zoom in on the idea in the map
           onFocusIdea={onFocusIdea}
         />
+        {!isViewOnly && !isEditing && hoverButtons}
       </div>
     );
 
-    if (isViewOnly) {
+    if (isViewOnly || isEditing) {
       return ideaPanel;
     }
 
@@ -152,9 +157,15 @@ class TripIdeaUI extends Component {
     return _.extend(styles.emptySpace, { height });
   }
 
-  loadRemoveButtonStyle() {
-    const style = styles.removeButton.div;
-    return this.isHovering() ? {...style, display: "block" } : style;
+  loadHoverButtonsStyle() {
+    const style = styles.hoverButtons;
+    return this.isHovering() ? { ...style, display: "flex" } : style;
+  }
+
+  loadMainDivStyle() {
+    const style = styles.mainDiv;
+    const { isEditing } = this.props;
+    return isEditing ? { ...style, backgroundColor: "white" } : style;
   }
 
   isHovering() {
@@ -177,41 +188,55 @@ TripIdeaUI.propTypes = {
   idea: PropTypes.object,
   index: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
   hoverLngLat: PropTypes.array,
   onClearHoverLngLat: PropTypes.func.isRequired,
+  onEditIdea: PropTypes.func.isRequired,
+  onEnterComment: PropTypes.func.isRequired,
+  onExitEditMode: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,
-  onRemoveIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
+  onShowDeleteTripIdeaModal: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired,
-  onShowTripIdeaSettingsModal: PropTypes.func.isRequired
+  onUpdateIdeaAfterDrag: PropTypes.func.isRequired
 };
 
 const styles = {
+  editButton: {
+    backgroundImage: "url('../assets/edit-idea-icon.png')",
+    backgroundPosition: "9px 3px",
+    backgroundRepeat: "no-repeat",
+    borderRight: "1px solid #dddddd",
+    cursor: "pointer",
+    width: 30
+  },
   emptySpace: {
-    backgroundColor: "#eeeeee",
-    borderRadius: 4,
-    height: 80,
-    marginBottom: 20
+    backgroundColor: "#eeeeee"
+  },
+  hoverButtons: {
+    backgroundColor: "white",
+    border: "1px solid #dddddd",
+    borderRadius: 100,
+    display: "none",
+    height: 24,
+    left: 170,
+    marginTop: -18,
+    position: "absolute",
+    width: 60,
+    zIndex: 1
   },
   mainDiv: {
-    backgroundColor: "#ffffff"
+    backgroundColor: colors.background,
+    position: "relative"
   },
   removeButton: {
-    div: {
-      backgroundColor: "rgba(255,255,255,0.0)",
-      cursor: "pointer",
-      display: "none",
-      position: "absolute",
-      left: 356
-    },
-    glyph: {
-      borderRadius: 22,
-      backgroundColor: "#ffffff",
-      fontSize: 22,
-      top: -8
-    }
+    backgroundImage: "url('../assets/delete-idea-icon.png')",
+    backgroundPosition: "8px 6px",
+    backgroundRepeat: "no-repeat",
+    cursor: "pointer",
+    width: 30
   }
 };
 

@@ -1,9 +1,8 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import { Image, Panel } from 'react-bootstrap';
 import { DragLayer } from 'react-dnd';
-import TripIdeaPanel from './TripIdeaPanel';
+import TripIdeaRow from './TripIdeaRow';
 
 function collect(monitor) {
   return {
@@ -27,7 +26,7 @@ class TripIdeaDragPreview extends Component {
 
     return (
       <div style={loadStyles(this.props)}>
-        <TripIdeaPanel idea={ideas[draggedIdea.currentIndex]} />
+        <TripIdeaRow dragPreview idea={ideas[draggedIdea.currentIndex]} />
       </div>
     );
   }

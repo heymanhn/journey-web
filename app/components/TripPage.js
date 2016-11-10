@@ -11,9 +11,8 @@ import Navigation from 'app/containers/Navigation';
 import TripIdeas from 'app/containers/TripIdeas';
 import TripMap from 'app/containers/TripMap';
 import TripDetails from 'app/containers/TripDetails';
-import TripIdeaSettings from 'app/containers/TripIdeaSettings';
 import TripSettings from 'app/containers/TripSettings';
-import { dimensions, transitions } from 'app/constants';
+import { colors, dimensions, transitions } from 'app/constants';
 
 class TripPage extends Component {
   componentDidMount() {
@@ -74,7 +73,6 @@ class TripPage extends Component {
                 <TripDetails />
                 <TripIdeas />
                 <TripSettings action="update" />
-                <TripIdeaSettings />
               </div>
             ) : (!error && (
               <div style={styles.loader}>
@@ -82,8 +80,9 @@ class TripPage extends Component {
               </div>
             ))}
           </div>
-          <div style={styles.gradientShadow}></div>
-          <div style={styles.whitespaceFooter}></div>
+          <div style={styles.whitespaceFooter}>
+            <div style={styles.gradientShadow}></div>
+          </div>
         </div>
         {this.isTripLoaded() && <TripMap />}
       </div>
@@ -140,12 +139,12 @@ TripPage.propTypes = {
 const styles = {
   errorMessage: {
     position: "fixed",
-    padding: "7px " + dimensions.sidePadding + "px",
+    padding: "5px " + dimensions.sidePadding + "px",
     top: 80,
     width: dimensions.leftColumn.width
   },
   gradientShadow: {
-    background: "linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))",
+    background: "linear-gradient(rgba(0,0,0,0), " + colors.background + ")",
     height: 5,
     position: "relative",
     top: -4
@@ -154,7 +153,7 @@ const styles = {
     marginTop: 70
   },
   mainContainer: {
-    backgroundColor: "white",
+    backgroundColor: colors.background,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     boxShadow: "rgba(0, 0, 0, 0.1) 3px 3px 8px," +
@@ -186,11 +185,11 @@ const styles = {
   navStyle: {
     width: dimensions.leftColumn.width
   },
-  transparentHeader: {
-    height: dimensions.leftColumn.margin
-  },
   whitespaceFooter: {
-    height: 10
+    backgroundColor: colors.background,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    height: 20
   }
 };
 

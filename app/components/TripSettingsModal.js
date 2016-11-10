@@ -126,6 +126,7 @@ const styles = {
     height: 35
   },
   inputField: {
+    borderRadius: 0,
     margin: 0,
     width: 350
   },

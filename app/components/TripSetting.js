@@ -106,7 +106,7 @@ const styles = {
     border: "1px solid #dddddd",
     borderRadius: 25,
     fontSize: 12,
-    height: 28,
+    height: 26,
     margin: "0px 0px 10px 0px",
     outline: 0
   },
@@ -120,7 +120,7 @@ const styles = {
     maxHeight: 16,
     paddingRight: 5,
     position: "relative",
-    top: -2
+    top: -3
   },
   spinner: {
     float: "left",
@@ -133,7 +133,7 @@ const styles = {
   },
   title: {
     position: "relative",
-    top: -1
+    top: -2
   }
 };
 

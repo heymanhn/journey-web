@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import LoadingAnimation from './LoadingAnimation';
 import TripsList from './TripsList';
-import TripDeleteModal from './TripDeleteModal';
+import DeleteModal from './DeleteModal';
 import TripSettings from 'app/containers/TripSettings';
 import { colors, dimensions } from 'app/constants';
 
@@ -74,13 +74,14 @@ class TripsPage extends Component {
             </div>
             {trips.length === 0 ? createTripPlaceholder : tripsList}
             <TripSettings action="create" />
-            <TripDeleteModal
+            <DeleteModal
+              contentTitle={this.getTripTitleToDelete()}
               error={error}
               isFetching={isFetching}
+              modalTitle="Delete Trip"
               onHide={onHide}
-              onDeleteTrip={onDeleteTrip}
+              onDelete={onDeleteTrip}
               showModal={showModal}
-              tripTitle={this.getTripTitleToDelete()}
             />
           </div>
         </div>

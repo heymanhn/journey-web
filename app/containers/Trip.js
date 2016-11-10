@@ -9,14 +9,13 @@ import TripPage from 'app/components/TripPage';
 
 const mapStateToProps = (state) => {
   const { error, trip } = state.tripState;
-  const { tripIdeaSettings, tripSettings } = state.componentsState.modalsState;
+  const { tripSettings } = state.componentsState.modalsState;
   const { pageHeight } = state.componentsState.tripPageState;
   const { showModal: showSettingsModal } = tripSettings;
-  const { showModal: showIdeaSettingsModal } = tripIdeaSettings;
 
   return {
     // Don't display an error if any of the trip modals are open
-    error: (!showSettingsModal && !showIdeaSettingsModal) ? error : undefined,
+    error: !showSettingsModal ? error : undefined,
     pageHeight,
     trip
   };

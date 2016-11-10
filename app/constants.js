@@ -148,7 +148,7 @@ export const dimensions = {
 };
 
 export const colors = {
-  background: "rgb(249, 249, 249)",
+  background: "rgba(249, 249, 249, 1)",
   primary: "rgb(233, 30, 99)",
   primaryDark: "rgb(143, 23, 64)",
   primaryError: "rgb(251, 210, 224)",
@@ -180,23 +180,6 @@ export function generateGUID() {
   });
 }
 
-export const initialAuthState = {
-  isFetching: false,
-  loginFields: {},
-  signupFields: {},
-  newUserFields: {}
-};
-
-export const initialLPState = {
-  frame: 'signup',
-  overrideFrame: ''
-};
-
-export const initialNavBarState = {
-  gravatarFocused: false,
-  tooltipVisible: false
-};
-
 export const initialACState = {
   input: '',
   isFetchingAC: false,
@@ -205,8 +188,29 @@ export const initialACState = {
   results: []
 };
 
+export const initialAuthState = {
+  isFetching: false,
+  loginFields: {},
+  signupFields: {},
+  newUserFields: {}
+};
+
+export const initialDropdownState = {
+  showDropdown: false
+};
+
+export const initialLPState = {
+  frame: 'signup',
+  overrideFrame: ''
+};
+
 export const initialModalState = {
   showModal: false
+};
+
+export const initialNavBarState = {
+  gravatarFocused: false,
+  tooltipVisible: false
 };
 
 export const initialTripsState = {
@@ -237,8 +241,16 @@ export const acComponents = {
  */
 export const modalComponents = {
   deleteTrip: 'deleteTrip',
-  tripSettings: 'tripSettings',
-  tripIdeaSettings: 'tripIdeaSettings'
+  deleteTripIdea: 'deleteTripIdea',
+  tripSettings: 'tripSettings'
+};
+
+
+/*
+ * Trip Page dropdown component IDs
+ */
+export const dropdownComponents = {
+  addTripIdeas: 'addTripIdeas'
 };
 
 

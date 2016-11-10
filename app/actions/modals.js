@@ -36,9 +36,6 @@ export function hideModal(modalId) {
     if (modalId === modalComponents.tripSettings) {
       autocompleteId = acComponents.tripAC;
     }
-    if (modalId === modalComponents.tripIdeaSettings) {
-      autocompleteId = acComponents.tripIdeaAC;
-    }
 
     dispatch(hideModalAction(modalId));
     autocompleteId && dispatch(resetAutocomplete(autocompleteId));

@@ -13,15 +13,16 @@ import {
   CLEAR_NEW_TRIP_IDEA,
   SAVE_IDEA_COMMENT,
   ADD_TRIP_IDEA,
-  REMOVE_TRIP_IDEA,
   SET_IDEA_INDEX_TO_UPDATE,
+  SET_TRIP_IDEA_TO_DELETE,
   REORDER_TRIP_IDEA,
   SAVE_IDEA_UPDATED_COMMENT,
-  CLEAR_IDEA_UPDATED_COMMENT,
   SET_HOVER_LNGLAT,
   CLEAR_HOVER_LNGLAT,
   SET_FOCUS_LNGLAT,
   CLEAR_FOCUS_LNGLAT,
+  SET_EDITING_IDEA,
+  CLEAR_EDITING_IDEA,
   CLEAR_TRIP_ERROR,
   API_CREATE_TRIP_REQUEST,
   API_CREATE_TRIP_SUCCESS,
@@ -39,12 +40,12 @@ import {
   API_UPDATE_TRIP_IDEA_REQUEST,
   API_UPDATE_TRIP_IDEA_SUCCESS,
   API_UPDATE_TRIP_IDEA_FAILURE,
-  API_REMOVE_TRIP_IDEA_REQUEST,
-  API_REMOVE_TRIP_IDEA_SUCCESS,
-  API_REMOVE_TRIP_IDEA_FAILURE
+  API_DELETE_TRIP_IDEA_REQUEST,
+  API_DELETE_TRIP_IDEA_SUCCESS,
+  API_DELETE_TRIP_IDEA_FAILURE
 } from 'app/actions/trips';
 import { initialTripState, modalComponents } from 'app/constants';
-const { tripIdeaSettings, tripSettings } = modalComponents;
+const { deleteTripIdea, tripIdeaSettings, tripSettings } = modalComponents;
 
 export default function tripState(state = initialTripState, action) {
   switch (action.type) {
@@ -107,6 +108,11 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         ideaIndexToUpdate: action.index
       };
+    case SET_TRIP_IDEA_TO_DELETE:
+      return {
+        ...state,
+        tripIdeaToDelete: action.ideaId
+      };
     case REORDER_TRIP_IDEA:
       let ideas = state.trip.ideas.slice();
       let idea1 = ideas[action.index1];
@@ -123,17 +129,6 @@ export default function tripState(state = initialTripState, action) {
         ...state,
         newComment: action.comment
       };
-    case CLEAR_IDEA_UPDATED_COMMENT:
-      return _.omit(state, 'newComment');
-    case REMOVE_TRIP_IDEA:
-      return {
-        ..._.omit(state, ['focusLngLat', 'hoverLngLat']),
-        trip: _.extend(state.trip, {
-          ideas: _.reject(state.trip.ideas, (idea) =>
-            idea._id === action.ideaId
-          )
-        })
-      };
     case SET_HOVER_LNGLAT:
       return {
         ...state,
@@ -148,6 +143,13 @@ export default function tripState(state = initialTripState, action) {
       };
     case CLEAR_FOCUS_LNGLAT:
       return _.omit(state, 'focusLngLat');
+    case SET_EDITING_IDEA:
+      return {
+        ...state,
+        editingIdea: action.ideaId
+      };
+    case CLEAR_EDITING_IDEA:
+      return _.omit(state, 'editingIdea');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
     case SHOW_MODAL:
@@ -160,14 +162,19 @@ export default function tripState(state = initialTripState, action) {
         return _.omit(state, 'error');
       }
     case HIDE_MODAL:
-      if (action.modalId === tripSettings) {
-        return _.omit(state, ['error', 'newFields']);
-      } else if (action.modalId === tripIdeaSettings) {
-        return _.omit(state, ['error', 'ideaIndexToUpdate', 'updatedComment']);
-      } else {
-        return state;
+      switch(action.modalId) {
+        case deleteTripIdea:
+          return _.omit(state, ['error', 'tripIdeaToDelete']);
+        case tripSettings:
+          return _.omit(state, ['error', 'newFields']);
+        case tripIdeaSettings:
+          return _.omit(
+            state,
+            ['error', 'ideaIndexToUpdate', 'updatedComment']
+          );
+        default:
+          return state;
       }
-
     // API actions
     case API_GET_TRIP_REQUEST:
       return {
@@ -177,7 +184,7 @@ export default function tripState(state = initialTripState, action) {
     case API_CREATE_TRIP_REQUEST:
     case API_ADD_TRIP_IDEA_REQUEST:
     case API_UPDATE_TRIP_IDEA_REQUEST:
-    case API_REMOVE_TRIP_IDEA_REQUEST:
+    case API_DELETE_TRIP_IDEA_REQUEST:
     case API_UPDATE_TRIP_REQUEST:
       return {
         ...(_.omit(state, 'error')),
@@ -210,9 +217,12 @@ export default function tripState(state = initialTripState, action) {
         focusLngLat: action.ideas[0].loc.coordinates
       };
     case API_UPDATE_TRIP_IDEA_SUCCESS:
-    case API_REMOVE_TRIP_IDEA_SUCCESS:
+    case API_DELETE_TRIP_IDEA_SUCCESS:
       return {
-        ..._.omit(state, ['ideaIndexToUpdate', 'newComment']),
+        ..._.omit(
+          state,
+          ['focusLngLat', 'hoverLngLat', 'ideaIndexToUpdate', 'newComment']
+        ),
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false
       };
@@ -221,7 +231,7 @@ export default function tripState(state = initialTripState, action) {
     case API_UPDATE_TRIP_FAILURE:
     case API_ADD_TRIP_IDEA_FAILURE:
     case API_UPDATE_TRIP_IDEA_FAILURE:
-    case API_REMOVE_TRIP_IDEA_FAILURE:
+    case API_DELETE_TRIP_IDEA_FAILURE:
       return {
         ...state,
         error: action.error,

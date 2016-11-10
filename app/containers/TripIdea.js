@@ -2,41 +2,55 @@
 
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
+import { showModal } from 'app/actions/modals';
 import {
-  apiRemoveTripIdea,
   apiUpdateTripIdea,
+  clearEditingIdea,
   clearHoverLngLat,
   reorderTripIdea,
+  saveIdeaUpdatedComment,
+  setEditingIdea,
   setFocusLngLat,
   setHoverLngLat,
-  setIdeaIndexToUpdate
+  setIdeaIndexToUpdate,
+  setTripIdeaToDelete
 } from 'app/actions/trips';
-import { showModal } from 'app/actions/modals';
 import TripIdeaUI from 'app/components/TripIdeaUI';
 import { analytics, modalComponents } from 'app/constants';
 
-const mapStateToProps = (state) => {
-  const ts = state.tripState;
+const mapStateToProps = (state, ownProps) => {
+  const { editingIdea, hoverLngLat } = state.tripState;
   return {
-    hoverLngLat: ts.hoverLngLat
+    hoverLngLat,
+    isEditing: editingIdea === ownProps.idea._id
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { idea: { _id: ideaId, loc: { coordinates } }, index } = ownProps;
+  const { deleteTripIdea } = modalComponents;
 
   return {
     onClearHoverLngLat() {
       dispatch(clearHoverLngLat());
     },
 
-    onFocusIdea() {
-      dispatch(apiTripPageEvent(analytics.pages.TRIP_IDEA, { ideaId } ));
+    onEditIdea() {
+      dispatch(setEditingIdea(ideaId));
       dispatch(setFocusLngLat(coordinates));
     },
 
-    onRemoveIdea() {
-      dispatch(apiRemoveTripIdea(ideaId));
+    onEnterComment(event) {
+      dispatch(saveIdeaUpdatedComment(event.target.value));
+    },
+
+    onExitEditMode() {
+      dispatch(clearEditingIdea());
+    },
+
+    onFocusIdea() {
+      dispatch(apiTripPageEvent(analytics.pages.TRIP_IDEA, { ideaId } ));
+      dispatch(setFocusLngLat(coordinates));
     },
 
     onReorderIdea: (index1, index2) => {
@@ -47,13 +61,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(setHoverLngLat(coordinates));
     },
 
-    onShowTripIdeaSettingsModal(event) {
-      event.stopPropagation();
-      dispatch(setIdeaIndexToUpdate(index));
-      dispatch(showModal(modalComponents.tripIdeaSettings));
+    onShowDeleteTripIdeaModal() {
+      dispatch(showModal(deleteTripIdea));
+      dispatch(setTripIdeaToDelete(ideaId));
     },
 
     onUpdateIdea() {
+      dispatch(apiUpdateTripIdea(index)).then(() => {
+        return dispatch(clearEditingIdea());
+      });
+    },
+
+    onUpdateIdeaAfterDrag() {
       dispatch(apiUpdateTripIdea(index));
     }
   };

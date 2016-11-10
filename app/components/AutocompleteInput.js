@@ -18,6 +18,7 @@ class AutocompleteInput extends Component {
 
   render() {
     const {
+      autoFocus,
       id,
       input,
       onClearAutocomplete,
@@ -31,6 +32,7 @@ class AutocompleteInput extends Component {
     } = this.props;
 
     let inputProps = {
+      autoFocus,
       onChange: onSaveInput,
       onKeyDown: this.handleKeyPress.bind(this),
       placeholder,
@@ -62,10 +64,8 @@ class AutocompleteInput extends Component {
     // Display the autocomplete container once there are results
     if (results.length > 0) {
       _.extend(baseStyle.suggestionsContainer, sc.results);
-      _.extend(baseStyle.input, input.results);
     } else {
       _.extend(baseStyle.suggestionsContainer, sc.noResults);
-      _.extend(baseStyle.input, input.noResults);
     }
 
     // Incorporate additional styles from the user of this component
@@ -129,6 +129,7 @@ function renderSuggestion(suggestion, { query }) {
 }
 
 AutocompleteInput.propTypes = {
+  autoFocus: PropTypes.bool,
   defaultValue: PropTypes.string,
   error: PropTypes.string,
   id: PropTypes.string.isRequired,
@@ -151,7 +152,6 @@ const autocompleteStyles = {
   },
   input: {
     border: "1px solid #cccccc",
-    borderRadius: "3px",
     color: colors.primaryText,
     fontSize: 14,
     height: 36,
@@ -184,7 +184,8 @@ const autocompleteStyles = {
     border: "1px solid #cccccc",
     borderTop: 0,
     marginTop: -1,
-    position: "absolute"
+    position: "absolute",
+    zIndex: 2
   }
 };
 
@@ -194,20 +195,12 @@ const styles = {
       paddingLeft: 12,
       backgroundImage: "none"
     },
-    noResults: {
-      borderBottomLeftRadius: 4,
-      borderBottomRightRadius: 4
-    },
     placeSelected: {
       paddingLeft: 30,
       backgroundImage: "url('../assets/mini-marker-icon.png')",
       backgroundPosition: "10px 50%",
       backgroundRepeat: "no-repeat",
       backgroundSize: "12px 16px"
-    },
-    results: {
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0
     }
   },
   inputIcon: {
