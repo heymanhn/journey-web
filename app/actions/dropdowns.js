@@ -1,7 +1,6 @@
 'use strict';
 
-import { resetAutocomplete } from './autocomplete';
-import { clearFocusLngLat } from 'app/actions/trips';
+import { clearSavedPlace, resetAutocomplete } from './autocomplete';
 import { acComponents, dropdownComponents } from 'app/constants';
 
 /*
@@ -40,11 +39,13 @@ export function toggleDropdown(dropdownId) {
       let autocompleteId;
       if (dropdownId === dropdownComponents.addTripIdeas) {
         autocompleteId = acComponents.tripIdeaAC;
-        dispatch(clearFocusLngLat());
       }
 
       dispatch(hideDropdown(dropdownId));
-      autocompleteId && dispatch(resetAutocomplete(autocompleteId));
+      if (autocompleteId) {
+        dispatch(resetAutocomplete(autocompleteId));
+        dispatch(clearSavedPlace(autocompleteId));
+      }
     } else {
       dispatch(showDropdown(dropdownId));
     }
