@@ -180,23 +180,6 @@ export function generateGUID() {
   });
 }
 
-export const initialAuthState = {
-  isFetching: false,
-  loginFields: {},
-  signupFields: {},
-  newUserFields: {}
-};
-
-export const initialLPState = {
-  frame: 'signup',
-  overrideFrame: ''
-};
-
-export const initialNavBarState = {
-  gravatarFocused: false,
-  tooltipVisible: false
-};
-
 export const initialACState = {
   input: '',
   isFetchingAC: false,
@@ -205,8 +188,29 @@ export const initialACState = {
   results: []
 };
 
+export const initialAuthState = {
+  isFetching: false,
+  loginFields: {},
+  signupFields: {},
+  newUserFields: {}
+};
+
+export const initialDropdownState = {
+  showDropdown: false
+};
+
+export const initialLPState = {
+  frame: 'signup',
+  overrideFrame: ''
+};
+
 export const initialModalState = {
   showModal: false
+};
+
+export const initialNavBarState = {
+  gravatarFocused: false,
+  tooltipVisible: false
 };
 
 export const initialTripsState = {
@@ -239,6 +243,14 @@ export const modalComponents = {
   deleteTrip: 'deleteTrip',
   deleteTripIdea: 'deleteTripIdea',
   tripSettings: 'tripSettings'
+};
+
+
+/*
+ * Trip Page dropdown component IDs
+ */
+export const dropdownComponents = {
+  addTripIdeas: 'addTripIdeas'
 };
 
 

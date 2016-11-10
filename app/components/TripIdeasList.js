@@ -4,8 +4,12 @@ import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
-
-import { acComponents, colors, dimensions } from 'app/constants';
+import {
+  acComponents,
+  colors,
+  dimensions,
+  dropdownComponents
+} from 'app/constants';
 import DeleteModal from './DeleteModal';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
@@ -21,12 +25,26 @@ class TripIdeasList extends Component {
       isViewOnly,
       newIdea,
       onAddIdeaPress,
+      onShowDropdown,
       onDeleteTripIdea,
       onEnterIdeaComment,
       onHide,
       onShowAllIdeas,
+      showDropdown,
       showModal
     } = this.props;
+    const { addTripIdeas } = dropdownComponents;
+
+    const addIdeasDropdownButton = (
+      <div style={styles.addIdeaDropdownButton}>
+        <img
+          onClick={onShowDropdown.bind(null, addTripIdeas)}
+          src="../assets/add-idea-button.png"
+          style={styles.addIdeaDropdownButtonIcon}
+        />
+        {showDropdown && <div style={this.loadActiveDropdownStyle()}></div>}
+      </div>
+    );
 
     const tripIdeas = ideas.map((idea, index) => {
       return (
@@ -64,25 +82,14 @@ class TripIdeasList extends Component {
       <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
 
-    const addIdeaSection = (
-      <div>
-        <div style={styles.searchSection}>
-          <PlaceAutocomplete
-            id={acComponents.tripIdeaAC}
-            placeholder="Enter a place or destination"
-            style={styles.searchBox}
-            tabIndex={1}
-          />
-          <Button
-            disabled={!newIdea}
-            onClick={onAddIdeaPress}
-            style={this.loadAddIdeaButtonStyle()}
-            tabIndex={3}
-          >
-            Add
-          </Button>
-        </div>
-        {newIdea && commentBox}
+    const addIdeasDropdown = (
+      <div style={styles.addIdeasSection}>
+        <PlaceAutocomplete
+          id={acComponents.tripIdeaAC}
+          placeholder="Enter a place or destination"
+          style={styles.addIdeaSearchBox}
+          tabIndex={1}
+        />
       </div>
     );
 
@@ -90,8 +97,10 @@ class TripIdeasList extends Component {
       <div>
         <div style={styles.titleSection}>
           <h3 style={styles.h3}>Ideas</h3>
+          {!isViewOnly && addIdeasDropdownButton}
         </div>
         <div>
+          {showDropdown && addIdeasDropdown}
           <div style={styles.ideasSection}>
             {tripIdeas}
             <DeleteModal
@@ -119,6 +128,12 @@ class TripIdeasList extends Component {
     return newIdea ? style : { ...style, ...disabledStyle };
   }
 
+  loadActiveDropdownStyle() {
+    const { showDropdown } = this.props;
+    const style = styles.activeDropdown;
+    return showDropdown ? { ...style, display: "block" } : style;
+  }
+
   getTripIdeaNameToDelete() {
     const { ideas, tripIdeaToDelete } = this.props;
 
@@ -144,11 +159,43 @@ TripIdeasList.propTypes = {
   onEnterIdeaComment: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   onShowAllIdeas: PropTypes.func.isRequired,
+  onShowDropdown: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
   tripIdeaToDelete: PropTypes.string
 };
 
 const styles = {
+  activeDropdown: {
+    backgroundColor: colors.primary,
+    borderRadius: 25,
+    display: "none",
+    height: 4,
+    position: "absolute",
+    marginTop: 5,
+    width: 25
+  },
+  addIdeaDropdownButton: {
+    marginLeft: 20,
+    position: "relative",
+    textAlign: "center",
+    width: 25
+  },
+  addIdeaDropdownButtonIcon: {
+    cursor: "pointer"
+  },
+  addIdeaSearchBox: {
+    border: "1px solid #dddddd",
+    borderRadius: 0,
+    fontSize: 13,
+    width: 340
+  },
+  addIdeasSection: {
+    backgroundColor: "#eeeeee",
+    borderTop: "1px solid #dddddd",
+    display: "flex",
+    justifyContent: "center",
+    padding: "12px 0px"
+  },
   commentBox: {
     display: "inline",
     margin: "0px 0px 10px 0px",
@@ -162,18 +209,13 @@ const styles = {
     fontFamily: "'Raleway', sans-serif",
     fontSize: 22,
     fontWeight: 400,
-    marginTop: 10,
-    marginBottom: 0
+    margin: "10px 0px 0px",
+    position: "relative",
+    top: 5
   },
   ideasSection: {
     backgroundColor: colors.background,
     borderTop: "1px solid #dddddd"
-  },
-  inputSection: {
-  },
-  searchBox: {
-    fontSize: 14,
-    width: 280
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
@@ -186,12 +228,6 @@ const styles = {
     border: "1px solid #e1e1e1",
     color: "#cccccc",
     cursor: "default"
-  },
-  searchSection: {
-    alignItems: "baseline",
-    display: "flex",
-    justifyContent: "space-between",
-    margin: "0px 0px 10px 0px"
   },
   showAllLink: {
     color: "white",

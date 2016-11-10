@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { toggleDropdown } from 'app/actions/dropdowns';
 import { showAllTripIdeasOnMap } from 'app/actions/map';
 import { hideModal } from 'app/actions/modals';
 import {
@@ -15,6 +16,7 @@ import { modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { user } = state.authState;
+  const { showDropdown } = state.componentsState.dropdownsState.addTripIdeas;
   const {
     error,
     isFetching,
@@ -31,6 +33,7 @@ const mapStateToProps = (state) => {
     isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
     newIdea,
+    showDropdown,
     showModal,
     tripIdeaToDelete
   };
@@ -66,6 +69,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onShowAllIdeas() {
       dispatch(showAllTripIdeasOnMap());
+    },
+
+    onShowDropdown(dropdownId) {
+      dispatch(toggleDropdown(dropdownId));
     }
   };
 };
