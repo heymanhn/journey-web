@@ -1,6 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux';
+import { clearSavedPlace } from 'app/actions/autocomplete';
 import { toggleDropdown } from 'app/actions/dropdowns';
 import { showAllTripIdeasOnMap } from 'app/actions/map';
 import { hideModal } from 'app/actions/modals';
@@ -12,7 +13,7 @@ import {
   saveNewTripIdea
 } from 'app/actions/trips';
 import TripIdeasList from 'app/components/TripIdeasList';
-import { modalComponents } from 'app/constants';
+import { acComponents, modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { user } = state.authState;
@@ -40,11 +41,16 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const { tripIdeaAC } = acComponents;
   const { deleteTripIdea } = modalComponents;
 
   return {
     onAddIdeaPress() {
       dispatch(apiAddTripIdea());
+    },
+
+    onClearSavedPlace() {
+      dispatch(clearSavedPlace(tripIdeaAC));
     },
 
     onClearTripIdea() {

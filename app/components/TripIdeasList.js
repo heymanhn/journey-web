@@ -2,7 +2,6 @@
 
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
 import {
@@ -32,6 +31,7 @@ class TripIdeasList extends Component {
       isViewOnly,
       newIdea,
       onAddIdeaPress,
+      onClearSavedPlace,
       onShowDropdown,
       onDeleteTripIdea,
       onEnterIdeaComment,
@@ -71,6 +71,27 @@ class TripIdeasList extends Component {
       </div>
     );
 
+    const newIdeaButtons = newIdea && (
+      <div style={styles.newIdeaButtonContainer}>
+        <div style={styles.newIdeaButtons}>
+          <Button
+            onClick={onAddIdeaPress}
+            style={styles.addButton}
+            tabIndex={3}
+          >
+            <span>Add</span>
+          </Button>
+          <Button
+            onClick={onClearSavedPlace}
+            style={styles.cancelButton}
+            tabIndex={4}
+          >
+            <span>Cancel</span>
+          </Button>
+        </div>
+      </div>
+    );
+
     const addIdeasDropdown = (
       <div style={styles.addIdeasSection}>
         <PlaceAutocomplete
@@ -81,6 +102,7 @@ class TripIdeasList extends Component {
           tabIndex={1}
         />
         {newIdeaPreview}
+        {newIdeaButtons}
         {commentField}
       </div>
     );
@@ -195,6 +217,7 @@ TripIdeasList.propTypes = {
   isViewOnly: PropTypes.bool.isRequired,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
+  onClearSavedPlace: PropTypes.func.isRequired,
   onClearTripIdea: PropTypes.func.isRequired,
   onDeleteTripIdea: PropTypes.func.isRequired,
   onEnterIdea: PropTypes.func.isRequired,
@@ -215,6 +238,17 @@ const styles = {
     position: "absolute",
     marginTop: 5,
     width: 25
+  },
+  addButton: {
+    backgroundColor: colors.primary,
+    border: 0,
+    borderRadius: 25,
+    color: "white",
+    fontSize: 13,
+    height: 25,
+    marginRight: 5,
+    padding: 0,
+    width: 60
   },
   addIdeaDropdownButton: {
     marginLeft: 20,
@@ -238,6 +272,15 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     padding: "12px 0px"
+  },
+  cancelButton: {
+    border: "1px solid #dddddd",
+    borderRadius: 25,
+    color: colors.primaryText,
+    fontSize: 13,
+    height: 25,
+    padding: 0,
+    width: 70
   },
   commentField: {
     color: colors.primaryText,
@@ -264,11 +307,23 @@ const styles = {
     backgroundColor: colors.background,
     borderTop: "1px solid #dddddd"
   },
+  newIdeaButtonContainer: {
+    height: 15,
+    position: "relative",
+    width: dimensions.leftColumn.width - 60
+  },
+  newIdeaButtons: {
+    display: "flex",
+    justifyContent: "center",
+    position: "relative",
+    top: -13
+  },
   newIdeaPreview: {
     borderBottom: "1px solid #ddd",
     borderTop: "1px solid #ddd",
     margin: "10px 0px 0px 30px",
-    padding: "12px 30px 12px 0px"
+    padding: "12px 30px 20px 0px",
+    width: dimensions.leftColumn.width - 30
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
