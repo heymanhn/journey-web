@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
+import TripIdeaLayout from './TripIdeaLayout';
 import { colors, dimensions } from 'app/constants';
 
 class TripIdeaRow extends Component {
@@ -26,22 +27,8 @@ class TripIdeaRow extends Component {
 
     // Insert a dummy function if connectDropTarget is not specified
     const wrapperFn = connectDropTarget || (x => x);
-    const imageSection = (
-      <div style={styles.photoSection}>
-        <img src={idea.photo} style={styles.photo} />
-      </div>
-    );
 
-    const infoSection = wrapperFn(
-      <div style={styles.contentSection}>
-        <div>
-          <p style={styles.name}>{idea.name}</p>
-          <p style={styles.address}>{idea.address}</p>
-        </div>
-        {idea.photo && imageSection}
-      </div>
-    );
-
+    const contentSection = (<div><TripIdeaLayout idea={idea} /></div>);
     const settingsSection = (
       <div>
         <Textarea
@@ -78,7 +65,7 @@ class TripIdeaRow extends Component {
         style={this.loadIdeaStyle()}
       >
         <div style={this.loadIdeaInfoStyle()}>
-          {infoSection}
+          {wrapperFn(contentSection)}
           {isEditing && settingsSection}
         </div>
       </div>
@@ -161,11 +148,6 @@ TripIdeaRow.propTypes = {
 };
 
 const styles = {
-  address: {
-    fontSize: 12,
-    color: "#999999",
-    marginBottom: 0
-  },
   cancelButton: {
     border: "1px solid #dddddd",
     borderRadius: 25,
@@ -183,10 +165,6 @@ const styles = {
     padding: 10,
     resize: "none",
     width: 340
-  },
-  contentSection: {
-    display: "flex",
-    justifyContent: "space-between"
   },
   doneButton: {
     backgroundColor: colors.primary,
@@ -232,21 +210,6 @@ const styles = {
     margin: 0,
     padding: "0px 30px",
     cursor: "pointer"
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: "bold"
-  },
-  photo: {
-    border: "1px solid #eeeeee",
-    height: 60,
-    objectFit: "cover",
-    width: 60
-  },
-  photoSection: {
-    height: 60,
-    marginLeft: 10,
-    width: 60
   },
   settingsButtons: {
     display: "flex",

@@ -18,6 +18,7 @@ class AutocompleteInput extends Component {
 
   render() {
     const {
+      autoFocus,
       id,
       input,
       onClearAutocomplete,
@@ -31,6 +32,7 @@ class AutocompleteInput extends Component {
     } = this.props;
 
     let inputProps = {
+      autoFocus,
       onChange: onSaveInput,
       onKeyDown: this.handleKeyPress.bind(this),
       placeholder,
@@ -127,6 +129,7 @@ function renderSuggestion(suggestion, { query }) {
 }
 
 AutocompleteInput.propTypes = {
+  autoFocus: PropTypes.bool,
   defaultValue: PropTypes.string,
   error: PropTypes.string,
   id: PropTypes.string.isRequired,

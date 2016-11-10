@@ -14,6 +14,7 @@ import DeleteModal from './DeleteModal';
 import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
+import TripIdeaLayout from './TripIdeaLayout';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 
 class TripIdeasList extends Component {
@@ -82,14 +83,22 @@ class TripIdeasList extends Component {
       <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
 
+    const newIdeaPreview = newIdea && (
+      <div style={styles.newIdeaPreview}>
+        <TripIdeaLayout idea={newIdea} />
+      </div>
+    );
+
     const addIdeasDropdown = (
       <div style={styles.addIdeasSection}>
         <PlaceAutocomplete
+          autoFocus={showDropdown && !newIdea}
           id={acComponents.tripIdeaAC}
           placeholder="Enter a place or destination"
           style={styles.addIdeaSearchBox}
           tabIndex={1}
         />
+        {newIdeaPreview}
       </div>
     );
 
@@ -193,7 +202,8 @@ const styles = {
     backgroundColor: "#eeeeee",
     borderTop: "1px solid #dddddd",
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
     padding: "12px 0px"
   },
   commentBox: {
@@ -216,6 +226,12 @@ const styles = {
   ideasSection: {
     backgroundColor: colors.background,
     borderTop: "1px solid #dddddd"
+  },
+  newIdeaPreview: {
+    borderBottom: "1px solid #ddd",
+    borderTop: "1px solid #ddd",
+    margin: "10px 0px 0px 30px",
+    padding: "12px 30px 12px 0px"
   },
   searchBoxButton: {
     backgroundColor: colors.primary,
