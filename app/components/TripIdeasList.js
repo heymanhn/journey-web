@@ -4,6 +4,7 @@ import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-bootstrap';
+import Textarea from 'react-textarea-autosize';
 import {
   acComponents,
   colors,
@@ -11,13 +12,18 @@ import {
   dropdownComponents
 } from 'app/constants';
 import DeleteModal from './DeleteModal';
-import TextInput from './TextInput';
 import TripIdea from 'app/containers/TripIdea';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TripIdeaLayout from './TripIdeaLayout';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 
 class TripIdeasList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { focused: false };
+  }
+
   render() {
     const {
       error,
@@ -47,40 +53,16 @@ class TripIdeasList extends Component {
       </div>
     );
 
-    const tripIdeas = ideas.map((idea, index) => {
-      return (
-        <TripIdea
-          idea={idea}
-          index={index}
-          isViewOnly={isViewOnly}
-          key={idea._id}
-        />
-      );
-    });
-
-    const commentBox = (
-      <TextInput
+    const commentField = newIdea && (
+      <Textarea
+        onBlur={this.clearFocus.bind(this)}
         onChange={onEnterIdeaComment}
-        placeholder="Add a comment"
-        style={styles.commentBox}
+        onFocus={this.setFocus.bind(this)}
+        placeholder="Add a note"
+        style={this.loadCommentFieldStyle()}
         tabIndex={2}
         type="text"
       />
-    );
-
-    const showAllIdeasLink = (
-      <div style={styles.footerSection}>
-        <div
-          onClick={onShowAllIdeas}
-          style={styles.showAllLink}
-        >
-          Show all ideas on map
-        </div>
-      </div>
-    );
-
-    const dragPreview = (
-      <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
 
     const newIdeaPreview = newIdea && (
@@ -99,7 +81,34 @@ class TripIdeasList extends Component {
           tabIndex={1}
         />
         {newIdeaPreview}
+        {commentField}
       </div>
+    );
+
+    const tripIdeas = ideas.map((idea, index) => {
+      return (
+        <TripIdea
+          idea={idea}
+          index={index}
+          isViewOnly={isViewOnly}
+          key={idea._id}
+        />
+      );
+    });
+
+    const showAllIdeasLink = (
+      <div style={styles.footerSection}>
+        <div
+          onClick={onShowAllIdeas}
+          style={styles.showAllLink}
+        >
+          Show all ideas on map
+        </div>
+      </div>
+    );
+
+    const dragPreview = (
+      <TripIdeaDragPreview ideas={ideas} key="__preview" />
     );
 
     return (
@@ -143,6 +152,22 @@ class TripIdeasList extends Component {
     return showDropdown ? { ...style, display: "block" } : style;
   }
 
+  loadCommentFieldStyle() {
+    const style = styles.commentField;
+    const { focused } = this.state;
+
+    if (focused) {
+      style.backgroundColor = "white";
+      style.border = "1px solid #999999";
+      style.outline = "none";
+    } else {
+      style.backgroundColor = colors.background;
+      style.border = "1px solid #dddddd";
+    }
+
+    return style;
+  }
+
   getTripIdeaNameToDelete() {
     const { ideas, tripIdeaToDelete } = this.props;
 
@@ -152,6 +177,14 @@ class TripIdeasList extends Component {
 
     const idea = ideas.find(i => i._id === tripIdeaToDelete);
     return idea ? idea.name : '';
+  }
+
+  setFocus() {
+    this.setState({ focused: true });
+  }
+
+  clearFocus() {
+    this.setState({ focused: false });
   }
 }
 
@@ -206,10 +239,14 @@ const styles = {
     alignItems: "center",
     padding: "12px 0px"
   },
-  commentBox: {
-    display: "inline",
-    margin: "0px 0px 10px 0px",
-    width: "100%"
+  commentField: {
+    color: colors.primaryText,
+    fontSize: 13,
+    marginTop: 10,
+    minHeight: 60,
+    padding: 10,
+    resize: "none",
+    width: 340
   },
   footerSection: {
     backgroundColor: colors.background,
