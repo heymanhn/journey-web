@@ -49,11 +49,31 @@ class TripMapDisplay extends Component {
   render() {
     const { destination, ideas } = this.props;
 
+    const viewControl = (
+      <div style={styles.viewControl}>
+        <div style={styles.mapOption}>
+          <img
+            src="../assets/map-view.png"
+            style={styles.mapIcon}
+          />
+          <span>Map</span>
+        </div>
+        <div style={styles.satelliteOption}>
+          <div style={styles.earthEmoji}>🌎</div>
+          <span>Satellite</span>
+        </div>
+      </div>
+    );
+
     return (
-      <div
-        ref={x => this.container = x}
-        style={styles.mapContainer}
-      ></div>
+      <div>
+        <div
+          ref={x => this.container = x}
+          style={styles.mapContainer}
+        >
+          {viewControl}
+        </div>
+      </div>
     );
   }
 
@@ -314,12 +334,50 @@ TripMapDisplay.propTypes = {
 };
 
 const styles = {
+  earthEmoji: {
+    fontSize: 20,
+    marginTop: 5,
+    position: "relative",
+    top: 2
+  },
   mapContainer: {
     position: "absolute",
     top: 0,
     bottom: 0,
     width: "100%",
     zIndex: 1
+  },
+  viewControl: {
+    backgroundColor: "white",
+    borderRadius: 4,
+    boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.1)",
+    float: "right",
+    height: 90,
+    position: "relative",
+    right: 50,
+    top: 10,
+    width: 60,
+    zIndex: 1
+  },
+  mapIcon: {
+    marginTop: 3,
+    position: "relative",
+    top: 2
+  },
+  mapOption: {
+    alignItems: "center",
+    borderBottom: "1px solid #dddddd",
+    display: "flex",
+    flexDirection: "column",
+    fontSize: 11,
+    height: 45
+  },
+  satelliteOption: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    fontSize: 11,
+    height: 45
   }
 };
 
