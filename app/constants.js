@@ -149,7 +149,7 @@ export const dimensions = {
 
 export const colors = {
   background: "rgba(249, 249, 249, 1)",
-  primary: "rgb(233, 30, 99)",
+  primary: "rgba(233, 30, 99, 1)",
   primaryDark: "rgb(143, 23, 64)",
   primaryError: "rgb(251, 210, 224)",
   primaryText: "rgb(51, 51, 51)",
@@ -168,6 +168,84 @@ export const transitions = {
     leave: 700
   }
 };
+
+
+/*
+ * Mapbox API
+ */
+export const mapbox = {
+  ids: {
+    hover: 'hoverTargets',
+    markers: 'ideaMarkers'
+  },
+  staticImage: {
+    height: dimensions.tripsPage.listItem.height - 62,
+    url: 'https://api.mapbox.com/styles/v1/heymanhn/',
+    width: dimensions.tripsPage.listItem.width - 2
+  },
+  styleURL: 'mapbox://styles/',
+  satelliteStyleId: 'mapbox/satellite-streets-v9',
+  streetsStyleId: 'heymanhn/citkhed0r002r2iqh4v6b8k1l',
+  streetsNoLabelsStyleId: 'heymanhn/ciuizxxtn00492is1dvf2tbw0',
+  token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
+};
+
+export const mapMarkers = {
+  radius: 7,
+  icon: {
+    width: 29,
+    height: 40
+  }
+};
+
+/* Helper function for zoom level calculation
+ * Inspired with gratitude from:
+ * http://stackoverflow.com/questions/6048975/google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
+ */
+export function getZoomLevel(bounds) {
+  const WORLD_DIM = { height: 256, width: 256 };
+
+  // Mapbox zoom levels start at 1 instead of 0. So a max zoom level of 20
+  // should be stored as 19
+  const ZOOM_MAX = 19;
+
+  function latRad(lat) {
+    const sin = Math.sin(lat * Math.PI / 180);
+    const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
+    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+  }
+
+  function zoom(mapPx, worldPx, fraction) {
+    // Subtract 1 to line up to Mapbox zoom level format
+    return (Math.log(mapPx / worldPx / fraction) / Math.LN2) - 1;
+  }
+
+  const [neLng, neLat] = bounds.northeast.coordinates;
+  const [swLng, swLat] = bounds.southwest.coordinates;
+
+  const latFraction = (latRad(neLat) - latRad(swLat)) / Math.PI;
+
+  const lngDiff = neLng - swLng;
+  const lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+
+  const { height, width } = mapbox.staticImage;
+  const latZoom = zoom(height, WORLD_DIM.height, latFraction);
+  const lngZoom = zoom(width, WORLD_DIM.width, lngFraction);
+
+  return Math.min(latZoom, lngZoom, ZOOM_MAX);
+}
+
+export function generateMapImage(lng, lat, zoom) {
+  const {
+    staticImage: { height, url, width },
+    streetsNoLabelsStyleId: styleId,
+    token
+  } = mapbox;
+
+  return `${url}${styleId}/static/${lng},${lat},${zoom}/${width}x${height}?` +
+    `access_token=${token}&attribution=false&logo=false`;
+}
+
 
 /*
  * Redux store default states
@@ -202,6 +280,11 @@ export const initialDropdownState = {
 export const initialLPState = {
   frame: 'signup',
   overrideFrame: ''
+};
+
+export const initialMapState = {
+  mapStyle: 'map',
+  viewChanged: false
 };
 
 export const initialModalState = {
@@ -263,82 +346,6 @@ export const dndTypes = {
 
 const md = new MobileDetect(window.navigator.userAgent);
 export const isMobile = md.mobile() ? true : false;
-
-
-/*
- * Mapbox API
- */
-export const mapbox = {
-  ids: {
-    hover: 'hoverTargets',
-    markers: 'ideaMarkers'
-  },
-  staticImage: {
-    height: dimensions.tripsPage.listItem.height - 62,
-    url: 'https://api.mapbox.com/styles/v1/heymanhn/',
-    width: dimensions.tripsPage.listItem.width - 2
-  },
-  styleURL: 'mapbox://styles/heymanhn/',
-  streetsStyleId: 'citkhed0r002r2iqh4v6b8k1l',
-  streetsNoLabelsStyleId: 'ciuizxxtn00492is1dvf2tbw0',
-  token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
-};
-
-export const mapMarkers = {
-  radius: 7,
-  icon: {
-    width: 29,
-    height: 40
-  }
-};
-
-/* Helper function for zoom level calculation
- * Inspired with gratitude from:
- * http://stackoverflow.com/questions/6048975/google-maps-v3-how-to-calculate-the-zoom-level-for-a-given-bounds
- */
-export function getZoomLevel(bounds) {
-  const WORLD_DIM = { height: 256, width: 256 };
-
-  // Mapbox zoom levels start at 1 instead of 0. So a max zoom level of 20
-  // should be stored as 19
-  const ZOOM_MAX = 19;
-
-  function latRad(lat) {
-    const sin = Math.sin(lat * Math.PI / 180);
-    const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
-  }
-
-  function zoom(mapPx, worldPx, fraction) {
-    // Subtract 1 to line up to Mapbox zoom level format
-    return (Math.log(mapPx / worldPx / fraction) / Math.LN2) - 1;
-  }
-
-  const [neLng, neLat] = bounds.northeast.coordinates;
-  const [swLng, swLat] = bounds.southwest.coordinates;
-
-  const latFraction = (latRad(neLat) - latRad(swLat)) / Math.PI;
-
-  const lngDiff = neLng - swLng;
-  const lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
-
-  const { height, width } = mapbox.staticImage;
-  const latZoom = zoom(height, WORLD_DIM.height, latFraction);
-  const lngZoom = zoom(width, WORLD_DIM.width, lngFraction);
-
-  return Math.min(latZoom, lngZoom, ZOOM_MAX);
-}
-
-export function generateMapImage(lng, lat, zoom) {
-  const {
-    staticImage: { height, url, width },
-    streetsNoLabelsStyleId: styleId,
-    token
-  } = mapbox;
-
-  return `${url}${styleId}/static/${lng},${lat},${zoom}/${width}x${height}?` +
-    `access_token=${token}&attribution=false&logo=false`;
-}
 
 
 /*

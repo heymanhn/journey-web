@@ -4,7 +4,7 @@ require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { dimensions, mapbox, mapMarkers } from 'app/constants';
+import { colors, dimensions, mapbox, mapMarkers } from 'app/constants';
 
 class TripMapDisplay extends Component {
   componentDidMount() {
@@ -16,18 +16,31 @@ class TripMapDisplay extends Component {
   // Update the map markers if there are any changes
   componentWillReceiveProps(newProps) {
     const { focusLngLat, ideas, hoverLngLat } = this.props;
+    const { map } = this;
     const {
       fitMapRequest,
       focusLngLat: newFocusLngLat,
       focusMarker,
       ideas: newIdeas,
       hoverLngLat: newHoverLngLat,
+      mapStyleURL,
       onDeleteFocusMarker,
-      onMapFitComplete
+      onMapFitComplete,
+      onViewUpdated,
+      viewChanged
     } = newProps;
 
+    if (viewChanged) {
+      map.setStyle(mapStyleURL);
+      map.on('style.load', () => {
+        !map.getSource(mapbox.ids.markers) && this.loadSourceData();
+      });
+
+      onViewUpdated();
+    }
+
     if (newIdeas.length !== ideas.length) {
-      this.map
+      map
         .getSource(mapbox.ids.markers)
         .setData(createGeoJSON(newIdeas));
     }
@@ -47,18 +60,25 @@ class TripMapDisplay extends Component {
   }
 
   render() {
-    const { destination, ideas } = this.props;
+    const { destination, ideas, onSetMapView, onSetSatelliteView } = this.props;
+    const { mapOption, satelliteOption } = styles;
 
     const viewControl = (
       <div style={styles.viewControl}>
-        <div style={styles.mapOption}>
+        <div
+          onClick={onSetMapView}
+          style={this.loadOptionStyle(mapOption, 'map')}
+        >
           <img
             src="../assets/map-view.png"
             style={styles.mapIcon}
           />
           <span>Map</span>
         </div>
-        <div style={styles.satelliteOption}>
+        <div
+          onClick={onSetSatelliteView}
+          style={this.loadOptionStyle(satelliteOption, 'satellite')}
+        >
           <div style={styles.earthEmoji}>🌎</div>
           <span>Satellite</span>
         </div>
@@ -78,12 +98,14 @@ class TripMapDisplay extends Component {
   }
 
   loadMap() {
+    const { mapStyleURL } = this.props;
+
     // Initialize the map and set it to the viewport of the destination
     mapboxgl.accessToken = mapbox.token;
 
     let map = new mapboxgl.Map({
       container: this.container,
-      style: mapbox.styleURL + mapbox.streetsStyleId,
+      style: mapStyleURL,
       attributionControl: true,
       center: this.props.destination.loc.coordinates,
     });
@@ -243,6 +265,16 @@ class TripMapDisplay extends Component {
       this.map.flyTo(opts);
     }
   }
+
+  loadOptionStyle(style, option) {
+    const { mapStyle } = this.props;
+
+    if (mapStyle === option) {
+      return { ...style, backgroundColor: "#eeeeee" };
+    }
+
+    return style;
+  }
 }
 
 function createGeoJSON(ideas) {
@@ -255,7 +287,7 @@ function createGeoJSON(ideas) {
 function createLayerJSON(name) {
   const { hover, markers } = mapbox.ids;
   let blur = name === markers ? 0.4 : 0;
-  let color = name === markers ? "rgba(233, 30, 99, 1)" : "rgba(0, 0, 0, 0)";
+  let color = name === markers ? colors.primary : "rgba(0, 0, 0, 0)";
   let radius = name === markers ? 8 : 15;
 
   return {
@@ -325,17 +357,24 @@ TripMapDisplay.propTypes = {
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
   ideas: PropTypes.array,
+  mapStyle: PropTypes.string.isRequired,
+  mapStyleURL: PropTypes.string.isRequired,
   onClearFocusLngLat: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
-  trackIdeaView: PropTypes.func.isRequired
+  onSetMapView: PropTypes.func.isRequired,
+  onSetSatelliteView: PropTypes.func.isRequired,
+  onViewUpdated: PropTypes.func.isRequired,
+  trackIdeaView: PropTypes.func.isRequired,
+  viewChanged: PropTypes.bool.isRequired
 };
 
 const styles = {
   earthEmoji: {
     fontSize: 20,
+    fontWeight: "normal",
     marginTop: 5,
     position: "relative",
     top: 2
@@ -362,21 +401,29 @@ const styles = {
   mapIcon: {
     marginTop: 3,
     position: "relative",
-    top: 2
+    top: 1
   },
   mapOption: {
     alignItems: "center",
     borderBottom: "1px solid #dddddd",
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    cursor: "pointer",
     display: "flex",
     flexDirection: "column",
     fontSize: 11,
+    fontWeight: 500,
     height: 45
   },
   satelliteOption: {
     alignItems: "center",
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    cursor: "pointer",
     display: "flex",
     flexDirection: "column",
     fontSize: 11,
+    fontWeight: 500,
     height: 45
   }
 };
