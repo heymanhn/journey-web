@@ -160,14 +160,6 @@ class TripIdeasList extends Component {
     );
   }
 
-  loadAddIdeaButtonStyle() {
-    let style = styles.searchBoxButton;
-    const disabledStyle = styles.searchBoxButtonDisabled;
-    const { newIdea } = this.props;
-
-    return newIdea ? style : { ...style, ...disabledStyle };
-  }
-
   loadActiveDropdownStyle() {
     const { showDropdown } = this.props;
     const style = styles.activeDropdown;
@@ -324,18 +316,6 @@ const styles = {
     margin: "10px 0px 0px 30px",
     padding: "12px 30px 20px 0px",
     width: dimensions.leftColumn.width - 30
-  },
-  searchBoxButton: {
-    backgroundColor: colors.primary,
-    border: "none",
-    color: "white",
-    float: "right"
-  },
-  searchBoxButtonDisabled: {
-    backgroundColor: "#f3f3f3",
-    border: "1px solid #e1e1e1",
-    color: "#cccccc",
-    cursor: "default"
   },
   showAllLink: {
     color: "white",

@@ -112,8 +112,8 @@ class TripIdeaUI extends Component {
 
         /*
          * When the mouse hovers over an idea, dim the idea's background color
-         * slightly and display a marker pin above the idea's location on the map to
-         * indicate that that location is selected
+         * slightly and display a marker pin above the idea's location on the
+         * map to indicate that that location is selected
          */
         onMouseOver={this.setHoverLngLat.bind(this)}
         onMouseLeave={onClearHoverLngLat}
@@ -143,7 +143,7 @@ class TripIdeaUI extends Component {
 
     if (isDragging) {
       // Displays the grey placeholder box
-      return compose(connectDragSource, connectDropTarget)(
+      return connectDropTarget(
         <div id={idea._id} style={this.loadEmptyStyle()}/>
       );
     }

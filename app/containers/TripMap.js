@@ -3,27 +3,56 @@
 import { connect } from 'react-redux';
 import { apiTripPageEvent } from 'app/actions/analytics';
 import {
+  changeToMapView,
+  changeToSatelliteView,
   deleteFocusMarker,
   deleteHoverMarker,
   saveFocusMarker,
   saveHoverMarker,
-  showAllTripIdeasComplete
+  showAllTripIdeasComplete,
+  viewUpdated
 } from 'app/actions/map';
 import { clearFocusLngLat } from 'app/actions/trips';
 import TripMapDisplay from 'app/components/TripMapDisplay';
-import { analytics, calcMapWidth } from 'app/constants';
+import { analytics, calcMapWidth, mapbox } from 'app/constants';
 
 const mapStateToProps = (state) => {
-  const ts = state.tripState;
-  const ms = state.componentsState.mapState;
+  const {
+    trip: { destination, ideas },
+    focusLngLat,
+    hoverLngLat
+  } = state.tripState;
+  const {
+    fitMapRequest,
+    focusMarker,
+    hoverMarker,
+    mapStyle,
+    viewChanged
+  } = state.componentsState.mapState;
+  const { satelliteStyleId, streetsStyleId, styleURL } = mapbox;
+
+  let mapStyleURL;
+  switch(mapStyle) {
+    case 'satellite':
+      mapStyleURL = styleURL + satelliteStyleId;
+      break;
+    case 'map':
+    default:
+      mapStyleURL = styleURL + streetsStyleId;
+      break;
+  }
+
   return {
-    destination: ts.trip.destination,
-    fitMapRequest: ms.fitMapRequest,
-    focusLngLat: ts.focusLngLat,
-    focusMarker: ms.focusMarker,
-    hoverLngLat: ts.hoverLngLat,
-    hoverMarker: ms.hoverMarker,
-    ideas: ts.trip.ideas
+    destination,
+    fitMapRequest,
+    focusLngLat,
+    focusMarker,
+    hoverLngLat,
+    hoverMarker,
+    ideas,
+    mapStyle,
+    mapStyleURL,
+    viewChanged
   };
 };
 
@@ -53,6 +82,18 @@ const mapDispatchToProps = (dispatch) => {
 
     onMapFitComplete() {
       dispatch(showAllTripIdeasComplete());
+    },
+
+    onSetMapView() {
+      dispatch(changeToMapView());
+    },
+
+    onSetSatelliteView() {
+      dispatch(changeToSatelliteView());
+    },
+
+    onViewUpdated() {
+      dispatch(viewUpdated());
     },
 
     trackIdeaView(ideaId) {
