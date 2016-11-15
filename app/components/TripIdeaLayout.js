@@ -2,15 +2,18 @@
 
 import React, { Component, PropTypes } from 'react';
 import Textarea from 'react-textarea-autosize';
-import { colors, dimensions } from 'app/constants';
+import { colors, dimensions, categoryIcons } from 'app/constants';
 
 class TripIdeaLayout extends Component {
   render() {
-    const { idea: { address, name, photo } } = this.props;
+    const { idea: { address, category, name, photo } } = this.props;
 
     return (
       <div style={styles.contentSection}>
-        <div>
+        <div style={styles.categoryIcon} title={category}>
+          {categoryIcons[category || 'default']}
+        </div>
+        <div style={styles.info}>
           <p style={styles.name}>{name}</p>
           <p style={styles.address}>{address}</p>
         </div>
@@ -34,9 +37,15 @@ const styles = {
     color: "#999999",
     marginBottom: 0
   },
+  categoryIcon: {
+    fontSize: 16,
+    marginRight: 12
+  },
   contentSection: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: "flex"
+  },
+  info: {
+    flexGrow: 1
   },
   name: {
     fontSize: 14,
