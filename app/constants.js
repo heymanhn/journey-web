@@ -382,12 +382,10 @@ export const categoryIcons = {
   [IDEA_CATEGORY_FOOD]: '🍲',
   [IDEA_CATEGORY_LODGING]: '🏠',
   [IDEA_CATEGORY_NIGHTLIFE]: '🍷',
-  [IDEA_CATEGORY_PLACE]: '⭐️',
   [IDEA_CATEGORY_RECREATION]: '🏖',
   [IDEA_CATEGORY_SHOPPING]: '🎁',
   [IDEA_CATEGORY_SIGHTSEEING]: '⛰',
-  [IDEA_CATEGORY_TRANSPORTATION]: '🚗',
-  default: '⭐️'
+  [IDEA_CATEGORY_TRANSPORTATION]: '🚗'
 };
 
 export function getCategoryForIdeaType(type) {
@@ -395,6 +393,8 @@ export function getCategoryForIdeaType(type) {
     case 'bakery':
     case 'cafe':
     case 'food':
+    case 'meal_delivery':
+    case 'meal_takeaway':
     case 'restaurant':
       return IDEA_CATEGORY_FOOD;
     case 'lodging':

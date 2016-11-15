@@ -10,6 +10,7 @@ import { hideModal } from './modals';
 import {
   acComponents,
   fetchOptsTemplate,
+  getCategoryForIdeaType,
   handleErrors,
   journeyAPI,
   modalComponents
@@ -274,16 +275,18 @@ export function saveNewTripIdea(place) {
   const loc = place.geometry.location;
 
   // Format the Google place object to the right shape
+  let types = place.types || [];
   let idea = {
     googlePlaceId: place.place_id,
     name: place.name,
+    category: getCategoryForIdeaType(types[0]),
     loc: {
       type: 'Point',
       coordinates: [loc.lng(), loc.lat()]
     },
     address: place.formatted_address,
     phone: place.international_phone_number,
-    types: place.types,
+    types,
     photo: place.photos ? place.photos[0].getUrl({ 'maxWidth': 300 }) : '',
     url: place.url
   };

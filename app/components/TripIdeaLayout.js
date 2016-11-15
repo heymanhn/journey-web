@@ -7,11 +7,14 @@ import { colors, dimensions, categoryIcons } from 'app/constants';
 class TripIdeaLayout extends Component {
   render() {
     const { idea: { address, category, name, photo } } = this.props;
+    const defaultCategoryIcon = (
+      <img src="../assets/place-idea-icon.png" style={styles.defaultIcon} />
+    );
 
     return (
       <div style={styles.contentSection}>
         <div style={styles.categoryIcon} title={category}>
-          {categoryIcons[category || 'default']}
+          {categoryIcons[category] || defaultCategoryIcon}
         </div>
         <div style={styles.info}>
           <p style={styles.name}>{name}</p>
@@ -43,6 +46,12 @@ const styles = {
   },
   contentSection: {
     display: "flex"
+  },
+  defaultIcon: {
+    height: 12,
+    marginLeft: 3,
+    marginTop: 4,
+    width: 12
   },
   info: {
     flexGrow: 1
