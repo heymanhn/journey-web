@@ -87,11 +87,13 @@ class TripIdeaUI extends Component {
       isEditing,
       isViewOnly,
       hoverLngLat,
+      newCategory,
       onClearHoverLngLat,
       onEditIdea,
       onEnterComment,
       onExitEditMode,
       onFocusIdea,
+      onSetCategory,
       onShowDeleteTripIdeaModal,
       onUpdateIdea
     } = this.props;
@@ -123,8 +125,10 @@ class TripIdeaUI extends Component {
             'connectDropTarget',
             'idea',
             'isViewOnly',
+            'newCategory',
             'onEnterComment',
             'onExitEditMode',
+            'onSetCategory',
             'onUpdateIdea'
           ])}
           hover={this.isHovering()}
@@ -191,12 +195,14 @@ TripIdeaUI.propTypes = {
   isEditing: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
   hoverLngLat: PropTypes.array,
+  newCategory: PropTypes.string,
   onClearHoverLngLat: PropTypes.func.isRequired,
   onEditIdea: PropTypes.func.isRequired,
   onEnterComment: PropTypes.func.isRequired,
   onExitEditMode: PropTypes.func.isRequired,
   onFocusIdea: PropTypes.func.isRequired,
   onReorderIdea: PropTypes.func.isRequired,
+  onSetCategory: PropTypes.func.isRequired,
   onSetHoverLngLat: PropTypes.func.isRequired,
   onShowDeleteTripIdeaModal: PropTypes.func.isRequired,
   onUpdateIdea: PropTypes.func.isRequired,
