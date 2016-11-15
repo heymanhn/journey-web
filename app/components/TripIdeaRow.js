@@ -28,7 +28,10 @@ class TripIdeaRow extends Component {
     // Insert a dummy function if connectDropTarget is not specified
     const wrapperFn = connectDropTarget || (x => x);
 
-    const contentSection = (<div><TripIdeaLayout idea={idea} /></div>);
+    const contentSection = (
+      <div><TripIdeaLayout idea={idea} showIcon={!isEditing} /></div>
+    );
+
     const settingsSection = (
       <div>
         <Textarea
@@ -164,7 +167,7 @@ const styles = {
     minHeight: 60,
     padding: 10,
     resize: "none",
-    width: 340
+    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
   },
   doneButton: {
     backgroundColor: colors.primary,
