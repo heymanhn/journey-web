@@ -12,6 +12,7 @@ import {
 } from 'app/constants';
 import DeleteModal from './DeleteModal';
 import TripIdea from 'app/containers/TripIdea';
+import TripIdeaCategoryDropdown from './TripIdeaCategoryDropdown';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TripIdeaLayout from './TripIdeaLayout';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
@@ -50,6 +51,15 @@ class TripIdeasList extends Component {
           style={styles.addIdeaDropdownButtonIcon}
         />
         {showDropdown && <div style={this.loadActiveDropdownStyle()}></div>}
+      </div>
+    );
+
+    const categorySection = newIdea && (
+      <div style={styles.categorySection}>
+        <div style={styles.newIdeaSectionHeader}>CATEGORY</div>
+        <TripIdeaCategoryDropdown
+          selectedCategory={newIdea.category}
+        />
       </div>
     );
 
@@ -106,6 +116,7 @@ class TripIdeasList extends Component {
         />
         {newIdeaPreview}
         {newIdeaButtons}
+        {categorySection}
         {commentSection}
       </div>
     );
@@ -276,6 +287,10 @@ const styles = {
     height: 25,
     padding: 0,
     width: 70
+  },
+  categorySection: {
+    alignSelf: "flex-start",
+    margin: "0 " + dimensions.sidePadding
   },
   commentField: {
     color: colors.primaryText,
