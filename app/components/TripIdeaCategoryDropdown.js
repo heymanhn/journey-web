@@ -9,7 +9,10 @@ class TripIdeaCategoryDropdown extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { visible: false };
+    this.state = {
+      hover: '',
+      visible: false
+    };
   }
 
   render() {
@@ -24,7 +27,12 @@ class TripIdeaCategoryDropdown extends Component {
       <div style={styles.dropdown}>
         {Object.keys(categoryIcons).map(key => {
           return (
-            <div style={this.loadDropdownFieldStyle(key === selectedCategory)}>
+            <div
+              key={key}
+              onMouseOver={this.onHover.bind(this, key)}
+              onMouseOut={this.clearHover.bind(this)}
+              style={this.loadDropdownFieldStyle(key)}
+            >
               <div style={styles.categoryFieldIcon}>
                 {categoryIcons[key]}
               </div>
@@ -34,9 +42,11 @@ class TripIdeaCategoryDropdown extends Component {
             </div>
           );
         })}
-        <div style={
-          this.loadDropdownFieldStyle(defaultCategory === selectedCategory)
-        }>
+        <div
+          onMouseOver={this.onHover.bind(this, defaultCategory)}
+          onMouseOut={this.clearHover.bind(this)}
+          style={this.loadDropdownFieldStyle(defaultCategory)}
+        >
           {defaultCategoryIcon}
           <div style={styles.dropdownFieldLabel}>
             {IDEA_CATEGORY_PLACE}
@@ -66,9 +76,12 @@ class TripIdeaCategoryDropdown extends Component {
     )
   }
 
-  loadDropdownFieldStyle(current) {
+  loadDropdownFieldStyle(category) {
+    const { selectedCategory } = this.props;
+    const { hover } = this.state;
     const style = styles.dropdownField;
-    return current ? {
+    const isHighlighted = category === selectedCategory || category === hover;
+    return isHighlighted ? {
       ...style,
       backgroundColor: "#f2f2f2",
       borderRight: "1px solid #dddddd"
@@ -82,6 +95,14 @@ class TripIdeaCategoryDropdown extends Component {
 
   dismissDropdown() {
     return this.state.visible && this.toggleVisible();
+  }
+
+  onHover(category) {
+    this.setState({ hover: category });
+  }
+
+  clearHover() {
+    this.setState({ hover: '' });
   }
 }
 
