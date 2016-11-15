@@ -2,15 +2,23 @@
 
 import React, { Component, PropTypes } from 'react';
 import Textarea from 'react-textarea-autosize';
-import { colors, dimensions } from 'app/constants';
+import { colors, dimensions, categoryIcons } from 'app/constants';
 
 class TripIdeaLayout extends Component {
   render() {
-    const { idea: { address, name, photo } } = this.props;
+    const { idea: { address, category, name, photo }, showIcon } = this.props;
+    const defaultCategoryIcon = (
+      <img src="../assets/place-idea-icon.png" style={styles.defaultIcon} />
+    );
 
     return (
       <div style={styles.contentSection}>
-        <div>
+        {showIcon && (
+          <div style={styles.categoryIcon} title={category}>
+            {categoryIcons[category] || defaultCategoryIcon}
+          </div>
+        )}
+        <div style={styles.info}>
           <p style={styles.name}>{name}</p>
           <p style={styles.address}>{address}</p>
         </div>
@@ -25,7 +33,8 @@ class TripIdeaLayout extends Component {
 }
 
 TripIdeaLayout.propTypes = {
-  idea: PropTypes.object.isRequired
+  idea: PropTypes.object.isRequired,
+  showIcon: PropTypes.bool
 };
 
 const styles = {
@@ -34,9 +43,21 @@ const styles = {
     color: "#999999",
     marginBottom: 0
   },
+  categoryIcon: {
+    fontSize: 16,
+    marginRight: 12
+  },
   contentSection: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: "flex"
+  },
+  defaultIcon: {
+    height: 12,
+    marginLeft: 3,
+    marginTop: 4,
+    width: 12
+  },
+  info: {
+    flexGrow: 1
   },
   name: {
     fontSize: 14,

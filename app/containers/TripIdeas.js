@@ -9,6 +9,7 @@ import {
   apiAddTripIdea,
   apiDeleteTripIdea,
   clearNewTripIdea,
+  saveIdeaCategory,
   saveIdeaComment,
   saveNewTripIdea
 } from 'app/actions/trips';
@@ -33,6 +34,7 @@ const mapStateToProps = (state) => {
     ideas,
     isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
+    newCategory: newIdea && newIdea.category,
     newIdea,
     showDropdown,
     showModal,
@@ -79,6 +81,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onShowDropdown(dropdownId) {
       dispatch(toggleDropdown(dropdownId));
+    },
+
+    setCategory(category) {
+      dispatch(saveIdeaCategory(category));
     }
   };
 };

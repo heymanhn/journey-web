@@ -8,6 +8,7 @@ import {
   clearEditingIdea,
   clearHoverLngLat,
   reorderTripIdea,
+  saveIdeaUpdatedCategory,
   saveIdeaUpdatedComment,
   setEditingIdea,
   setFocusLngLat,
@@ -19,10 +20,11 @@ import TripIdeaUI from 'app/components/TripIdeaUI';
 import { analytics, modalComponents } from 'app/constants';
 
 const mapStateToProps = (state, ownProps) => {
-  const { editingIdea, hoverLngLat } = state.tripState;
+  const { editingIdea, hoverLngLat, newCategory } = state.tripState;
   return {
     hoverLngLat,
-    isEditing: editingIdea === ownProps.idea._id
+    isEditing: editingIdea === ownProps.idea._id,
+    newCategory
   };
 };
 
@@ -53,8 +55,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(setFocusLngLat(coordinates));
     },
 
-    onReorderIdea: (index1, index2) => {
+    onReorderIdea(index1, index2) {
       dispatch(reorderTripIdea(index1, index2));
+    },
+
+    onSetCategory(category) {
+      dispatch(saveIdeaUpdatedCategory(category));
     },
 
     onSetHoverLngLat() {

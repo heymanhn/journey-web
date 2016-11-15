@@ -10,6 +10,7 @@ import { hideModal } from './modals';
 import {
   acComponents,
   fetchOptsTemplate,
+  getCategoryForIdeaType,
   handleErrors,
   journeyAPI,
   modalComponents
@@ -56,6 +57,7 @@ export const API_DELETE_TRIP_FAILURE = 'API_DELETE_TRIP_FAILURE';
 // Create new trip idea
 export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
 export const CLEAR_NEW_TRIP_IDEA = 'CLEAR_NEW_TRIP_IDEA';
+export const SAVE_IDEA_CATEGORY = 'SAVE_IDEA_CATEGORY';
 export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
 export const ADD_TRIP_IDEA = 'ADD_TRIP_IDEA';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
@@ -65,6 +67,7 @@ export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
 // Update trip ideas
 export const SET_IDEA_INDEX_TO_UPDATE = 'SET_IDEA_INDEX_TO_UPDATE';
 export const REORDER_TRIP_IDEA = 'REORDER_TRIP_IDEA';
+export const SAVE_IDEA_UPDATED_CATEGORY = 'SAVE_IDEA_UPDATED_CATEGORY';
 export const SAVE_IDEA_UPDATED_COMMENT = 'SAVE_IDEA_UPDATED_COMMENT';
 export const API_UPDATE_TRIP_IDEA_REQUEST = 'API_UPDATE_TRIP_IDEA_REQUEST';
 export const API_UPDATE_TRIP_IDEA_SUCCESS = 'API_UPDATE_TRIP_IDEA_SUCCESS';
@@ -274,16 +277,18 @@ export function saveNewTripIdea(place) {
   const loc = place.geometry.location;
 
   // Format the Google place object to the right shape
+  let types = place.types || [];
   let idea = {
     googlePlaceId: place.place_id,
     name: place.name,
+    category: getCategoryForIdeaType(types[0]),
     loc: {
       type: 'Point',
       coordinates: [loc.lng(), loc.lat()]
     },
     address: place.formatted_address,
     phone: place.international_phone_number,
-    types: place.types,
+    types,
     photo: place.photos ? place.photos[0].getUrl({ 'maxWidth': 300 }) : '',
     url: place.url
   };
@@ -297,6 +302,13 @@ export function saveNewTripIdea(place) {
 export function clearNewTripIdea() {
   return {
     type: CLEAR_NEW_TRIP_IDEA
+  };
+}
+
+export function saveIdeaCategory(category) {
+  return {
+    type: SAVE_IDEA_CATEGORY,
+    category
   };
 }
 
@@ -348,6 +360,13 @@ export function reorderTripIdea(index1, index2) {
     type: REORDER_TRIP_IDEA,
     index1,
     index2
+  };
+}
+
+export function saveIdeaUpdatedCategory(category) {
+  return {
+    type: SAVE_IDEA_UPDATED_CATEGORY,
+    category
   };
 }
 
@@ -635,6 +654,7 @@ export function apiUpdateTripIdea(index) {
 
     const {
       ideaIndexToUpdate,
+      newCategory,
       newComment,
       trip: { _id: tripId, ideas }
     } = getState().tripState;
@@ -644,6 +664,10 @@ export function apiUpdateTripIdea(index) {
 
     if (newComment) {
       params.comment = newComment;
+    }
+
+    if (newCategory) {
+      params.category = newCategory;
     }
 
     const updateTripIdeaAPI = journeyAPI.trip.ideas.update(tripId, ideaId);

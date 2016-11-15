@@ -3,6 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
+import TripIdeaCategoryDropdown from './TripIdeaCategoryDropdown';
 import TripIdeaLayout from './TripIdeaLayout';
 import { colors, dimensions } from 'app/constants';
 
@@ -19,26 +20,41 @@ class TripIdeaRow extends Component {
       idea,
       isEditing,
       isViewOnly,
+      newCategory,
       onEnterComment,
       onExitEditMode,
       onFocusIdea,
+      onSetCategory,
       onUpdateIdea
     } = this.props;
 
     // Insert a dummy function if connectDropTarget is not specified
     const wrapperFn = connectDropTarget || (x => x);
 
-    const contentSection = (<div><TripIdeaLayout idea={idea} /></div>);
+    const contentSection = (
+      <div><TripIdeaLayout idea={idea} showIcon={!isEditing} /></div>
+    );
+
     const settingsSection = (
       <div>
-        <Textarea
-          defaultValue={idea.comment}
-          onBlur={this.clearFocus.bind(this)}
-          onChange={onEnterComment}
-          onFocus={this.setFocus.bind(this)}
-          placeholder="Add a note"
-          style={this.loadCommentFieldStyle()}
-        />
+        <div style={styles.categorySection}>
+          <div style={styles.newIdeaSectionHeader}>CATEGORY</div>
+          <TripIdeaCategoryDropdown
+            onSelectCategory={onSetCategory}
+            selectedCategory={newCategory || idea.category}
+          />
+        </div>
+        <div style={styles.commentSection}>
+          <div style={styles.newIdeaSectionHeader}>NOTE</div>
+          <Textarea
+            defaultValue={idea.comment}
+            onBlur={this.clearFocus.bind(this)}
+            onChange={onEnterComment}
+            onFocus={this.setFocus.bind(this)}
+            placeholder="Add a note"
+            style={this.loadCommentFieldStyle()}
+          />
+        </div>
         <div style={styles.settingsButtons}>
           <Button
             onClick={onUpdateIdea}
@@ -141,9 +157,11 @@ TripIdeaRow.propTypes = {
   idea: PropTypes.object,
   isEditing: PropTypes.bool,
   isViewOnly: PropTypes.bool,
+  newCategory: PropTypes.string,
   onEnterComment: PropTypes.func,
   onExitEditMode: PropTypes.func,
   onFocusIdea: PropTypes.func,
+  onSetCategory: PropTypes.func,
   onUpdateIdea: PropTypes.func
 };
 
@@ -157,14 +175,21 @@ const styles = {
     padding: 0,
     width: 70
   },
+  categorySection: {
+    alignSelf: "flex-start",
+    marginTop: 10
+  },
   commentField: {
     color: colors.primaryText,
     fontSize: 13,
-    margin: "12px 0px",
+    marginBottom: 12,
     minHeight: 60,
     padding: 10,
     resize: "none",
-    width: 340
+    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
+  },
+  commentSection: {
+    marginTop: 10
   },
   doneButton: {
     backgroundColor: colors.primary,
@@ -210,6 +235,10 @@ const styles = {
     margin: 0,
     padding: "0px 30px",
     cursor: "pointer"
+  },
+  newIdeaSectionHeader: {
+    fontSize: 10,
+    paddingBottom: 3
   },
   settingsButtons: {
     display: "flex",

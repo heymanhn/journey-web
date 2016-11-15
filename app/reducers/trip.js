@@ -11,11 +11,13 @@ import {
   CLEAR_NEW_TRIP_DESTINATION,
   SAVE_NEW_TRIP_IDEA,
   CLEAR_NEW_TRIP_IDEA,
+  SAVE_IDEA_CATEGORY,
   SAVE_IDEA_COMMENT,
   ADD_TRIP_IDEA,
   SET_IDEA_INDEX_TO_UPDATE,
   SET_TRIP_IDEA_TO_DELETE,
   REORDER_TRIP_IDEA,
+  SAVE_IDEA_UPDATED_CATEGORY,
   SAVE_IDEA_UPDATED_COMMENT,
   SET_HOVER_LNGLAT,
   CLEAR_HOVER_LNGLAT,
@@ -89,6 +91,11 @@ export default function tripState(state = initialTripState, action) {
       };
     case CLEAR_NEW_TRIP_IDEA:
       return _.omit(state, ['focusLngLat', 'newIdea', 'newComment']);
+    case SAVE_IDEA_CATEGORY:
+      return {
+        ...state,
+        newIdea: _.extend(state.newIdea, { category: action.category })
+      };
     case SAVE_IDEA_COMMENT:
       return {
         ...state,
@@ -124,6 +131,11 @@ export default function tripState(state = initialTripState, action) {
           ideas
         })
       };
+    case SAVE_IDEA_UPDATED_CATEGORY:
+      return {
+        ...state,
+        newCategory: action.category
+      };
     case SAVE_IDEA_UPDATED_COMMENT:
       return {
         ...state,
@@ -149,7 +161,7 @@ export default function tripState(state = initialTripState, action) {
         editingIdea: action.ideaId
       };
     case CLEAR_EDITING_IDEA:
-      return _.omit(state, 'editingIdea');
+      return _.omit(state, 'editingIdea', 'newCategory', 'newComment');
     case CLEAR_TRIP_ERROR:
       return _.omit(state, 'error');
     case SHOW_MODAL:
@@ -219,10 +231,13 @@ export default function tripState(state = initialTripState, action) {
     case API_UPDATE_TRIP_IDEA_SUCCESS:
     case API_DELETE_TRIP_IDEA_SUCCESS:
       return {
-        ..._.omit(
-          state,
-          ['focusLngLat', 'hoverLngLat', 'ideaIndexToUpdate', 'newComment']
-        ),
+        ..._.omit(state, [
+          'focusLngLat',
+          'hoverLngLat',
+          'ideaIndexToUpdate',
+          'newCategory',
+          'newComment'
+        ]),
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false
       };

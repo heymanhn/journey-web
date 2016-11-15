@@ -12,6 +12,7 @@ import {
 } from 'app/constants';
 import DeleteModal from './DeleteModal';
 import TripIdea from 'app/containers/TripIdea';
+import TripIdeaCategoryDropdown from './TripIdeaCategoryDropdown';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 import TripIdeaLayout from './TripIdeaLayout';
 import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
@@ -29,6 +30,7 @@ class TripIdeasList extends Component {
       ideas,
       isFetching,
       isViewOnly,
+      newCategory,
       newIdea,
       onAddIdeaPress,
       onClearSavedPlace,
@@ -37,6 +39,7 @@ class TripIdeasList extends Component {
       onEnterIdeaComment,
       onHide,
       onShowAllIdeas,
+      setCategory,
       showDropdown,
       showModal
     } = this.props;
@@ -53,21 +56,34 @@ class TripIdeasList extends Component {
       </div>
     );
 
-    const commentField = newIdea && (
-      <Textarea
-        onBlur={this.clearFocus.bind(this)}
-        onChange={onEnterIdeaComment}
-        onFocus={this.setFocus.bind(this)}
-        placeholder="Add a note"
-        style={this.loadCommentFieldStyle()}
-        tabIndex={2}
-        type="text"
-      />
+    const categorySection = newIdea && (
+      <div style={styles.categorySection}>
+        <div style={styles.newIdeaSectionHeader}>CATEGORY</div>
+        <TripIdeaCategoryDropdown
+          onSelectCategory={setCategory}
+          selectedCategory={newCategory}
+        />
+      </div>
+    );
+
+    const commentSection = newIdea && (
+      <div style={styles.commentSection}>
+        <div style={styles.newIdeaSectionHeader}>NOTE</div>
+        <Textarea
+          onBlur={this.clearFocus.bind(this)}
+          onChange={onEnterIdeaComment}
+          onFocus={this.setFocus.bind(this)}
+          placeholder="Add a note"
+          style={this.loadCommentFieldStyle()}
+          tabIndex={2}
+          type="text"
+        />
+      </div>
     );
 
     const newIdeaPreview = newIdea && (
       <div style={styles.newIdeaPreview}>
-        <TripIdeaLayout idea={newIdea} />
+        <TripIdeaLayout idea={newIdea} showIcon={false} />
       </div>
     );
 
@@ -103,7 +119,8 @@ class TripIdeasList extends Component {
         />
         {newIdeaPreview}
         {newIdeaButtons}
-        {commentField}
+        {categorySection}
+        {commentSection}
       </div>
     );
 
@@ -207,6 +224,7 @@ TripIdeasList.propTypes = {
   ideas: PropTypes.array,
   isFetching: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
+  newCategory: PropTypes.string,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
   onClearSavedPlace: PropTypes.func.isRequired,
@@ -217,6 +235,7 @@ TripIdeasList.propTypes = {
   onHide: PropTypes.func.isRequired,
   onShowAllIdeas: PropTypes.func.isRequired,
   onShowDropdown: PropTypes.func.isRequired,
+  setCategory: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
   tripIdeaToDelete: PropTypes.string
 };
@@ -255,7 +274,7 @@ const styles = {
     border: "1px solid #dddddd",
     borderRadius: 0,
     fontSize: 13,
-    width: 340
+    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
   },
   addIdeasSection: {
     backgroundColor: "#eeeeee",
@@ -274,14 +293,20 @@ const styles = {
     padding: 0,
     width: 70
   },
+  categorySection: {
+    alignSelf: "flex-start",
+    margin: "0 " + dimensions.sidePadding
+  },
   commentField: {
     color: colors.primaryText,
     fontSize: 13,
-    marginTop: 10,
     minHeight: 60,
     padding: 10,
     resize: "none",
-    width: 340
+    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
+  },
+  commentSection: {
+    marginTop: 10
   },
   footerSection: {
     backgroundColor: colors.background,
@@ -302,7 +327,7 @@ const styles = {
   newIdeaButtonContainer: {
     height: 15,
     position: "relative",
-    width: dimensions.leftColumn.width - 60
+    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
   },
   newIdeaButtons: {
     display: "flex",
@@ -315,7 +340,11 @@ const styles = {
     borderTop: "1px solid #ddd",
     margin: "10px 0px 0px 30px",
     padding: "12px 30px 20px 0px",
-    width: dimensions.leftColumn.width - 30
+    width: dimensions.leftColumn.width - dimensions.sidePadding
+  },
+  newIdeaSectionHeader: {
+    fontSize: 10,
+    paddingBottom: 3
   },
   showAllLink: {
     color: "white",

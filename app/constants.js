@@ -133,7 +133,7 @@ export const dimensions = {
   },
   leftColumn: {
     margin: 20,
-    width: 400
+    width: 420
   },
   navigationBar: {
     height: 60
@@ -364,3 +364,76 @@ export const analytics = {
     TRIPS_PAGE: 'Trips Page'
   }
 };
+
+
+/*
+ * Trip idea types: mappings to categories
+ */
+const IDEA_CATEGORY_FOOD = 'Food';
+const IDEA_CATEGORY_LODGING = 'Lodging';
+const IDEA_CATEGORY_NIGHTLIFE = 'Nightlife';
+export const IDEA_CATEGORY_PLACE = 'Place';
+const IDEA_CATEGORY_RECREATION = 'Recreation';
+const IDEA_CATEGORY_SHOPPING = 'Shopping';
+const IDEA_CATEGORY_SIGHTSEEING = 'Sightseeing';
+const IDEA_CATEGORY_TRANSPORTATION = 'Transportation';
+
+export const categoryIcons = {
+  [IDEA_CATEGORY_FOOD]: '🍲',
+  [IDEA_CATEGORY_LODGING]: '🏠',
+  [IDEA_CATEGORY_NIGHTLIFE]: '🍷',
+  [IDEA_CATEGORY_RECREATION]: '🏖',
+  [IDEA_CATEGORY_SHOPPING]: '🎁',
+  [IDEA_CATEGORY_SIGHTSEEING]: '⛰',
+  [IDEA_CATEGORY_TRANSPORTATION]: '🚗'
+};
+
+export function getCategoryForIdeaType(type) {
+  switch(type) {
+    case 'bakery':
+    case 'cafe':
+    case 'food':
+    case 'meal_delivery':
+    case 'meal_takeaway':
+    case 'restaurant':
+      return IDEA_CATEGORY_FOOD;
+    case 'lodging':
+      return IDEA_CATEGORY_LODGING;
+    case 'bar':
+    case 'night_club':
+      return IDEA_CATEGORY_NIGHTLIFE;
+    case 'amusement_park':
+    case 'aquarium':
+    case 'art_gallery':
+    case 'campground':
+    case 'museum':
+    case 'park':
+    case 'spa':
+    case 'stadium':
+    case 'zoo':
+      return IDEA_CATEGORY_RECREATION;
+    case 'book_store':
+    case 'clothing_store':
+    case 'department_store':
+    case 'furniture_store':
+    case 'shopping_mall':
+    case 'store':
+      return IDEA_CATEGORY_SHOPPING;
+    case 'establishment':
+    case 'locality':
+    case 'natural_feature':
+    case 'place_of_worship':
+    case 'premise':
+    case 'point_of_interest':
+    case 'subpremise':
+      return IDEA_CATEGORY_SIGHTSEEING;
+    case 'airport':
+    case 'bus_station':
+    case 'taxi_stand':
+    case 'train_station':
+    case 'transit_station':
+      return IDEA_CATEGORY_TRANSPORTATION;
+    default:
+      return IDEA_CATEGORY_PLACE;
+  }
+}
