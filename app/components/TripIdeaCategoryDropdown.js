@@ -16,7 +16,7 @@ class TripIdeaCategoryDropdown extends Component {
   }
 
   render() {
-    const { selectedCategory } = this.props;
+    const { onSelectCategory, selectedCategory } = this.props;
     const { visible } = this.state;
     const defaultCategory = IDEA_CATEGORY_PLACE;
     const defaultCategoryIcon = (
@@ -29,6 +29,7 @@ class TripIdeaCategoryDropdown extends Component {
           return (
             <div
               key={key}
+              onClick={onSelectCategory.bind(null, key)}
               onMouseOver={this.onHover.bind(this, key)}
               onMouseOut={this.clearHover.bind(this)}
               style={this.loadDropdownFieldStyle(key)}
@@ -43,6 +44,7 @@ class TripIdeaCategoryDropdown extends Component {
           );
         })}
         <div
+          onClick={onSelectCategory.bind(null, defaultCategory)}
           onMouseOver={this.onHover.bind(this, defaultCategory)}
           onMouseOut={this.clearHover.bind(this)}
           style={this.loadDropdownFieldStyle(defaultCategory)}

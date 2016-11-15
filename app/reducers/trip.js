@@ -11,6 +11,7 @@ import {
   CLEAR_NEW_TRIP_DESTINATION,
   SAVE_NEW_TRIP_IDEA,
   CLEAR_NEW_TRIP_IDEA,
+  SAVE_IDEA_CATEGORY,
   SAVE_IDEA_COMMENT,
   ADD_TRIP_IDEA,
   SET_IDEA_INDEX_TO_UPDATE,
@@ -89,6 +90,11 @@ export default function tripState(state = initialTripState, action) {
       };
     case CLEAR_NEW_TRIP_IDEA:
       return _.omit(state, ['focusLngLat', 'newIdea', 'newComment']);
+    case SAVE_IDEA_CATEGORY:
+      return {
+        ...state,
+        newIdea: _.extend(state.newIdea, { category: action.category })
+      };
     case SAVE_IDEA_COMMENT:
       return {
         ...state,

@@ -30,6 +30,7 @@ class TripIdeasList extends Component {
       ideas,
       isFetching,
       isViewOnly,
+      newCategory,
       newIdea,
       onAddIdeaPress,
       onClearSavedPlace,
@@ -38,6 +39,7 @@ class TripIdeasList extends Component {
       onEnterIdeaComment,
       onHide,
       onShowAllIdeas,
+      setCategory,
       showDropdown,
       showModal
     } = this.props;
@@ -58,7 +60,8 @@ class TripIdeasList extends Component {
       <div style={styles.categorySection}>
         <div style={styles.newIdeaSectionHeader}>CATEGORY</div>
         <TripIdeaCategoryDropdown
-          selectedCategory={newIdea.category}
+          onSelectCategory={setCategory}
+          selectedCategory={newCategory}
         />
       </div>
     );
@@ -221,6 +224,7 @@ TripIdeasList.propTypes = {
   ideas: PropTypes.array,
   isFetching: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
+  newCategory: PropTypes.string,
   newIdea: PropTypes.object,
   onAddIdeaPress: PropTypes.func.isRequired,
   onClearSavedPlace: PropTypes.func.isRequired,
@@ -231,6 +235,7 @@ TripIdeasList.propTypes = {
   onHide: PropTypes.func.isRequired,
   onShowAllIdeas: PropTypes.func.isRequired,
   onShowDropdown: PropTypes.func.isRequired,
+  setCategory: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
   tripIdeaToDelete: PropTypes.string
 };
