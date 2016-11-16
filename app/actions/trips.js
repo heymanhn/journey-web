@@ -10,7 +10,7 @@ import { hideModal } from './modals';
 import {
   acComponents,
   fetchOptsTemplate,
-  getCategoryForIdeaType,
+  getCategoryForIdeaTypes,
   handleErrors,
   journeyAPI,
   modalComponents
@@ -281,7 +281,7 @@ export function saveNewTripIdea(place) {
   let idea = {
     googlePlaceId: place.place_id,
     name: place.name,
-    category: getCategoryForIdeaType(types[0]),
+    category: getCategoryForIdeaTypes(types),
     loc: {
       type: 'Point',
       coordinates: [loc.lng(), loc.lat()]

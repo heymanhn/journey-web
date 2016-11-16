@@ -388,7 +388,19 @@ export const categoryIcons = {
   [IDEA_CATEGORY_TRANSPORTATION]: '🚗'
 };
 
-export function getCategoryForIdeaType(type) {
+export function getCategoryForIdeaTypes(types) {
+  let selectedType;
+  for (const type of types) {
+    selectedType = getCategoryForIdeaType(type);
+    if (selectedType) {
+      break;
+    }
+  }
+
+  return selectedType || IDEA_CATEGORY_PLACE;
+}
+
+function getCategoryForIdeaType(type) {
   switch(type) {
     case 'bakery':
     case 'cafe':
@@ -434,6 +446,6 @@ export function getCategoryForIdeaType(type) {
     case 'transit_station':
       return IDEA_CATEGORY_TRANSPORTATION;
     default:
-      return IDEA_CATEGORY_PLACE;
+      return null;
   }
 }
