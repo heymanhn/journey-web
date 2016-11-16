@@ -180,7 +180,7 @@ export const mapbox = {
   },
   staticImage: {
     height: dimensions.tripsPage.listItem.height - 62,
-    url: 'https://api.mapbox.com/styles/v1/heymanhn/',
+    url: 'https://api.mapbox.com/styles/v1/',
     width: dimensions.tripsPage.listItem.width - 2
   },
   styleURL: 'mapbox://styles/',
