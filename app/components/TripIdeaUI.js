@@ -7,7 +7,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { compose } from 'redux';
 import TripIdeaRow from './TripIdeaRow';
-import { colors, dndTypes } from 'app/constants';
+import { colors, dimensions, dndTypes } from 'app/constants';
 
 /*
  * React-dnd drag source
@@ -227,7 +227,7 @@ const styles = {
     borderRadius: 100,
     display: "none",
     height: 24,
-    left: 170,
+    left: (dimensions.leftColumn.width/2) - dimensions.sidePadding,
     marginTop: -18,
     position: "absolute",
     width: 60,
