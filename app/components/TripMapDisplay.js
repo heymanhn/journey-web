@@ -8,6 +8,7 @@ import {
   categoryIcons,
   colors,
   dimensions,
+  IDEA_CATEGORY_PLACE,
   mapbox,
   mapMarkers
 } from 'app/constants';
@@ -124,7 +125,7 @@ class TripMapDisplay extends Component {
   loadSourceData() {
     const { ideas, trackIdeaView } = this.props;
     const { map } = this;
-    const { hover, markers } = mapbox.ids;
+    const { baseLabelLayer, ids: { hover, markers } } = mapbox;
     const moveMapToLocation = this.moveMapToLocation.bind(this);
 
     // Load the marker data into the map
@@ -133,13 +134,29 @@ class TripMapDisplay extends Component {
       data: createGeoJSON(ideas)
     });
 
-    // Add layers visualizing the markers and invisible hover targets
-    map.addLayer(createLayerJSON(markers), 'housenum-label');
-    map.addLayer(createLayerJSON(hover));
+    // Add layer for the place category markers
+    map.addLayer(createPlaceLayerJSON(), baseLabelLayer);
+
+    // Add layers visualizing the category icons
+    map.addLayer(createIconBorderLayerJSON());
+    map.addLayer(createIconFillLayerJSON());
+
+    // Note that these are markers, not layers, due to Mapbox constraints
+    ideas.forEach(idea => {
+      const { category, loc: { coordinates } } = idea;
+      const icon = categoryIcons[category];
+
+      icon && this.createIconMarker(coordinates, icon);
+    });
+
+    // Add layer for the invisible tooltip hover targets
+    map.addLayer(createHoverLayerJSON(IDEA_CATEGORY_PLACE));
+    map.addLayer(createHoverLayerJSON());
 
     const popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false
+      closeOnClick: false,
+      offset: 3
     });
 
     // Create event handlers for displaying popups
@@ -187,6 +204,23 @@ class TripMapDisplay extends Component {
     }
   }
 
+  createIconMarker(lngLat, icon) {
+    const { fontSize, height, width } = mapMarkers.emoji;
+
+    let markerElem = document.createElement('div');
+    markerElem.innerHTML = icon;
+    markerElem.style.fontSize = fontSize;
+    markerElem.style.width = width;
+    markerElem.style.height = height;
+
+    new mapboxgl.Marker(
+      markerElem,
+      { offset: [-width/2, -height/2] }
+    )
+      .setLngLat(lngLat)
+      .addTo(this.map);
+  }
+
   createHoverMarker(lngLat, isFocusMarker = false) {
     const { onSaveFocusMarker, onSaveHoverMarker } = this.props;
 
@@ -200,7 +234,7 @@ class TripMapDisplay extends Component {
 
     const marker = new mapboxgl.Marker(
       markerElem,
-      { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
+      { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height - 3] }
     )
       .setLngLat(lngLat)
       .addTo(this.map);
@@ -290,22 +324,56 @@ function createGeoJSON(ideas) {
   };
 }
 
-function createLayerJSON(name) {
-  const { hover, markers } = mapbox.ids;
-  let blur = name === markers ? 0.4 : 0;
-  let color = name === markers ? colors.primary : "rgba(0, 0, 0, 0)";
-  let radius = name === markers ? 8 : 15;
-
-  return {
-    id: name,
+function createCircleLayerJSON(opts) {
+  const { blur, color, filter, id, radius } = opts;
+  let layerJSON = {
+    id,
     type: 'circle',
-    source: markers,
+    source: mapbox.ids.markers,
     paint: {
-      "circle-radius": radius,
-      "circle-color": color,
-      "circle-blur": blur
+      'circle-radius': radius,
+      'circle-color': color,
+      'circle-blur': blur || 0
     }
   };
+
+  return filter ? { ...layerJSON, filter } : layerJSON;
+}
+
+function createPlaceLayerJSON() {
+  return createCircleLayerJSON({
+    id: IDEA_CATEGORY_PLACE + 'Markers',
+    filter: ['==', 'category', IDEA_CATEGORY_PLACE],
+    radius: mapMarkers.places.radius,
+    blur: 0.2,
+    color: colors.primary
+  });
+}
+
+function createIconBorderLayerJSON() {
+  return createCircleLayerJSON({
+    id: 'IconMarkersBorders',
+    filter: ['!=', 'category', IDEA_CATEGORY_PLACE],
+    radius: mapMarkers.emoji.radius,
+    color: colors.primary
+  });
+}
+
+function createIconFillLayerJSON() {
+  return createCircleLayerJSON({
+    id: 'IconMarkersFill',
+    filter: ['!=', 'category', IDEA_CATEGORY_PLACE],
+    radius: mapMarkers.emoji.radius - 1,
+    color: 'rgba(249, 249, 249, 1)'
+  });
+}
+
+function createHoverLayerJSON(place) {
+  return createCircleLayerJSON({
+    id: (place || 'Icon') + mapbox.ids.hover,
+    radius: place ? 15 : 18,
+    color: 'rgba(0, 0, 0, 0)'
+  });
 }
 
 function createSourceEntry(idea) {
@@ -340,7 +408,10 @@ function createPopupHTML(idea) {
 
 function showOrHidePopup(popup, point, map) {
   const { hover } = mapbox.ids;
-  const features = map.queryRenderedFeatures(point, { layers: [hover] });
+  const features = map.queryRenderedFeatures(
+    point,
+    { layers: [IDEA_CATEGORY_PLACE + hover, 'Icon' + hover] }
+  );
 
   // Change the cursor style as a UI indicator.
   map.getCanvas().style.cursor = features.length ? 'pointer' : '';

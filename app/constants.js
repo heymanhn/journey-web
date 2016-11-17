@@ -174,6 +174,7 @@ export const transitions = {
  * Mapbox API
  */
 export const mapbox = {
+  baseLabelLayer: 'housenum-label',
   ids: {
     hover: 'hoverTargets',
     markers: 'ideaMarkers'
@@ -191,7 +192,15 @@ export const mapbox = {
 };
 
 export const mapMarkers = {
-  radius: 7,
+  places: {
+    radius: 8
+  },
+  emoji: {
+    fontSize: 14,
+    radius: 14,
+    width: 19,
+    height: 23
+  },
   icon: {
     width: 29,
     height: 40
