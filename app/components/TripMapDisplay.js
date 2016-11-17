@@ -4,7 +4,13 @@ require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { colors, dimensions, mapbox, mapMarkers } from 'app/constants';
+import {
+  categoryIcons,
+  colors,
+  dimensions,
+  mapbox,
+  mapMarkers
+} from 'app/constants';
 
 class TripMapDisplay extends Component {
   componentDidMount() {
@@ -303,8 +309,8 @@ function createLayerJSON(name) {
 }
 
 function createSourceEntry(idea) {
-  const { _id, name, photo, address, loc } = idea;
-  const properties = { _id, name, photo, address };
+  const { _id, name, category, photo, address, loc } = idea;
+  const properties = { _id, name, category, photo, address };
   const geometry = loc;
 
   return {
@@ -315,10 +321,19 @@ function createSourceEntry(idea) {
 }
 
 function createPopupHTML(idea) {
-  let popupHTML = idea.photo ? `<img src="${idea.photo}">` : '';
+  const { category, name, photo, address } = idea;
+  const categoryHTML = categoryIcons[category] || `<img
+    class="popup-idea-default-icon"
+    src="../assets/place-idea-icon.png"
+  />`;
+
+  let popupHTML = '<div class="popup-idea">';
+  popupHTML += `<div class="popup-idea-category">${categoryHTML}</div><div>`;
+  popupHTML += photo ? `<img class="popup-idea-photo" src="${photo}">` : '';
   popupHTML += `
-    <p class="popup-name">${idea.name}</p>
-    <p class="popup-address">${idea.address}</p>`;
+    <p class="popup-idea-name">${name}</p>
+    <p class="popup-idea-address">${address}</p>
+  </div></div>`;
 
   return popupHTML;
 }
@@ -328,7 +343,7 @@ function showOrHidePopup(popup, point, map) {
   const features = map.queryRenderedFeatures(point, { layers: [hover] });
 
   // Change the cursor style as a UI indicator.
-  map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+  map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 
   if (!features.length) {
     popup.remove();
