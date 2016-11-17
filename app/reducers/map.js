@@ -13,10 +13,13 @@ import {
   CHANGE_TO_MAP_VIEW,
   CHANGE_TO_SATELLITE_VIEW,
   VIEW_UPDATED,
+  IDEA_DELETED,
+  IDEA_UPDATED,
   LOGOUT
 } from 'app/actions/map';
 import {
-  API_DELETE_TRIP_IDEA_SUCCESS
+  API_DELETE_TRIP_IDEA_SUCCESS,
+  API_UPDATE_TRIP_IDEA_SUCCESS
 } from 'app/actions/trips';
 import { initialMapState } from 'app/constants';
 
@@ -24,7 +27,7 @@ export default function mapState(state = initialMapState, action) {
   switch (action.type) {
     case SAVE_ICON_MARKERS:
       return {
-        ..._.omit(state, 'iconMarkerToDelete'),
+        ...state,
         iconMarkers: action.markers
       };
     case SAVE_HOVER_MARKER:
@@ -54,9 +57,15 @@ export default function mapState(state = initialMapState, action) {
         viewChanged: state.mapStyle !== 'satellite'
       };
     case VIEW_UPDATED:
-      return { ...state, viewChanged: false }
+      return { ...state, viewChanged: false };
+    case IDEA_UPDATED:
+      return _.omit(state, 'ideaToUpdate');
+    case IDEA_DELETED:
+      return _.omit(state, 'ideaToDelete');
+    case API_UPDATE_TRIP_IDEA_SUCCESS:
+      return { ...state, ideaToUpdate: action.updatedIdea };
     case API_DELETE_TRIP_IDEA_SUCCESS:
-      return { ...state, iconMarkerToDelete: action.deletedIdea };
+      return { ...state, ideaToDelete: action.deletedIdea };
     case LOGOUT:
       return initialMapState;
   }

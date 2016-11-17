@@ -375,10 +375,11 @@ export function apiUpdateTripIdeaRequest() {
   };
 }
 
-export function apiUpdateTripIdeaSuccess(json) {
+export function apiUpdateTripIdeaSuccess(json, updatedIdea) {
   return {
     type: API_UPDATE_TRIP_IDEA_SUCCESS,
-    ideas: json.ideas
+    ideas: json.ideas,
+    updatedIdea
   };
 }
 
@@ -669,7 +670,7 @@ export function apiUpdateTripIdea(index) {
     return fetch(updateTripIdeaAPI.route, opts)
       .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
-      .then(json => dispatch(apiUpdateTripIdeaSuccess(json)))
+      .then(json => dispatch(apiUpdateTripIdeaSuccess(json, ideaId)))
       .catch(error => {
         return error && dispatch(apiUpdateTripIdeaFailure(error.message));
       });

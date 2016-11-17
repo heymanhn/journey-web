@@ -29,11 +29,14 @@ class TripMapDisplay extends Component {
       focusLngLat: newFocusLngLat,
       focusMarker,
       iconMarkers,
-      iconMarkerToDelete,
       ideas: newIdeas,
+      ideaToDelete,
+      ideaToUpdate,
       hoverLngLat: newHoverLngLat,
       mapStyleURL,
       onDeleteFocusMarker,
+      onIdeaDeleted,
+      onIdeaUpdated,
       onSaveIconMarkers,
       onMapFitComplete,
       onViewUpdated,
@@ -49,12 +52,12 @@ class TripMapDisplay extends Component {
       onViewUpdated();
     }
 
-    if (newIdeas.length !== ideas.length) {
+    if (newIdeas.length !== ideas.length || ideaToUpdate) {
       map
         .getSource(mapbox.ids.markers)
         .setData(createGeoJSON(newIdeas));
 
-      // Add or remove an icon marker
+      // Add, remove, or update an icon marker
       if (newIdeas.length > ideas.length) {
         const { category, _id, loc: { coordinates } } = newIdeas[0];
         const icon = categoryIcons[category];
@@ -63,14 +66,44 @@ class TripMapDisplay extends Component {
           iconMarkers[_id] = this.createIconMarker(coordinates, icon);
           onSaveIconMarkers(iconMarkers);
         }
-      } else {
-        const markerToDelete = iconMarkers[iconMarkerToDelete];
+      }
+
+      if (ideaToDelete) {
+        const markerToDelete = iconMarkers[ideaToDelete];
         if (markerToDelete) {
           markerToDelete.remove();
-          delete iconMarkers[iconMarkerToDelete];
+          delete iconMarkers[ideaToDelete];
         }
 
         onSaveIconMarkers(iconMarkers);
+        onIdeaDeleted();
+      }
+
+      if (ideaToUpdate) {
+        // Redraw the idea marker if the category is changed
+        let newIdea = newIdeas.find(i => i._id === ideaToUpdate);
+        let oldIdea = ideas.find(i => i._id === ideaToUpdate);
+        let newCategory = newIdea.category;
+
+        if (newCategory !== oldIdea.category) {
+          // Remove the old marker first
+          const markerToDelete = iconMarkers[ideaToUpdate];
+          if (markerToDelete) {
+            markerToDelete.remove();
+            delete iconMarkers[ideaToUpdate];
+          }
+
+          // Add the new idea marker if it's not a place category
+          const { category, _id, loc: { coordinates } } = newIdea;
+          const icon = categoryIcons[newCategory];
+
+          if (icon) {
+            iconMarkers[_id] = this.createIconMarker(coordinates, icon);
+          }
+        }
+
+        onSaveIconMarkers(iconMarkers);
+        onIdeaUpdated();
       }
     }
 
@@ -147,7 +180,7 @@ class TripMapDisplay extends Component {
   loadSourceData() {
     const { iconMarkers, ideas, onSaveIconMarkers, trackIdeaView } = this.props;
     const { map } = this;
-    const { baseLabelLayer, ids: { hover, markers } } = mapbox;
+    const { ids: { hover, markers } } = mapbox;
     const moveMapToLocation = this.moveMapToLocation.bind(this);
 
     // Load the marker data into the map
@@ -157,7 +190,7 @@ class TripMapDisplay extends Component {
     });
 
     // Add layer for the place category markers
-    map.addLayer(createPlaceLayerJSON(), baseLabelLayer);
+    map.addLayer(createPlaceLayerJSON());
 
     // Add layers visualizing the category icons
     map.addLayer(createIconBorderLayerJSON());
@@ -473,13 +506,16 @@ TripMapDisplay.propTypes = {
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
   iconMarkers: PropTypes.object,
-  iconMarkerToDelete: PropTypes.string,
   ideas: PropTypes.array,
+  ideaToDelete: PropTypes.string,
+  ideaToUpdate: PropTypes.string,
   mapStyle: PropTypes.string.isRequired,
   mapStyleURL: PropTypes.string.isRequired,
   onClearFocusLngLat: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
+  onIdeaDeleted: PropTypes.func.isRequired,
+  onIdeaUpdated: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
   onSaveIconMarkers: PropTypes.func.isRequired,
