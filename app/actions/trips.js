@@ -59,7 +59,6 @@ export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
 export const CLEAR_NEW_TRIP_IDEA = 'CLEAR_NEW_TRIP_IDEA';
 export const SAVE_IDEA_CATEGORY = 'SAVE_IDEA_CATEGORY';
 export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
-export const ADD_TRIP_IDEA = 'ADD_TRIP_IDEA';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
@@ -316,13 +315,6 @@ export function saveIdeaComment(comment) {
   return {
     type: SAVE_IDEA_COMMENT,
     comment
-  };
-}
-
-export function addTripIdea(idea) {
-  return {
-    type: ADD_TRIP_IDEA,
-    idea
   };
 }
 
@@ -626,10 +618,6 @@ export function apiAddTripIdea() {
     if (ts.newComment) {
       idea.comment = ts.newComment;
     }
-
-    // Update UI state first, using a stubbed idea ID
-    const _id = ObjectID().toString();
-    dispatch(addTripIdea(_.extend(idea, { _id })));
 
     const addTripIdeaAPI = journeyAPI.trip.ideas.create(tripId);
     let opts = {
