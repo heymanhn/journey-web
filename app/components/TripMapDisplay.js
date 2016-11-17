@@ -128,7 +128,7 @@ class TripMapDisplay extends Component {
     });
 
     // Add layers visualizing the markers and invisible hover targets
-    map.addLayer(createLayerJSON(markers));
+    map.addLayer(createLayerJSON(markers), 'housenum-label');
     map.addLayer(createLayerJSON(hover));
 
     const popup = new mapboxgl.Popup({
