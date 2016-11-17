@@ -28,10 +28,13 @@ class TripMapDisplay extends Component {
       fitMapRequest,
       focusLngLat: newFocusLngLat,
       focusMarker,
+      iconMarkers,
+      iconMarkerToDelete,
       ideas: newIdeas,
       hoverLngLat: newHoverLngLat,
       mapStyleURL,
       onDeleteFocusMarker,
+      onSaveIconMarkers,
       onMapFitComplete,
       onViewUpdated,
       viewChanged
@@ -50,6 +53,25 @@ class TripMapDisplay extends Component {
       map
         .getSource(mapbox.ids.markers)
         .setData(createGeoJSON(newIdeas));
+
+      // Add or remove an icon marker
+      if (newIdeas.length > ideas.length) {
+        const { category, _id, loc: { coordinates } } = newIdeas[0];
+        const icon = categoryIcons[category];
+
+        if (icon) {
+          iconMarkers[_id] = this.createIconMarker(coordinates, icon);
+          onSaveIconMarkers(iconMarkers);
+        }
+      } else {
+        const markerToDelete = iconMarkers[iconMarkerToDelete];
+        if (markerToDelete) {
+          markerToDelete.remove();
+          delete iconMarkers[iconMarkerToDelete];
+        }
+
+        onSaveIconMarkers(iconMarkers);
+      }
     }
 
     if (newHoverLngLat !== hoverLngLat) {
@@ -451,6 +473,7 @@ TripMapDisplay.propTypes = {
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
   iconMarkers: PropTypes.object,
+  iconMarkerToDelete: PropTypes.string,
   ideas: PropTypes.array,
   mapStyle: PropTypes.string.isRequired,
   mapStyleURL: PropTypes.string.isRequired,

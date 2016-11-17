@@ -21,13 +21,14 @@ const mapStateToProps = (state) => {
   const {
     trip: { destination, ideas },
     focusLngLat,
-    hoverLngLat
+    hoverLngLat,
   } = state.tripState;
   const {
     fitMapRequest,
     focusMarker,
     hoverMarker,
     iconMarkers,
+    iconMarkerToDelete,
     mapStyle,
     viewChanged
   } = state.componentsState.mapState;
@@ -52,6 +53,7 @@ const mapStateToProps = (state) => {
     hoverLngLat,
     hoverMarker,
     iconMarkers,
+    iconMarkerToDelete,
     ideas,
     mapStyle,
     mapStyleURL,

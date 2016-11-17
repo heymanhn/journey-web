@@ -15,12 +15,18 @@ import {
   VIEW_UPDATED,
   LOGOUT
 } from 'app/actions/map';
+import {
+  API_DELETE_TRIP_IDEA_SUCCESS
+} from 'app/actions/trips';
 import { initialMapState } from 'app/constants';
 
 export default function mapState(state = initialMapState, action) {
   switch (action.type) {
     case SAVE_ICON_MARKERS:
-      return { ...state, iconMarkers: action.markers };
+      return {
+        ..._.omit(state, 'iconMarkerToDelete'),
+        iconMarkers: action.markers
+      };
     case SAVE_HOVER_MARKER:
       return { ...state, hoverMarker: action.marker };
     case DELETE_HOVER_MARKER:
@@ -49,6 +55,8 @@ export default function mapState(state = initialMapState, action) {
       };
     case VIEW_UPDATED:
       return { ...state, viewChanged: false }
+    case API_DELETE_TRIP_IDEA_SUCCESS:
+      return { ...state, iconMarkerToDelete: action.deletedIdea };
     case LOGOUT:
       return initialMapState;
   }
