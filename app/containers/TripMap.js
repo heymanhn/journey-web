@@ -9,6 +9,7 @@ import {
   deleteHoverMarker,
   saveFocusMarker,
   saveHoverMarker,
+  saveIconMarkers,
   showAllTripIdeasComplete,
   viewUpdated
 } from 'app/actions/map';
@@ -26,6 +27,7 @@ const mapStateToProps = (state) => {
     fitMapRequest,
     focusMarker,
     hoverMarker,
+    iconMarkers,
     mapStyle,
     viewChanged
   } = state.componentsState.mapState;
@@ -49,6 +51,7 @@ const mapStateToProps = (state) => {
     focusMarker,
     hoverLngLat,
     hoverMarker,
+    iconMarkers,
     ideas,
     mapStyle,
     mapStyleURL,
@@ -72,12 +75,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(deleteFocusMarker());
     },
 
+    onSaveFocusMarker(marker) {
+      dispatch(saveFocusMarker(marker));
+    },
+
     onSaveHoverMarker(marker) {
       dispatch(saveHoverMarker(marker));
     },
 
-    onSaveFocusMarker(marker) {
-      dispatch(saveFocusMarker(marker));
+    onSaveIconMarkers(markers) {
+      dispatch(saveIconMarkers(markers));
     },
 
     onMapFitComplete() {

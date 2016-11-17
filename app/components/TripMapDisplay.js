@@ -123,7 +123,7 @@ class TripMapDisplay extends Component {
   }
 
   loadSourceData() {
-    const { ideas, trackIdeaView } = this.props;
+    const { iconMarkers, ideas, onSaveIconMarkers, trackIdeaView } = this.props;
     const { map } = this;
     const { baseLabelLayer, ids: { hover, markers } } = mapbox;
     const moveMapToLocation = this.moveMapToLocation.bind(this);
@@ -142,12 +142,20 @@ class TripMapDisplay extends Component {
     map.addLayer(createIconFillLayerJSON());
 
     // Note that these are markers, not layers, due to Mapbox constraints
-    ideas.forEach(idea => {
-      const { category, loc: { coordinates } } = idea;
-      const icon = categoryIcons[category];
+    // with displaying emojis in the canvas layers
+    if (!iconMarkers) {
+      let newIconMarkers = {};
+      ideas.forEach(idea => {
+        const { category, _id, loc: { coordinates } } = idea;
+        const icon = categoryIcons[category];
 
-      icon && this.createIconMarker(coordinates, icon);
-    });
+        if (icon) {
+          newIconMarkers[_id] = this.createIconMarker(coordinates, icon);
+        }
+      });
+
+      onSaveIconMarkers(newIconMarkers);
+    }
 
     // Add layer for the invisible tooltip hover targets
     map.addLayer(createHoverLayerJSON(IDEA_CATEGORY_PLACE));
@@ -213,7 +221,7 @@ class TripMapDisplay extends Component {
     markerElem.style.width = width;
     markerElem.style.height = height;
 
-    new mapboxgl.Marker(
+    return new mapboxgl.Marker(
       markerElem,
       { offset: [-width/2, -height/2] }
     )
@@ -442,6 +450,7 @@ TripMapDisplay.propTypes = {
   focusMarker: PropTypes.object,
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
+  iconMarkers: PropTypes.object,
   ideas: PropTypes.array,
   mapStyle: PropTypes.string.isRequired,
   mapStyleURL: PropTypes.string.isRequired,
@@ -450,6 +459,7 @@ TripMapDisplay.propTypes = {
   onDeleteHoverMarker: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
+  onSaveIconMarkers: PropTypes.func.isRequired,
   onSetMapView: PropTypes.func.isRequired,
   onSetSatelliteView: PropTypes.func.isRequired,
   onViewUpdated: PropTypes.func.isRequired,

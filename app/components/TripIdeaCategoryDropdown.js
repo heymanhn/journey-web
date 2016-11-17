@@ -109,7 +109,7 @@ class TripIdeaCategoryDropdown extends Component {
 }
 
 TripIdeaCategoryDropdown.propTypes = {
-  onSelectCategory: PropTypes.func.isRequired,
+  onSelectCategory: PropTypes.func,
   selectedCategory: PropTypes.string.isRequired
 };
 

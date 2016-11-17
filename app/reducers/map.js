@@ -2,6 +2,7 @@
 
 import _ from 'underscore';
 import {
+  SAVE_ICON_MARKERS,
   SAVE_HOVER_MARKER,
   DELETE_HOVER_MARKER,
   SAVE_FOCUS_MARKER,
@@ -18,6 +19,8 @@ import { initialMapState } from 'app/constants';
 
 export default function mapState(state = initialMapState, action) {
   switch (action.type) {
+    case SAVE_ICON_MARKERS:
+      return { ...state, iconMarkers: action.markers };
     case SAVE_HOVER_MARKER:
       return { ...state, hoverMarker: action.marker };
     case DELETE_HOVER_MARKER:
