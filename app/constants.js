@@ -184,7 +184,7 @@ export const mapbox = {
     width: dimensions.tripsPage.listItem.width - 2
   },
   styleURL: 'mapbox://styles/',
-  satelliteStyleId: 'mapbox/satellite-streets-v9',
+  satelliteStreetsStyleId: 'heymanhn/civnemo11000w2jrzbfw7ai7a',
   streetsStyleId: 'heymanhn/citkhed0r002r2iqh4v6b8k1l',
   streetsNoLabelsStyleId: 'heymanhn/ciuizxxtn00492is1dvf2tbw0',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'

@@ -31,12 +31,12 @@ const mapStateToProps = (state) => {
     mapStyle,
     viewChanged
   } = state.componentsState.mapState;
-  const { satelliteStyleId, streetsStyleId, styleURL } = mapbox;
+  const { satelliteStreetsStyleId, streetsStyleId, styleURL } = mapbox;
 
   let mapStyleURL;
   switch(mapStyle) {
     case 'satellite':
-      mapStyleURL = styleURL + satelliteStyleId;
+      mapStyleURL = styleURL + satelliteStreetsStyleId;
       break;
     case 'map':
     default:
