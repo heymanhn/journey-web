@@ -413,11 +413,11 @@ export const categoryMapIcons = {
   },
   [IDEA_CATEGORY_SHOPPING]: {
     name: 'shopping-icon',
-    size: 0.4
+    size: 0.35
   },
   [IDEA_CATEGORY_SIGHTSEEING]: {
     name: 'sightseeing-icon',
-    size: 0.3
+    size: 0.25
   },
   [IDEA_CATEGORY_TRANSPORTATION]: {
     name: 'transportation-icon',
