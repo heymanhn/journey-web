@@ -136,7 +136,9 @@ class TripMapDisplay extends Component {
     // Load the marker data into the map
     map.addSource(markers, {
       type: 'geojson',
-      data: createGeoJSON(ideas)
+      data: createGeoJSON(ideas),
+      cluster: true,
+      clusterRadius: 40
     });
 
     // Add layer for the place category markers
@@ -153,6 +155,10 @@ class TripMapDisplay extends Component {
     // Add layer for the invisible tooltip hover targets
     map.addLayer(createHoverLayerJSON(IDEA_CATEGORY_PLACE));
     map.addLayer(createHoverLayerJSON());
+
+    // Add layers for the clusters
+    map.addLayer(createClusterCirclesJSON());
+    map.addLayer(createClusterCountsJSON());
 
     const popup = new mapboxgl.Popup({
       closeButton: false,
@@ -381,6 +387,31 @@ function createHoverLayerJSON(place) {
     radius: place ? 15 : 18,
     color: 'rgba(0, 0, 0, 0)'
   });
+}
+
+function createClusterCirclesJSON() {
+  return createCircleLayerJSON({
+    id: 'cluster-circles',
+    filter: ['>=', 'point_count', 0],
+    radius: 25,
+    color: colors.primary
+  });
+}
+
+function createClusterCountsJSON() {
+  return {
+    id: 'cluster-counts',
+    type: 'symbol',
+    source: mapbox.ids.markers,
+    layout: {
+      'text-field': '{point_count}',
+      'text-font': ['Open Sans Bold'],
+      'text-size': 18
+    },
+    paint: {
+      'text-color': 'white'
+    }
+  };
 }
 
 function createSourceEntry(idea) {
