@@ -184,14 +184,19 @@ export const mapbox = {
     width: dimensions.tripsPage.listItem.width - 2
   },
   styleURL: 'mapbox://styles/',
-  satelliteStyleId: 'mapbox/satellite-streets-v9',
+  satelliteStreetsStyleId: 'heymanhn/civnemo11000w2jrzbfw7ai7a',
   streetsStyleId: 'heymanhn/citkhed0r002r2iqh4v6b8k1l',
   streetsNoLabelsStyleId: 'heymanhn/ciuizxxtn00492is1dvf2tbw0',
   token: 'pk.eyJ1IjoiaGV5bWFuaG4iLCJhIjoiNTB1bjhNNCJ9.reogg5avP170MBu9SMc7EA'
 };
 
 export const mapMarkers = {
-  radius: 7,
+  places: {
+    radius: 8
+  },
+  categories: {
+    radius: 17.5
+  },
   icon: {
     width: 29,
     height: 40
@@ -388,7 +393,50 @@ export const categoryIcons = {
   [IDEA_CATEGORY_TRANSPORTATION]: '🚗'
 };
 
-export function getCategoryForIdeaType(type) {
+export const categoryMapIcons = {
+  [IDEA_CATEGORY_FOOD]: {
+    name: 'food-icon',
+    size: 0.35
+  },
+  [IDEA_CATEGORY_LODGING]: {
+    name: 'lodging-icon',
+    size: 0.3
+  },
+  [IDEA_CATEGORY_NIGHTLIFE]: {
+    name: 'nightlife-icon',
+    size: 0.35
+  },
+  [IDEA_CATEGORY_RECREATION]: {
+    name: 'recreation-icon',
+    size: 0.3
+  },
+  [IDEA_CATEGORY_SHOPPING]: {
+    name: 'shopping-icon',
+    size: 0.4
+  },
+  [IDEA_CATEGORY_SIGHTSEEING]: {
+    name: 'sightseeing-icon',
+    size: 0.3
+  },
+  [IDEA_CATEGORY_TRANSPORTATION]: {
+    name: 'transportation-icon',
+    size: 0.4
+  }
+}
+
+export function getCategoryForIdeaTypes(types) {
+  let selectedType;
+  for (const type of types) {
+    selectedType = getCategoryForIdeaType(type);
+    if (selectedType) {
+      break;
+    }
+  }
+
+  return selectedType || IDEA_CATEGORY_PLACE;
+}
+
+function getCategoryForIdeaType(type) {
   switch(type) {
     case 'bakery':
     case 'cafe':
@@ -434,6 +482,6 @@ export function getCategoryForIdeaType(type) {
     case 'transit_station':
       return IDEA_CATEGORY_TRANSPORTATION;
     default:
-      return IDEA_CATEGORY_PLACE;
+      return null;
   }
 }

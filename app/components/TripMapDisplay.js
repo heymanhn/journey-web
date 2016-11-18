@@ -4,7 +4,15 @@ require('app/stylesheets/mapbox-gl.css');
 
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
-import { colors, dimensions, mapbox, mapMarkers } from 'app/constants';
+import {
+  categoryIcons,
+  categoryMapIcons,
+  colors,
+  dimensions,
+  IDEA_CATEGORY_PLACE,
+  mapbox,
+  mapMarkers
+} from 'app/constants';
 
 class TripMapDisplay extends Component {
   componentDidMount() {
@@ -22,9 +30,11 @@ class TripMapDisplay extends Component {
       focusLngLat: newFocusLngLat,
       focusMarker,
       ideas: newIdeas,
+      ideaToUpdate,
       hoverLngLat: newHoverLngLat,
       mapStyleURL,
       onDeleteFocusMarker,
+      onIdeaUpdated,
       onMapFitComplete,
       onViewUpdated,
       viewChanged
@@ -39,10 +49,12 @@ class TripMapDisplay extends Component {
       onViewUpdated();
     }
 
-    if (newIdeas.length !== ideas.length) {
+    if (newIdeas.length !== ideas.length || ideaToUpdate) {
       map
         .getSource(mapbox.ids.markers)
         .setData(createGeoJSON(newIdeas));
+
+      ideaToUpdate && onIdeaUpdated();
     }
 
     if (newHoverLngLat !== hoverLngLat) {
@@ -118,22 +130,41 @@ class TripMapDisplay extends Component {
   loadSourceData() {
     const { ideas, trackIdeaView } = this.props;
     const { map } = this;
-    const { hover, markers } = mapbox.ids;
+    const { ids: { hover, markers } } = mapbox;
     const moveMapToLocation = this.moveMapToLocation.bind(this);
 
     // Load the marker data into the map
     map.addSource(markers, {
       type: 'geojson',
-      data: createGeoJSON(ideas)
+      data: createGeoJSON(ideas),
+      cluster: true,
+      clusterRadius: 40,
+      clusterMaxZoom: 13
     });
 
-    // Add layers visualizing the markers and invisible hover targets
-    map.addLayer(createLayerJSON(markers));
-    map.addLayer(createLayerJSON(hover));
+    // Add layer for the place category markers
+    map.addLayer(createPlaceLayerJSON());
+
+    // Add layers visualizing the category icons
+    map.addLayer(createIconBorderLayerJSON());
+    map.addLayer(createIconFillLayerJSON());
+
+    for (const category in categoryMapIcons) {
+      map.addLayer(createIconLayerJSON(category));
+    }
+
+    // Add layer for the invisible tooltip hover targets
+    map.addLayer(createHoverLayerJSON(IDEA_CATEGORY_PLACE));
+    map.addLayer(createHoverLayerJSON());
+
+    // Add layers for the clusters
+    map.addLayer(createClusterCirclesJSON());
+    map.addLayer(createClusterCountsJSON());
 
     const popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false
+      closeOnClick: false,
+      offset: 3
     });
 
     // Create event handlers for displaying popups
@@ -194,7 +225,7 @@ class TripMapDisplay extends Component {
 
     const marker = new mapboxgl.Marker(
       markerElem,
-      { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height] }
+      { offset: [-mapMarkers.icon.width/2, -mapMarkers.icon.height - 3] }
     )
       .setLngLat(lngLat)
       .addTo(this.map);
@@ -284,27 +315,110 @@ function createGeoJSON(ideas) {
   };
 }
 
-function createLayerJSON(name) {
-  const { hover, markers } = mapbox.ids;
-  let blur = name === markers ? 0.4 : 0;
-  let color = name === markers ? colors.primary : "rgba(0, 0, 0, 0)";
-  let radius = name === markers ? 8 : 15;
-
-  return {
-    id: name,
+function createCircleLayerJSON(opts) {
+  const { blur, color, filter, id, radius } = opts;
+  let layerJSON = {
+    id,
     type: 'circle',
-    source: markers,
+    source: mapbox.ids.markers,
     paint: {
-      "circle-radius": radius,
-      "circle-color": color,
-      "circle-blur": blur
+      'circle-radius': radius,
+      'circle-color': color,
+      'circle-blur': blur || 0
+    }
+  };
+
+  return filter ? { ...layerJSON, filter } : layerJSON;
+}
+
+function createPlaceLayerJSON() {
+  return createCircleLayerJSON({
+    id: IDEA_CATEGORY_PLACE + 'Markers',
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['==', 'category', IDEA_CATEGORY_PLACE]],
+    radius: mapMarkers.places.radius,
+    blur: 0.2,
+    color: colors.primary
+  });
+}
+
+function createIconBorderLayerJSON() {
+  return createCircleLayerJSON({
+    id: 'IconMarkersBorders',
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['!=', 'category', IDEA_CATEGORY_PLACE]],
+    radius: mapMarkers.categories.radius,
+    color: colors.primary
+  });
+}
+
+function createIconFillLayerJSON() {
+  return createCircleLayerJSON({
+    id: 'IconMarkersFill',
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['!=', 'category', IDEA_CATEGORY_PLACE]],
+    radius: mapMarkers.categories.radius - 1,
+    color: 'rgba(249, 249, 249, 1)'
+  });
+}
+
+function createIconLayerJSON(category) {
+  const categoryDetails = categoryMapIcons[category];
+  return {
+    id: 'IconMarkers' + category,
+    type: 'symbol',
+    source: mapbox.ids.markers,
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['==', 'category', category]],
+    layout: {
+      'icon-image': categoryDetails.name,
+      'icon-size': categoryDetails.size,
+      'icon-allow-overlap': true
+    }
+  };
+}
+
+function createHoverLayerJSON(place) {
+  return createCircleLayerJSON({
+    id: (place || 'Icon') + mapbox.ids.hover,
+    filter: ["!has", "point_count"],
+    radius: place ? 15 : 18,
+    color: 'rgba(0, 0, 0, 0)'
+  });
+}
+
+function createClusterCirclesJSON() {
+  return createCircleLayerJSON({
+    id: 'cluster-circles',
+    filter: ['>=', 'point_count', 0],
+    radius: 25,
+    color: colors.primary
+  });
+}
+
+function createClusterCountsJSON() {
+  return {
+    id: 'cluster-counts',
+    type: 'symbol',
+    source: mapbox.ids.markers,
+    layout: {
+      'text-field': '{point_count}',
+      'text-font': ['Open Sans Bold'],
+      'text-size': 18
+    },
+    paint: {
+      'text-color': 'white'
     }
   };
 }
 
 function createSourceEntry(idea) {
-  const { _id, name, photo, address, loc } = idea;
-  const properties = { _id, name, photo, address };
+  const { _id, name, category, photo, address, loc } = idea;
+  const properties = { _id, name, category, photo, address };
   const geometry = loc;
 
   return {
@@ -315,20 +429,32 @@ function createSourceEntry(idea) {
 }
 
 function createPopupHTML(idea) {
-  let popupHTML = idea.photo ? `<img src="${idea.photo}">` : '';
+  const { category, name, photo, address } = idea;
+  const categoryHTML = categoryIcons[category] || `<img
+    class="popup-idea-default-icon"
+    src="../assets/place-idea-icon.png"
+  />`;
+
+  let popupHTML = '<div class="popup-idea">';
+  popupHTML += `<div class="popup-idea-category">${categoryHTML}</div><div>`;
+  popupHTML += photo ? `<img class="popup-idea-photo" src="${photo}">` : '';
   popupHTML += `
-    <p class="popup-name">${idea.name}</p>
-    <p class="popup-address">${idea.address}</p>`;
+    <p class="popup-idea-name">${name}</p>
+    <p class="popup-idea-address">${address}</p>
+  </div></div>`;
 
   return popupHTML;
 }
 
 function showOrHidePopup(popup, point, map) {
   const { hover } = mapbox.ids;
-  const features = map.queryRenderedFeatures(point, { layers: [hover] });
+  const features = map.queryRenderedFeatures(
+    point,
+    { layers: [IDEA_CATEGORY_PLACE + hover, 'Icon' + hover] }
+  );
 
   // Change the cursor style as a UI indicator.
-  map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+  map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 
   if (!features.length) {
     popup.remove();
@@ -357,11 +483,13 @@ TripMapDisplay.propTypes = {
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
   ideas: PropTypes.array,
+  ideaToUpdate: PropTypes.string,
   mapStyle: PropTypes.string.isRequired,
   mapStyleURL: PropTypes.string.isRequired,
   onClearFocusLngLat: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
+  onIdeaUpdated: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
   onSetMapView: PropTypes.func.isRequired,

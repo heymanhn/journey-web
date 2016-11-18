@@ -12,8 +12,10 @@ import {
   CHANGE_TO_MAP_VIEW,
   CHANGE_TO_SATELLITE_VIEW,
   VIEW_UPDATED,
+  IDEA_UPDATED,
   LOGOUT
 } from 'app/actions/map';
+import { API_UPDATE_TRIP_IDEA_SUCCESS } from 'app/actions/trips';
 import { initialMapState } from 'app/constants';
 
 export default function mapState(state = initialMapState, action) {
@@ -45,7 +47,11 @@ export default function mapState(state = initialMapState, action) {
         viewChanged: state.mapStyle !== 'satellite'
       };
     case VIEW_UPDATED:
-      return { ...state, viewChanged: false }
+      return { ...state, viewChanged: false };
+    case IDEA_UPDATED:
+      return _.omit(state, 'ideaToUpdate');
+    case API_UPDATE_TRIP_IDEA_SUCCESS:
+      return { ...state, ideaToUpdate: action.updatedIdea };
     case LOGOUT:
       return initialMapState;
   }

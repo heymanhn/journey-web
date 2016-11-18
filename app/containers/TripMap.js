@@ -7,6 +7,7 @@ import {
   changeToSatelliteView,
   deleteFocusMarker,
   deleteHoverMarker,
+  ideaUpdated,
   saveFocusMarker,
   saveHoverMarker,
   showAllTripIdeasComplete,
@@ -20,21 +21,22 @@ const mapStateToProps = (state) => {
   const {
     trip: { destination, ideas },
     focusLngLat,
-    hoverLngLat
+    hoverLngLat,
   } = state.tripState;
   const {
     fitMapRequest,
     focusMarker,
     hoverMarker,
+    ideaToUpdate,
     mapStyle,
     viewChanged
   } = state.componentsState.mapState;
-  const { satelliteStyleId, streetsStyleId, styleURL } = mapbox;
+  const { satelliteStreetsStyleId, streetsStyleId, styleURL } = mapbox;
 
   let mapStyleURL;
   switch(mapStyle) {
     case 'satellite':
-      mapStyleURL = styleURL + satelliteStyleId;
+      mapStyleURL = styleURL + satelliteStreetsStyleId;
       break;
     case 'map':
     default:
@@ -50,6 +52,7 @@ const mapStateToProps = (state) => {
     hoverLngLat,
     hoverMarker,
     ideas,
+    ideaToUpdate,
     mapStyle,
     mapStyleURL,
     viewChanged
@@ -72,12 +75,16 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(deleteFocusMarker());
     },
 
-    onSaveHoverMarker(marker) {
-      dispatch(saveHoverMarker(marker));
+    onIdeaUpdated() {
+      dispatch(ideaUpdated());
     },
 
     onSaveFocusMarker(marker) {
       dispatch(saveFocusMarker(marker));
+    },
+
+    onSaveHoverMarker(marker) {
+      dispatch(saveHoverMarker(marker));
     },
 
     onMapFitComplete() {

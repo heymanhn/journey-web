@@ -10,7 +10,7 @@ import { hideModal } from './modals';
 import {
   acComponents,
   fetchOptsTemplate,
-  getCategoryForIdeaType,
+  getCategoryForIdeaTypes,
   handleErrors,
   journeyAPI,
   modalComponents
@@ -59,7 +59,6 @@ export const SAVE_NEW_TRIP_IDEA = 'SAVE_NEW_TRIP_IDEA';
 export const CLEAR_NEW_TRIP_IDEA = 'CLEAR_NEW_TRIP_IDEA';
 export const SAVE_IDEA_CATEGORY = 'SAVE_IDEA_CATEGORY';
 export const SAVE_IDEA_COMMENT = 'SAVE_IDEA_COMMENT';
-export const ADD_TRIP_IDEA = 'ADD_TRIP_IDEA';
 export const API_ADD_TRIP_IDEA_REQUEST = 'API_ADD_TRIP_IDEA_REQUEST';
 export const API_ADD_TRIP_IDEA_SUCCESS = 'API_ADD_TRIP_IDEA_SUCCESS';
 export const API_ADD_TRIP_IDEA_FAILURE = 'API_ADD_TRIP_IDEA_FAILURE';
@@ -281,7 +280,7 @@ export function saveNewTripIdea(place) {
   let idea = {
     googlePlaceId: place.place_id,
     name: place.name,
-    category: getCategoryForIdeaType(types[0]),
+    category: getCategoryForIdeaTypes(types),
     loc: {
       type: 'Point',
       coordinates: [loc.lng(), loc.lat()]
@@ -316,13 +315,6 @@ export function saveIdeaComment(comment) {
   return {
     type: SAVE_IDEA_COMMENT,
     comment
-  };
-}
-
-export function addTripIdea(idea) {
-  return {
-    type: ADD_TRIP_IDEA,
-    idea
   };
 }
 
@@ -383,10 +375,11 @@ export function apiUpdateTripIdeaRequest() {
   };
 }
 
-export function apiUpdateTripIdeaSuccess(json) {
+export function apiUpdateTripIdeaSuccess(json, updatedIdea) {
   return {
     type: API_UPDATE_TRIP_IDEA_SUCCESS,
-    ideas: json.ideas
+    ideas: json.ideas,
+    updatedIdea
   };
 }
 
@@ -627,10 +620,6 @@ export function apiAddTripIdea() {
       idea.comment = ts.newComment;
     }
 
-    // Update UI state first, using a stubbed idea ID
-    const _id = ObjectID().toString();
-    dispatch(addTripIdea(_.extend(idea, { _id })));
-
     const addTripIdeaAPI = journeyAPI.trip.ideas.create(tripId);
     let opts = {
       ...fetchOptsTemplate(getState().authState),
@@ -680,7 +669,7 @@ export function apiUpdateTripIdea(index) {
     return fetch(updateTripIdeaAPI.route, opts)
       .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
-      .then(json => dispatch(apiUpdateTripIdeaSuccess(json)))
+      .then(json => dispatch(apiUpdateTripIdeaSuccess(json, ideaId)))
       .catch(error => {
         return error && dispatch(apiUpdateTripIdeaFailure(error.message));
       });

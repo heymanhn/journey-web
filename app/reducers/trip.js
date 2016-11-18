@@ -13,7 +13,6 @@ import {
   CLEAR_NEW_TRIP_IDEA,
   SAVE_IDEA_CATEGORY,
   SAVE_IDEA_COMMENT,
-  ADD_TRIP_IDEA,
   SET_IDEA_INDEX_TO_UPDATE,
   SET_TRIP_IDEA_TO_DELETE,
   REORDER_TRIP_IDEA,
@@ -100,15 +99,6 @@ export default function tripState(state = initialTripState, action) {
       return {
         ...state,
         newComment: action.comment
-      };
-    case ADD_TRIP_IDEA:
-      return {
-        ..._.omit(state, ['newIdea', 'newComment']),
-        trip: _.extend(state.trip, {
-          ideas: [action.idea].concat(state.trip.ideas)
-        }),
-        isFetching: false,
-        focusLngLat: action.idea.loc.coordinates
       };
     case SET_IDEA_INDEX_TO_UPDATE:
       return {
@@ -223,7 +213,7 @@ export default function tripState(state = initialTripState, action) {
       };
     case API_ADD_TRIP_IDEA_SUCCESS:
       return {
-        ...state,
+        ..._.omit(state, ['newIdea', 'newComment']),
         trip: _.extend(state.trip, { ideas: action.ideas }),
         isFetching: false,
         focusLngLat: action.ideas[0].loc.coordinates
