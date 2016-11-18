@@ -138,7 +138,8 @@ class TripMapDisplay extends Component {
       type: 'geojson',
       data: createGeoJSON(ideas),
       cluster: true,
-      clusterRadius: 40
+      clusterRadius: 40,
+      clusterMaxZoom: 13
     });
 
     // Add layer for the place category markers
@@ -375,7 +376,8 @@ function createIconLayerJSON(category) {
       ['==', 'category', category]],
     layout: {
       'icon-image': categoryDetails.name,
-      'icon-size': categoryDetails.size
+      'icon-size': categoryDetails.size,
+      'icon-allow-overlap': true
     }
   };
 }

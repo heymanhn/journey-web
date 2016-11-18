@@ -195,7 +195,7 @@ export const mapMarkers = {
     radius: 8
   },
   categories: {
-    radius: 14
+    radius: 17.5
   },
   icon: {
     width: 29,
@@ -396,31 +396,31 @@ export const categoryIcons = {
 export const categoryMapIcons = {
   [IDEA_CATEGORY_FOOD]: {
     name: 'food-icon',
-    size: 0.25
+    size: 0.35
   },
   [IDEA_CATEGORY_LODGING]: {
     name: 'lodging-icon',
-    size: 0.2
+    size: 0.3
   },
   [IDEA_CATEGORY_NIGHTLIFE]: {
     name: 'nightlife-icon',
-    size: 0.25
+    size: 0.35
   },
   [IDEA_CATEGORY_RECREATION]: {
     name: 'recreation-icon',
-    size: 0.2
+    size: 0.3
   },
   [IDEA_CATEGORY_SHOPPING]: {
     name: 'shopping-icon',
-    size: 0.3
+    size: 0.4
   },
   [IDEA_CATEGORY_SIGHTSEEING]: {
     name: 'sightseeing-icon',
-    size: 0.2
+    size: 0.3
   },
   [IDEA_CATEGORY_TRANSPORTATION]: {
     name: 'transportation-icon',
-    size: 0.3
+    size: 0.4
   }
 }
 
