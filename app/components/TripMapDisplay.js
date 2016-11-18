@@ -138,7 +138,7 @@ class TripMapDisplay extends Component {
       type: 'geojson',
       data: createGeoJSON(ideas),
       cluster: true,
-      clusterRadius: 40,
+      clusterRadius: 30,
       clusterMaxZoom: 13
     });
 
