@@ -13,6 +13,8 @@ import {
   CHANGE_TO_SATELLITE_VIEW,
   VIEW_UPDATED,
   IDEA_UPDATED,
+  SET_POPUP_TIMESTAMP,
+  CLEAR_POPUP_TIMESTAMP,
   LOGOUT
 } from 'app/actions/map';
 import { API_UPDATE_TRIP_IDEA_SUCCESS } from 'app/actions/trips';
@@ -50,6 +52,14 @@ export default function mapState(state = initialMapState, action) {
       return { ...state, viewChanged: false };
     case IDEA_UPDATED:
       return _.omit(state, 'ideaToUpdate');
+    case SET_POPUP_TIMESTAMP:
+      return {
+        ...state,
+        popupTimestamp: action.timestamp,
+        popupIdeaId: action.ideaId
+      };
+    case CLEAR_POPUP_TIMESTAMP:
+      return _.omit(state, ['popupTimestamp', 'popupIdeaId']);
     case API_UPDATE_TRIP_IDEA_SUCCESS:
       return { ...state, ideaToUpdate: action.updatedIdea };
     case LOGOUT:

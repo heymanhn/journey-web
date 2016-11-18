@@ -15,6 +15,8 @@ export const CHANGE_TO_MAP_VIEW = 'CHANGE_TO_MAP_VIEW';
 export const CHANGE_TO_SATELLITE_VIEW = 'CHANGE_TO_SATELLITE_VIEW';
 export const VIEW_UPDATED = 'VIEW_UPDATED';
 export const IDEA_UPDATED = 'IDEA_UPDATED';
+export const SET_POPUP_TIMESTAMP = 'SET_POPUP_TIMESTAMP';
+export const CLEAR_POPUP_TIMESTAMP = 'CLEAR_POPUP_TIMESTAMP';
 
 
 /*
@@ -86,5 +88,19 @@ export function viewUpdated() {
 export function ideaUpdated() {
   return {
     type: IDEA_UPDATED
+  };
+}
+
+export function setPopupTimestamp(ideaId) {
+  return {
+    type: SET_POPUP_TIMESTAMP,
+    timestamp: Date.now(),
+    ideaId
+  };
+}
+
+export function clearPopupTimestamp() {
+  return {
+    type: CLEAR_POPUP_TIMESTAMP
   };
 }

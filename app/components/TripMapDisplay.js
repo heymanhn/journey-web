@@ -168,9 +168,9 @@ class TripMapDisplay extends Component {
     });
 
     // Create event handlers for displaying popups
-    map.on('mousemove', e => showOrHidePopup(popup, e.point, map));
+    map.on('mousemove', e => this.showOrHidePopup(popup, e.point, map));
     map.on('click', e => {
-      const feature = showOrHidePopup(popup, e.point, map);
+      const feature = this.showOrHidePopup(popup, e.point, map);
       if (feature) {
         trackIdeaView(feature.properties._id);
         moveMapToLocation(feature.geometry.coordinates);
@@ -278,6 +278,52 @@ class TripMapDisplay extends Component {
       this.createFocusMarker(focusLngLat);
       this.moveMapToLocation(focusLngLat);
     }
+  }
+
+  showOrHidePopup(popup, point, map, reCheck) {
+    const {
+      onClearPopupTimestamp,
+      onSetPopupTimestamp,
+      popupIdeaId,
+      popupTimestamp
+    } = this.props;
+    const { hover } = mapbox.ids;
+    const features = map.queryRenderedFeatures(
+      point,
+      { layers: [IDEA_CATEGORY_PLACE + hover, 'Icon' + hover] }
+    );
+
+    if (!features.length) {
+      popup.remove();
+      popupTimestamp && onClearPopupTimestamp();
+      return;
+    }
+
+    const feature = features[0];
+    const ideaId = feature.properties._id;
+    const delay = mapMarkers.popupDelay;
+
+    // The user must hover over an idea for a while before showing the tooltip
+    if (!popupTimestamp && !reCheck) {
+      onSetPopupTimestamp(ideaId);
+      setTimeout(() => this.showOrHidePopup(popup, point, map, true), delay);
+      return;
+    }
+
+    if (Date.now() < popupTimestamp + delay || popupIdeaId !== ideaId) {
+      return;
+    }
+
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+
+    // Add popup to map if the user hovers over a marker
+    popup
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML(createPopupHTML(feature.properties))
+      .addTo(map);
+
+    return feature;
   }
 
   moveMapToLocation(lngLat) {
@@ -446,31 +492,6 @@ function createPopupHTML(idea) {
   return popupHTML;
 }
 
-function showOrHidePopup(popup, point, map) {
-  const { hover } = mapbox.ids;
-  const features = map.queryRenderedFeatures(
-    point,
-    { layers: [IDEA_CATEGORY_PLACE + hover, 'Icon' + hover] }
-  );
-
-  // Change the cursor style as a UI indicator.
-  map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-
-  if (!features.length) {
-    popup.remove();
-    return;
-  }
-
-  // Add popup to map if the user hovers over a marker
-  const feature = features[0];
-  popup
-    .setLngLat(feature.geometry.coordinates)
-    .setHTML(createPopupHTML(feature.properties))
-    .addTo(map);
-
-  return feature;
-}
-
 function easeInOutQuad(t) {
   return t<.5 ? 2*t*t : -1+2*(2-t)*t;
 }
@@ -487,14 +508,18 @@ TripMapDisplay.propTypes = {
   mapStyle: PropTypes.string.isRequired,
   mapStyleURL: PropTypes.string.isRequired,
   onClearFocusLngLat: PropTypes.func.isRequired,
+  onClearPopupTimestamp: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
   onIdeaUpdated: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
   onSetMapView: PropTypes.func.isRequired,
+  onSetPopupTimestamp: PropTypes.func.isRequired,
   onSetSatelliteView: PropTypes.func.isRequired,
   onViewUpdated: PropTypes.func.isRequired,
+  popupIdeaId: PropTypes.string,
+  popupTimestamp: PropTypes.number,
   trackIdeaView: PropTypes.func.isRequired,
   viewChanged: PropTypes.bool.isRequired
 };

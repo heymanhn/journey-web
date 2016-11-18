@@ -5,11 +5,13 @@ import { apiTripPageEvent } from 'app/actions/analytics';
 import {
   changeToMapView,
   changeToSatelliteView,
+  clearPopupTimestamp,
   deleteFocusMarker,
   deleteHoverMarker,
   ideaUpdated,
   saveFocusMarker,
   saveHoverMarker,
+  setPopupTimestamp,
   showAllTripIdeasComplete,
   viewUpdated
 } from 'app/actions/map';
@@ -29,6 +31,8 @@ const mapStateToProps = (state) => {
     hoverMarker,
     ideaToUpdate,
     mapStyle,
+    popupTimestamp,
+    popupIdeaId,
     viewChanged
   } = state.componentsState.mapState;
   const { satelliteStreetsStyleId, streetsStyleId, styleURL } = mapbox;
@@ -55,6 +59,8 @@ const mapStateToProps = (state) => {
     ideaToUpdate,
     mapStyle,
     mapStyleURL,
+    popupIdeaId,
+    popupTimestamp,
     viewChanged
   };
 };
@@ -63,6 +69,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onClearFocusLngLat() {
       dispatch(clearFocusLngLat());
+    },
+
+    onClearPopupTimestamp() {
+      dispatch(clearPopupTimestamp());
     },
 
     onDeleteHoverMarker(marker) {
@@ -93,6 +103,10 @@ const mapDispatchToProps = (dispatch) => {
 
     onSetMapView() {
       dispatch(changeToMapView());
+    },
+
+    onSetPopupTimestamp(ideaId) {
+      dispatch(setPopupTimestamp(ideaId));
     },
 
     onSetSatelliteView() {

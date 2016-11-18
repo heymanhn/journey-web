@@ -200,7 +200,8 @@ export const mapMarkers = {
   icon: {
     width: 29,
     height: 40
-  }
+  },
+  popupDelay: 500
 };
 
 /* Helper function for zoom level calculation
