@@ -404,11 +404,10 @@ export function apiDeleteTripIdeaRequest() {
   };
 }
 
-export function apiDeleteTripIdeaSuccess(json, ideaId) {
+export function apiDeleteTripIdeaSuccess(json) {
   return {
     type: API_DELETE_TRIP_IDEA_SUCCESS,
-    ideas: json.ideas,
-    deletedIdea: ideaId
+    ideas: json.ideas
   };
 }
 
@@ -693,7 +692,7 @@ export function apiDeleteTripIdea() {
       .then(handleErrors.bind(null, dispatch))
       .then(response => response.json())
       .then(json => {
-        dispatch(apiDeleteTripIdeaSuccess(json, ideaId));
+        dispatch(apiDeleteTripIdeaSuccess(json));
         dispatch(hideModal(modalComponents.deleteTripIdea))
       })
       .catch(error => {

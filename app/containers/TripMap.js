@@ -7,11 +7,9 @@ import {
   changeToSatelliteView,
   deleteFocusMarker,
   deleteHoverMarker,
-  ideaDeleted,
   ideaUpdated,
   saveFocusMarker,
   saveHoverMarker,
-  saveIconMarkers,
   showAllTripIdeasComplete,
   viewUpdated
 } from 'app/actions/map';
@@ -29,8 +27,6 @@ const mapStateToProps = (state) => {
     fitMapRequest,
     focusMarker,
     hoverMarker,
-    iconMarkers,
-    ideaToDelete,
     ideaToUpdate,
     mapStyle,
     viewChanged
@@ -55,8 +51,6 @@ const mapStateToProps = (state) => {
     focusMarker,
     hoverLngLat,
     hoverMarker,
-    iconMarkers,
-    ideaToDelete,
     ideas,
     ideaToUpdate,
     mapStyle,
@@ -81,10 +75,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(deleteFocusMarker());
     },
 
-    onIdeaDeleted() {
-      dispatch(ideaDeleted());
-    },
-
     onIdeaUpdated() {
       dispatch(ideaUpdated());
     },
@@ -95,10 +85,6 @@ const mapDispatchToProps = (dispatch) => {
 
     onSaveHoverMarker(marker) {
       dispatch(saveHoverMarker(marker));
-    },
-
-    onSaveIconMarkers(markers) {
-      dispatch(saveIconMarkers(markers));
     },
 
     onMapFitComplete() {

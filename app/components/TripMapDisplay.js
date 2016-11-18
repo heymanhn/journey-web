@@ -6,6 +6,7 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
 import {
   categoryIcons,
+  categoryMapIcons,
   colors,
   dimensions,
   IDEA_CATEGORY_PLACE,
@@ -28,16 +29,12 @@ class TripMapDisplay extends Component {
       fitMapRequest,
       focusLngLat: newFocusLngLat,
       focusMarker,
-      iconMarkers,
       ideas: newIdeas,
-      ideaToDelete,
       ideaToUpdate,
       hoverLngLat: newHoverLngLat,
       mapStyleURL,
       onDeleteFocusMarker,
-      onIdeaDeleted,
       onIdeaUpdated,
-      onSaveIconMarkers,
       onMapFitComplete,
       onViewUpdated,
       viewChanged
@@ -57,54 +54,7 @@ class TripMapDisplay extends Component {
         .getSource(mapbox.ids.markers)
         .setData(createGeoJSON(newIdeas));
 
-      // Add, remove, or update an icon marker
-      if (newIdeas.length > ideas.length) {
-        const { category, _id, loc: { coordinates } } = newIdeas[0];
-        const icon = categoryIcons[category];
-
-        if (icon) {
-          iconMarkers[_id] = this.createIconMarker(coordinates, icon);
-          onSaveIconMarkers(iconMarkers);
-        }
-      }
-
-      if (ideaToDelete) {
-        const markerToDelete = iconMarkers[ideaToDelete];
-        if (markerToDelete) {
-          markerToDelete.remove();
-          delete iconMarkers[ideaToDelete];
-        }
-
-        onSaveIconMarkers(iconMarkers);
-        onIdeaDeleted();
-      }
-
-      if (ideaToUpdate) {
-        // Redraw the idea marker if the category is changed
-        let newIdea = newIdeas.find(i => i._id === ideaToUpdate);
-        let oldIdea = ideas.find(i => i._id === ideaToUpdate);
-        let newCategory = newIdea.category;
-
-        if (newCategory !== oldIdea.category) {
-          // Remove the old marker first
-          const markerToDelete = iconMarkers[ideaToUpdate];
-          if (markerToDelete) {
-            markerToDelete.remove();
-            delete iconMarkers[ideaToUpdate];
-          }
-
-          // Add the new idea marker if it's not a place category
-          const { category, _id, loc: { coordinates } } = newIdea;
-          const icon = categoryIcons[newCategory];
-
-          if (icon) {
-            iconMarkers[_id] = this.createIconMarker(coordinates, icon);
-          }
-        }
-
-        onSaveIconMarkers(iconMarkers);
-        onIdeaUpdated();
-      }
+      ideaToUpdate && onIdeaUpdated();
     }
 
     if (newHoverLngLat !== hoverLngLat) {
@@ -178,7 +128,7 @@ class TripMapDisplay extends Component {
   }
 
   loadSourceData() {
-    const { iconMarkers, ideas, onSaveIconMarkers, trackIdeaView } = this.props;
+    const { ideas, trackIdeaView } = this.props;
     const { map } = this;
     const { ids: { hover, markers } } = mapbox;
     const moveMapToLocation = this.moveMapToLocation.bind(this);
@@ -196,20 +146,8 @@ class TripMapDisplay extends Component {
     map.addLayer(createIconBorderLayerJSON());
     map.addLayer(createIconFillLayerJSON());
 
-    // Note that these are markers, not layers, due to Mapbox constraints
-    // with displaying emojis in the canvas layers
-    if (!iconMarkers) {
-      let newIconMarkers = {};
-      ideas.forEach(idea => {
-        const { category, _id, loc: { coordinates } } = idea;
-        const icon = categoryIcons[category];
-
-        if (icon) {
-          newIconMarkers[_id] = this.createIconMarker(coordinates, icon);
-        }
-      });
-
-      onSaveIconMarkers(newIconMarkers);
+    for (const category in categoryMapIcons) {
+      map.addLayer(createIconLayerJSON(category));
     }
 
     // Add layer for the invisible tooltip hover targets
@@ -265,23 +203,6 @@ class TripMapDisplay extends Component {
         easing: easeInOutQuad
       });
     }
-  }
-
-  createIconMarker(lngLat, icon) {
-    const { fontSize, height, width } = mapMarkers.emoji;
-
-    let markerElem = document.createElement('div');
-    markerElem.innerHTML = icon;
-    markerElem.style.fontSize = fontSize;
-    markerElem.style.width = width;
-    markerElem.style.height = height;
-
-    return new mapboxgl.Marker(
-      markerElem,
-      { offset: [-width/2, -height/2] }
-    )
-      .setLngLat(lngLat)
-      .addTo(this.map);
   }
 
   createHoverMarker(lngLat, isFocusMarker = false) {
@@ -406,7 +327,9 @@ function createCircleLayerJSON(opts) {
 function createPlaceLayerJSON() {
   return createCircleLayerJSON({
     id: IDEA_CATEGORY_PLACE + 'Markers',
-    filter: ['==', 'category', IDEA_CATEGORY_PLACE],
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['==', 'category', IDEA_CATEGORY_PLACE]],
     radius: mapMarkers.places.radius,
     blur: 0.2,
     color: colors.primary
@@ -416,8 +339,10 @@ function createPlaceLayerJSON() {
 function createIconBorderLayerJSON() {
   return createCircleLayerJSON({
     id: 'IconMarkersBorders',
-    filter: ['!=', 'category', IDEA_CATEGORY_PLACE],
-    radius: mapMarkers.emoji.radius,
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['!=', 'category', IDEA_CATEGORY_PLACE]],
+    radius: mapMarkers.categories.radius,
     color: colors.primary
   });
 }
@@ -425,15 +350,34 @@ function createIconBorderLayerJSON() {
 function createIconFillLayerJSON() {
   return createCircleLayerJSON({
     id: 'IconMarkersFill',
-    filter: ['!=', 'category', IDEA_CATEGORY_PLACE],
-    radius: mapMarkers.emoji.radius - 1,
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['!=', 'category', IDEA_CATEGORY_PLACE]],
+    radius: mapMarkers.categories.radius - 1,
     color: 'rgba(249, 249, 249, 1)'
   });
+}
+
+function createIconLayerJSON(category) {
+  const categoryDetails = categoryMapIcons[category];
+  return {
+    id: 'IconMarkers' + category,
+    type: 'symbol',
+    source: mapbox.ids.markers,
+    filter: ['all',
+      ['!has', 'point_count'],
+      ['==', 'category', category]],
+    layout: {
+      'icon-image': categoryDetails.name,
+      'icon-size': categoryDetails.size
+    }
+  };
 }
 
 function createHoverLayerJSON(place) {
   return createCircleLayerJSON({
     id: (place || 'Icon') + mapbox.ids.hover,
+    filter: ["!has", "point_count"],
     radius: place ? 15 : 18,
     color: 'rgba(0, 0, 0, 0)'
   });
@@ -505,20 +449,16 @@ TripMapDisplay.propTypes = {
   focusMarker: PropTypes.object,
   hoverLngLat: PropTypes.array,
   hoverMarker: PropTypes.object,
-  iconMarkers: PropTypes.object,
   ideas: PropTypes.array,
-  ideaToDelete: PropTypes.string,
   ideaToUpdate: PropTypes.string,
   mapStyle: PropTypes.string.isRequired,
   mapStyleURL: PropTypes.string.isRequired,
   onClearFocusLngLat: PropTypes.func.isRequired,
   onDeleteFocusMarker: PropTypes.func.isRequired,
   onDeleteHoverMarker: PropTypes.func.isRequired,
-  onIdeaDeleted: PropTypes.func.isRequired,
   onIdeaUpdated: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
-  onSaveIconMarkers: PropTypes.func.isRequired,
   onSetMapView: PropTypes.func.isRequired,
   onSetSatelliteView: PropTypes.func.isRequired,
   onViewUpdated: PropTypes.func.isRequired,

@@ -194,11 +194,8 @@ export const mapMarkers = {
   places: {
     radius: 8
   },
-  emoji: {
-    fontSize: 14,
-    radius: 14,
-    width: 19,
-    height: 23
+  categories: {
+    radius: 14
   },
   icon: {
     width: 29,
@@ -395,6 +392,37 @@ export const categoryIcons = {
   [IDEA_CATEGORY_SIGHTSEEING]: '⛰',
   [IDEA_CATEGORY_TRANSPORTATION]: '🚗'
 };
+
+export const categoryMapIcons = {
+  [IDEA_CATEGORY_FOOD]: {
+    name: 'food-icon',
+    size: 0.25
+  },
+  [IDEA_CATEGORY_LODGING]: {
+    name: 'lodging-icon',
+    size: 0.2
+  },
+  [IDEA_CATEGORY_NIGHTLIFE]: {
+    name: 'nightlife-icon',
+    size: 0.25
+  },
+  [IDEA_CATEGORY_RECREATION]: {
+    name: 'recreation-icon',
+    size: 0.2
+  },
+  [IDEA_CATEGORY_SHOPPING]: {
+    name: 'shopping-icon',
+    size: 0.3
+  },
+  [IDEA_CATEGORY_SIGHTSEEING]: {
+    name: 'sightseeing-icon',
+    size: 0.2
+  },
+  [IDEA_CATEGORY_TRANSPORTATION]: {
+    name: 'transportation-icon',
+    size: 0.3
+  }
+}
 
 export function getCategoryForIdeaTypes(types) {
   let selectedType;

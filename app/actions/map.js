@@ -4,7 +4,6 @@
  * Action Types
  */
 
-export const SAVE_ICON_MARKERS = 'SAVE_ICON_MARKERS';
 export const SAVE_HOVER_MARKER = 'SAVE_HOVER_MARKER';
 export const DELETE_HOVER_MARKER = 'DELETE_HOVER_MARKER';
 export const SAVE_FOCUS_MARKER = 'SAVE_FOCUS_MARKER';
@@ -16,19 +15,11 @@ export const CHANGE_TO_MAP_VIEW = 'CHANGE_TO_MAP_VIEW';
 export const CHANGE_TO_SATELLITE_VIEW = 'CHANGE_TO_SATELLITE_VIEW';
 export const VIEW_UPDATED = 'VIEW_UPDATED';
 export const IDEA_UPDATED = 'IDEA_UPDATED';
-export const IDEA_DELETED = 'IDEA_DELETED';
 
 
 /*
  * Action Creators
  */
-
-export function saveIconMarkers(markers) {
-  return {
-    type: SAVE_ICON_MARKERS,
-    markers
-  };
-}
 
 export function saveHoverMarker(marker) {
   return {
@@ -95,11 +86,5 @@ export function viewUpdated() {
 export function ideaUpdated() {
   return {
     type: IDEA_UPDATED
-  };
-}
-
-export function ideaDeleted() {
-  return {
-    type: IDEA_DELETED
   };
 }
