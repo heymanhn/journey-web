@@ -339,7 +339,8 @@ export const modalComponents = {
  * Trip Page dropdown component IDs
  */
 export const dropdownComponents = {
-  addTripIdeas: 'addTripIdeas'
+  addTripIdeas: 'addTripIdeas',
+  filterTripIdeas: 'filterTripIdeas'
 };
 
 

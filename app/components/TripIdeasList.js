@@ -9,6 +9,7 @@ import {
 } from 'app/constants';
 import AddTripIdeas from 'app/containers/AddTripIdeas';
 import DeleteModal from './DeleteModal';
+import FilterTripIdeas from 'app/containers/FilterTripIdeas';
 import TripIdea from 'app/containers/TripIdea';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
 
@@ -23,10 +24,22 @@ class TripIdeasList extends Component {
       onDeleteTripIdea,
       onHide,
       onShowAllIdeas,
-      showDropdown,
+      showAddIdeasDropdown,
+      showFilterIdeasDropdown,
       showModal
     } = this.props;
-    const { addTripIdeas } = dropdownComponents;
+    const { addTripIdeas, filterTripIdeas } = dropdownComponents;
+
+    const filterIdeasDropdownButton = (
+      <div style={styles.filterIdeasDropdownButton}>
+        <img
+          onClick={onShowDropdown.bind(null, filterTripIdeas)}
+          src="../assets/filter-button.png"
+          style={styles.filterIdeasDropdownButtonIcon}
+        />
+        {showFilterIdeasDropdown && <div style={styles.activeDropdown}></div>}
+      </div>
+    );
 
     const addIdeasDropdownButton = (
       <div style={styles.addIdeaDropdownButton}>
@@ -35,7 +48,7 @@ class TripIdeasList extends Component {
           src="../assets/add-idea-button.png"
           style={styles.addIdeaDropdownButtonIcon}
         />
-        {showDropdown && <div style={this.loadActiveDropdownStyle()}></div>}
+        {showAddIdeasDropdown && <div style={styles.activeDropdown}></div>}
       </div>
     );
 
@@ -69,10 +82,12 @@ class TripIdeasList extends Component {
       <div>
         <div style={styles.titleSection}>
           <h3 style={styles.h3}>Ideas</h3>
+          {filterIdeasDropdownButton}
           {!isViewOnly && addIdeasDropdownButton}
         </div>
         <div>
-          {showDropdown && <AddTripIdeas />}
+          {showFilterIdeasDropdown && <FilterTripIdeas />}
+          {showAddIdeasDropdown && <AddTripIdeas />}
           <div style={styles.ideasSection}>
             {tripIdeas}
             <DeleteModal
@@ -90,12 +105,6 @@ class TripIdeasList extends Component {
         </div>
       </div>
     );
-  }
-
-  loadActiveDropdownStyle() {
-    const { showDropdown } = this.props;
-    const style = styles.activeDropdown;
-    return showDropdown ? { ...style, display: "block" } : style;
   }
 
   getTripIdeaNameToDelete() {
@@ -127,7 +136,6 @@ const styles = {
   activeDropdown: {
     backgroundColor: colors.primary,
     borderRadius: 25,
-    display: "none",
     height: 4,
     position: "absolute",
     marginTop: 5,
@@ -140,6 +148,15 @@ const styles = {
   },
   addIdeaDropdownButtonIcon: {
     cursor: "pointer"
+  },
+  filterIdeasDropdownButton: {
+    position: "relative",
+    top: 2,
+    width: 25
+  },
+  filterIdeasDropdownButtonIcon: {
+    cursor: "pointer",
+    marginBottom: 1
   },
   footerSection: {
     backgroundColor: colors.background,

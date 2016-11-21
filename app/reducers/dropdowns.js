@@ -11,7 +11,7 @@ import {
   dropdownComponents,
   initialDropdownState
 } from 'app/constants';
-const { addTripIdeas } = dropdownComponents;
+const { addTripIdeas, filterTripIdeas } = dropdownComponents;
 
 function createDropdownReducer(id) {
   return function reducer(state = initialDropdownState, action) {
@@ -39,7 +39,8 @@ function createDropdownReducer(id) {
 }
 
 const dropdownsState = combineReducers({
-  [addTripIdeas]: createDropdownReducer(addTripIdeas)
+  [addTripIdeas]: createDropdownReducer(addTripIdeas),
+  [filterTripIdeas]: createDropdownReducer(filterTripIdeas)
 });
 
 export default dropdownsState;
