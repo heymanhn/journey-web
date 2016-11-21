@@ -2,44 +2,27 @@
 
 import _ from 'underscore';
 import React, { Component, PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
-import Textarea from 'react-textarea-autosize';
 import {
-  acComponents,
   colors,
   dimensions,
   dropdownComponents
 } from 'app/constants';
+import AddTripIdeas from 'app/containers/AddTripIdeas';
 import DeleteModal from './DeleteModal';
 import TripIdea from 'app/containers/TripIdea';
-import TripIdeaCategoryDropdown from './TripIdeaCategoryDropdown';
 import TripIdeaDragPreview from './TripIdeaDragPreview';
-import TripIdeaLayout from './TripIdeaLayout';
-import PlaceAutocomplete from 'app/containers/PlaceAutocomplete';
 
 class TripIdeasList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { focused: false };
-  }
-
   render() {
     const {
       error,
       ideas,
       isFetching,
       isViewOnly,
-      newCategory,
-      newIdea,
-      onAddIdeaPress,
-      onClearSavedPlace,
       onShowDropdown,
       onDeleteTripIdea,
-      onEnterIdeaComment,
       onHide,
       onShowAllIdeas,
-      setCategory,
       showDropdown,
       showModal
     } = this.props;
@@ -53,74 +36,6 @@ class TripIdeasList extends Component {
           style={styles.addIdeaDropdownButtonIcon}
         />
         {showDropdown && <div style={this.loadActiveDropdownStyle()}></div>}
-      </div>
-    );
-
-    const categorySection = newIdea && (
-      <div style={styles.categorySection}>
-        <div style={styles.newIdeaSectionHeader}>CATEGORY</div>
-        <TripIdeaCategoryDropdown
-          onSelectCategory={setCategory}
-          selectedCategory={newCategory}
-        />
-      </div>
-    );
-
-    const commentSection = newIdea && (
-      <div style={styles.commentSection}>
-        <div style={styles.newIdeaSectionHeader}>NOTE</div>
-        <Textarea
-          onBlur={this.clearFocus.bind(this)}
-          onChange={onEnterIdeaComment}
-          onFocus={this.setFocus.bind(this)}
-          placeholder="Add a note"
-          style={this.loadCommentFieldStyle()}
-          tabIndex={2}
-          type="text"
-        />
-      </div>
-    );
-
-    const newIdeaPreview = newIdea && (
-      <div style={styles.newIdeaPreview}>
-        <TripIdeaLayout idea={newIdea} showIcon={false} />
-      </div>
-    );
-
-    const newIdeaButtons = newIdea && (
-      <div style={styles.newIdeaButtonContainer}>
-        <div style={styles.newIdeaButtons}>
-          <Button
-            onClick={onAddIdeaPress}
-            style={styles.addButton}
-            tabIndex={3}
-          >
-            <span>Add</span>
-          </Button>
-          <Button
-            onClick={onClearSavedPlace}
-            style={styles.cancelButton}
-            tabIndex={4}
-          >
-            <span>Cancel</span>
-          </Button>
-        </div>
-      </div>
-    );
-
-    const addIdeasDropdown = (
-      <div style={styles.addIdeasSection}>
-        <PlaceAutocomplete
-          autoFocus={showDropdown && !newIdea}
-          id={acComponents.tripIdeaAC}
-          placeholder="Enter a place or destination"
-          style={styles.addIdeaSearchBox}
-          tabIndex={1}
-        />
-        {newIdeaPreview}
-        {newIdeaButtons}
-        {categorySection}
-        {commentSection}
       </div>
     );
 
@@ -157,7 +72,7 @@ class TripIdeasList extends Component {
           {!isViewOnly && addIdeasDropdownButton}
         </div>
         <div>
-          {showDropdown && addIdeasDropdown}
+          {showDropdown && <AddTripIdeas />}
           <div style={styles.ideasSection}>
             {tripIdeas}
             <DeleteModal
@@ -183,22 +98,6 @@ class TripIdeasList extends Component {
     return showDropdown ? { ...style, display: "block" } : style;
   }
 
-  loadCommentFieldStyle() {
-    const style = styles.commentField;
-    const { focused } = this.state;
-
-    if (focused) {
-      style.backgroundColor = "white";
-      style.border = "1px solid #999999";
-      style.outline = "none";
-    } else {
-      style.backgroundColor = colors.background;
-      style.border = "1px solid #dddddd";
-    }
-
-    return style;
-  }
-
   getTripIdeaNameToDelete() {
     const { ideas, tripIdeaToDelete } = this.props;
 
@@ -209,14 +108,6 @@ class TripIdeasList extends Component {
     const idea = ideas.find(i => i._id === tripIdeaToDelete);
     return idea ? idea.name : '';
   }
-
-  setFocus() {
-    this.setState({ focused: true });
-  }
-
-  clearFocus() {
-    this.setState({ focused: false });
-  }
 }
 
 TripIdeasList.propTypes = {
@@ -224,18 +115,10 @@ TripIdeasList.propTypes = {
   ideas: PropTypes.array,
   isFetching: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
-  newCategory: PropTypes.string,
-  newIdea: PropTypes.object,
-  onAddIdeaPress: PropTypes.func.isRequired,
-  onClearSavedPlace: PropTypes.func.isRequired,
-  onClearTripIdea: PropTypes.func.isRequired,
   onDeleteTripIdea: PropTypes.func.isRequired,
-  onEnterIdea: PropTypes.func.isRequired,
-  onEnterIdeaComment: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   onShowAllIdeas: PropTypes.func.isRequired,
   onShowDropdown: PropTypes.func.isRequired,
-  setCategory: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
   tripIdeaToDelete: PropTypes.string
 };
@@ -250,69 +133,20 @@ const styles = {
     marginTop: 5,
     width: 25
   },
-  addButton: {
-    backgroundColor: colors.primary,
-    border: 0,
-    borderRadius: 25,
-    color: "white",
-    fontSize: 13,
-    height: 25,
-    marginRight: 5,
-    padding: 0,
-    width: 60
-  },
   addIdeaDropdownButton: {
-    marginLeft: 20,
-    position: "relative",
+    marginLeft: 15,
     textAlign: "center",
     width: 25
   },
   addIdeaDropdownButtonIcon: {
     cursor: "pointer"
   },
-  addIdeaSearchBox: {
-    border: "1px solid #dddddd",
-    borderRadius: 0,
-    fontSize: 13,
-    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
-  },
-  addIdeasSection: {
-    backgroundColor: "#eeeeee",
-    borderTop: "1px solid #dddddd",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "12px 0px"
-  },
-  cancelButton: {
-    border: "1px solid #dddddd",
-    borderRadius: 25,
-    color: colors.primaryText,
-    fontSize: 13,
-    height: 25,
-    padding: 0,
-    width: 70
-  },
-  categorySection: {
-    alignSelf: "flex-start",
-    margin: "0 " + dimensions.sidePadding
-  },
-  commentField: {
-    color: colors.primaryText,
-    fontSize: 13,
-    minHeight: 60,
-    padding: 10,
-    resize: "none",
-    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
-  },
-  commentSection: {
-    marginTop: 10
-  },
   footerSection: {
     backgroundColor: colors.background,
     padding: "20px 0px 10px"
   },
   h3: {
+    flexGrow: 1,
     fontFamily: "'Raleway', sans-serif",
     fontSize: 22,
     fontWeight: 400,
@@ -323,28 +157,6 @@ const styles = {
   ideasSection: {
     backgroundColor: colors.background,
     borderTop: "1px solid #dddddd"
-  },
-  newIdeaButtonContainer: {
-    height: 15,
-    position: "relative",
-    width: dimensions.leftColumn.width - (dimensions.sidePadding * 2)
-  },
-  newIdeaButtons: {
-    display: "flex",
-    justifyContent: "center",
-    position: "relative",
-    top: -13
-  },
-  newIdeaPreview: {
-    borderBottom: "1px solid #ddd",
-    borderTop: "1px solid #ddd",
-    margin: "10px 0px 0px 30px",
-    padding: "12px 30px 20px 0px",
-    width: dimensions.leftColumn.width - dimensions.sidePadding
-  },
-  newIdeaSectionHeader: {
-    fontSize: 10,
-    paddingBottom: 3
   },
   showAllLink: {
     color: "white",

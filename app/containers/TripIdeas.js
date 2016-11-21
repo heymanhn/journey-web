@@ -1,18 +1,10 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { clearSavedPlace } from 'app/actions/autocomplete';
 import { toggleDropdown } from 'app/actions/dropdowns';
 import { showAllTripIdeasOnMap } from 'app/actions/map';
 import { hideModal } from 'app/actions/modals';
-import {
-  apiAddTripIdea,
-  apiDeleteTripIdea,
-  clearNewTripIdea,
-  saveIdeaCategory,
-  saveIdeaComment,
-  saveNewTripIdea
-} from 'app/actions/trips';
+import { apiDeleteTripIdea } from 'app/actions/trips';
 import TripIdeasList from 'app/components/TripIdeasList';
 import { acComponents, modalComponents } from 'app/constants';
 
@@ -23,8 +15,7 @@ const mapStateToProps = (state) => {
     error,
     isFetching,
     trip,
-    tripIdeaToDelete,
-    newIdea
+    tripIdeaToDelete
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.deleteTripIdea;
 
@@ -34,8 +25,6 @@ const mapStateToProps = (state) => {
     ideas,
     isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
-    newCategory: newIdea && newIdea.category,
-    newIdea,
     showDropdown,
     showModal,
     tripIdeaToDelete
@@ -47,28 +36,8 @@ const mapDispatchToProps = (dispatch) => {
   const { deleteTripIdea } = modalComponents;
 
   return {
-    onAddIdeaPress() {
-      dispatch(apiAddTripIdea());
-    },
-
-    onClearSavedPlace() {
-      dispatch(clearSavedPlace(tripIdeaAC));
-    },
-
-    onClearTripIdea() {
-      dispatch(clearNewTripIdea());
-    },
-
     onDeleteTripIdea() {
       dispatch(apiDeleteTripIdea());
-    },
-
-    onEnterIdea(idea) {
-      dispatch(saveNewTripIdea(idea));
-    },
-
-    onEnterIdeaComment(event) {
-      dispatch(saveIdeaComment(event.target.value));
     },
 
     onHide() {
@@ -81,10 +50,6 @@ const mapDispatchToProps = (dispatch) => {
 
     onShowDropdown(dropdownId) {
       dispatch(toggleDropdown(dropdownId));
-    },
-
-    setCategory(category) {
-      dispatch(saveIdeaCategory(category));
     }
   };
 };
