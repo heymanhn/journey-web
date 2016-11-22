@@ -328,7 +328,8 @@ export function apiAddTripIdeaSuccess(json) {
   return {
     type: API_ADD_TRIP_IDEA_SUCCESS,
     autocompleteId: acComponents.tripIdeaAC,
-    ideas: json.ideas
+    ideas: json.ideas,
+    ideaCategories: json.ideaCategories
   };
 }
 
@@ -379,6 +380,7 @@ export function apiUpdateTripIdeaSuccess(json, updatedIdea) {
   return {
     type: API_UPDATE_TRIP_IDEA_SUCCESS,
     ideas: json.ideas,
+    ideaCategories: json.ideaCategories,
     updatedIdea
   };
 }
@@ -407,7 +409,8 @@ export function apiDeleteTripIdeaRequest() {
 export function apiDeleteTripIdeaSuccess(json) {
   return {
     type: API_DELETE_TRIP_IDEA_SUCCESS,
-    ideas: json.ideas
+    ideas: json.ideas,
+    ideaCategories: json.ideaCategories
   };
 }
 

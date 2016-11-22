@@ -396,7 +396,8 @@ function createIconBorderLayerJSON() {
       ['!has', 'point_count'],
       ['!=', 'category', IDEA_CATEGORY_PLACE]],
     radius: mapMarkers.categories.radius,
-    color: colors.primary
+    color: colors.primary,
+    blur: 0.1
   });
 }
 
@@ -407,7 +408,8 @@ function createIconFillLayerJSON() {
       ['!has', 'point_count'],
       ['!=', 'category', IDEA_CATEGORY_PLACE]],
     radius: mapMarkers.categories.radius - 1,
-    color: 'rgba(249, 249, 249, 1)'
+    color: 'rgba(249, 249, 249, 1)',
+    blur: 0.1
   });
 }
 
@@ -442,7 +444,8 @@ function createClusterCirclesJSON() {
     id: 'cluster-circles',
     filter: ['>=', 'point_count', 0],
     radius: 25,
-    color: colors.primary
+    color: colors.primary,
+    blur: 0.1
   });
 }
 

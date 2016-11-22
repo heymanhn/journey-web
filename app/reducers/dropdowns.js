@@ -7,15 +7,16 @@ import {
   SHOW_DROPDOWN,
   HIDE_DROPDOWN
 } from 'app/actions/dropdowns';
+import { API_GET_TRIP_REQUEST } from 'app/actions/trips';
 import {
   dropdownComponents,
   initialDropdownState
 } from 'app/constants';
-const { addTripIdeas } = dropdownComponents;
+const { addTripIdeas, filterTripIdeas } = dropdownComponents;
 
 function createDropdownReducer(id) {
   return function reducer(state = initialDropdownState, action) {
-    if (action.dropdownId !== id) {
+    if (action.dropdownId && action.dropdownId !== id) {
       return state;
     }
 
@@ -30,6 +31,7 @@ function createDropdownReducer(id) {
           ...state,
           showDropdown: false
         };
+      case API_GET_TRIP_REQUEST:
       case LOGOUT:
         return initialDropdownState;
     }
@@ -39,7 +41,8 @@ function createDropdownReducer(id) {
 }
 
 const dropdownsState = combineReducers({
-  [addTripIdeas]: createDropdownReducer(addTripIdeas)
+  [addTripIdeas]: createDropdownReducer(addTripIdeas),
+  [filterTripIdeas]: createDropdownReducer(filterTripIdeas)
 });
 
 export default dropdownsState;

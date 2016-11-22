@@ -31,9 +31,8 @@ function hideDropdown(dropdownId) {
 
 export function toggleDropdown(dropdownId) {
   return (dispatch, getState) => {
-    const {
-      showDropdown: isShown
-    } = getState().componentsState.dropdownsState[dropdownId];
+    const { dropdownsState } = getState().componentsState;
+    const { showDropdown: isShown } = dropdownsState[dropdownId];
 
     if (isShown) {
       let autocompleteId;
@@ -47,6 +46,11 @@ export function toggleDropdown(dropdownId) {
         dispatch(clearSavedPlace(autocompleteId));
       }
     } else {
+      // Hide the other dropdowns before showing this one
+      for (const id in dropdownsState) {
+        id !== dropdownId && dispatch(hideDropdown(id));
+      }
+
       dispatch(showDropdown(dropdownId));
     }
   };

@@ -1,42 +1,41 @@
 'use strict';
 
 import { connect } from 'react-redux';
-import { clearSavedPlace } from 'app/actions/autocomplete';
 import { toggleDropdown } from 'app/actions/dropdowns';
 import { showAllTripIdeasOnMap } from 'app/actions/map';
 import { hideModal } from 'app/actions/modals';
-import {
-  apiAddTripIdea,
-  apiDeleteTripIdea,
-  clearNewTripIdea,
-  saveIdeaCategory,
-  saveIdeaComment,
-  saveNewTripIdea
-} from 'app/actions/trips';
+import { apiDeleteTripIdea } from 'app/actions/trips';
 import TripIdeasList from 'app/components/TripIdeasList';
 import { acComponents, modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { user } = state.authState;
-  const { showDropdown } = state.componentsState.dropdownsState.addTripIdeas;
+  const {
+    addTripIdeas,
+    filterTripIdeas
+  } = state.componentsState.dropdownsState;
+  const { categories: filterCategories } = state.componentsState.filtersState;
+  const { showDropdown: showAddIdeasDropdown } = addTripIdeas;
+  const { showDropdown: showFilterIdeasDropdown } = filterTripIdeas;
   const {
     error,
     isFetching,
     trip,
-    tripIdeaToDelete,
-    newIdea
+    tripIdeaToDelete
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.deleteTripIdea;
-
   const { creator, ideas, visibility } = trip;
+  const filteredIdeas = (filterCategories.length && showFilterIdeasDropdown) ?
+    ideas.filter(idea => filterCategories.includes(idea.category)) :
+    ideas;
+
   return {
     error,
-    ideas,
+    ideas: filteredIdeas,
     isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
-    newCategory: newIdea && newIdea.category,
-    newIdea,
-    showDropdown,
+    showAddIdeasDropdown,
+    showFilterIdeasDropdown,
     showModal,
     tripIdeaToDelete
   };
@@ -47,28 +46,8 @@ const mapDispatchToProps = (dispatch) => {
   const { deleteTripIdea } = modalComponents;
 
   return {
-    onAddIdeaPress() {
-      dispatch(apiAddTripIdea());
-    },
-
-    onClearSavedPlace() {
-      dispatch(clearSavedPlace(tripIdeaAC));
-    },
-
-    onClearTripIdea() {
-      dispatch(clearNewTripIdea());
-    },
-
     onDeleteTripIdea() {
       dispatch(apiDeleteTripIdea());
-    },
-
-    onEnterIdea(idea) {
-      dispatch(saveNewTripIdea(idea));
-    },
-
-    onEnterIdeaComment(event) {
-      dispatch(saveIdeaComment(event.target.value));
     },
 
     onHide() {
@@ -81,10 +60,6 @@ const mapDispatchToProps = (dispatch) => {
 
     onShowDropdown(dropdownId) {
       dispatch(toggleDropdown(dropdownId));
-    },
-
-    setCategory(category) {
-      dispatch(saveIdeaCategory(category));
     }
   };
 };

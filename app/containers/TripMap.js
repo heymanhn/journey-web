@@ -35,6 +35,9 @@ const mapStateToProps = (state) => {
     popupIdeaId,
     viewChanged
   } = state.componentsState.mapState;
+  const { dropdownsState, filtersState } = state.componentsState;
+  const { categories: filterCategories } = filtersState;
+  const { showDropdown } = dropdownsState.filterTripIdeas;
   const { satelliteStreetsStyleId, streetsStyleId, styleURL } = mapbox;
 
   let mapStyleURL;
@@ -48,6 +51,10 @@ const mapStateToProps = (state) => {
       break;
   }
 
+  const filteredIdeas = (filterCategories.length && showDropdown) ?
+    ideas.filter(idea => filterCategories.includes(idea.category)) :
+    ideas;
+
   return {
     destination,
     fitMapRequest,
@@ -55,7 +62,7 @@ const mapStateToProps = (state) => {
     focusMarker,
     hoverLngLat,
     hoverMarker,
-    ideas,
+    ideas: filteredIdeas,
     ideaToUpdate,
     mapStyle,
     mapStyleURL,

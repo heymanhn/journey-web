@@ -214,7 +214,10 @@ export default function tripState(state = initialTripState, action) {
     case API_ADD_TRIP_IDEA_SUCCESS:
       return {
         ..._.omit(state, ['newIdea', 'newComment']),
-        trip: _.extend(state.trip, { ideas: action.ideas }),
+        trip: _.extend(state.trip, {
+          ideas: action.ideas,
+          ideaCategories: action.ideaCategories
+        }),
         isFetching: false,
         focusLngLat: action.ideas[0].loc.coordinates
       };
@@ -228,7 +231,10 @@ export default function tripState(state = initialTripState, action) {
           'newCategory',
           'newComment'
         ]),
-        trip: _.extend(state.trip, { ideas: action.ideas }),
+        trip: _.extend(state.trip, {
+          ideas: action.ideas,
+          ideaCategories: action.ideaCategories
+        }),
         isFetching: false
       };
     case API_CREATE_TRIP_FAILURE:
