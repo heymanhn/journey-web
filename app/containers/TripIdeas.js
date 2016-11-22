@@ -27,12 +27,16 @@ const mapStateToProps = (state) => {
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.deleteTripIdea;
   const { creator, ideas, visibility } = trip;
-  const filteredIdeas = (filterCategories.length && showFilterIdeasDropdown) ?
+  const shouldFilter = (filterCategories.length && showFilterIdeasDropdown);
+  const filteredIdeas = shouldFilter ?
     ideas.filter(idea => {
       return (!visibleIdeas || visibleIdeas.includes(idea._id)) &&
         filterCategories.includes(idea.category);
     }) :
     ideas;
+  const totalIdeas = shouldFilter ?
+    ideas.filter(idea => filterCategories.includes(idea.category)).length :
+    ideas.length;
 
   return {
     error,
@@ -42,6 +46,7 @@ const mapStateToProps = (state) => {
     showAddIdeasDropdown,
     showFilterIdeasDropdown,
     showModal,
+    totalIdeas,
     tripIdeaToDelete
   };
 };

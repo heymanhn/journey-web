@@ -26,7 +26,8 @@ class TripIdeasList extends Component {
       onShowAllIdeas,
       showAddIdeasDropdown,
       showFilterIdeasDropdown,
-      showModal
+      showModal,
+      totalIdeas
     } = this.props;
     const { addTripIdeas, filterTripIdeas } = dropdownComponents;
 
@@ -69,7 +70,7 @@ class TripIdeasList extends Component {
           onClick={onShowAllIdeas}
           style={styles.showAllLink}
         >
-          Show all ideas on map
+          Show all {totalIdeas > 1 && totalIdeas} ideas
         </div>
       </div>
     );
@@ -100,7 +101,7 @@ class TripIdeasList extends Component {
               showModal={showModal}
             />
           </div>
-          {ideas.length > 0 && showAllIdeasLink}
+          {totalIdeas > 0 && showAllIdeasLink}
           {!isViewOnly && dragPreview}
         </div>
       </div>
@@ -129,6 +130,7 @@ TripIdeasList.propTypes = {
   onShowAllIdeas: PropTypes.func.isRequired,
   onShowDropdown: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
+  totalIdeas: PropTypes.number,
   tripIdeaToDelete: PropTypes.string
 };
 
@@ -184,7 +186,7 @@ const styles = {
     margin: "0px auto",
     padding: 8,
     textAlign: "center",
-    width: 180
+    width: 160
   },
   titleSection: {
     backgroundColor: "white",
