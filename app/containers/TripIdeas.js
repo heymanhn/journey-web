@@ -25,7 +25,7 @@ const mapStateToProps = (state) => {
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.deleteTripIdea;
   const { creator, ideas, visibility } = trip;
-  const filteredIdeas = filterCategories.length ?
+  const filteredIdeas = (filterCategories.length && showFilterIdeasDropdown) ?
     ideas.filter(idea => filterCategories.includes(idea.category)) :
     ideas;
 
