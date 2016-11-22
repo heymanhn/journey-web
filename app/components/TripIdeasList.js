@@ -26,7 +26,8 @@ class TripIdeasList extends Component {
       onShowAllIdeas,
       showAddIdeasDropdown,
       showFilterIdeasDropdown,
-      showModal
+      showModal,
+      totalIdeas
     } = this.props;
     const { addTripIdeas, filterTripIdeas } = dropdownComponents;
 
@@ -63,13 +64,17 @@ class TripIdeasList extends Component {
       );
     });
 
+    const noResultsText = (
+      <div style={styles.noResults}>No results in view</div>
+    );
+
     const showAllIdeasLink = (
       <div style={styles.footerSection}>
         <div
           onClick={onShowAllIdeas}
           style={styles.showAllLink}
         >
-          Show all ideas on map
+          Show all {totalIdeas > 1 && totalIdeas} ideas
         </div>
       </div>
     );
@@ -89,7 +94,7 @@ class TripIdeasList extends Component {
           {showFilterIdeasDropdown && <FilterTripIdeas />}
           {showAddIdeasDropdown && <AddTripIdeas />}
           <div style={styles.ideasSection}>
-            {tripIdeas}
+            {totalIdeas > 0 && !ideas.length ? noResultsText : tripIdeas}
             <DeleteModal
               contentTitle={this.getTripIdeaNameToDelete()}
               error={error}
@@ -100,7 +105,7 @@ class TripIdeasList extends Component {
               showModal={showModal}
             />
           </div>
-          {ideas.length > 0 && showAllIdeasLink}
+          {totalIdeas > 0 && showAllIdeasLink}
           {!isViewOnly && dragPreview}
         </div>
       </div>
@@ -129,6 +134,7 @@ TripIdeasList.propTypes = {
   onShowAllIdeas: PropTypes.func.isRequired,
   onShowDropdown: PropTypes.func.isRequired,
   showModal: PropTypes.bool.isRequired,
+  totalIdeas: PropTypes.number,
   tripIdeaToDelete: PropTypes.string
 };
 
@@ -175,6 +181,10 @@ const styles = {
     backgroundColor: colors.background,
     borderTop: "1px solid #dddddd"
   },
+  noResults: {
+    margin: "20px 0 10px",
+    textAlign: "center"
+  },
   showAllLink: {
     color: "white",
     cursor: "pointer",
@@ -184,7 +194,7 @@ const styles = {
     margin: "0px auto",
     padding: 8,
     textAlign: "center",
-    width: 180
+    width: 160
   },
   titleSection: {
     backgroundColor: "white",

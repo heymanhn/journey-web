@@ -17,6 +17,7 @@ export const VIEW_UPDATED = 'VIEW_UPDATED';
 export const IDEA_UPDATED = 'IDEA_UPDATED';
 export const SET_POPUP_TIMESTAMP = 'SET_POPUP_TIMESTAMP';
 export const CLEAR_POPUP_TIMESTAMP = 'CLEAR_POPUP_TIMESTAMP';
+export const SAVE_VISIBLE_IDEAS = 'SAVE_VISIBLE_IDEAS';
 
 
 /*
@@ -102,5 +103,12 @@ export function setPopupTimestamp(ideaId) {
 export function clearPopupTimestamp() {
   return {
     type: CLEAR_POPUP_TIMESTAMP
+  };
+}
+
+export function saveVisibleIdeas(ideas) {
+  return {
+    type: SAVE_VISIBLE_IDEAS,
+    ideas
   };
 }
