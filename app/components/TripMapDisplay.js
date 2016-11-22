@@ -2,6 +2,7 @@
 
 require('app/stylesheets/mapbox-gl.css');
 
+import _ from 'underscore';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 import React, { Component, PropTypes } from 'react';
 import {
@@ -50,9 +51,14 @@ class TripMapDisplay extends Component {
     }
 
     if (newIdeas.length !== ideas.length || ideaToUpdate) {
+      const ideasJSON = createGeoJSON(newIdeas);
       map
         .getSource(mapbox.ids.markers)
-        .setData(createGeoJSON(newIdeas));
+        .setData(ideasJSON);
+
+      map
+        .getSource(mapbox.ids.markers + 'data')
+        .setData(ideasJSON);
 
       ideaToUpdate && onIdeaUpdated();
     }
@@ -132,15 +138,23 @@ class TripMapDisplay extends Component {
     const { map } = this;
     const { ids: { hover, markers } } = mapbox;
     const moveMapToLocation = this.moveMapToLocation.bind(this);
+    const ideasJSON = createGeoJSON(ideas);
 
     // Load the marker data into the map
     map.addSource(markers, {
       type: 'geojson',
-      data: createGeoJSON(ideas),
+      data: ideasJSON,
       cluster: true,
       clusterRadius: 30,
       clusterMaxZoom: 13
     });
+
+    // Add layer for all markers for data query purposes
+    map.addSource(markers + 'data', {
+      type: 'geojson',
+      data: ideasJSON
+    });
+    map.addLayer(createInvisiblePointsJSON());
 
     // Add layer for the place category markers
     map.addLayer(createPlaceLayerJSON());
@@ -176,6 +190,23 @@ class TripMapDisplay extends Component {
         moveMapToLocation(feature.geometry.coordinates);
       }
     });
+
+    map.on('moveend', () => this.saveVisibleIdeas());
+  }
+
+  saveVisibleIdeas() {
+    const { onSaveVisibleIdeas } = this.props;
+    const { hover } = mapbox.ids;
+    const { margin, width } = dimensions.leftColumn;
+    const northwest = [width + margin, 0];
+    const southeast = [window.innerWidth, window.innerHeight];
+    const features = this.map.queryRenderedFeatures(
+      [northwest, southeast],
+      { layers: ['invisiblePoints'] }
+    );
+
+    const ideas = _.uniq(features.map(f => f.properties._id).sort(), true);
+    onSaveVisibleIdeas(ideas);
   }
 
   fitMapToData(boundToDestination) {
@@ -362,11 +393,11 @@ function createGeoJSON(ideas) {
 }
 
 function createCircleLayerJSON(opts) {
-  const { blur, color, filter, id, radius } = opts;
+  const { blur, color, filter, id, radius, source } = opts;
   let layerJSON = {
     id,
     type: 'circle',
-    source: mapbox.ids.markers,
+    source: source || mapbox.ids.markers,
     paint: {
       'circle-radius': radius,
       'circle-color': color,
@@ -375,6 +406,15 @@ function createCircleLayerJSON(opts) {
   };
 
   return filter ? { ...layerJSON, filter } : layerJSON;
+}
+
+function createInvisiblePointsJSON() {
+  return createCircleLayerJSON({
+    id: 'invisiblePoints',
+    radius: 1,
+    source: mapbox.ids.markers + 'data',
+    color: 'rgba(0,0,0,0)'
+  });
 }
 
 function createPlaceLayerJSON() {
@@ -517,6 +557,7 @@ TripMapDisplay.propTypes = {
   onIdeaUpdated: PropTypes.func.isRequired,
   onSaveFocusMarker: PropTypes.func.isRequired,
   onSaveHoverMarker: PropTypes.func.isRequired,
+  onSaveVisibleIdeas: PropTypes.func.isRequired,
   onSetMapView: PropTypes.func.isRequired,
   onSetPopupTimestamp: PropTypes.func.isRequired,
   onSetSatelliteView: PropTypes.func.isRequired,

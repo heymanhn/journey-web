@@ -11,6 +11,7 @@ import {
   ideaUpdated,
   saveFocusMarker,
   saveHoverMarker,
+  saveVisibleIdeas,
   setPopupTimestamp,
   showAllTripIdeasComplete,
   viewUpdated
@@ -96,6 +97,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(ideaUpdated());
     },
 
+    onMapFitComplete() {
+      dispatch(showAllTripIdeasComplete());
+    },
+
     onSaveFocusMarker(marker) {
       dispatch(saveFocusMarker(marker));
     },
@@ -104,8 +109,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(saveHoverMarker(marker));
     },
 
-    onMapFitComplete() {
-      dispatch(showAllTripIdeasComplete());
+    onSaveVisibleIdeas(ideas) {
+      dispatch(saveVisibleIdeas(ideas));
     },
 
     onSetMapView() {

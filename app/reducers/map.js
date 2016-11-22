@@ -15,6 +15,7 @@ import {
   IDEA_UPDATED,
   SET_POPUP_TIMESTAMP,
   CLEAR_POPUP_TIMESTAMP,
+  SAVE_VISIBLE_IDEAS,
   LOGOUT
 } from 'app/actions/map';
 import { API_UPDATE_TRIP_IDEA_SUCCESS } from 'app/actions/trips';
@@ -60,6 +61,11 @@ export default function mapState(state = initialMapState, action) {
       };
     case CLEAR_POPUP_TIMESTAMP:
       return _.omit(state, ['popupTimestamp', 'popupIdeaId']);
+    case SAVE_VISIBLE_IDEAS:
+      return {
+        ...state,
+        visibleIdeas: action.ideas
+      };
     case API_UPDATE_TRIP_IDEA_SUCCESS:
       return { ...state, ideaToUpdate: action.updatedIdea };
     case LOGOUT:
