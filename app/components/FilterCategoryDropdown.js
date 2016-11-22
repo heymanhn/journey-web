@@ -1,3 +1,5 @@
+'use strict';
+
 import React, { Component, PropTypes } from 'react';
 import { categoryIcons, colors, IDEA_CATEGORY_PLACE } from 'app/constants';
 
@@ -21,9 +23,6 @@ class FilterCategoryDropdown extends Component {
       onToggleFilterCategory
     } = this.props;
     const { visible } = this.state;
-    const defaultCategoryIcon = (
-      <img src="../assets/place-idea-icon.png" style={styles.defaultIcon} />
-    );
 
     const categoryDropdown = (
       <div style={styles.dropdown}>
@@ -41,8 +40,7 @@ class FilterCategoryDropdown extends Component {
                 type="checkbox"
               />
               <div style={styles.categoryFieldIcon}>
-                {category === IDEA_CATEGORY_PLACE ?
-                  defaultCategoryIcon : categoryIcons[category]}
+                {this.loadCategoryIcon(category)}
               </div>
               <div style={styles.dropdownFieldLabel}>
                 {category}
@@ -53,13 +51,39 @@ class FilterCategoryDropdown extends Component {
       </div>
     );
 
+    let categoryFilterStatus;
+    const { length } = filterCategories;
+    if (!length) {
+      categoryFilterStatus = (
+        <span style={styles.inputFieldLabel}>Choose Category</span>
+      );
+    } else if (length === 1) {
+      const category = filterCategories[0];
+      categoryFilterStatus = (
+        <div style={styles.oneCategoryLabel}>
+          <span style={styles.oneCategoryIcon}>
+            {this.loadCategoryIcon(category)}
+          </span>
+          <span style={this.loadOneCategoryTextStyle(category)}>
+            {category}
+          </span>
+        </div>
+      );
+    } else {
+      categoryFilterStatus = (
+        <span style={styles.inputFieldLabel}>
+          {this.loadCategoryStatusText(length)}
+        </span>
+      );
+    }
+
     return (
       <div>
         <div
           onClick={this.toggleVisible.bind(this)}
           style={styles.categoryField}
         >
-          <span style={styles.inputFieldLabel}>Choose Category</span>
+          {categoryFilterStatus}
           <div>
             <img src="../assets/expand-arrow.png" />
           </div>
@@ -69,6 +93,16 @@ class FilterCategoryDropdown extends Component {
     )
   }
 
+  loadCategoryIcon(category) {
+    const defaultCategoryIcon = (
+      <img src="../assets/place-idea-icon.png" style={styles.defaultIcon} />
+    );
+
+    return category === IDEA_CATEGORY_PLACE ?
+      defaultCategoryIcon :
+      categoryIcons[category];
+  }
+
   loadDropdownFieldStyle(category, isEnabled) {
     const style = styles.dropdownField;
     return this.props.filterCategories.includes(category) ? {
@@ -76,6 +110,16 @@ class FilterCategoryDropdown extends Component {
       backgroundColor: "#e6f4ff",
       borderRight: "1px solid #dddddd"
     } : style;
+  }
+
+  loadOneCategoryTextStyle(category) {
+    const style = styles.oneCategoryText;
+    return category === IDEA_CATEGORY_PLACE ? { ...style, top: 1 } : style;
+  }
+
+  loadCategoryStatusText(numCategories) {
+    const noun = numCategories === 1 ? 'Category' : 'Categories';
+    return `${numCategories} ${noun}`;
   }
 
   toggleVisible(e) {
@@ -122,7 +166,7 @@ const styles = {
   },
   defaultIcon: {
     height: 12,
-    marginLeft: 3,
+    marginLeft: 4,
     width: 12
   },
   dropdown: {
@@ -151,6 +195,17 @@ const styles = {
   inputFieldLabel: {
     flexGrow: 1,
     marginTop: 1
+  },
+  oneCategoryIcon: {
+    fontSize: 16,
+    marginRight: 12
+  },
+  oneCategoryLabel: {
+    flexGrow: 1
+  },
+  oneCategoryText: {
+    position: "relative",
+    top: -1
   }
 };
 
