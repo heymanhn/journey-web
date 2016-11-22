@@ -10,37 +10,36 @@ class FilterCategoryDropdown extends Component {
     super(props);
 
     this.state = {
-      hover: '',
       visible: false
     };
   }
 
   render() {
-    const { ideaCategories, onToggleFilterCategory } = this.props;
+    const {
+      filterCategories,
+      ideaCategories,
+      onToggleFilterCategory
+    } = this.props;
     const { visible } = this.state;
     const defaultCategoryIcon = (
       <img src="../assets/place-idea-icon.png" style={styles.defaultIcon} />
     );
 
-    const key = 'Lodging';
     const categoryDropdown = (
       <div style={styles.dropdown}>
         {ideaCategories.map(category => {
+          const isEnabled = filterCategories.includes(category);
           return (
             <div
               key={category}
               onClick={onToggleFilterCategory.bind(null, category)}
-              onMouseOver={this.onHover.bind(this, category)}
-              onMouseOut={this.clearHover.bind(this)}
               style={this.loadDropdownFieldStyle(category)}
             >
-              <div>
-                <input
-                  onChange={onToggleFilterCategory.bind(null, category)}
-                  style={styles.checkbox}
-                  type="checkbox"
-                />
-              </div>
+              <input
+                checked={isEnabled}
+                style={styles.checkbox}
+                type="checkbox"
+              />
               <div style={styles.categoryFieldIcon}>
                 {category === IDEA_CATEGORY_PLACE ?
                   defaultCategoryIcon : categoryIcons[category]}
@@ -70,12 +69,9 @@ class FilterCategoryDropdown extends Component {
     )
   }
 
-  loadDropdownFieldStyle(category) {
-    const { selectedCategory } = this.props;
-    const { hover } = this.state;
+  loadDropdownFieldStyle(category, isEnabled) {
     const style = styles.dropdownField;
-    const isHighlighted = category === selectedCategory || category === hover;
-    return isHighlighted ? {
+    return this.props.filterCategories.includes(category) ? {
       ...style,
       backgroundColor: "#e6f4ff",
       borderRight: "1px solid #dddddd"
@@ -90,17 +86,10 @@ class FilterCategoryDropdown extends Component {
   dismissDropdown() {
     return this.state.visible && this.toggleVisible();
   }
-
-  onHover(category) {
-    this.setState({ hover: category });
-  }
-
-  clearHover() {
-    this.setState({ hover: '' });
-  }
 }
 
 FilterCategoryDropdown.propTypes = {
+  filterCategories: PropTypes.array.isRequired,
   ideaCategories: PropTypes.array.isRequired,
   onToggleFilterCategory: PropTypes.func.isRequired
 };

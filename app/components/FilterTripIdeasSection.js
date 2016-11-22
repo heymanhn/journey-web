@@ -11,26 +11,46 @@ import FilterCategoryDropdown from './FilterCategoryDropdown';
 
 class FilterTripIdeasSection extends Component {
   render() {
-    const { ideaCategories, onToggleFilterCategory } = this.props;
+    const {
+      filterCategories,
+      ideaCategories,
+      onClearFilterCategories,
+      onToggleFilterCategory
+    } = this.props;
 
     return (
       <div style={styles.filterIdeasSection}>
         <FilterCategoryDropdown
-          ideaCategories={ideaCategories}
-          onToggleFilterCategory={onToggleFilterCategory}
+          {..._.pick(this.props, [
+            'filterCategories',
+            'ideaCategories',
+            'onToggleFilterCategory'
+          ])}
         />
         <Button
-          style={styles.clearButton}
+          disabled={!filterCategories.length}
+          onClick={onClearFilterCategories}
+          style={this.loadClearButtonStyle()}
         >
           <span style={styles.clearButtonLabel}>Clear</span>
         </Button>
       </div>
     );
   }
+
+  loadClearButtonStyle() {
+    const { filterCategories } = this.props;
+    const style = styles.clearButton;
+    const disabledStyle = styles.clearButtonDisabled;
+
+    return !filterCategories.length ? { ...style, ...disabledStyle } : style;
+  }
 }
 
 FilterTripIdeasSection.propTypes = {
+  filterCategories: PropTypes.array.isRequired,
   ideaCategories: PropTypes.array.isRequired,
+  onClearFilterCategories: PropTypes.func.isRequired,
   onToggleFilterCategory: PropTypes.func.isRequired
 };
 
@@ -45,6 +65,9 @@ const styles = {
     marginLeft: 15,
     padding: 0,
     width: 70
+  },
+  clearButtonDisabled: {
+    color: "#cccccc"
   },
   clearButtonLabel: {
     position: "relative",

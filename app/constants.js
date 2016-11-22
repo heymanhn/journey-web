@@ -279,6 +279,10 @@ export const initialAuthState = {
   newUserFields: {}
 };
 
+export const initialFiltersState = {
+  categories: []
+};
+
 export const initialDropdownState = {
   showDropdown: false
 };

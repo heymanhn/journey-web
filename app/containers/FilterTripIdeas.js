@@ -2,21 +2,29 @@
 
 import { connect } from 'react-redux';
 import {
-} from 'app/actions/trips';
+  clearCategories,
+  toggleCategory
+} from 'app/actions/filters';
 import FilterTripIdeasSection from 'app/components/FilterTripIdeasSection';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { ideaCategories } = state.tripState.trip;
+  const { categories: filterCategories } = state.componentsState.filtersState;
   return {
+    filterCategories,
     ideaCategories
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
+    onClearFilterCategories() {
+      dispatch(clearCategories());
+    },
+
     onToggleFilterCategory(category, event) {
-      // Need to distinguish between checkbox and div
       event.stopPropagation();
+      dispatch(toggleCategory(category));
     }
   };
 };
