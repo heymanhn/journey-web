@@ -6,7 +6,9 @@ import {
 import FilterTripIdeasSection from 'app/components/FilterTripIdeasSection';
 
 const mapStateToProps = (state) => {
+  const { ideaCategories } = state.tripState.trip;
   return {
+    ideaCategories
   };
 };
 

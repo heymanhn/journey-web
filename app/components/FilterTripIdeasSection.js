@@ -11,11 +11,12 @@ import FilterCategoryDropdown from './FilterCategoryDropdown';
 
 class FilterTripIdeasSection extends Component {
   render() {
-    const { onToggleFilterCategory } = this.props;
+    const { ideaCategories, onToggleFilterCategory } = this.props;
 
     return (
       <div style={styles.filterIdeasSection}>
         <FilterCategoryDropdown
+          ideaCategories={ideaCategories}
           onToggleFilterCategory={onToggleFilterCategory}
         />
         <Button
@@ -29,6 +30,7 @@ class FilterTripIdeasSection extends Component {
 }
 
 FilterTripIdeasSection.propTypes = {
+  ideaCategories: PropTypes.array.isRequired,
   onToggleFilterCategory: PropTypes.func.isRequired
 };
 

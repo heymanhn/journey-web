@@ -3,7 +3,6 @@ import { categoryIcons, colors, IDEA_CATEGORY_PLACE } from 'app/constants';
 
 class FilterCategoryDropdown extends Component {
   componentDidMount() {
-    // Dismiss it only when clicking outside the dropdown
     window.addEventListener('click', () => this.dismissDropdown());
   }
 
@@ -17,9 +16,8 @@ class FilterCategoryDropdown extends Component {
   }
 
   render() {
-    const { onToggleFilterCategory } = this.props;
+    const { ideaCategories, onToggleFilterCategory } = this.props;
     const { visible } = this.state;
-    const defaultCategory = IDEA_CATEGORY_PLACE;
     const defaultCategoryIcon = (
       <img src="../assets/place-idea-icon.png" style={styles.defaultIcon} />
     );
@@ -27,27 +25,32 @@ class FilterCategoryDropdown extends Component {
     const key = 'Lodging';
     const categoryDropdown = (
       <div style={styles.dropdown}>
-        <div
-          key={key}
-          onClick={onToggleFilterCategory.bind(null, key)}
-          onMouseOver={this.onHover.bind(this, key)}
-          onMouseOut={this.clearHover.bind(this)}
-          style={this.loadDropdownFieldStyle(key)}
-        >
-          <div>
-            <input
-              onChange={onToggleFilterCategory.bind(null, key)}
-              style={styles.checkbox}
-              type="checkbox"
-            />
-          </div>
-          <div style={styles.categoryFieldIcon}>
-            {categoryIcons[key]}
-          </div>
-          <div style={styles.dropdownFieldLabel}>
-            {key}
-          </div>
-        </div>
+        {ideaCategories.map(category => {
+          return (
+            <div
+              key={category}
+              onClick={onToggleFilterCategory.bind(null, category)}
+              onMouseOver={this.onHover.bind(this, category)}
+              onMouseOut={this.clearHover.bind(this)}
+              style={this.loadDropdownFieldStyle(category)}
+            >
+              <div>
+                <input
+                  onChange={onToggleFilterCategory.bind(null, category)}
+                  style={styles.checkbox}
+                  type="checkbox"
+                />
+              </div>
+              <div style={styles.categoryFieldIcon}>
+                {category === IDEA_CATEGORY_PLACE ?
+                  defaultCategoryIcon : categoryIcons[category]}
+              </div>
+              <div style={styles.dropdownFieldLabel}>
+                {category}
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
 
@@ -98,6 +101,7 @@ class FilterCategoryDropdown extends Component {
 }
 
 FilterCategoryDropdown.propTypes = {
+  ideaCategories: PropTypes.array.isRequired,
   onToggleFilterCategory: PropTypes.func.isRequired
 };
 
@@ -130,7 +134,6 @@ const styles = {
   defaultIcon: {
     height: 12,
     marginLeft: 3,
-    marginRight: 12,
     width: 12
   },
   dropdown: {
