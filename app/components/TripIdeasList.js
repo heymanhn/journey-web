@@ -64,6 +64,10 @@ class TripIdeasList extends Component {
       );
     });
 
+    const noResultsText = (
+      <div style={styles.noResults}>No results in view</div>
+    );
+
     const showAllIdeasLink = (
       <div style={styles.footerSection}>
         <div
@@ -90,7 +94,7 @@ class TripIdeasList extends Component {
           {showFilterIdeasDropdown && <FilterTripIdeas />}
           {showAddIdeasDropdown && <AddTripIdeas />}
           <div style={styles.ideasSection}>
-            {tripIdeas}
+            {totalIdeas > 0 && !ideas.length ? noResultsText : tripIdeas}
             <DeleteModal
               contentTitle={this.getTripIdeaNameToDelete()}
               error={error}
@@ -176,6 +180,10 @@ const styles = {
   ideasSection: {
     backgroundColor: colors.background,
     borderTop: "1px solid #dddddd"
+  },
+  noResults: {
+    margin: "20px 0 10px",
+    textAlign: "center"
   },
   showAllLink: {
     color: "white",
