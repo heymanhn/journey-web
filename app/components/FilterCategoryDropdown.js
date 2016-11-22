@@ -36,6 +36,7 @@ class FilterCategoryDropdown extends Component {
             >
               <input
                 checked={isEnabled}
+                readOnly
                 style={styles.checkbox}
                 type="checkbox"
               />

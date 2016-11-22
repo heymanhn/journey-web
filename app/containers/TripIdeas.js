@@ -10,13 +10,15 @@ import { acComponents, modalComponents } from 'app/constants';
 
 const mapStateToProps = (state) => {
   const { user } = state.authState;
+  const { dropdownsState, filtersState, mapState } = state.componentsState;
   const {
     addTripIdeas,
     filterTripIdeas
-  } = state.componentsState.dropdownsState;
-  const { categories: filterCategories } = state.componentsState.filtersState;
+  } = dropdownsState;
+  const { categories: filterCategories } = filtersState;
   const { showDropdown: showAddIdeasDropdown } = addTripIdeas;
   const { showDropdown: showFilterIdeasDropdown } = filterTripIdeas;
+  const { visibleIdeas } = mapState;
   const {
     error,
     isFetching,
@@ -26,7 +28,10 @@ const mapStateToProps = (state) => {
   const { showModal } = state.componentsState.modalsState.deleteTripIdea;
   const { creator, ideas, visibility } = trip;
   const filteredIdeas = (filterCategories.length && showFilterIdeasDropdown) ?
-    ideas.filter(idea => filterCategories.includes(idea.category)) :
+    ideas.filter(idea => {
+      return (!visibleIdeas || visibleIdeas.includes(idea._id)) &&
+        filterCategories.includes(idea.category);
+    }) :
     ideas;
 
   return {
