@@ -7,6 +7,7 @@ import {
   CLEAR_CATEGORIES,
   REMOVE_CATEGORY
 } from 'app/actions/filters';
+import { API_GET_TRIP_REQUEST } from 'app/actions/trips';
 import { initialFiltersState } from 'app/constants';
 
 export default function filtersState(state = initialFiltersState, action) {
@@ -21,6 +22,7 @@ export default function filtersState(state = initialFiltersState, action) {
         ...state,
         categories: state.categories.filter(c => c !== action.category)
       };
+    case API_GET_TRIP_REQUEST:
     case CLEAR_CATEGORIES:
     case LOGOUT:
       return initialFiltersState;
