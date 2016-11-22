@@ -447,7 +447,7 @@ function createIconFillLayerJSON() {
     filter: ['all',
       ['!has', 'point_count'],
       ['!=', 'category', IDEA_CATEGORY_PLACE]],
-    radius: mapMarkers.categories.radius - 1,
+    radius: mapMarkers.categories.radius - 2,
     color: 'rgba(249, 249, 249, 1)',
     blur: 0.1
   });
