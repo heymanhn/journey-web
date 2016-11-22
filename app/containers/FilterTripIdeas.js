@@ -12,6 +12,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onToggleFilterCategory(category, event) {
+      // Need to distinguish between checkbox and div
+      event.stopPropagation();
+    }
   };
 };
 
