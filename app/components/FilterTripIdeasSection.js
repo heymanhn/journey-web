@@ -67,7 +67,8 @@ const styles = {
     width: 70
   },
   clearButtonDisabled: {
-    color: "#cccccc"
+    color: "#cccccc",
+    cursor: "default"
   },
   clearButtonLabel: {
     position: "relative",
