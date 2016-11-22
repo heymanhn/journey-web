@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
     addTripIdeas,
     filterTripIdeas
   } = state.componentsState.dropdownsState;
+  const { categories: filterCategories } = state.componentsState.filtersState;
   const { showDropdown: showAddIdeasDropdown } = addTripIdeas;
   const { showDropdown: showFilterIdeasDropdown } = filterTripIdeas;
   const {
@@ -24,10 +25,13 @@ const mapStateToProps = (state) => {
   } = state.tripState;
   const { showModal } = state.componentsState.modalsState.deleteTripIdea;
   const { creator, ideas, visibility } = trip;
+  const filteredIdeas = filterCategories.length ?
+    ideas.filter(idea => filterCategories.includes(idea.category)) :
+    ideas;
 
   return {
     error,
-    ideas,
+    ideas: filteredIdeas,
     isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
     showAddIdeasDropdown,
