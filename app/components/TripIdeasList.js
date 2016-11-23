@@ -95,7 +95,11 @@ class TripIdeasList extends Component {
           {showFilterIdeasDropdown && <FilterTripIdeas />}
           {showAddIdeasDropdown && <AddTripIdeas />}
           <div style={styles.ideasSection}>
-            {totalIdeas > 0 && !ideas.length ? noResultsText : tripIdeas}
+            {
+              totalIdeas > 0 && !filteredIdeas.length ?
+                noResultsText :
+                tripIdeas
+            }
             <DeleteModal
               contentTitle={this.getTripIdeaNameToDelete()}
               error={error}

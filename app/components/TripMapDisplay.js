@@ -191,6 +191,7 @@ class TripMapDisplay extends Component {
       }
     });
 
+    map.on('data', () => this.saveVisibleIdeas());
     map.on('moveend', () => this.saveVisibleIdeas());
   }
 
