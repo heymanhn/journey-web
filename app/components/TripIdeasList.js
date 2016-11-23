@@ -17,6 +17,7 @@ class TripIdeasList extends Component {
   render() {
     const {
       error,
+      filteredIdeas,
       ideas,
       isFetching,
       isViewOnly,
@@ -54,7 +55,7 @@ class TripIdeasList extends Component {
     );
 
     const tripIdeas = ideas.map((idea, index) => {
-      return (
+      return filteredIdeas.includes(idea._id) && (
         <TripIdea
           idea={idea}
           index={index}
@@ -126,6 +127,7 @@ class TripIdeasList extends Component {
 
 TripIdeasList.propTypes = {
   error: PropTypes.string,
+  filteredIdeas: PropTypes.array,
   ideas: PropTypes.array,
   isFetching: PropTypes.bool.isRequired,
   isViewOnly: PropTypes.bool.isRequired,
