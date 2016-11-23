@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'underscore';
 import { connect } from 'react-redux';
 import { toggleDropdown } from 'app/actions/dropdowns';
 import { showAllTripIdeasOnMap } from 'app/actions/map';
@@ -40,7 +41,8 @@ const mapStateToProps = (state) => {
 
   return {
     error,
-    ideas: filteredIdeas,
+    filteredIdeas: _.pluck(filteredIdeas, '_id'),
+    ideas,
     isFetching,
     isViewOnly: visibility === 'viewOnly' && (!user || user._id !== creator),
     showAddIdeasDropdown,
