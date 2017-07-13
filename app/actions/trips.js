@@ -729,11 +729,11 @@ function formatDestination(destination) {
     viewport: {
       northeast: {
         type: 'Point',
-        coordinates: [viewport.b.f, viewport.f.b]
+        coordinates: [viewport.b.f, viewport.f.f]
       },
       southwest: {
         type: 'Point',
-        coordinates: [viewport.b.b, viewport.f.f]
+        coordinates: [viewport.b.b, viewport.f.b]
       }
     },
     types
